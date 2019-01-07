@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <!--头部-->
     <div class="head">
       <div class="content">
         <div class="head_top">
@@ -7,7 +8,7 @@
         </div>
       </div>
     </div>
-
+    <!--搜索栏-->
     <div class="search">
       <div class="content">
         <el-select v-model="value" placeholder="请选择">
@@ -23,6 +24,7 @@
         </div>
       </div>
     </div>
+    <!--轮播-->
     <div class="banner">
       <el-carousel height="120px">
         <el-carousel-item v-for="item in 3" :key="item">
@@ -30,9 +32,72 @@
         </el-carousel-item>
       </el-carousel>
     </div>
+    <!--主导航-->
     <div class="main_nav_cell">
       <div class="content">
-
+        <router-link :to="{}">
+          <div class="nav_cell">
+            <img src="/static/images/ic_jobs@2x.png" alt="">
+            <p>全部职位</p>
+          </div>
+        </router-link>
+        <router-link :to="{}">
+          <div class="nav_cell">
+            <img src="/static/images/ic_findjob@2x.png" alt="">
+            <p>找工作</p>
+         </div>
+        </router-link>
+        <router-link :to="{}">
+          <div class="nav_cell">
+            <img src="/static/images/ic_mingqi@2x.png" alt="">
+            <p>名企招聘</p>
+          </div>
+        </router-link>
+        <router-link :to="{}">
+          <div class="nav_cell">
+            <img src="/static/images/ic_jyzd@2x.png" alt="">
+            <p>就业指导</p>
+          </div>
+        </router-link>
+        <router-link :to="{name: 'user_login'}">
+          <div class="nav_cell">
+            <img src="/static/images/ic_news@2x.png" alt="">
+            <p>新闻资讯</p>
+          </div>
+        </router-link>
+      </div>
+    </div>
+    <!--急聘-->
+    <div class="ugent">
+      <div class="content">
+        <div class="common_title">
+          <img src="/static/images/ic_title_zhaopin@2x.png" alt="">急聘职位
+        </div>
+        <div class="ugent_body">
+          <div class="ugent_cell">
+            <div class="ugent_top">
+              <span class="ugent_sign">急聘</span><span class="pos_name">一级建造师 - 建筑工程</span><span class="salary fr">8K-10K/月</span>
+            </div>
+            <div class="ugent_bottom">
+              <span class="tags">贵阳</span> | <span class="tags">3年以上</span> | <span class="tags">大专</span> | <span class="tags">全职</span><span class="update_time fr">3天前</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--名企招聘-->
+    <div class="famous">
+      <div class="content">
+        <div class="common_title">
+          <img src="/static/images/ic_title_mq@2x.png" alt="">名企招聘
+        </div>
+        <div class="famous_body">
+          <div class="famous_cell">
+            <div class="famous_head">
+              <img src="" alt="">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -116,7 +181,106 @@
   }
   /*主导航*/
   .main_nav_cell{
+    padding-top: 5px;
     width: 100%;
-    height: 100px;
+    height: 95px;
+    background-color: #ffffff;
+  }
+  .nav_cell{
+    float: left;
+    text-align: center;
+    width: 20%;
+    height: 65px;
+    padding: 12px 0 9px;
+  }
+  .nav_cell img{
+    width: 44px;
+    height: 44px;
+  }
+  .main_nav_cell a {
+    font-size: 12px;
+    color: #919199;
+    text-decoration: none;
+  }
+  /*公共头部栏*/
+  .common_title{
+    width: 100%;
+    line-height: 36px;
+    font-size: 14px;
+    color: #353535;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
+  }
+  .common_title img{
+    margin-right: 5px;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+  }
+  /*急聘*/
+  .ugent{
+    margin-top: 10px;
+    background-color: #ffffff;
+  }
+  .ugent_cell{
+    padding: 15px 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ECEFF1;
+  }
+  .ugent_sign{
+    display: inline-block;
+    margin-right: 10px;
+    width: 30px;
+    line-height: 16px;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #FF8236;
+    color: #ff8236;
+    font-size: 12px;
+  }
+  .pos_name{
+    font-size: 14px;
+    color: #666666;
+  }
+  .salary{
+    font-size: 12px;
+    color: #ff5959;
+  }
+  .ugent_bottom{
+    margin-top: 10px;
+  }
+  .tags{
+    font-size: 12px;
+    color: #919199;
+  }
+  .update_time{
+    font-size: 12px;
+    color: #919199;
+  }
+  /*名企招聘*/
+  .famous{
+    margin-top: 10px;
+    background-color: #ffffff;
+  }
+  .famous_cell{
+    padding: 15px 0;
+  }
+  .famous_head{
+    width: 60px;
+    height: 60px;
+    -webkit-border-radius: 10000px;
+    -moz-border-radius: 10000px;
+    border-radius: 10000px;
+    background-color: aqua;
+  }
+  .famous_head img{
+    width: 100%;
+    height: 100%;
   }
 </style>
