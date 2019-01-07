@@ -93,8 +93,14 @@
         </div>
         <div class="famous_body">
           <div class="famous_cell">
-            <div class="famous_head">
+            <div class="famous_head fl">
               <img src="" alt="">
+            </div>
+            <div class="famous_body">
+              <div class="famous_name">
+                贵州长右岸建设工程有限公司
+              </div>
+              <p>招聘职位<span>3个</span></p>
             </div>
           </div>
         </div>
@@ -274,13 +280,13 @@
   .famous_head{
     width: 60px;
     height: 60px;
-    -webkit-border-radius: 10000px;
-    -moz-border-radius: 10000px;
-    border-radius: 10000px;
     background-color: aqua;
   }
   .famous_head img{
     width: 100%;
     height: 100%;
+    -webkit-border-radius: 10000px;
+    -moz-border-radius: 10000px;
+    border-radius: 10000px;
   }
 </style>
