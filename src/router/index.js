@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import index from '../components/index'
 import user_reg from '../components/reg_log/user_reg'
 import user_login from '../components/reg_log/user_login'
+import find_job from '../components/com_part/find_job'
 
 
 Vue.use(Router);
@@ -26,6 +27,11 @@ export default new Router({
       path: '/user_login',
       name: 'user_login',
       component: user_login
+    },
+    {
+      path: '/find_job',
+      name: 'find_job',
+      component: find_job
     }
   ]
 })

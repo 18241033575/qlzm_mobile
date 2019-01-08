@@ -43,7 +43,7 @@
   }
   .get_smsCode{
     text-align: center;
-    line-height: 38px;
+    /*line-height: 38px;*/
     width: 45%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -78,8 +78,6 @@
     width: 100%;
     line-height: 40px;
     border: 1px solid #E1E4E6;
-  }
-  .el-input__inner{
     margin: 0;
     padding: 0 15px;
   }
