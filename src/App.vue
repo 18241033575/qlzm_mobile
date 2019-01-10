@@ -103,4 +103,26 @@
     margin: 0 auto;
     width: 92%;
   }
+  /*公共头部栏*/
+  .common_title{
+    width: 100%;
+    line-height: 36px;
+    font-size: 14px;
+    color: #353535;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
+  }
+  .common_title img{
+    margin-right: 5px;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+  }
+  .common_menu{
+    margin-top: 11px;
+    width: 22px;
+    height: 22px;
+  }
 </style>
