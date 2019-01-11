@@ -68,7 +68,7 @@
       </div>
     </div>
     <!--筛选第一层-->
-    <div class="filter_all_box" v-show="false">
+    <div class="filter_all_box" v-show="true">
       <div class="filter_bg">
 
       </div>
