@@ -6,6 +6,8 @@ import user_reg from '../components/reg_log/user_reg'
 import user_login from '../components/reg_log/user_login'
 import find_job from '../components/com_part/find_job'
 import famous_pos from '../components/com_part/famous_pos'
+import company_det from '../components/com_part/company_det'
+import pos_det from '../components/com_part/pos_det'
 
 
 Vue.use(Router);
@@ -38,6 +40,16 @@ export default new Router({
       path: '/famous_pos',
       name: 'famous_pos',
       component: famous_pos
+    },
+    {
+      path: '/company_det',
+      name: 'company_det',
+      component: company_det
+    },
+    {
+      path: '/pos_det',
+      name: 'pos_det',
+      component: pos_det
     }
   ]
 })

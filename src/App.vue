@@ -12,7 +12,7 @@
 
 <style>
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'PingFang-SC','Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
@@ -37,6 +37,9 @@
     margin: 15px auto 0;
     width: 92%;
     height: 44px;
+  }
+  html{
+    background-color: #F0F1F5;
   }
   .common_input_sms{
     width: 55%;
