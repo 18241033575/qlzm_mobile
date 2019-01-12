@@ -10,6 +10,7 @@ import company_det from '../components/com_part/company_det'
 import pos_det from '../components/com_part/pos_det'
 // import main_menu from '../components/common/main_menu'
 
+import tal_center from '../components/talent/tal_center'
 
 Vue.use(Router);
 
@@ -51,6 +52,11 @@ export default new Router({
       path: '/pos_det',
       name: 'pos_det',
       component: pos_det
+    },
+    {
+      path: '/tal_center',
+      name: 'tal_center',
+      component: tal_center
     }
   ]
 })

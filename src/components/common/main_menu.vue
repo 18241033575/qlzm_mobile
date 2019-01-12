@@ -19,7 +19,7 @@
             </div>
           </div>
           <div class="btn_group" v-if="isLogin">
-            <router-link :to="{}">
+            <router-link :to="{name: tal_center}">
               <div class="sub_btn btn_size">
                 个人中心
               </div>

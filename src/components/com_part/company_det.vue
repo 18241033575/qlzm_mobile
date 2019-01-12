@@ -154,16 +154,7 @@
     background-color: #ffffff;
     margin-bottom: 10px;
   }
-  .com_det_title{
-    line-height: 44px;
-    font-size: 16px;
-    color: #353535;
-    font-weight: bold;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border-bottom: 1px solid #E1E4E6;
-  }
+
   .com_det_body{
     width: 100%;
     height: 90px;

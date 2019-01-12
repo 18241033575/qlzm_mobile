@@ -45,8 +45,13 @@
     font-size: 16px;
     color: #353535;
     font-weight: bold;
+    background-color: #ffffff;
   }
   .famous{
+    margin-top: 0;
+    background-color: #f0f1f5;
+  }
+  .famous_body{
     background-color: #ffffff;
   }
   .famous_cell{
