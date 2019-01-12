@@ -8,6 +8,7 @@ import find_job from '../components/com_part/find_job'
 import famous_pos from '../components/com_part/famous_pos'
 import company_det from '../components/com_part/company_det'
 import pos_det from '../components/com_part/pos_det'
+// import main_menu from '../components/common/main_menu'
 
 
 Vue.use(Router);

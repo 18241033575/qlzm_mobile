@@ -124,8 +124,16 @@
     vertical-align: middle;
   }
   .common_menu{
-    margin-top: 11px;
+    position: absolute;
+    right: 4%;
+    top: 11px;
     width: 22px;
     height: 22px;
+    z-index: 88888;
+  }
+  .stop_scroll{
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
   }
 </style>
