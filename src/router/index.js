@@ -8,11 +8,13 @@ import find_job from '../components/com_part/find_job'
 import famous_pos from '../components/com_part/famous_pos'
 import company_det from '../components/com_part/company_det'
 import pos_det from '../components/com_part/pos_det'
-// import main_menu from '../components/common/main_menu'
+import main_menu from '../components/common/main_menu'
 
 import tal_center from '../components/talent/tal_center'
+import tal_resume from '../components/talent/tal_resume'
 
 Vue.use(Router);
+
 
 
 export default new Router({
@@ -57,6 +59,16 @@ export default new Router({
       path: '/tal_center',
       name: 'tal_center',
       component: tal_center
+    },
+    {
+      path: '/tal_resume',
+      name: 'tal_resume',
+      component: tal_resume
+    },
+    {
+      path: '/main_menu',
+      name: 'main_menu',
+      component: main_menu
     }
   ]
 })

@@ -13,7 +13,7 @@
       <el-input class="common_input" v-model="acount" placeholder="请输入手机号码"></el-input>
       <el-input class="common_input" v-if="this.active" v-model="password" type="password" placeholder="请输入密码"></el-input>
       <div class="sms_group" v-if="!this.active">
-        <el-input class="common_input_sms fl" v-model="input" placeholder="请输入验证码"></el-input><el-button class="fl get_smsCode">获取验证码</el-button>
+        <el-input class="common_input_sms fl" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button class="fl get_smsCode">获取验证码</el-button>
       </div>
       <el-button class="common_btn" @click="user_login">登录</el-button>
       <p>没有账号?&nbsp;<router-link :to="{name:'user_reg'}">去注册</router-link></p>
@@ -28,7 +28,7 @@
           acount: '',
           password: '',
           active: true,
-
+          sms_code: ''
         }
       },
       methods: {
@@ -50,8 +50,9 @@
 
 <style scoped>
   .user_login{
-    margin-top: 60px;
+    padding-top: 60px;
     text-align: center;
+    background-color: #ffffff;
   }
   .login_type{
     margin: 40px auto 0;

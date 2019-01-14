@@ -14,6 +14,7 @@ Vue.use(elementUI);
 //数据请求
 Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
+// axios.defaults.baseURL= '/api';
 
 //element组件调用
 Vue.use(Carousel);
@@ -24,6 +25,18 @@ Vue.use(Icon);
 
 
 Vue.config.productionTip = false;
+
+
+
+Axios.interceptors.request.use(config => {
+  /* let token = userInfo.token;
+   if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+     config.headers.token = token;
+   }*/
+  return config
+}, error => {
+  /*return Promise.reject(error)*/
+})
 
 /* eslint-disable no-new */
 new Vue({

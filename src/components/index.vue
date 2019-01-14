@@ -1,5 +1,6 @@
 <template>
-  <div class="main" :class="{stop_scroll:this.isOpen}"  v-on:give_sign="get_sign">
+  <div class="main" :class="{stop_scroll: this.openState}">
+    <menu_list_pic ref="menu_list_pic" v-show="!this.openState"/>
     <!--头部-->
     <div class="head">
       <div class="content">
@@ -140,17 +141,19 @@
       <p>版权所有©2018-2030</p>
       <p>贵州骑驴找马科技有限公司 All Rights Reserved</p>
     </div>
-    <main_menu ref="main_menu"></main_menu>
+    <main_menu ref="main_menu" v-on:give_sign="get_sign"/>
   </div>
 
 </template>
 
 <script>
   import main_menu from '../components/common/main_menu'
+  import menu_list_pic from '../components/common/menu_list_pic'
     export default {
         name: "index",
       components: {
-        main_menu
+        main_menu,
+        menu_list_pic
       },
       data() {
           return{
@@ -168,14 +171,12 @@
             }],
             value: '1',
             search_text: "",
-            isOpen: false
+            openState: false
           }
       },
       methods: {
         get_sign(data) {
-          console.log(data);
-          alert(2);
-          this.isOpen = data
+          this.openState = !data;
         },
       }
     }

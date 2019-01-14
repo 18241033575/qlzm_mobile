@@ -1,7 +1,6 @@
 <template>
   <!--弹出菜单-->
-  <div class="main_menu" :class="{zIndex:this.isOpen}">
-    <img class="common_menu fr" v-if="this.isOpen" src="/static/images/ic_menu@2x.png" alt="" @click="nav_open">
+  <div class="main_menu" v-if="this.isOpen">
     <!--阴影-->
     <div class="bg_shawed" @click="nav_close" v-show="!this.isOpen">
 
@@ -14,7 +13,7 @@
               <img src="/static/images/ic_user_def@2x.png" alt="">
             </div>
             <div class="msg_det">
-              <p class="msg_name">HI，<span>克里斯蒂亚诺</span></p>
+              <p class="msg_name">HI，<span class="user_name">克里斯蒂亚诺</span></p>
               <p class="greeting">欢迎回来，<span>下午好!</span></p>
             </div>
           </div>
@@ -58,6 +57,7 @@
 </template>
 
 <script>
+
     export default {
         name: "main_menu",
       data() {
@@ -89,6 +89,7 @@
             },
           },
           isOpen: true,
+          openSign: false,
           isLogin: false
         }
       },
@@ -97,9 +98,8 @@
           this.isOpen = true;
           this.$emit('give_sign', this.isOpen);
         },
-        nav_open() {
-          this.isOpen = false;
-          this.$emit("give_sign", this.isOpen);
+        pic_get_sign(data) {
+          this.isOpen = !data;
         }
       },
       beforeCreate() {
