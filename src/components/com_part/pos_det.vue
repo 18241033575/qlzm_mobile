@@ -23,7 +23,7 @@
           <div class="pos_btn collect_btn">
             收藏职位
           </div>
-          <div class="pos_btn apply_btn">
+          <div class="pos_btn apply_btn" @click="apply_pos">
             申请职位
           </div>
         </div>
@@ -111,7 +111,18 @@
 
 <script>
     export default {
-        name: "pos_det"
+        name: "pos_det",
+      methods: {
+        apply_pos() {
+
+        }
+      },
+      created() {
+          /*this.$ajax.get('/office/detail',{id: 32})
+            .then((res)=>{
+              console.log(res);
+            })*/
+      }
     }
 </script>
 
@@ -133,7 +144,7 @@
   .com_det_body{
     width: 100%;
     /*height: 90px;*/
-    background-color: aqua;
+    background-color: #fff;
   }
 
   /*名企列表*/
@@ -151,7 +162,7 @@
     margin-bottom: 15px;
     width: 60px;
     height: 60px;
-    background-color: aqua;
+    background-color: #fff;
   }
   .famous_head img{
     width: 100%;
@@ -368,6 +379,7 @@
   .pos_btn_group{
     display: flex;
     justify-content: center;
+    padding-bottom: 15px;
   }
   .pos_btn{
     width: 30%;

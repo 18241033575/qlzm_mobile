@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import elementUI from 'element-ui'
-import { Button, Select, Icon, Input, Carousel} from 'element-ui';
+import { Button, Select, Icon, Input, Carousel, Dialog} from 'element-ui';
 import App from './App'
 import router from './router'
 import Axios from 'axios'
@@ -14,7 +14,7 @@ Vue.use(elementUI);
 //数据请求
 Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
-// axios.defaults.baseURL= '/api';
+Axios.defaults.baseURL= '/api';
 
 //element组件调用
 Vue.use(Carousel);
@@ -22,6 +22,7 @@ Vue.use(Button);
 Vue.use(Select);
 Vue.use(Input);
 Vue.use(Icon);
+Vue.use(Dialog);
 
 
 Vue.config.productionTip = false;

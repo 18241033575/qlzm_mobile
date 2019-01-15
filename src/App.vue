@@ -145,5 +145,6 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border-bottom: 1px solid #E1E4E6;
+    background-color: #ffffff;
   }
 </style>

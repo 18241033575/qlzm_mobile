@@ -1,6 +1,6 @@
 <template>
   <div class="main" :class="{stop_scroll: this.openState}">
-    <menu_list_pic ref="menu_list_pic" v-show="!this.openState"/>
+    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--头部-->
     <div class="head">
       <div class="content">
@@ -78,12 +78,12 @@
           <img src="/static/images/ic_title_zhaopin@2x.png" alt="">急聘职位
         </div>
         <div class="ugent_body">
-          <div class="ugent_cell">
+          <div class="ugent_cell" v-for="(item,index) in ugentData" :key="index">
             <div class="ugent_top">
-              <span class="ugent_sign">急聘</span><span class="pos_name">一级建造师 - 建筑工程</span><span class="salary fr">8K-10K/月</span>
+              <span class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
             </div>
             <div class="ugent_bottom">
-              <span class="tags">贵阳</span> | <span class="tags">3年以上</span> | <span class="tags">大专</span> | <span class="tags">全职</span><span class="update_time fr">3天前</span>
+              <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span class="tags">{{item.nature}}</span><span class="update_time fr">{{item.created_at}}</span>
             </div>
           </div>
         </div>
@@ -96,21 +96,21 @@
           <img src="/static/images/ic_title_mq@2x.png" alt="">名企招聘
         </div>
         <div class="famous_body">
-          <div class="famous_cell">
+          <div class="famous_cell" v-for="(item,index) in famousData" :key="index">
             <div class="famous_head fl">
               <img src="" alt="">
             </div>
             <div class="famous_msg fl">
               <div class="famous_name">
-                贵州长右岸建设工程有限公司
+                {{item.name}}
               </div>
-              <p>招聘职位<span>&nbsp;&nbsp;3个</span></p>
+              <p>招聘职位<span>&nbsp;&nbsp{{item.offices.length}}个</span></p>
             </div>
           </div>
         </div>
-        <div class="show_more">
+        <router-link :to="{name: 'famous_pos'}" class="show_more">
           更多名企招聘
-        </div>
+        </router-link>
       </div>
     </div>
     <!--新闻资讯-->
@@ -120,20 +120,20 @@
           <img src="/static/images/ic_title_news@2x.png" alt="">新闻资讯
         </div>
         <div class="news_body">
-          <div class="news_cell">
+          <div class="news_cell" v-for="(item,index) in newsData" :key="index">
             <div class="news_head fl">
 
             </div>
             <div class="news_msg fl">
               <div class="news_name">
-                国家主席习近平发表二〇一九年新年贺词
+                {{item.title}}
               </div>
             </div>
           </div>
         </div>
-        <div class="show_more">
+        <router-link :to="{name: 'famous_pos'}" class="show_more">
           更多新闻资讯
-        </div>
+        </router-link>
       </div>
     </div>
     <!--底部-->
@@ -141,7 +141,7 @@
       <p>版权所有©2018-2030</p>
       <p>贵州骑驴找马科技有限公司 All Rights Reserved</p>
     </div>
-    <main_menu ref="main_menu" v-on:give_sign="get_sign"/>
+    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 
 </template>
@@ -171,13 +171,44 @@
             }],
             value: '1',
             search_text: "",
-            openState: false
+            openState: false,
+            ugentData: {},
+            famousData: {},
+            newsData: {}
           }
       },
       methods: {
         get_sign(data) {
           this.openState = !data;
         },
+        getIsopen(data) {
+          this.openState = data;
+        }
+      },
+      watch: {
+        openState(curVal,oldVal){
+        },
+        deep:true
+      },
+      created() {
+          this.$ajax.get('/office/urgent')
+            .then((res)=>{
+              if(res.data.state != 400){
+                this.ugentData = res.data
+              }
+            });
+        this.$ajax.get('/company/famous',{page: 1, rows: 6})
+          .then((res)=>{
+            if(res.data.state != 400){
+              this.famousData = res.data
+            }
+          });
+        this.$ajax.post('/news',{page: 1, operate: 'index'})
+          .then((res)=>{
+            if(res.data.code == 200){
+              this.newsData = res.data.data
+            }
+          })
       }
     }
 </script>
@@ -324,7 +355,7 @@
   }
   .famous_cell{
     display: flex;
-    padding: 15px 0;
+    padding-top: 15px;
   }
   .famous_head{
     justify-content: start;
@@ -346,6 +377,7 @@
     color: #666666;
   }
   .famous_name{
+    padding-top: 3px;
     font-size: 14px;
     font-weight: bold;
   }
@@ -357,15 +389,17 @@
     color: #ff8236;
   }
   .show_more{
+    display: inline-block;
     width: 100%;
     line-height: 44px;
     text-align: center;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    border-bottom: 1px solid #E1E4E6;
+    border-top: 1px solid #E1E4E6;
     font-size: 12px;
     color: #ff8236;
+    text-decoration: none;
   }
   /*新闻资讯*/
   .news{
@@ -381,11 +415,13 @@
     margin-bottom: 15px;
     width: 90px;
     height: 60px;
+    min-width: 90px;
     background-color: aqua;
   }
   .news_msg{
     flex-grow: 1;
     padding-left: 20px;
+    padding-top: 3px;
     color: #666666;
   }
   .news_name{

@@ -50,25 +50,25 @@
         </div>
       </div>
     </div>
-    <!--急聘-->
+    <!--找工作-->
     <div class="ugent">
       <div class="content">
         <div class="ugent_body">
-          <div class="ugent_cell">
+          <div class="ugent_cell" v-for="(item,index) in find_jobData" :key="index">
             <div class="ugent_top">
-              <span class="ugent_sign">急聘</span><span class="pos_name">一级建造师 - 建筑工程</span><span class="salary fr">8K-10K/月</span>
+              <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
             </div>
             <div class="ugent_bottom">
-              <span class="tags">贵阳</span> | <span class="tags">3年以上</span> | <span class="tags">大专</span> | <span
-              class="tags">全职</span><span class="update_time fr">3天前</span>
-              <p><img src="/static/images/ic_fam_comp@2x.png" alt="">贵州大鱼路桥工程有限公司</p>
+              <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
+              class="tags">{{item.nature}}</span><span class="update_time fr">{{item.created_at}}</span>
+              <p><img v-if="item.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company_name}}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
     <!--筛选第一层-->
-    <div class="filter_all_box" v-show="true">
+    <div class="filter_all_box" v-show="false">
       <div class="filter_bg">
 
       </div>
@@ -184,20 +184,45 @@
         search_job: '',
         famFlag: false,
         ugentFlag: false,
-        sort_sign: false
+        sort_sign: false,
+        find_jobData: {},
+        find_jobParam: {
+          page: 1,
+          row: 8
+        }
       }
     },
     methods: {
+      getjobData(param) {
+        this.$ajax.get('/company_work',param)
+          .then((res)=>{
+            if (res.data.code == 200) {
+              this.find_jobData = res.data.data
+            }
+          })
+      },
       // 名企 急聘
       only_fam() {
-        this.famFlag = !this.famFlag
+        this.famFlag = !this.famFlag;
+        this.find_jobParam.has_m = this.famFlag == true?1:0;
+        this.getjobData(this.find_jobParam)
       },
       only_ugent() {
-        this.ugentFlag = !this.ugentFlag
+        this.ugentFlag = !this.ugentFlag;
+        this.find_jobParam.is_urgent = this.ugentFlag == true?1:0;
+        this.getjobData(this.find_jobParam)
       },
       rotate() {
         this.sort_sign = !this.sort_sign
-      }
+      },
+    },
+    created() {
+      this.$ajax.get('/company_work',this.find_jobParam)
+        .then((res)=>{
+          if (res.data.code == 200) {
+            this.find_jobData = res.data.data
+          }
+        })
     }
   }
 </script>
@@ -213,8 +238,8 @@
     line-height: 44px;
     height: 44px;
     border-bottom: 1px solid #E1E4E6;
+    background-color: #ffffff;
   }
-
   .search_job .el-input {
     height: 28px;
   }
@@ -231,7 +256,7 @@
 
   /*筛选*/
   .filter {
-
+    background-color: #ffffff;
   }
 
   .filter_box {

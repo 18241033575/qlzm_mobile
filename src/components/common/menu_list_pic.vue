@@ -15,6 +15,7 @@
       methods: {
         nav_open() {
           this.isOpen = true;
+          this.$emit('sendIsopen',this.isOpen)
         }
       },
     }

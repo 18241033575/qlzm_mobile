@@ -10,15 +10,15 @@
         <!--可以提取出来公共部分-->
         <div class="famous_body">
           <div class="content">
-            <div class="famous_cell">
+            <div class="famous_cell" v-for="(item,index) in famData" :key="index">
               <div class="famous_head fl">
                 <img src="" alt="">
               </div>
               <div class="famous_msg fl">
                 <div class="famous_name">
-                  贵州长右岸建设工程有限公司
+                  {{item.name}}
                 </div>
-                <p>招聘职位<span>&nbsp;&nbsp;3个</span></p>
+                <p>招聘职位<span>&nbsp;&nbsp;{{item.offices.length}}个</span></p>
               </div>
             </div>
           </div>
@@ -29,7 +29,22 @@
 
 <script>
     export default {
-        name: "famous_pos"
+        name: "famous_pos",
+      data() {
+          return {
+            famData: {},
+            pages: 1
+          }
+      },
+      created() {
+          this.$ajax.get('/company/famous',{page: this.pages, rows: 6})
+            .then((res)=>{
+              console.log(res);
+              if(res.data.state != 400) {
+                this.famData = res.data
+              }
+            })
+      }
     }
 </script>
 

@@ -1,11 +1,11 @@
 <template>
   <!--弹出菜单-->
-  <div class="main_menu" v-if="this.isOpen">
+  <div class="main_menu" v-if="this.give_shade&&this.isOpen">
     <!--阴影-->
-    <div class="bg_shawed" @click="nav_close" v-show="!this.isOpen">
+    <div class="bg_shawed" @click="nav_close" v-show="this.give_shade&&this.isOpen">
 
     </div>
-    <div class="menu_box" v-show="!this.isOpen">
+    <div class="menu_box" v-show="this.give_shade&&this.isOpen">
       <div class="menu_top">
         <div class="content">
           <div class="msg" v-if="isLogin">
@@ -59,6 +59,11 @@
 <script>
 
     export default {
+      props: {
+        give_shade:{
+          default: true
+        }
+      },
         name: "main_menu",
       data() {
         return {
@@ -97,9 +102,6 @@
         nav_close() {
           this.isOpen = true;
           this.$emit('give_sign', this.isOpen);
-        },
-        pic_get_sign(data) {
-          this.isOpen = !data;
         }
       },
       beforeCreate() {
@@ -122,7 +124,7 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    z-index: 99999;
+    z-index: 77777;
   }
   .bg_shawed{
     width: 40%;

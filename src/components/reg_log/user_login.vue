@@ -17,6 +17,15 @@
       </div>
       <el-button class="common_btn" @click="user_login">登录</el-button>
       <p>没有账号?&nbsp;<router-link :to="{name:'user_reg'}">去注册</router-link></p>
+      <el-dialog
+        title="提示"
+        :visible.sync="dialogVisible"
+        width="80%">
+        <span>{{showMsg}}</span>
+        <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="handleClose">确 定</el-button>
+  </span>
+      </el-dialog>
     </div>
 </template>
 
@@ -28,7 +37,10 @@
           acount: '',
           password: '',
           active: true,
-          sms_code: ''
+          sms_code: '',
+          dialogVisible: false,
+          reqSuc: false,
+          showMsg: ''
         }
       },
       methods: {
@@ -39,10 +51,27 @@
           this.active = true;
         },
         user_login() {
-          this.$ajax.post('/member/login',{acount: this.acount,password: this.password,type:1})
+          this.$ajax.post('/member/login',{"phone": this.acount,"account": this.acount,"password": this.password,"type": 1})
             .then((res)=>{
               console.log(res);
+              if (res.data.state == 400) {
+                this.reqSuc = false;
+                this.dialogVisible = true;
+                this.showMsg = res.data.msg;
+                //  放入本地数据
+              }else {
+                this.reqSuc = true;
+                this.dialogVisible = true;
+                this.showMsg = '登录成功'
+              }
+
             })
+        },
+        handleClose() {
+          this.dialogVisible = false;
+          if (this.reqSuc == true){
+            this.$router.push({name: 'index'})
+          }
         }
       }
     }
