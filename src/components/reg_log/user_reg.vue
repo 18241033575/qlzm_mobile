@@ -25,10 +25,13 @@
 
 <style>
   .user_reg{
-    margin-top: 60px;
+    width: 100%;
+    height: 100vh;
+    background-color: #ffffff;
     text-align: center;
   }
   .user_reg h3{
+    padding-top: 60px;
     line-height: 30px;
   }
 

@@ -79,9 +79,13 @@
 
 <style scoped>
   .user_login{
-    padding-top: 60px;
+    width: 100%;
+    height: 100vh;
     text-align: center;
     background-color: #ffffff;
+  }
+  .user_login h3{
+    padding-top: 60px;
   }
   .login_type{
     margin: 40px auto 0;
