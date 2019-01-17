@@ -14,7 +14,17 @@ Vue.use(elementUI);
 //数据请求
 Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
-Axios.defaults.baseURL= '/api';
+// Axios.defaults.baseURL= '/api';
+
+
+Axios.interceptors.request.use(config => {
+  config.headers['Content-Type'] = 'application/json';
+  return config
+}, error => {
+  /*return Promise.reject(error)*/
+})
+
+
 
 //element组件调用
 Vue.use(Carousel);

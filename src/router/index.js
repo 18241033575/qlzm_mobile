@@ -4,6 +4,9 @@ import HelloWorld from '@/components/HelloWorld'
 import index from '../components/index'
 import user_reg from '../components/reg_log/user_reg'
 import user_login from '../components/reg_log/user_login'
+
+
+
 //公共组件
 import find_job from '../components/com_part/find_job'
 import famous_pos from '../components/com_part/famous_pos'

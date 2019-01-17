@@ -78,7 +78,7 @@
           <img src="/static/images/ic_title_zhaopin@2x.png" alt="">急聘职位
         </div>
         <div class="ugent_body">
-          <div class="ugent_cell" v-for="(item,index) in ugentData" :key="index">
+          <div class="ugent_cell" :data-id="item.id" v-for="(item,index) in ugentData" :key="index" @click="to_posDetail">
             <div class="ugent_top">
               <span class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
             </div>
@@ -96,7 +96,7 @@
           <img src="/static/images/ic_title_mq@2x.png" alt="">名企招聘
         </div>
         <div class="famous_body">
-          <div class="famous_cell" v-for="(item,index) in famousData" :key="index">
+          <div class="famous_cell" :company-id="item.id" v-for="(item,index) in famousData" :key="index" @click="to_comDetail">
             <div class="famous_head fl">
               <img src="" alt="">
             </div>
@@ -149,6 +149,8 @@
 <script>
   import main_menu from '../components/common/main_menu'
   import menu_list_pic from '../components/common/menu_list_pic'
+  // import {gender} from '../../static/js/common.js'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp} from '../../static/js/common.js'
     export default {
         name: "index",
       components: {
@@ -183,6 +185,14 @@
         },
         getIsopen(data) {
           this.openState = data;
+        },
+        to_posDetail(e) {
+          let id = e.currentTarget.getAttribute('data-id');
+          this.$router.push({name: 'pos_det',query:{id: id}})
+        },
+        to_comDetail(e) {
+          let id = e.currentTarget.getAttribute('company-id');
+          this.$router.push({name: 'company_det',query:{id: id}})
         }
       },
       watch: {
@@ -194,7 +204,14 @@
           this.$ajax.get('/office/urgent')
             .then((res)=>{
               if(res.data.state != 400){
+                transSalary(res.data);
+                transNature(res.data);
+                transEducation(res.data);
+                transWorkexp(res.data);
                 this.ugentData = res.data
+                for (let i = 0;i < this.ugentData.length; i++) {
+                  this.ugentData[i].created_at = getDistanceTime(this.ugentData[i].created_at)
+                }
               }
             });
         this.$ajax.get('/company/famous',{page: 1, rows: 6})
@@ -339,10 +356,10 @@
   }
   .ugent_bottom{
     margin-top: 10px;
+    color: #919199;
   }
   .tags{
     font-size: 12px;
-    color: #919199;
   }
   .update_time{
     font-size: 12px;

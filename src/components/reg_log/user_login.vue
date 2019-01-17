@@ -13,7 +13,7 @@
       <el-input class="common_input" v-model="acount" placeholder="请输入手机号码"></el-input>
       <el-input class="common_input" v-if="this.active" v-model="password" type="password" placeholder="请输入密码"></el-input>
       <div class="sms_group" v-if="!this.active">
-        <el-input class="common_input_sms fl" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button class="fl get_smsCode">获取验证码</el-button>
+        <el-input class="common_input_sms fl" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
       </div>
       <el-button class="common_btn" @click="user_login">登录</el-button>
       <p>没有账号?&nbsp;<router-link :to="{name:'user_reg'}">去注册</router-link></p>
@@ -36,11 +36,13 @@
         return {
           acount: '',
           password: '',
-          active: true,
+          active: false,
           sms_code: '',
           dialogVisible: false,
           reqSuc: false,
-          showMsg: ''
+          showMsg: '',
+          getSmsCode: '获取短信验证码',
+          getSmsState: true
         }
       },
       methods: {
@@ -51,26 +53,52 @@
           this.active = true;
         },
         user_login() {
-          this.$ajax.post('/member/login',{"phone": this.acount,"account": this.acount,"password": this.password,"type": 1})
-            .then((res)=>{
-              console.log(res);
-              if (res.data.state == 400) {
-                this.reqSuc = false;
-                this.dialogVisible = true;
-                this.showMsg = res.data.msg;
-                //  放入本地数据
-              }else {
-                this.reqSuc = true;
-                this.dialogVisible = true;
-                this.showMsg = '登录成功'
-              }
+          if (this.active) {
+            this.$ajax.post('/member/login',{"phone": this.acount,"account": this.acount,"password": this.password,"type": 1})
+              .then((res)=>{
+                if (res.data.state == 400) {
+                  this.reqSuc = false;
+                  this.dialogVisible = true;
+                  this.showMsg = res.data.msg;
+                  //  放入本地数据
+                }else {
+                  this.reqSuc = true;
+                  this.dialogVisible = true;
+                  this.showMsg = '登录成功'
+                }
 
-            })
+              })
+          }else {
+            this.$ajax.post('/sms/login',{"phone": this.acount,"type": 1,"member":1,"sms_code": this.sms_code})
+              .then((res)=>{
+                if (res.data.state == 400) {
+                  this.reqSuc = false;
+                  this.dialogVisible = true;
+                  this.showMsg = res.data.msg;
+                  //  放入本地数据
+                }else {
+                  this.reqSuc = true;
+                  this.dialogVisible = true;
+                  this.showMsg = '登录成功'
+                }
+
+              })
+          }
+
         },
         handleClose() {
           this.dialogVisible = false;
           if (this.reqSuc == true){
             this.$router.push({name: 'index'})
+          }
+        },
+        getCode() {
+          if (this.getSmsState) {
+            this.getSmsState = false;
+            this.$ajax.get('/sms',{params: {type:1,member:1,phone:this.acount}})
+              .then((res)=>{
+                console.log(res);
+              })
           }
         }
       }

@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-           "/api":{
+        /*   "/api":{
              target: 'http://qlzm.com',
              changeOrigin: true,
              pathRewrite: {
                '^/api': '/'
              }
-           }
+           }*/
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
