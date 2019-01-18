@@ -1,6 +1,6 @@
 <template>
   <div class="tal_bas_msg_all">
-    <div class="tal_bas_msg">
+    <div class="tal_bas_msg" v-show="this.edit">
       <div class="com_det_title">
         <div class="content">
           基本信息
@@ -9,8 +9,8 @@
       <div class="tal_msg_det">
         <div class="content">
           <div class="top_pic">
-            <img src="/static/images/banner03@2x.png" alt="">
-            <p class="tal_name">德勒·阿里</p>
+            <img :src="this.headPic" alt="">
+            <p class="tal_name">{{userInfoMsg.name}}</p>
             <p><span>男</span>|<span>27岁</span>|<span>本科</span>|<span>10年以上</span></p>
           </div>
           <div class="bottom_msg">
@@ -24,12 +24,12 @@
         </div>
       </div>
       <div class="content">
-        <div class="bas_msg_btn">
+        <div class="bas_msg_btn" @click="to_edit">
           编辑
         </div>
       </div>
     </div>
-    <div class="tal_msg_edit" v-show="false">
+    <div class="tal_msg_edit" v-show="!this.edit">
       <div class="com_det_title">
         <div class="content">
           编辑基本信息
@@ -58,17 +58,51 @@
         </div>
       </div>
       <div class="content">
-        <div class="bas_msg_btn">
+        <div class="bas_msg_btn" @click="to_edited">
           保存
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
+  import {splicPic} from '../../../static/js/common.js'
     export default {
-        name: "tal_bas_msg"
+        name: "tal_bas_msg",
+      data() {
+          return {
+            userInfoMsg: {},
+            userMsg: {},
+            headPic: '/static/images/banner03@2x.png',
+            edit: true
+          }
+      },
+      created() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+
+        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
+            .then((res)=>{
+              if (res.data.state!= 400) {
+                this.userMsg = res.data.base_info;
+                userInfo.ability_index = this.userMsg.ability_index;
+                console.log(this.userMsg);
+              }
+            });
+        //头像
+        if (userInfo.photo != '') {
+          this.headPic = splicPic(userInfo.photo, true);
+        }
+        userInfo.name = userInfo.name == ''?userInfo.phone:userInfo.name;
+        this.userInfoMsg = userInfo;
+      },
+      methods: {
+        to_edit() {
+          this.edit = false;
+        },
+        to_edited() {
+          this.edit = true;
+        }
+      }
     }
 </script>
 

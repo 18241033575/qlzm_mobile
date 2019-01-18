@@ -78,7 +78,7 @@
           <img src="/static/images/ic_title_zhaopin@2x.png" alt="">急聘职位
         </div>
         <div class="ugent_body">
-          <div class="ugent_cell" :data-id="item.id" v-for="(item,index) in ugentData" :key="index" @click="to_posDetail">
+          <div class="ugent_cell" :data-id="item.id"  :cid="item.cid"  v-for="(item,index) in ugentData" :key="index" @click="to_posDetail">
             <div class="ugent_top">
               <span class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
             </div>
@@ -188,7 +188,8 @@
         },
         to_posDetail(e) {
           let id = e.currentTarget.getAttribute('data-id');
-          this.$router.push({name: 'pos_det',query:{id: id}})
+          let cid = e.currentTarget.getAttribute('cid');
+          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
         },
         to_comDetail(e) {
           let id = e.currentTarget.getAttribute('company-id');

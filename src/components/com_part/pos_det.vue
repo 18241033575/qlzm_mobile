@@ -10,21 +10,21 @@
         <div class="content">
           <div class="ugent_cell">
             <div class="ugent_top">
-              <span class="ugent_sign">急聘</span><span class="pos_name">一级建造师 - 建筑工程</span><span class="salary fr">8K-10K/月</span>
+              <span class="ugent_sign" v-show="this.posDetData.is_urgent == 1">急聘</span><span class="pos_name">{{this.posDetData.office_name}}</span><span class="salary fr">{{this.posDetData.salary}}</span>
             </div>
             <div class="ugent_bottom">
-              <span class="tags">贵阳</span> | <span class="tags">3年以上</span> | <span class="tags">大专</span> | <span
-              class="tags">全职</span><span class="update_time fr">3天前</span>
-              <p><img src="/static/images/ic_fam_comp@2x.png" alt="">贵州大鱼路桥工程有限公司</p>
+              <span class="tags">{{this.posDetData.city}}</span> | <span class="tags">{{this.posDetData.work_exp}}</span> | <span class="tags">{{this.posDetData.education}}</span> | <span
+              class="tags">{{this.posDetData.nature}}</span><span class="update_time fr">{{this.posDetData.created_at}}</span>
+              <p><img v-show="this.has_mSign" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyName}}</p>
             </div>
           </div>
         </div>
         <div class="pos_btn_group">
           <div class="pos_btn collect_btn">
-            收藏职位
+            {{collect_btn}}
           </div>
           <div class="pos_btn apply_btn" @click="apply_pos">
-            申请职位
+            {{apply_btn}}
           </div>
         </div>
       </div>
@@ -102,7 +102,7 @@
                 工作地址
               </div>
               <div class="company_address">
-                广东省深圳市南山区海德三道1126号
+                {{this.posDetData.province + this.posDetData.city + this.posDetData.area + this.posDetData.address}}
               </div>
             </div>
           </div>
@@ -117,7 +117,13 @@
     name: "pos_det",
     data() {
       return {
-        tabSign: true
+        posDetData: {},
+        posOthData: {},
+        has_mSign: false,
+        companyName: '',
+        tabSign: true,
+        collect_btn: '取消收藏职位',
+        apply_btn: '申请职位'
       }
     },
     methods: {
@@ -133,9 +139,23 @@
     },
     created() {
       let id = this.$route.query.id;
-      this.$ajax.get('/office/detail', {id: id})
+      this.$ajax.get('/office/detail', {params:{id: id}})
         .then((res) => {
           console.log(res);
+          if (res.data.state != 400) {
+            this.posDetData = res.data;
+            this.has_mSign = this.posDetData.company_info.has_m == 1?true:false;
+            this.companyName = this.posDetData.company_info.name
+          }
+        });
+      let cid = this.$route.query.cid;
+      this.$ajax.get('/company', {params:{cid: cid}})
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.posDetData = res.data;
+          }else {
+            console.log('暂无数据');
+          }
         })
     }
   }

@@ -143,8 +143,21 @@
         name: "company_det",
       data() {
           return {
-            msg: "企业详情"
+            msg: "企业详情",
+            companyMsg: {}
           }
+      },
+      created() {
+        let cid = this.$route.query.id;
+        this.$ajax.get('/api/company/detail'+ '/' + cid)
+          .then((res) => {
+            console.log(res);
+            /*if (res.data.code == 200) {
+              this.companyMsg = res.data;
+            }else {
+              console.log('暂无数据');
+            }*/
+          })
       }
     }
 </script>

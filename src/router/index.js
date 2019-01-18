@@ -26,6 +26,7 @@ import tal_invited_det from '../components/talent/tal_invited_det'
 import self_eval from '../components/talent/self_eval'
 import tal_work from '../components/talent/tal_work'
 import tal_privacy from '../components/talent/tal_privacy'
+import tal_shield from '../components/talent/tal_shield'
 
 //个人中心组件
 import main_menu from '../components/common/main_menu'
@@ -121,6 +122,11 @@ export default new Router({
       path: '/tal_invited_det',
       name: 'tal_invited_det',
       component: tal_invited_det
+    },
+    {
+      path: '/tal_shield',
+      name: 'tal_shield',
+      component: tal_shield
     },
     {
       path: '/self_eval',

@@ -10,7 +10,7 @@
         <div class="content">
           <div class="msg" v-if="isLogin">
             <div class="msg_head">
-              <img src="/static/images/ic_user_def@2x.png" alt="">
+              <img :src="this.default_headPic" alt="">
             </div>
             <div class="msg_det">
               <p class="msg_name">HI，<span class="user_name">克里斯蒂亚诺</span></p>
@@ -18,14 +18,14 @@
             </div>
           </div>
           <div class="btn_group" v-if="isLogin">
-            <router-link :to="{name: tal_center}">
+            <router-link :to="{name: 'tal_center'}">
               <div class="sub_btn btn_size">
                 个人中心
               </div>
             </router-link>
             <router-link :to="{}">
-              <div class="cancel_btn btn_size">
-                登出登录
+              <div class="cancel_btn btn_size" @click="exit_login">
+                退出登录
               </div>
             </router-link>
           </div>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-
+  import {splicPic} from '../../../static/js/common.js'
     export default {
       props: {
         give_shade:{
@@ -95,18 +95,32 @@
           },
           isOpen: true,
           openSign: false,
-          isLogin: false
+          isLogin: false,
+          default_headPic: '/static/images/ic_user_def@2x.png'
         }
       },
       methods: {
         nav_close() {
           this.isOpen = true;
           this.$emit('give_sign', this.isOpen);
-        }
+        },
+        exit_login() {
+          localStorage.clear();
+          this.isLogin = false;
+        },
       },
-      beforeCreate() {
+      created() {
         let userInfo = JSON.parse(localStorage.getItem('USER'));
-        this.isLogin = userInfo == undefined?false:true
+        console.log(userInfo);
+        if (userInfo) {
+          this.isLogin = true;
+          if (userInfo.photo != '') {
+            this.default_headPic = splicPic(userInfo.photo, true);
+          }
+        }else {
+          this.isLogin = false;
+        }
+
       }
     }
 </script>
@@ -183,11 +197,11 @@
   .btn_group{
     clear: both;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
   }
   .menu_top a{
     display: inline-block;
-    width: 40%;
+    width: 45%;
     text-decoration: none;
   }
   .menu_top a .btn_size{
@@ -204,7 +218,7 @@
     color: #ffffff;
   }
   .cancel_btn{
-    margin-left: 15px;
+    /*margin-left: 15px;*/
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;

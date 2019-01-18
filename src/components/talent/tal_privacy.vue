@@ -10,7 +10,7 @@
         <div class="content">
           <div class="privacy_state_box">
             <span>开放/隐藏简历</span>
-            <el-switch class="switch_btn"
+            <el-switch class="switch_btn" @change="changeState"
                        v-model="privacy_state">
             </el-switch>
           </div>
@@ -26,6 +26,28 @@
           return {
             privacy_state: true
           }
+      },
+      created() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.privacy_state = userInfo.state == 1?true:false
+      },
+      methods: {
+        changeState() {
+          this.$message({
+            message: '开启/关闭成功',
+            type: 'success'
+          });
+          let sta = this.privacy_state == true?1:-1;
+          this.$ajax.post('/resume/hiddenopen',{state: sta})
+            .then((res)=>{
+              //提示信息
+              this.$message({
+                message: '恭喜你，这是一条成功消息',
+                type: 'success'
+              });
+              console.log(res);
+            })
+        }
       }
     }
 </script>

@@ -12,11 +12,11 @@
             <div class="tal_point_box">
               <div class="mark tal_point_cell">
                 <p><span>个人价值指数</span><img src="/static/images/ic_doubt@2x.png" alt=""></p>
-                <p class="sign_num">70</p>
+                <p class="sign_num">{{ability_index}}</p>
               </div>
               <div class="salary tal_point_cell">
-                <p><span>个人价值指数</span><img src="/static/images/ic_doubt@2x.png" alt=""></p>
-                <p class="sign_num">12K</p>
+                <p><span>预估薪资水平</span><img src="/static/images/ic_doubt@2x.png" alt=""></p>
+                <p class="sign_num">{{estimate_salary}}</p>
               </div>
             </div>
           </div>
@@ -30,23 +30,23 @@
               <img src="/static/images/ic_resume@2x.png" alt="">
               <p>我的简历</p>
             </router-link>
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'tal_del_col'}" class="opera_list_cell">
               <img src="/static/images/iic_resume_record@2x.png" alt="">
               <p>投递记录</p>
             </router-link>
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'tal_invited'}" class="opera_list_cell">
               <img src="/static/images/ic_offer@2x.png" alt="">
               <p>面试邀请</p>
             </router-link>
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'tal_del_col'}" class="opera_list_cell">
               <img src="/static/images/ic_collection@2x.png" alt="">
               <p>收藏职位</p>
             </router-link>
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'account_manage'}" class="opera_list_cell">
               <img src="/static/images/ic_count_manage@2x.png" alt="">
               <p>账号管理</p>
             </router-link>
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'tal_shield'}" class="opera_list_cell">
               <img src="/static/images/ic_shield@2x.png" alt="">
               <p>屏蔽企业</p>
             </router-link>
@@ -57,7 +57,7 @@
       <!--消息-->
       <div class="system_msg">
         <div class="content">
-          <div class="system_msg_box">
+          <div class="system_msg_box" @click="to_msg">
             <img class="msg_pic" src="/static/images/ic_news_me@2x.png" alt="">
             <div class="msg_list">
               <ul>
@@ -65,7 +65,7 @@
                 <li>您有一份双11专属权益待查收<span>3小时前</span></li>
               </ul>
             </div>
-            <div class="msg_tip">
+            <div class="msg_tip" v-show="this.newsNew">
 
             </div>
             <img class="to_right_pic" src="/static/images/icon_goright.png" alt="">
@@ -76,24 +76,24 @@
       <div class="tal_center_bottom">
         <div class="content">
           <div class="com_det_title">
-            简历完整度 <span class="fr">80%</span>
+            简历完整度 <span class="fr">{{integrity}}%</span>
           </div>
-          <el-progress :text-inside="true" :stroke-width="18" :percentage="70"></el-progress>
+          <el-progress :text-inside="true" :stroke-width="18" :percentage="this.integrity"></el-progress>
           <div class="commit_list">
             <div class="commit_list_cell">
-              <span>83</span>家
+              <span>{{look}}</span>家
               <p>企业看过</p>
             </div>
             <div class="commit_list_cell">
-              <span>8</span>次
+              <span>{{dev}}</span>次
               <p>简历投递</p>
             </div>
             <div class="commit_list_cell">
-              <span>83</span>次
+              <span>{{col}}</span>次
               <p>企业收藏</p>
             </div>
             <div class="commit_list_cell">
-              <span>83</span>次
+              <span>{{down}}</span>次
               <p>简历下载</p>
             </div>
           </div>
@@ -104,7 +104,43 @@
 
 <script>
     export default {
-        name: "tal_center"
+        name: "tal_center",
+      data () {
+          return {
+            estimate_salary: '',
+            ability_index: '',
+            integrity: 80,
+            look: 0,
+            dev: 0,
+            col: 0,
+            down: 0,
+            newsNew: false
+          }
+      },
+      methods: {
+        to_msg() {
+
+        }
+      },
+      created() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+        //  个人价值指数
+        this.ability_index = userInfo.estimate_salary/1000;
+        //  预估薪资水平
+        this.estimate_salary = userInfo.estimate_salary/1000 +　'K';
+
+        //看、投递、收藏、下载
+        this.look = userInfo.views;
+        this.dev = userInfo.apply;
+        this.col = userInfo.collections;
+        this.down = userInfo.downloads;
+
+        //是否有新消息
+        this.$ajax.get('/personal/hasnewmsg',{params:{}})
+          .then((res)=>{
+            console.log(res);
+          })
+      }
     }
 </script>
 

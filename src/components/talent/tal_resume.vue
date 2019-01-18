@@ -9,10 +9,10 @@
       <div class="opera_list">
         <div class="content">
           <div class="opera_list_box">
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+            <div class="opera_list_cell" @click="resume_flash">
               <img src="/static/images/ic_refresh@2x.png" alt="">
               <p>刷新简历</p>
-            </router-link>
+            </div>
             <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
               <img src="/static/images/ic_preview@2x.png" alt="">
               <p>预览简历</p>
@@ -21,7 +21,7 @@
               <img src="/static/images/ic_download@2x.png" alt="">
               <p>下载简历</p>
             </router-link>
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'tal_privacy'}" class="opera_list_cell">
               <img src="/static/images/ic_privacy@2x.png" alt="">
               <p>简历隐私</p>
             </router-link>
@@ -50,33 +50,46 @@
             menuList: {
               0: {
                 urlName: "基本信息",
-                urlRoute: "index"
+                urlRoute: "tal_bas_msg"
               },
               1: {
                 urlName: "求职意向",
-                urlRoute: "find_job"
+                urlRoute: "int_job"
               },
               2:{
                 urlName: "工作经验",
-                urlRoute: "famous_pos"
+                urlRoute: "tal_work"
               },
               3:{
                 urlName: "项目经验",
-                urlRoute: "index"
+                urlRoute: ""
               },
               4:{
                 urlName: "教育经历",
-                urlRoute: "index"
+                urlRoute: ""
               },
               5:{
                 urlName: "建筑行业证书",
-                urlRoute: "index"
+                urlRoute: ""
               },
               6:{
                 urlName: "自我评价",
-                urlRoute: "index"
+                urlRoute: "self_eval"
               }
             },
+          }
+      },
+      methods: {
+        resume_flash() {
+            this.$ajax.get('/resume/refresh',{params:{}})
+              .then((res)=>{
+                if (res.data.state == 200) {
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'success'
+                  })
+                }
+              })
           }
       }
     }

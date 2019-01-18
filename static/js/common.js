@@ -115,11 +115,32 @@
   };
 
 
+  var userTags = [
+    "无",
+    "技术好",
+    "经验丰富",
+    "高学历",
+    "形象好",
+    "善于沟通",
+    "能加班",
+    "能出差",
+    "有责任心"
+  ];
+  /*
+    // 文件服务器地址
+    'file_server'           => '//file.wiiwork.com/',
+    // 文件上传接口地址
+    'file_upload'           => '//file.wiiwork.com/v1/upload',
+  */
   //拼接图片地址
-  function splicPic(data) {
-
+  function splicPic(data,add) {
+    if (add) {
+      const file_server = '//file.wiiwork.com/';
+      const file_upload = '//file.wiiwork.com/v1/upload';
+      return data = file_server + data;
+    }
   }
 
   export {
-    transSalary,gender,transEducation,transWorkexp,getDistanceTime,transNature
+    transSalary,gender,transEducation,transWorkexp,getDistanceTime,transNature,splicPic
   }

@@ -60,11 +60,16 @@
                   this.reqSuc = false;
                   this.dialogVisible = true;
                   this.showMsg = res.data.msg;
-                  //  放入本地数据
                 }else {
                   this.reqSuc = true;
                   this.dialogVisible = true;
-                  this.showMsg = '登录成功'
+                  this.showMsg = '登录成功';
+                  //  放入本地数据
+                  let params = {};
+                  params = JSON.stringify(res.data);
+                  localStorage.setItem('USER',params);
+                  sessionStorage.setItem('USER',params);
+                  console.log(JSON.parse(localStorage.getItem('USER')));
                 }
 
               })
@@ -75,8 +80,12 @@
                   this.reqSuc = false;
                   this.dialogVisible = true;
                   this.showMsg = res.data.msg;
-                  //  放入本地数据
                 }else {
+                  //  放入本地数据
+                  let params = {};
+                  params = res.data;
+                  localStorage.setItem('USER',params);
+                  console.log(localStorage.getItem('USER'));
                   this.reqSuc = true;
                   this.dialogVisible = true;
                   this.showMsg = '登录成功'
