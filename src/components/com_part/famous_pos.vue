@@ -10,9 +10,9 @@
         <!--可以提取出来公共部分-->
         <div class="famous_body">
           <div class="content">
-            <div class="famous_cell" v-for="(item,index) in famData" :key="index">
+            <div class="famous_cell" :company-id="item.id" v-for="(item,index) in famData" :key="index" @click="to_comDetail">
               <div class="famous_head fl">
-                <img src="" alt="">
+                <img :src="item.logo" alt="">
               </div>
               <div class="famous_msg fl">
                 <div class="famous_name">
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import {splicLogo} from '../../../static/js/common.js'
     export default {
         name: "famous_pos",
       data() {
@@ -37,13 +38,19 @@
           }
       },
       created() {
-          this.$ajax.get('/company/famous',{page: this.pages, rows: 6})
+          this.$ajax.get('/company/famous',{params:{page: this.pages +1, rows: 6}})
             .then((res)=>{
-              console.log(res);
               if(res.data.state != 400) {
+                splicLogo(res.data);
                 this.famData = res.data
               }
             })
+      },
+      methods: {
+        to_comDetail(e) {
+          let id = e.currentTarget.getAttribute('company-id');
+          this.$router.push({name: 'company_det',query:{id: id}})
+        }
       }
     }
 </script>
@@ -82,7 +89,6 @@
     margin-bottom: 15px;
     width: 60px;
     height: 60px;
-    background-color: aqua;
   }
   .famous_head img{
     width: 100%;

@@ -30,7 +30,7 @@
               <img src="/static/images/ic_resume@2x.png" alt="">
               <p>我的简历</p>
             </router-link>
-            <router-link :to="{name: 'tal_del_col'}" class="opera_list_cell">
+            <router-link :to="{name: 'tal_del_col',query: {orig: 1}}" class="opera_list_cell">
               <img src="/static/images/iic_resume_record@2x.png" alt="">
               <p>投递记录</p>
             </router-link>
@@ -38,7 +38,7 @@
               <img src="/static/images/ic_offer@2x.png" alt="">
               <p>面试邀请</p>
             </router-link>
-            <router-link :to="{name: 'tal_del_col'}" class="opera_list_cell">
+            <router-link :to="{name: 'tal_del_col',query: {orig: 2}}" class="opera_list_cell">
               <img src="/static/images/ic_collection@2x.png" alt="">
               <p>收藏职位</p>
             </router-link>
@@ -119,13 +119,13 @@
       },
       methods: {
         to_msg() {
-
+            this.$router.push({name: 'tal_invited'})
         }
       },
       created() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
         //  个人价值指数
-        this.ability_index = userInfo.estimate_salary/1000;
+        this.ability_index = userInfo.ability_index || 0;
         //  预估薪资水平
         this.estimate_salary = userInfo.estimate_salary/1000 +　'K';
 

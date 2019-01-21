@@ -10,13 +10,13 @@
           <div class="content">
             <div class="famous_cell">
               <div class="famous_head fl">
-                <img src="" alt="">
+                <img :src="this.companyMsg.logo" alt="">
               </div>
               <div class="famous_msg fl">
                 <div class="pos_name">
-                  贵州长右岸建设工程有限公司
+                  <img v-show="companyMsg.has_m==1" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyMsg.name}}
                 </div>
-                <p><span class="tags">贵阳</span> | <span class="tags">3年以上</span> | <span class="tags">大专</span></p>
+                <p><span class="tags">{{companyMsg.nature}}</span> | <span class="tags">{{companyMsg.scale}}</span> | <span class="tags">{{companyMsg.province + companyMsg.city}}</span></p>
               </div>
             </div>
           </div>
@@ -24,111 +24,114 @@
       </div>
       <div class="company_det_bottom">
         <div class="bottom_tab">
-          <div class="bottom_tab_cell">
-            <span>企业信息</span>
+          <div class="bottom_tab_cell" @click="company_msg">
+            <span :class="{company_active: this.companyDetSign}">企业信息</span>
           </div>
-          <div class="bottom_tab_cell">
-            <span>热招职位</span>
+          <div class="bottom_tab_cell" @click="hot_pos">
+            <span :class="{company_active: !this.companyDetSign}">热招职位({{hotPosNum}})</span>
           </div>
         </div>
-        <div class="hot_post" v-show="false">
+        <div class="hot_post" v-show="!this.companyDetSign">
           <div class="content">
-            <div class="ugent_cell">
+            <div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in this.hotPosData.data" :key="index" @click="to_posDetail">
               <div class="ugent_top">
-                <span class="ugent_sign">急聘</span><span class="pos_name">一级建造师 - 建筑工程</span><span class="salary fr">8K-10K/月</span>
+                <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
               </div>
               <div class="ugent_bottom">
-                <span class="tags">贵阳</span> | <span class="tags">3年以上</span> | <span class="tags">大专</span> | <span
-                class="tags">全职</span><span class="update_time fr">3天前</span>
-                <!--<p><img src="/static/images/ic_fam_comp@2x.png" alt="">贵州大鱼路桥工程有限公司</p>-->
+                <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
+                class="tags">{{item.nature}}</span><span class="update_time fr">{{item.update_at}}</span>
               </div>
             </div>
           </div>
         </div>
-        <div class="company_msg_cell">
-          <div class="content">
-            <div class="cell_box">
-              <div class="com_det_title msg_cell_fz">
-                企业风采
-              </div>
-              <div class="company_mien">
-                <div class="mien_cell fl">
-                  <img src="/static/images/banner03@2x.png" alt="">
-                  <p>恒大地产秉承“民生地产”理念，在中国280多个城市拥有项目800多个，与全球800多家知名企业战略合作</p>
+        <div class="company_msg" v-show="this.companyDetSign">
+          <div class="company_msg_cell">
+            <div class="content">
+              <div class="cell_box">
+                <div class="com_det_title msg_cell_fz">
+                  企业风采
                 </div>
-                <div class="mien_cell fl">
-                  <img src="/static/images/banner03@2x.png" alt="">
-                  <p>恒大地产秉承“民生地产”理念，在中国280多个城市拥有项目800多个，与全球800多家知名企业战略合作</p>
+                <div class="company_mien">
+                  <div class="mien_cell fl">
+                    <img src="/static/images/banner03@2x.png" alt="">
+                    <p>恒大地产秉承“民生地产”理念，在中国280多个城市拥有项目800多个，与全球800多家知名企业战略合作</p>
+                  </div>
+                  <div class="mien_cell fl">
+                    <img src="/static/images/banner03@2x.png" alt="">
+                    <p>恒大地产秉承“民生地产”理念，在中国280多个城市拥有项目800多个，与全球800多家知名企业战略合作</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="company_msg_cell">
-          <div class="content">
-            <div class="cell_box">
-              <div class="com_det_title msg_cell_fz">
-                企业简介
-              </div>
-              <div class="company_info">
-                <p>恒大地产集团有限公司是中国恒大集团的下属控股企业大地产集团有限公司是中国恒大集团的下属控股企业，是集团的大地产集团有限公司是中国恒大集团的下属控股企业，是集团的大地产集团有限公司是中国恒大集团的下属控股企业，是集团的大地产集团有限公司是中国恒大集团的下属控股企业，是集团的大地产集团有限公司是中国恒大集团的下属控股企业，是集团的，是集团的地产业务主体，总部位于中国深圳。恒大集团是集地产、金融、健康、旅游及体育为一体的世界500强企业集团，总资产达万亿，年销售规模超4000亿，员工8万多人，解决就业130多万人，在全国180多个城市拥有地产项目500多个，已成为全球第一房企。
-                </p>
-                <div class="shade"></div>
-              </div>
-              <!--思路：开始固定高度，超出隐藏。点击后自动高度-->
-              <div class="show_all">查看全部</div>
-            </div>
-          </div>
-        </div>
-        <div class="company_msg_cell">
-          <div class="content">
-            <div class="cell_box">
-              <div class="com_det_title msg_cell_fz">
-                企业福利
-              </div>
-              <div class="company_welfare">
-                <span>五险一金</span><span>五险一金</span><span>双休</span><span>五险一金</span><span>五险一金</span><span>双休</span><span>五险一金</span><span>五险一金</span><span>双休</span>
+          <div class="company_msg_cell">
+            <div class="content">
+              <div class="cell_box">
+                <div class="com_det_title msg_cell_fz">
+                  企业简介
+                </div>
+                <div class="company_info">
+                  <p>{{companyMsg.introduction}}
+                  </p>
+                  <div class="shade"></div>
+                </div>
+                <!--思路：开始固定高度，超出隐藏。点击后自动高度-->
+                <div class="show_all">查看全部</div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="company_msg_cell">
-
-          <div class="content">
-            <div class="cell_box">
-              <div class="com_det_title msg_cell_fz">
-                企业地址
-              </div>
-              <div class="company_address">
-                广东省深圳市南山区海德三道1126号
+          <div class="company_msg_cell">
+            <div class="content">
+              <div class="cell_box">
+                <div class="com_det_title msg_cell_fz">
+                  企业福利
+                </div>
+                <div v-show="!tags_sign" class="company_welfare">
+                  <p v-show="!tags_sign">暂无</p>
+                </div>
+                <div v-show="tags_sign" class="company_welfare">
+                  <span v-for="(item,index) in companyMsg.tags" :key="index">{{item}}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="company_msg_cell">
-          <div class="content">
-            <div class="cell_box">
-              <div class="com_det_title msg_cell_fz">
-                联系人
+          <div class="company_msg_cell">
+            <div class="content">
+              <div class="cell_box">
+                <div class="com_det_title msg_cell_fz">
+                  企业地址
+                </div>
+                <div class="company_address">
+                  {{companyMsg.province +　companyMsg.city + companyMsg.area + companyMsg.address}}
+                </div>
               </div>
-              <div class="company_contract">
-                <div class="company_contract_cell">
-                  <span class="label">联系人</span><span class="contract_msg">王经理</span>
+            </div>
+          </div>
+          <div class="company_msg_cell">
+            <div class="content">
+              <div class="cell_box">
+                <div class="com_det_title msg_cell_fz">
+                  联系人
                 </div>
-                <div class="company_contract_cell">
-                  <span class="label">手机</span><span class="contract_msg">18500008878</span>
-                </div>
-                <div class="company_contract_cell">
-                  <span class="label">座机</span><span class="contract_msg">0851-85687778</span>
-                </div>
-                <div class="company_contract_cell">
-                  <span class="label">微信</span><span class="contract_msg">wx18500008878</span>
-                </div>
-                <div class="company_contract_cell">
-                  <span class="label">QQ</span><span class="contract_msg">10589856</span>
-                </div>
-                <div class="company_contract_cell">
-                  <span class="label">邮箱</span><span class="contract_msg">10589856@qq.com</span>
+                <div class="company_contract">
+                  <div class="company_contract_cell">
+                    <span class="label">联系人</span><span class="contract_msg">{{contactData.username}}</span>
+                  </div>
+                  <div class="company_contract_cell">
+                    <span class="label">手机</span><span class="contract_msg">{{contactData.phone}}</span>
+                  </div>
+                  <div class="company_contract_cell">
+                    <span class="label">座机</span><span class="contract_msg">{{contactData.tel}}</span>
+                  </div>
+                  <div class="company_contract_cell">
+                    <span class="label">微信</span><span class="contract_msg">{{contactData.wx}}</span>
+                  </div>
+                  <div class="company_contract_cell">
+                    <span class="label">QQ</span><span class="contract_msg">{{contactData.qq}}</span>
+                  </div>
+                  <div class="company_contract_cell">
+                    <span class="label">邮箱</span><span class="contract_msg">{{contactData.email}}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -139,25 +142,56 @@
 </template>
 
 <script>
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover,splicPic,company_adv} from '../../../static/js/common.js'
     export default {
         name: "company_det",
       data() {
           return {
             msg: "企业详情",
-            companyMsg: {}
+            companyMsg: {},
+            contactData: {},
+            hotPosData: [],
+            companyDetSign: true,
+            hotPosNum: 0,
+            tags_sign: true
           }
       },
       created() {
         let cid = this.$route.query.id;
         this.$ajax.get('/api/company/detail'+ '/' + cid)
           .then((res) => {
-            console.log(res);
-            /*if (res.data.code == 200) {
+            if (res.data.state != 400) {
+              if (res.data.tags == '') {
+                this.tags_sign = false;
+              } else {
+                this.tags_sign = true;
+                res.data.tags = company_adv(res.data.tags,true);
+              }
+              res.data.logo = splicPic(res.data.logo,true);
+              this.contactData = res.data.contact;
               this.companyMsg = res.data;
-            }else {
-              console.log('暂无数据');
-            }*/
+            }
+          });
+        this.$ajax.get('/office/company', {params: {cid: cid}})
+          .then((res) => {
+            if (res.data.state != 400) {
+              this.hotPosData = res.data;
+              this.hotPosNum = res.data.data.length;
+            }
           })
+      },
+      methods: {
+        company_msg() {
+          this.companyDetSign = true;
+        },
+        hot_pos() {
+          this.companyDetSign = false;
+        },
+        to_posDetail(e) {
+          let id = e.currentTarget.getAttribute('data-id');
+          let cid = e.currentTarget.getAttribute('cid');
+          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
+        },
       }
     }
 </script>
@@ -171,7 +205,6 @@
   .com_det_body{
     width: 100%;
     height: 90px;
-    background-color: aqua;
   }
 
   /*名企列表*/
@@ -189,7 +222,6 @@
     margin-bottom: 15px;
     width: 60px;
     height: 60px;
-    background-color: aqua;
   }
   .famous_head img{
     width: 100%;
@@ -200,6 +232,7 @@
   }
   .famous_msg{
     flex-grow: 1;
+    padding-top: 5px;
     padding-left: 20px;
     color: #666666;
   }
@@ -210,14 +243,21 @@
   .famous_msg p{
     margin-top: 12px;
     font-size: 12px;
+    color: #919199;
   }
-  .famous_msg p span{
+ /* .famous_msg p span{
     color: #ff8236;
-  }
+  }*/
 
   .pos_name {
     font-size: 14px;
     color: #666666;
+  }
+  .pos_name img{
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
   }
   .tags {
     font-size: 12px;
@@ -247,9 +287,10 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+  }
+  .company_active{
     border-bottom: 1px solid #5082E6;
   }
-
 
   .ugent_cell {
     padding: 15px 0;
@@ -379,13 +420,14 @@
     display: flex;
     /*justify-content: center;*/
     flex-wrap: wrap;
+    font-size: 12px;
+    color: #919199;
   }
   .company_welfare span{
     margin-bottom: 5px;
     margin-right: 10px;
     text-align: center;
     padding: 5px 7px;
-    font-size: 12px;
     line-height: 12px;
     color: #5082e6;
     -webkit-box-sizing: border-box;

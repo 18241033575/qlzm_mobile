@@ -33,13 +33,25 @@
           }
       },
       created() {
-        //判断路由显示不同内容
-        this.$ajax.get('/company_work',this.find_jobParam)
-          .then((res)=>{
-            if (res.data.code == 200) {
-              this.del_colData = res.data.data
-            }
-          })
+        //判断路由显示不同内容    /personal/apply
+        let type = this.$route.query.orig;
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        //1、投递  2、收藏
+        if (type == 1) {
+          this.titleMsg = '简历投递记录';
+          this.$ajax.get('/personal/apply',{params:{uid: userInfo.id}})
+            .then((res)=>{
+              console.log(res);
+
+            })
+        }else {
+          this.titleMsg = '收藏的简历';
+          this.$ajax.get('/personal/collection',{params:{uid: userInfo.id}})
+            .then((res)=>{
+              console.log(res);
+            })
+        }
+
       }
     }
 </script>

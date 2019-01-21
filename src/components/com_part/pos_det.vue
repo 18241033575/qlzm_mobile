@@ -35,19 +35,18 @@
           <span :class="{active:this.tabSign}">职位详情</span>
         </div>
         <div class="bottom_tab_cell " @click="tab_pos_oth">
-          <span :class="{active:!this.tabSign}">其他招聘职位(5)</span>
+          <span :class="{active:!this.tabSign}">其他招聘职位({{otherPosNum}})</span>
         </div>
       </div>
       <div class="hot_post" v-show="!this.tabSign">
         <div class="content">
-          <div class="ugent_cell">
+          <div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in this.otherPosData" :key="index" @click="to_posDetail">
             <div class="ugent_top">
-              <span class="ugent_sign">急聘</span><span class="pos_name">一级建造师 - 建筑工程</span><span class="salary fr">8K-10K/月</span>
+              <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
             </div>
             <div class="ugent_bottom">
-              <span class="tags">贵阳</span> | <span class="tags">3年以上</span> | <span class="tags">大专</span> | <span
-              class="tags">全职</span><span class="update_time fr">3天前</span>
-              <!--<p><img src="/static/images/ic_fam_comp@2x.png" alt="">贵州大鱼路桥工程有限公司</p>-->
+              <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
+              class="tags">{{item.nature}}</span><span class="update_time fr">{{item.update_at}}</span>
             </div>
           </div>
         </div>
@@ -69,7 +68,7 @@
           <div class="content">
             <div class="cell_box">
               <div class="com_det_title msg_cell_fz">
-                企业简介
+                职位描述
               </div>
               <div class="company_info">
                 <p>
@@ -88,8 +87,11 @@
               <div class="com_det_title msg_cell_fz">
                 职位亮点
               </div>
-              <div class="company_welfare">
-                <span>五险一金</span><span>五险一金</span><span>双休</span><span>五险一金</span><span>五险一金</span><span>双休</span><span>五险一金</span><span>五险一金</span><span>双休</span>
+              <div v-show="!tags_sign" class="company_welfare">
+                <p v-show="!tags_sign">暂无</p>
+              </div>
+              <div v-show="tags_sign" class="company_welfare">
+                <span v-for="(item,index) in posDetData.tags" :key="index">{{item}}</span>
               </div>
             </div>
           </div>
@@ -113,6 +115,7 @@
 </template>
 
 <script>
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover,splicPic,company_adv} from '../../../static/js/common.js'
   export default {
     name: "pos_det",
     data() {
@@ -123,7 +126,10 @@
         companyName: '',
         tabSign: true,
         collect_btn: '取消收藏职位',
-        apply_btn: '申请职位'
+        apply_btn: '申请职位',
+        otherPosData: {},
+        otherPosNum: 0,
+        tags_sign: true
       }
     },
     methods: {
@@ -135,6 +141,12 @@
       },
       tab_pos_oth() {
         this.tabSign = false
+      },
+      to_posDetail(e) {
+        let id = e.currentTarget.getAttribute('data-id');
+        let cid = e.currentTarget.getAttribute('cid');
+        this.$router.push({name: 'pos_det',query:{id: id,cid: cid}});
+        location.reload()
       }
     },
     created() {
@@ -143,18 +155,28 @@
         .then((res) => {
           console.log(res);
           if (res.data.state != 400) {
+            if (res.data.tags == '') {
+              this.tags_sign = false;
+            } else {
+              this.tags_sign = true;
+              res.data.tags = company_adv(res.data.tags,true);
+            }
             this.posDetData = res.data;
             this.has_mSign = this.posDetData.company_info.has_m == 1?true:false;
             this.companyName = this.posDetData.company_info.name
           }
         });
+
       let cid = this.$route.query.cid;
-      this.$ajax.get('/company', {params:{cid: cid}})
+      this.$ajax.get('/office/company', {params:{cid: cid}})
         .then((res) => {
-          if (res.data.code == 200) {
-            this.posDetData = res.data;
-          }else {
-            console.log('暂无数据');
+          if (res.data.state != 400) {
+            this.otherPosNum = res.data.data.length - 1;
+            for (let i = 0;i < res.data.data.length; i++) {
+              if (res.data.data[i].id != id) {
+                this.otherPosData[i] = res.data.data[i]
+              }
+            }
           }
         })
     }
@@ -278,7 +300,7 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    /*border-bottom: 1px solid #ECEFF1;*/
+    border: 0;
   }
 
   .ugent_sign {

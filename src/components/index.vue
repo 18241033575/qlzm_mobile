@@ -96,9 +96,9 @@
           <img src="/static/images/ic_title_mq@2x.png" alt="">名企招聘
         </div>
         <div class="famous_body">
-          <div class="famous_cell" :company-id="item.id" v-for="(item,index) in famousData" :key="index" @click="to_comDetail">
+          <div class="famous_cell" :company-cid="item.cid" v-for="(item,index) in famousData" :key="index" @click="to_comDetail">
             <div class="famous_head fl">
-              <img src="" alt="">
+              <img :src="item.logo" alt="">
             </div>
             <div class="famous_msg fl">
               <div class="famous_name">
@@ -120,9 +120,9 @@
           <img src="/static/images/ic_title_news@2x.png" alt="">新闻资讯
         </div>
         <div class="news_body">
-          <div class="news_cell" v-for="(item,index) in newsData" :key="index">
+          <div class="news_cell" :news-id="item.id" v-for="(item,index) in newsData" :key="index" @click="news_det">
             <div class="news_head fl">
-
+              <img :src="item.frontcover" alt="">
             </div>
             <div class="news_msg fl">
               <div class="news_name">
@@ -149,8 +149,7 @@
 <script>
   import main_menu from '../components/common/main_menu'
   import menu_list_pic from '../components/common/menu_list_pic'
-  // import {gender} from '../../static/js/common.js'
-  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp} from '../../static/js/common.js'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../static/js/common.js'
     export default {
         name: "index",
       components: {
@@ -192,8 +191,12 @@
           this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
         },
         to_comDetail(e) {
-          let id = e.currentTarget.getAttribute('company-id');
+          let id = e.currentTarget.getAttribute('company-cid');
           this.$router.push({name: 'company_det',query:{id: id}})
+        },
+        news_det(e) {
+          let id = e.currentTarget.getAttribute('news-id');
+          this.$router.push({name: 'news_det',query:{id: id}})
         }
       },
       watch: {
@@ -209,7 +212,7 @@
                 transNature(res.data);
                 transEducation(res.data);
                 transWorkexp(res.data);
-                this.ugentData = res.data
+                this.ugentData = res.data;
                 for (let i = 0;i < this.ugentData.length; i++) {
                   this.ugentData[i].created_at = getDistanceTime(this.ugentData[i].created_at)
                 }
@@ -218,12 +221,14 @@
         this.$ajax.get('/company/famous',{page: 1, rows: 6})
           .then((res)=>{
             if(res.data.state != 400){
+              splicLogo(res.data);
               this.famousData = res.data
             }
           });
         this.$ajax.post('/news',{page: 1, operate: 'index'})
           .then((res)=>{
             if(res.data.code == 200){
+              splicFrontcover(res.data.data);
               this.newsData = res.data.data
             }
           })
@@ -380,7 +385,6 @@
     margin-bottom: 15px;
     width: 60px;
     height: 60px;
-    background-color: aqua;
   }
   .famous_head img{
     width: 100%;
@@ -435,6 +439,10 @@
     height: 60px;
     min-width: 90px;
     background-color: aqua;
+  }
+  .news_head img{
+    width: 100%;
+    height: 100%;
   }
   .news_msg{
     flex-grow: 1;

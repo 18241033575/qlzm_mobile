@@ -7,8 +7,8 @@
       </div>
     </div>
     <div class="add_item">
-      <p v-show="false"><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加屏蔽企业</span></p>
-      <input type="text"> <span>保存</span><span>取消</span>
+      <p v-show="this.shieldSignState" @click="addShield"><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加屏蔽企业</span></p>
+      <div class="opera" v-show="!this.shieldSignState"><input type="text" placeholder="请输入完整的公司名称" v-model="company_name"> <span>保存</span><span @click="cancel">取消</span></div>
     </div>
     <div class="shield_list">
       <div class="content">
@@ -22,7 +22,28 @@
 
 <script>
     export default {
-        name: "tal_shield"
+        name: "tal_shield",
+      data() {
+          return {
+            shieldSignState: true,
+            company_name: '123456'
+          }
+      },
+      created() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.get('/personal/shield')
+            .then((res)=>{
+              console.log(res);
+            })
+      },
+      methods: {
+        addShield() {
+          this.shieldSignState = false
+        },
+        cancel() {
+          this.shieldSignState = true
+        }
+      }
     }
 </script>
 
@@ -34,6 +55,12 @@
     background-color: #ffffff;
     text-align: center;
   }
+  .add_item input{
+    vertical-align: middle;
+    height: 26px;
+    padding: 0 10px;
+    color: #919199;
+  }
   .add_item img{
     margin-right: 5px;
     width: 16px;
@@ -43,6 +70,16 @@
   .add_item span{
     font-size: 14px;
     color: #919199;
+  }
+  .add_item .opera span{
+    display: inline-block;
+    margin-left: 5px;
+    width: 50px;
+    line-height: 32px;
+    text-align: center;
+    font-size: 12px;
+    color: #ffffff;
+    background-color: #5082e6;
   }
   .shield_list{
     margin-top: 10px;

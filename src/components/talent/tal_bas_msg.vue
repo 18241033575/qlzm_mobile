@@ -11,15 +11,15 @@
           <div class="top_pic">
             <img :src="this.headPic" alt="">
             <p class="tal_name">{{userInfoMsg.name}}</p>
-            <p><span>男</span>|<span>27岁</span>|<span>本科</span>|<span>10年以上</span></p>
+            <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education}}</span>|<span>{{userMsg.work_exp}}</span></p>
           </div>
           <div class="bottom_msg">
-            <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-            <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-            <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-            <p><span class="left_lab">就业情况</span> <span class="right_msg">在职</span></p>
-            <p><span class="left_lab">通讯地址</span> <span class="right_msg">贵州省贵阳市南明区</span></p>
-            <p><span class="left_lab">街道</span> <span class="right_msg">花果园财富广场1栋8楼</span></p>
+            <p><span class="left_lab">手机</span> <span class="right_msg">{{userInfoMsg.phone}}</span></p>
+            <p><span class="left_lab">QQ</span> <span class="right_msg">{{userMsg.qq}}</span></p>
+            <p><span class="left_lab">邮箱</span> <span class="right_msg">{{userMsg.email}}</span></p>
+            <p><span class="left_lab">就业情况</span> <span class="right_msg">{{userMsg.work_status}}</span></p>
+            <p><span class="left_lab">通讯地址</span> <span class="right_msg">{{userMsg.province + userMsg.city + userMsg.area}}</span></p>
+            <p><span class="left_lab">街道</span> <span class="right_msg">{{userMsg.address}}</span></p>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
           <div class="content">
             <div class="edit_top_box">
               <div class="top_pic">
-                <img src="/static/images/user-01@2x.png" alt="">
+                <img :src="this.editHeadPic" alt="">
               </div>
               <div class="top_msg">
                 <span class="upload_btn">上传图片</span>
@@ -73,6 +73,7 @@
           return {
             userInfoMsg: {},
             userMsg: {},
+            editHeadPic: '/static/images/user-01@2x.png',
             headPic: '/static/images/banner03@2x.png',
             edit: true
           }
@@ -80,20 +81,24 @@
       created() {
         let userInfo = JSON.parse(localStorage.getItem('USER'));
 
+        //头像
+        if (userInfo.photo != '') {
+         this.editHeadPic = this.headPic = splicPic(userInfo.photo, true);
+        }
+        userInfo.name = userInfo.name == ''?userInfo.phone:userInfo.name;
+        this.userInfoMsg = userInfo;
+        console.log(this.userInfoMsg);
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
                 this.userMsg = res.data.base_info;
                 userInfo.ability_index = this.userMsg.ability_index;
+                userInfo = JSON.stringify(userInfo);
+                localStorage.setItem('USER',userInfo);
                 console.log(this.userMsg);
               }
             });
-        //头像
-        if (userInfo.photo != '') {
-          this.headPic = splicPic(userInfo.photo, true);
-        }
-        userInfo.name = userInfo.name == ''?userInfo.phone:userInfo.name;
-        this.userInfoMsg = userInfo;
+
       },
       methods: {
         to_edit() {
@@ -113,10 +118,10 @@
   .top_pic{
     text-align: center;
     padding-top: 15px;
-    -webkit-box-sizing: border-box;
+  /*  -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    border-bottom: 1px solid #E1E4E6;
+    border-bottom: 1px solid #E1E4E6;*/
   }
   .top_pic img{
     width: 75px;
@@ -178,6 +183,7 @@
   }
   .top_msg{
     margin-left: 15px;
+    padding-top: 15px;
     color: #919199;
   }
   .top_msg p{

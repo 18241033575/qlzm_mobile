@@ -111,7 +111,7 @@
       },
       created() {
         let userInfo = JSON.parse(localStorage.getItem('USER'));
-        console.log(userInfo);
+        // console.log(userInfo);
         if (userInfo) {
           this.isLogin = true;
           if (userInfo.photo != '') {
