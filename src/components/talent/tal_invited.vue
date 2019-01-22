@@ -8,7 +8,7 @@
       </div>
       <div class="invited_body">
         <div class="content">
-          <div class="invited_cell">
+          <div class="invited_cell" @click="invited_det">
             <span class="new_sign"></span>您收到一份来自“贵州长右岸建设工程有限公司”的面试邀请
           </div>
           <div class="invited_cell">
@@ -21,7 +21,24 @@
 
 <script>
     export default {
-        name: "tal_invited"
+        name: "tal_invited",
+      data() {
+          return {
+
+          }
+      },
+      created() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
+            .then((res)=>{
+              console.log(res);
+            })
+      },
+      methods: {
+        invited_det() {
+          this.$router.push({name: 'tal_invited_det'})
+        }
+      }
     }
 </script>
 

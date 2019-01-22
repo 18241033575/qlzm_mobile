@@ -22,6 +22,16 @@
             tips_msg: '提示信息'
 
           }
+      },
+      created() {
+          let orig = this.$route.query.orig;
+          if (orig == 'phone') {
+            this.success_msg = '手机号码修改成功！';
+            this.tips_msg = '下次登录请使用新手机号码登录。'
+          }else if(orig == 'password') {
+            this.success_msg = '密码修改成功！';
+            this.tips_msg = '下次登录请使用新密码登录。'
+          }
       }
     }
 </script>

@@ -1,12 +1,13 @@
 <template>
     <div class="tal_work">
-      <div class="tal_work_msg" v-show="false">
+      <!--工作经历列表-->
+      <div class="tal_work_msg" v-show="this.workExpSign">
         <div class="com_det_title">
           <div class="content">
             工作经历
           </div>
         </div>
-        <div class="add_item">
+        <div class="add_item" @click="add_work_exp">
           <p><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加工作经历</span></p>
         </div>
         <div class="exp_list">
@@ -52,17 +53,61 @@
           </div>
         </div>
       </div>
-      <div class="tal_work_edit">
+      <!--编辑工作经历-->
+      <div class="tal_work_edit" v-show="!this.workExpSign">
         <div class="com_det_title">
           <div class="content">
-            添加/编辑工作经历
+            {{editMsg}}
           </div>
         </div>
         <div class="exp_edit_list">
           <div class="content">
-            <div class="exp_edit_cell">
-              <span>公司名称</span><input type="text" placeholder="公司名称" value="贵州知商网络科技有限公司">
+            <div class="edit_cell">
+              <span class="edit_lab">公司名称</span><input type="text"  placeholder="公司名称">
             </div>
+            <div class="edit_cell">
+              <span class="edit_lab">职位名称</span><input type="text" placeholder="职位名称">
+            </div>
+            <div class="edit_cell">
+              <span class="edit_lab">税前月薪(元)</span><input type="text"  placeholder="税前月薪">
+            </div>
+            <div class="edit_cell special_cell">
+              <span class="edit_lab">在职时间</span>
+              <div class="block">
+                <!--<span class="demonstration">带快捷选项</span>-->
+                <el-date-picker
+                  v-model="value2"
+                  align="right"
+                  type="date"
+                  placeholder="选择日期"
+                  :picker-options="pickerOptions1">
+                </el-date-picker>
+              </div>
+              <div class="block">
+                <!--<span class="demonstration">带快捷选项</span>-->
+                <el-date-picker
+                  v-model="value1"
+                  align="right"
+                  type="date"
+                  placeholder="选择日期"
+                  :picker-options="pickerOptions1">
+                </el-date-picker>
+              </div>
+            </div>
+            <div class="edit_cell">
+              <span class="edit_lab">行业性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.jobNature==1}" @click="is_jobNature">建筑业</span><span class="choose_cell" :class="{choose_active:this.jobNature==0}" @click="isn_jobNature">非建筑业</span></span>
+            </div>
+            <div class="edit_cell">
+              <span class="edit_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.workNature==1}" @click="man_workNature">管理岗</span><span class="choose_cell" :class="{choose_active:this.workNature==2}" @click="ski_workNature">技术岗</span><span class="choose_cell" :class="{choose_active:this.workNature==3}" @click="oth_workNature">其他</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="remark">
+          <div class="content">
+            <div class="edit_cell specail_area">
+              <span class="edit_lab">工作职责</span>
+            </div>
+            <textarea placeholder="在这里填写职责内容" name="remark" id="" cols="30" rows="10"></textarea>
           </div>
         </div>
       </div>
@@ -71,7 +116,43 @@
 
 <script>
     export default {
-        name: "tal_work"
+        name: "tal_work",
+      data() {
+          return {
+            workExpSign: true,
+            editMsg: '',
+            jobNature: 0,
+            workNature: 1,
+            pickerOptions1: {
+              disabledDate(time) {
+                return time.getTime() > Date.now();
+              }
+            },
+            value1: '',
+            value2: '',
+          }
+      },
+      methods: {
+        add_work_exp() {
+          this.workExpSign = false;
+          this.editMsg = '添加工作经历'
+        },
+        is_jobNature() {
+          this.jobNature = 1
+        },
+        isn_jobNature() {
+          this.jobNature = 0
+        },
+        man_workNature() {
+          this.workNature = 1
+        },
+        ski_workNature() {
+          this.workNature = 2
+        },
+        oth_workNature() {
+          this.workNature = 3
+        },
+      }
     }
 </script>
 
@@ -137,5 +218,74 @@
   }
   .exp_edit_cell{
 
+  }
+  .edit_cell {
+    line-height: 44px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
+    font-size: 14px;
+  }
+  .edit_cell .edit_lab {
+    display: inline-block;
+    width: 90px;
+    color: #353535;
+  }
+  .edit_cell input{
+    display: inline-block;
+    padding-left: 10px;
+    width: 65%;
+    line-height: 32px;
+    border: none;
+    color: #666666;
+  }
+  .edit_cell input ::placeholder{
+    color: #c2c2cc;
+  }
+  .edit_cell input:focus{
+    outline: none;
+  }
+  .choose_group{
+    display: inline-block;
+    margin-top: 10px;
+    width: 65%;
+    text-align: right;
+    line-height: 24px;
+  }
+  .choose_cell{
+    display: inline-block;
+    margin-left: 10px;
+    width: 60px;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #919199;
+    background-color: #ffffff;
+  }
+  .choose_active{
+    color: #5082e6;
+    background:rgba(80,130,230,.2);
+  }
+  .remark{
+    margin-top: 10px;
+    text-align: center;
+    background-color: #ffffff;
+  }
+  .remark textarea{
+    padding: 15px;
+    width: 85%;
+    min-height: 120px;
+    border: none;
+  }
+  .specail_area{
+    text-align: left;
+    border: none;
   }
 </style>

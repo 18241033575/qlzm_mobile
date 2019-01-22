@@ -8,12 +8,12 @@
     </div>
     <div class="add_item">
       <p v-show="this.shieldSignState" @click="addShield"><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加屏蔽企业</span></p>
-      <div class="opera" v-show="!this.shieldSignState"><input type="text" placeholder="请输入完整的公司名称" v-model="company_name"> <span>保存</span><span @click="cancel">取消</span></div>
+      <div class="opera" v-show="!this.shieldSignState"><input type="text" placeholder="请输入完整的公司名称" v-model="company_name"> <span @click="shield_save">保存</span><span @click="cancel">取消</span></div>
     </div>
     <div class="shield_list">
       <div class="content">
         <ul>
-          <li>中国石油化工集团公司<span class="fr">取消屏蔽</span></li>
+          <li>中国石油化工集团公司<span class="fr" @click="shield_cancel">取消屏蔽</span></li>
         </ul>
       </div>
     </div>
@@ -31,7 +31,7 @@
       },
       created() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.get('/personal/shield')
+          this.$ajax.get('/personal/shield',{params:{uid: userInfo.id}})
             .then((res)=>{
               console.log(res);
             })
@@ -42,6 +42,16 @@
         },
         cancel() {
           this.shieldSignState = true
+        },
+        shield_save() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.post('/personal/shield',{uid: userInfo.id,company: this.company_name})
+            .then((res)=>{
+              console.log(res);
+            })
+        },
+        shield_cancel() {
+
         }
       }
     }

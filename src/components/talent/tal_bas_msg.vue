@@ -52,7 +52,25 @@
         <div class="edit_bottom">
           <div class="content">
             <div class="edit_cell">
-              <span class="edit_lab">真实姓名</span><input type="text">
+              <span class="edit_lab">真实姓名</span><input type="text" v-model="form.tal_name" placeholder="真实姓名">
+            </div>
+            <div class="edit_cell">
+              <span class="edit_lab">身份证号码</span><input type="text" v-model="form.tal_idcard" maxlength="16" placeholder="身份证号码">
+            </div>
+            <div class="edit_cell">
+              <span class="edit_lab">QQ号码</span><input type="text" v-model="form.tal_qq" placeholder="QQ号码">
+            </div>
+            <div class="edit_cell">
+              <span class="edit_lab">电子邮箱</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
+            </div>
+            <div class="edit_cell special_cell">
+              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell">贵州省<img src="/static/images/down3j.png" alt=""></div><div class="comm_addr_cell">贵阳市<img src="/static/images/down3j.png" alt=""></div><div class="comm_addr_cell">南明区<img src="/static/images/down3j.png" alt=""></div></div>
+            </div>
+            <div class="edit_cell">
+              <span class="edit_lab">详细地址</span><input type="text" v-model="form.tal_addr" placeholder="详细地址">
+            </div>
+            <div class="edit_cell">
+              <span class="edit_lab">就业状态</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">已就业</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">待就业</span></span>
             </div>
           </div>
         </div>
@@ -66,7 +84,7 @@
   </div>
 </template>
 <script>
-  import {splicPic} from '../../../static/js/common.js'
+  import {splicPic,transGender,transEducation,transWorkexp} from '../../../static/js/common.js'
     export default {
         name: "tal_bas_msg",
       data() {
@@ -75,7 +93,15 @@
             userMsg: {},
             editHeadPic: '/static/images/user-01@2x.png',
             headPic: '/static/images/banner03@2x.png',
-            edit: true
+            edit: true,
+            form: {
+                tal_name: '1',
+                tal_idcard: '2',
+                tal_qq: '3',
+                tal_email: '4',
+                tal_addr: '4',
+                tal_state: 1
+              }
           }
       },
       created() {
@@ -87,15 +113,24 @@
         }
         userInfo.name = userInfo.name == ''?userInfo.phone:userInfo.name;
         this.userInfoMsg = userInfo;
-        console.log(this.userInfoMsg);
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
+                transGender(res.data.base_info,true);
+                transEducation(res.data.base_info,1);
+                transWorkexp(res.data.base_info,1,'tal');
+                console.log(res.data.base_info);
                 this.userMsg = res.data.base_info;
+                this.form.tal_name = this.userMsg.name;
+                this.form.tal_idcard = this.userMsg.id_card;
+                this.form.tal_qq = this.userMsg.qq;
+                this.form.tal_email = this.userMsg.email;
+                this.form.tal_addr = this.userMsg.address;
+                this.form.tal_state = this.userMsg.work_status;
+
                 userInfo.ability_index = this.userMsg.ability_index;
                 userInfo = JSON.stringify(userInfo);
                 localStorage.setItem('USER',userInfo);
-                console.log(this.userMsg);
               }
             });
 
@@ -105,7 +140,19 @@
           this.edit = false;
         },
         to_edited() {
-          this.edit = true;
+          this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": 520000, "city": 520100, "area": 520103, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state})
+            .then((res)=>{
+              if (res.data.state == 200) {
+                this.edit = true;
+              }
+            })
+
+        },
+        have_job() {
+          this.form.tal_state = 1
+        },
+        wait_job() {
+          this.form.tal_state = 0
         }
       }
     }
@@ -205,10 +252,76 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border-top: 1px solid #E1E4E6;
-  }
-
-  .edit_lab {
     font-size: 14px;
+  }
+  .edit_cell .edit_lab {
+    display: inline-block;
+    width: 90px;
     color: #353535;
+  }
+  .edit_cell input{
+    display: inline-block;
+    padding-left: 10px;
+    width: 65%;
+    line-height: 32px;
+    border: none;
+    color: #666666;
+  }
+  .edit_cell input ::placeholder{
+    color: #c2c2cc;
+  }
+  .edit_cell input:focus{
+    outline: none;
+  }
+  .choose_group{
+    display: inline-block;
+    margin-top: 10px;
+    width: 65%;
+    text-align: right;
+    line-height: 24px;
+  }
+  .choose_cell{
+    display: inline-block;
+    margin-left: 10px;
+    width: 60px;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #919199;
+    background-color: #ffffff;
+  }
+  .choose_active{
+    color: #5082e6;
+    background:rgba(80,130,230,.2);
+  }
+  .comm_addr{
+    display: flex;
+    width: 100%;
+    padding-bottom: 15px;
+  }
+  .comm_addr .comm_addr_cell{
+    justify-content: space-between;
+    margin-right: 10px;
+    width: 30%;
+    line-height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+  }
+  .comm_addr img{
+    margin-left: 30px;
+    width: 12px;
+    height: 6px;
+    vertical-align: middle;
   }
 </style>

@@ -39,7 +39,7 @@
           });
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           let sta = this.privacy_state == true?1:-1;
-          this.$ajax.post('/resume/hiddenopen',{state: sta,id: userInfo.id})
+          this.$ajax.post('/resume/hiddenopen',{state: sta})
             .then((res)=>{
               //提示信息
               this.$message({

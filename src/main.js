@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import elementUI from 'element-ui'
-import { Button, Select, Icon, Input, Carousel, Dialog, Message} from 'element-ui';
+import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker} from 'element-ui';
 import App from './App'
 import router from './router'
 import Axios from 'axios'
@@ -33,6 +33,7 @@ Vue.use(Select);
 Vue.use(Input);
 Vue.use(Icon);
 Vue.use(Dialog);
+Vue.use(DatePicker);
 Vue.component(Message.name, Message);//用以解决刷新自动弹出message
 // Vue.use(Message);
 

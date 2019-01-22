@@ -9,7 +9,7 @@
 /*字典部分*/
 
 // salary
-function transSalary(data) {
+function transSalary(data,type) {
   const salary = [
     "面议",
     "2000以下",
@@ -24,29 +24,47 @@ function transSalary(data) {
     "10w以上"
   ];
   let transData = data;
-  for (let i = 0; i < transData.length; i++) {
+  if (type == 2) {
+    for (let i = 0; i < transData.length; i++) {
 
-    if (transData[i].salary != 0) {
-      transData[i].salary = (salary[transData[i].salary] + '元/月')
-    } else {
-      transData[i].salary = salary[transData[i].salary]
+      if (transData[i].salary != 0) {
+        transData[i].office.salary = (salary[transData[i].office.salary] + '元/月')
+      } else {
+        transData[i].office.salary = salary[transData[i].office.salary]
+      }
+    }
+  } else {
+    for (let i = 0; i < transData.length; i++) {
+
+      if (transData[i].salary != 0) {
+        transData[i].salary = (salary[transData[i].salary] + '元/月')
+      } else {
+        transData[i].salary = salary[transData[i].salary]
+      }
     }
   }
 }
 
-function transNature(data) {
+function transNature(data,type) {
   const nature = [
     "面议",
     "全职",
     "项目"
   ];
   let transData = data;
-  for (let i = 0; i < transData.length; i++) {
-    transData[i].nature = nature[transData[i].nature]
+
+  if (type == 2) {
+    for (let i = 0; i < transData.length; i++) {
+        transData[i].office.nature = nature[transData[i].office.nature]
+    }
+  } else {
+    for (let i = 0; i < transData.length; i++) {
+      transData[i].nature = nature[transData[i].nature]
+    }
   }
 }
 
-function transEducation(data) {
+function transEducation(data,type) {
   // education
   const education = [
     "不限",
@@ -60,33 +78,67 @@ function transEducation(data) {
     "博士及以上"
   ];
   let transData = data;
-  for (let i = 0; i < transData.length; i++) {
-    transData[i].education = education[transData[i].education]
+  if (type == 2) {
+    for (let i = 0; i < transData.length; i++) {
+        transData[i].office.education = education[transData[i].office.education]
+    }
+  }else if(type == 1) {
+    transData.education = education[transData.education]
+  }else {
+    for (let i = 0; i < transData.length; i++) {
+      transData[i].education = education[transData[i].education]
+    }
   }
 }
 
-function transWorkexp(data) {
-  //工作经验
-  const workexp = [
-    "不限",
-    "1年以下",
-    "1-3年",
-    "3-5年",
-    "5-10年",
-    "10年以上"
-  ];
+function transWorkexp(data,type,classify) {
+  if (classify == 'tal') {
+    //工作经验
+    var workexp = [
+      "应届生",
+      "1年以下",
+      "1-3年",
+      "3-5年",
+      "5-10年",
+      "10年以上"
+    ];
+  }else {
+    //工作经验
+    var workexp = [
+      "不限",
+      "1年以下",
+      "1-3年",
+      "3-5年",
+      "5-10年",
+      "10年以上"
+    ];
+  }
+
   let transData = data;
-  for (let i = 0; i < transData.length; i++) {
-    transData[i].work_exp = workexp[transData[i].work_exp]
+  if (type == 2) {
+    for (let i = 0; i < transData.length; i++) {
+        transData[i].office.work_exp = workexp[transData[i].office.work_exp]
+    }
+  }else if(type == 1) {
+    transData.work_exp = workexp[transData.work_exp]
+  }else {
+    for (let i = 0; i < transData.length; i++) {
+      transData[i].work_exp = workexp[transData[i].work_exp]
+    }
+  }
+}
+function transGender(data,flag) {
+  // gender：
+  const gender = [
+    "不限",
+    "男",
+    "女"
+  ];
+  if (flag) {
+    data.gender = gender[data.gender]
   }
 }
 
-// gender：
-const gender = [
-  "不限",
-  "男",
-  "女"
-];
 
 
 function getDistanceTime(time) {
@@ -211,10 +263,48 @@ function splicFrontcover(data) {
     }
   }
 }
+//倒序
+function reverseOrder(data) {
+  let len = data.length,
+      reverseData = {};
+  if (len == undefined || len == 0) {
+
+  } else {
+    for (let i = 0; i < len; i++) {
+      reverseData[i] = data[len - 1 - i];
+    }
+  }
+  return reverseData
+}
+
+var company_scale = [
+  "占位",
+  "1-19人",
+  "20-49人",
+  "50-99人",
+  "100-199人",
+  "200-499人",
+  "500-999人",
+  "1000-4999人",
+  "5000人以上"
+]
+
+var company_nature = [
+  "占位",
+  "国有企业",
+  "国有控股企业",
+  "外资企业",
+  "合资企业",
+  "私营企业",
+  "事业单位",
+  "国家行政机关",
+  "政府"
+]
+
 
 export {
   transSalary,
-  gender,
+  transGender,
   transEducation,
   transWorkexp,
   getDistanceTime,

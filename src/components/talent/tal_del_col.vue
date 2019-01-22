@@ -8,14 +8,14 @@
     </div>
     <div class="del_col_body">
       <div class="content">
-        <div class="ugent_cell" v-for="(item,index) in del_colData" :key="index">
+        <div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in del_colData" :key="index" @click="to_posDetail">
           <div class="ugent_top">
-            <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
+            <span v-if="item.office.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office.office_name}}</span><span class="salary fr">{{item.office.salary}}</span>
           </div>
           <div class="ugent_bottom">
-            <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
-            class="tags">{{item.nature}}</span><span class="update_time fr">{{item.created_at}}</span>
-            <p><img v-if="item.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company_name}}</p>
+            <span class="tags">{{item.office.city}}</span> | <span class="tags">{{item.office.work_exp}}</span> | <span class="tags">{{item.office.education}}</span> | <span
+            class="tags">{{item.office.nature}}</span><span class="update_time fr">{{item.created_at}}</span>
+            <p><img v-if="item.office.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company.name}}</p>
           </div>
         </div>
       </div>
@@ -24,6 +24,9 @@
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../../static/js/common.js'
     export default {
         name: "tal_del_col",
       data() {
@@ -41,17 +44,35 @@
           this.titleMsg = '简历投递记录';
           this.$ajax.get('/personal/apply',{params:{uid: userInfo.id}})
             .then((res)=>{
-              console.log(res);
-
+              if(res.data.state != 400) {
+                transWorkexp(res.data,2);
+                transNature(res.data,2);
+                transEducation(res.data,2);
+                transSalary(res.data,2);
+                this.del_colData = res.data
+              }
             })
         }else {
           this.titleMsg = '收藏的简历';
           this.$ajax.get('/personal/collection',{params:{uid: userInfo.id}})
             .then((res)=>{
-              console.log(res);
+              if(res.data.state != 400) {
+                transWorkexp(res.data,2);
+                transNature(res.data,2);
+                transEducation(res.data,2);
+                getDistanceTime(res.data);
+                transSalary(res.data,2);
+                this.del_colData = res.data
+              }
             })
         }
-
+      },
+      methods: {
+        to_posDetail(e) {
+          let id = e.currentTarget.getAttribute('data-id');
+          let cid = e.currentTarget.getAttribute('cid');
+          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
+        },
       }
     }
 </script>

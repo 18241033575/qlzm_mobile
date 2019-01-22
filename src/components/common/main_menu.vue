@@ -107,6 +107,7 @@
         exit_login() {
           localStorage.clear();
           this.isLogin = false;
+          this.$router.push({name:'index'})
         },
       },
       created() {

@@ -1,35 +1,37 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import index from '../components/index'
-import user_reg from '../components/reg_log/user_reg'
-import user_login from '../components/reg_log/user_login'
+import index from '@/components/index'
+import user_reg from '@/components/reg_log/user_reg'
+import user_login from '@/components/reg_log/user_login'
 
 
 
 //公共组件
-import find_job from '../components/com_part/find_job'
-import famous_pos from '../components/com_part/famous_pos'
-import company_det from '../components/com_part/company_det'
-import pos_det from '../components/com_part/pos_det'
-import success_page from '../components/com_part/success_page'
-import account_manage from '../components/com_part/account_manage'
+import find_job from '@/components/com_part/find_job'
+import famous_pos from '@/components/com_part/famous_pos'
+import company_det from '@/components/com_part/company_det'
+import pos_det from '@/components/com_part/pos_det'
+import success_page from '@/components/com_part/success_page'
+import account_manage from '@/components/com_part/account_manage'
+import change_phone from '@/components/com_part/change_phone'
+import change_password from '@/components/com_part/change_password'
 
 //个人中心页面
-import tal_center from '../components/talent/tal_center'
-import tal_resume from '../components/talent/tal_resume'
-import tal_bas_msg from '../components/talent/tal_bas_msg'
-import tal_del_col from '../components/talent/tal_del_col'
-import int_job from '../components/talent/int_job'
-import tal_invited from '../components/talent/tal_invited'
-import tal_invited_det from '../components/talent/tal_invited_det'
-import self_eval from '../components/talent/self_eval'
-import tal_work from '../components/talent/tal_work'
-import tal_privacy from '../components/talent/tal_privacy'
-import tal_shield from '../components/talent/tal_shield'
+import tal_center from '@/components/talent/tal_center'
+import tal_resume from '@/components/talent/tal_resume'
+import tal_bas_msg from '@/components/talent/tal_bas_msg'
+import tal_del_col from '@/components/talent/tal_del_col'
+import int_job from '@/components/talent/int_job'
+import tal_invited from '@/components/talent/tal_invited'
+import tal_invited_det from '@/components/talent/tal_invited_det'
+import self_eval from '@/components/talent/self_eval'
+import tal_work from '@/components/talent/tal_work'
+import tal_privacy from '@/components/talent/tal_privacy'
+import tal_shield from '@/components/talent/tal_shield'
 
 //个人中心组件
-import main_menu from '../components/common/main_menu'
+import main_menu from '@/components/common/main_menu'
 
 Vue.use(Router);
 
@@ -72,6 +74,32 @@ export default new Router({
       path: '/account_manage',
       name: 'account_manage',
       component: account_manage
+     /* children:[
+        {
+          path: '',
+          name: 'account_manage',
+          component: account_manage,
+        },
+        {
+          path: '/account_manage/change_phone',
+          name: 'change_phone',
+          component: change_phone,
+        },{
+          path: '/account_manage/change_password',
+          name: 'change_password',
+          component: change_password,
+        },
+      ]*/
+    },
+    {
+      path: '/change_phone',
+      name: 'change_phone',
+      component: change_phone
+    },
+    {
+      path: '/change_password',
+      name: 'change_password',
+      component: change_password
     },
     {
       path: '/company_det',
