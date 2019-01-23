@@ -1,6 +1,7 @@
 <template>
     <!--自我评价-->
   <div class="self_eval_all">
+    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--自我评价信息-->
     <div class="self_eval_msg" v-show="this.selfEvalSign">
       <div class="com_det_title">
@@ -51,20 +52,37 @@
         </div>
       </div>
     </div>
+    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tal_adv} from '../../../static/js/common.js'
     export default {
         name: "self_eval",
+      components: {
+        main_menu,
+        menu_list_pic
+      },
       data() {
           return {
+            /*总菜单状态*/
+            openState: false,
             selfEvalSign: true,
             selfEvalData: {}
           }
       },
       methods: {
+          /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
         selfEdit() {
           this.selfEvalSign = false;
         },

@@ -4,7 +4,7 @@
       <div class="famous">
         <div class="famous_pos_title">
           <div class="content">
-            名企招聘<img class="fr common_menu" src="/static/images/ic_menu@2x.png" alt="">
+            名企招聘
           </div>
         </div>
         <!--可以提取出来公共部分-->
@@ -24,15 +24,25 @@
           </div>
         </div>
       </div>
+      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
   import {splicLogo} from '../../../static/js/common.js'
     export default {
         name: "famous_pos",
+      components: {
+        main_menu,
+        menu_list_pic
+      },
       data() {
           return {
+            /*总菜单状态*/
+            openState: false,
             famData: {},
             pages: 1
           }
@@ -47,6 +57,14 @@
             })
       },
       methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
         to_comDetail(e) {
           //company-id
           let id = e.currentTarget.getAttribute('cid');

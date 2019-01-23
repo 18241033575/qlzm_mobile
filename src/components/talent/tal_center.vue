@@ -1,5 +1,6 @@
 <template>
     <div class="tal_center">
+      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <!--顶部-->
       <div class="tal_center_top">
         <div class="com_det_title">
@@ -99,14 +100,23 @@
           </div>
         </div>
       </div>
+      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
         name: "tal_center",
+      components: {
+        main_menu,
+        menu_list_pic
+      },
       data () {
           return {
+            /*总菜单状态*/
+            openState: false,
             estimate_salary: '',
             ability_index: '',
             integrity: 80,
@@ -118,6 +128,14 @@
           }
       },
       methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
         to_msg() {
             this.$router.push({name: 'tal_invited'})
         }

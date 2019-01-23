@@ -1,5 +1,6 @@
 <template>
     <div class="success_page">
+      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <div class="com_det_title">
         <div class="content">
           提示
@@ -10,17 +11,25 @@
         <p class="success_msg">{{success_msg}}</p>
         <p class="tips_msg">{{tips_msg}}</p>
       </div>
+      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
         name: "success_page",
+      components: {
+        main_menu,
+        menu_list_pic
+      },
       data() {
           return {
+            /*总菜单状态*/
+            openState: false,
             success_msg: '成功',
             tips_msg: '提示信息'
-
           }
       },
       created() {
@@ -32,6 +41,16 @@
             this.success_msg = '密码修改成功！';
             this.tips_msg = '下次登录请使用新密码登录。'
           }
+      },
+      methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
       }
     }
 </script>

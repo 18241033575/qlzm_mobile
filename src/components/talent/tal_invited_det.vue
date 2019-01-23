@@ -1,6 +1,7 @@
 <template>
   <!--面试邀请记录详情-->
   <div class="invited_det">
+    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <div class="com_det_title">
       <div class="content">
         面试邀请详情
@@ -25,12 +26,35 @@
         </div>
       </div>
     </div>
+    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "tal_invited_det"
+        name: "tal_invited_det",
+      components: {
+        main_menu,
+        menu_list_pic
+      },
+      data() {
+        return {
+          /*总菜单状态*/
+          openState: false,
+          }
+        },
+      methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
+      }
     }
 </script>
 

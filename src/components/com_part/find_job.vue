@@ -1,9 +1,9 @@
 <template>
   <div class="find_job">
+    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--职位搜索-->
     <div class="search_job">
       <input type="text" placeholder="请输入关键词进行搜索！">
-      <img class="main_nav fr" src="/static/images/ic_menu@2x.png" alt="">
     </div>
     <!--筛选-->
     <div class="filter">
@@ -172,14 +172,23 @@
         </div>
       </div>
     </div>
+    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
   export default {
     name: "find_job",
+    components: {
+      main_menu,
+      menu_list_pic
+    },
     data() {
       return {
+        /*总菜单状态*/
+        openState: false,
         sort_msg: '默认排序',
         search_job: '',
         famFlag: false,
@@ -193,6 +202,14 @@
       }
     },
     methods: {
+      /*总菜单操作s*/
+      get_sign(data) {
+        this.openState = !data;
+      },
+      getIsopen(data) {
+        this.openState = data;
+      },
+      /*总菜单操作e*/
       getjobData(param) {
         this.$ajax.get('/company_work',param)
           .then((res)=>{

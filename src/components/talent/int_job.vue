@@ -1,6 +1,7 @@
 <template>
   <!--求职意向-->
   <div class="int_job_all">
+    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--信息列表-->
     <div class="int_job" v-show="this.int_job_edit">
       <div class="com_det_title">
@@ -68,14 +69,23 @@
         </div>
       </div>
     </div>
+    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
         name: "int_job",
+      components: {
+        main_menu,
+        menu_list_pic
+      },
       data() {
           return {
+            /*总菜单状态*/
+            openState: false,
             int_job_edit: true,
             form: {
               work_nature: 1
@@ -83,6 +93,14 @@
           }
       },
       methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
         edit_job() {
           this.int_job_edit = false
         },
@@ -95,7 +113,12 @@
         wait_job() {
           this.form.work_nature = 0
         }
-      }
+      },
+      watch: {
+        openState(curVal,oldVal){
+        },
+        deep:true
+      },
     }
 </script>
 

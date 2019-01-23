@@ -1,5 +1,6 @@
 <template>
   <div class="pos_det">
+    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <div class="company_det_top">
       <div class="com_det_title">
         <div class="content">
@@ -111,15 +112,24 @@
         </div>
       </div>
     </div>
+    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
   import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover,splicPic,company_adv} from '../../../static/js/common.js'
   export default {
     name: "pos_det",
+    components: {
+      main_menu,
+      menu_list_pic
+    },
     data() {
       return {
+        /*总菜单状态*/
+        openState: false,
         posDetData: {},
         posOthData: {},
         has_mSign: false,
@@ -133,6 +143,14 @@
       }
     },
     methods: {
+      /*总菜单操作s*/
+      get_sign(data) {
+        this.openState = !data;
+      },
+      getIsopen(data) {
+        this.openState = data;
+      },
+      /*总菜单操作e*/
       apply_pos() {
 
       },
