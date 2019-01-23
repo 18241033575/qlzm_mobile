@@ -149,6 +149,7 @@
 <script>
   import main_menu from '../components/common/main_menu'
   import menu_list_pic from '../components/common/menu_list_pic'
+  import {tranCity} from  '../../static/js/distpicker'
   import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../static/js/common.js'
     export default {
         name: "index",
@@ -208,10 +209,12 @@
           this.$ajax.get('/office/urgent')
             .then((res)=>{
               if(res.data.state != 400){
+                tranCity(res.data,true,2);
                 transSalary(res.data);
                 transNature(res.data);
                 transEducation(res.data);
                 transWorkexp(res.data);
+
                 this.ugentData = res.data;
                 for (let i = 0;i < this.ugentData.length; i++) {
                   this.ugentData[i].created_at = getDistanceTime(this.ugentData[i].created_at)

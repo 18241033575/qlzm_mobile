@@ -5,7 +5,6 @@
 
 //可以用类简化代码
 
-
 /*字典部分*/
 
 // salary
@@ -217,12 +216,14 @@ function company_adv(data, flag) {
     "美女多",
     "无试用期"
   ];
-  let transData = data.split(',');
-  if (flag) {
-    for (let i = 0; i < transData.length; i++) {
-      transData[i] = welfare[transData[i]]
+  if (data!='' && data!=undefined) {
+    let transData = data.split(',');
+    if (flag) {
+      for (let i = 0; i < transData.length; i++) {
+        transData[i] = welfare[transData[i]]
+      }
+      return transData
     }
-    return transData
   }
 }
 
@@ -299,7 +300,7 @@ var company_nature = [
   "事业单位",
   "国家行政机关",
   "政府"
-]
+];
 
 
 export {

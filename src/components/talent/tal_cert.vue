@@ -1,14 +1,14 @@
 <template>
-    <div class="tal_work">
-      <!--工作经历列表-->
+    <div class="tal_cert">
+      <!--证书列表-->
       <div class="tal_work_msg" v-show="this.workExpSign">
         <div class="com_det_title">
           <div class="content">
-            工作经历
+            建筑行业证书
           </div>
         </div>
         <div class="add_item" @click="add_work_exp">
-          <p><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加工作经历</span></p>
+          <p><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加证书</span></p>
         </div>
         <div class="exp_list">
           <div class="exp_cell">
@@ -35,7 +35,7 @@
             <div class="content">
               <div class="exp_cell_box">
                 <div class="exp_head">
-                  贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_add_item@2x.png" alt="">编辑</span>
+                  贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
                 </div>
                 <div class="bottom_msg">
                   <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
@@ -53,7 +53,7 @@
           </div>
         </div>
       </div>
-      <!--编辑工作经历-->
+      <!--编辑项目经验-->
       <div class="tal_work_edit" v-show="!this.workExpSign">
         <div class="com_det_title">
           <div class="content">
@@ -63,49 +63,25 @@
         <div class="exp_edit_list">
           <div class="content">
             <div class="edit_cell">
-              <span class="edit_lab">公司名称</span><input type="text"  placeholder="公司名称">
+              <span class="edit_lab">证书类型</span><span class="int_job_det fr">请选择<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">职位名称</span><input type="text" placeholder="职位名称">
+              <span class="edit_lab">证书专业</span><span class="int_job_det fr">请选择<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">税前月薪(元)</span><input type="text"  placeholder="税前月薪">
-            </div>
-            <div class="edit_cell special_cell">
-              <span class="edit_lab">工程周期</span>
-              <div class="block">
-                <!--<span class="demonstration">带快捷选项</span>-->
-                <el-date-picker
-                  v-model="value2"
-                  align="right"
-                  type="date"
-                  placeholder="选择日期"
-                  :picker-options="pickerOptions1">
-                </el-date-picker>
-                <el-date-picker
-                  v-model="value1"
-                  align="right"
-                  type="date"
-                  placeholder="选择日期"
-                  :picker-options="pickerOptions1">
-                </el-date-picker>
-                <el-checkbox v-model="checked">至今</el-checkbox>
-              </div>
+              <span class="edit_lab">建造师增项</span><span class="int_job_det fr">请选择<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">行业性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.jobNature==1}" @click="is_jobNature">建筑业</span><span class="choose_cell" :class="{choose_active:this.jobNature==0}" @click="isn_jobNature">非建筑业</span></span>
-            </div>
-            <div class="edit_cell">
-              <span class="edit_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.workNature==1}" @click="man_workNature">管理岗</span><span class="choose_cell" :class="{choose_active:this.workNature==2}" @click="ski_workNature">技术岗</span><span class="choose_cell" :class="{choose_active:this.workNature==3}" @click="oth_workNature">其他</span></span>
+              <span class="edit_lab">注册情况</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.workNature==1}" @click="man_workNature">不限</span><span class="choose_cell" :class="{choose_active:this.workNature==2}" @click="ski_workNature">初始</span><span class="choose_cell" :class="{choose_active:this.workNature==3}" @click="oth_workNature">转注</span></span>
             </div>
           </div>
         </div>
         <div class="remark">
           <div class="content">
             <div class="edit_cell specail_area">
-              <span class="edit_lab">工作职责</span>
+              <span class="edit_lab">备注</span>
             </div>
-            <textarea placeholder="在这里填写职责内容" name="remark" id="" cols="30" rows="10"></textarea>
+            <textarea placeholder="在这里填写备注内容" name="remark"></textarea>
           </div>
         </div>
         <div class="edit_btn_group">
@@ -126,27 +102,27 @@
 
 <script>
     export default {
-        name: "tal_work",
+        name: "tal_cert",
       data() {
-          return {
-            workExpSign: true,
-            editMsg: '',
-            jobNature: 0,
-            workNature: 1,
-            pickerOptions1: {
-              disabledDate(time) {
-                return time.getTime() > Date.now();
-              }
-            },
-            value1: '',
-            value2: '',
-            checked: true
-          }
+        return {
+          workExpSign: true,
+          editMsg: '',
+          jobNature: 0,
+          workNature: 1,
+          pickerOptions1: {
+            disabledDate(time) {
+              return time.getTime() > Date.now();
+            }
+          },
+          value1: '',
+          value2: '',
+          checked: true
+        }
       },
       methods: {
         add_work_exp() {
           this.workExpSign = false;
-          this.editMsg = '添加工作经历'
+          this.editMsg = '编辑证书'
         },
         is_jobNature() {
           this.jobNature = 1

@@ -13,7 +13,7 @@
               <img :src="this.default_headPic" alt="">
             </div>
             <div class="msg_det">
-              <p class="msg_name">HI，<span class="user_name">克里斯蒂亚诺</span></p>
+              <p class="msg_name">HI，<span class="user_name">{{userName}}</span></p>
               <p class="greeting">欢迎回来，<span>下午好!</span></p>
             </div>
           </div>
@@ -96,7 +96,8 @@
           isOpen: true,
           openSign: false,
           isLogin: false,
-          default_headPic: '/static/images/ic_user_def@2x.png'
+          default_headPic: '/static/images/ic_user_def@2x.png',
+          userName: ''
         }
       },
       methods: {
@@ -118,6 +119,7 @@
           if (userInfo.photo != '') {
             this.default_headPic = splicPic(userInfo.photo, true);
           }
+          this.userName = userInfo.name || userInfo.phone;
         }else {
           this.isLogin = false;
         }

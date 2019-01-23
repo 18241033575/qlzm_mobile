@@ -10,7 +10,7 @@
         <!--可以提取出来公共部分-->
         <div class="famous_body">
           <div class="content">
-            <div class="famous_cell" :company-id="item.id" v-for="(item,index) in famData" :key="index" @click="to_comDetail">
+            <div class="famous_cell" :cid="item.cid" :company-id="item.id" v-for="(item,index) in famData" :key="index" @click="to_comDetail">
               <div class="famous_head fl">
                 <img :src="item.logo" alt="">
               </div>
@@ -48,7 +48,8 @@
       },
       methods: {
         to_comDetail(e) {
-          let id = e.currentTarget.getAttribute('company-id');
+          //company-id
+          let id = e.currentTarget.getAttribute('cid');
           this.$router.push({name: 'company_det',query:{id: id}})
         }
       }

@@ -62,15 +62,15 @@
               },
               3:{
                 urlName: "项目经验",
-                urlRoute: ""
+                urlRoute: "tal_project"
               },
               4:{
                 urlName: "教育经历",
-                urlRoute: ""
+                urlRoute: "tal_education"
               },
               5:{
                 urlName: "建筑行业证书",
-                urlRoute: ""
+                urlRoute: "tal_cert"
               },
               6:{
                 urlName: "自我评价",

@@ -319,7 +319,7 @@
     color: #666666;
   }
   .comm_addr img{
-    margin-left: 30px;
+    margin-left: 20px;
     width: 12px;
     height: 6px;
     vertical-align: middle;

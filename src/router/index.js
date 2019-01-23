@@ -20,13 +20,16 @@ import change_password from '@/components/com_part/change_password'
 //个人中心页面
 import tal_center from '@/components/talent/tal_center'
 import tal_resume from '@/components/talent/tal_resume'
-import tal_bas_msg from '@/components/talent/tal_bas_msg'
 import tal_del_col from '@/components/talent/tal_del_col'
 import int_job from '@/components/talent/int_job'
 import tal_invited from '@/components/talent/tal_invited'
 import tal_invited_det from '@/components/talent/tal_invited_det'
-import self_eval from '@/components/talent/self_eval'
+import tal_bas_msg from '@/components/talent/tal_bas_msg'
 import tal_work from '@/components/talent/tal_work'
+import tal_project from '@/components/talent/tal_project'
+import tal_education from '@/components/talent/tal_education'
+import tal_cert from '@/components/talent/tal_cert'
+import self_eval from '@/components/talent/self_eval'
 import tal_privacy from '@/components/talent/tal_privacy'
 import tal_shield from '@/components/talent/tal_shield'
 
@@ -122,19 +125,39 @@ export default new Router({
       component: tal_resume
     },
     {
-      path: '/tal_bas_msg',
-      name: 'tal_bas_msg',
-      component: tal_bas_msg
-    },
-    {
       path: '/tal_del_col',
       name: 'tal_del_col',
       component: tal_del_col
     },
     {
+      path: '/tal_bas_msg',
+      name: 'tal_bas_msg',
+      component: tal_bas_msg
+    },
+    {
       path: '/tal_work',
       name: 'tal_work',
       component: tal_work
+    },
+    {
+      path: '/tal_project',
+      name: 'tal_project',
+      component: tal_project
+    },
+    {
+      path: '/tal_education',
+      name: 'tal_education',
+      component: tal_education
+    },
+    {
+      path: '/tal_cert',
+      name: 'tal_cert',
+      component: tal_cert
+    },
+    {
+      path: '/self_eval',
+      name: 'self_eval',
+      component: self_eval
     },
     {
       path: '/int_job',
@@ -155,11 +178,6 @@ export default new Router({
       path: '/tal_shield',
       name: 'tal_shield',
       component: tal_shield
-    },
-    {
-      path: '/self_eval',
-      name: 'self_eval',
-      component: self_eval
     },
     {
       path: '/tal_privacy',
