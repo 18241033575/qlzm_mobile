@@ -1,6 +1,6 @@
 <template>
     <!--投递记录、收藏职位-->
-  <div class="del_col">
+  <div class="del_col" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <div class="com_det_title">
       <div class="content">

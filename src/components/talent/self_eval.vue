@@ -1,6 +1,6 @@
 <template>
     <!--自我评价-->
-  <div class="self_eval_all">
+  <div class="self_eval_all" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--自我评价信息-->
     <div class="self_eval_msg" v-show="this.selfEvalSign">

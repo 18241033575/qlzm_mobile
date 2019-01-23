@@ -1,5 +1,5 @@
 <template>
-  <div class="tal_education">
+  <div class="tal_education" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--教育经历列表-->
     <div class="tal_work_msg" v-show="this.workExpSign">

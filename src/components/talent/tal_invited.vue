@@ -1,6 +1,6 @@
 <template>
   <!--面试邀请记录-->
-    <div class="invited">
+    <div class="invited" :class="{stop_scroll: this.openState}">
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <div class="com_det_title">
         <div class="content">

@@ -1,6 +1,6 @@
 <template>
   <!--求职意向-->
-  <div class="int_job_all">
+  <div class="int_job_all" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--信息列表-->
     <div class="int_job" v-show="this.int_job_edit">

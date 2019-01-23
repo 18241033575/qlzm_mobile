@@ -1,5 +1,5 @@
 <template>
-  <div class="pos_det">
+  <div class="pos_det" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <div class="company_det_top">
       <div class="com_det_title">

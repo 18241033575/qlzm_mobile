@@ -1,5 +1,5 @@
 <template>
-  <div class="tal_bas_msg_all">
+  <div class="tal_bas_msg_all" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <div class="tal_bas_msg" v-show="this.edit">
       <div class="com_det_title">

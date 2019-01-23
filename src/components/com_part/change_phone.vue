@@ -1,6 +1,6 @@
 <template>
   <!--修改手机-->
-  <div class="account_phone">
+  <div class="account_phone" :class="{stop_scroll: this.openState}">
     <div class="com_det_title">
       <div class="content">
         修改手机号码

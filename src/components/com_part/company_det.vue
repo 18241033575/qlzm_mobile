@@ -1,5 +1,5 @@
 <template>
-    <div class="company_det">
+    <div class="company_det" :class="{stop_scroll: this.openState}">
       <div class="company_det_top">
         <div class="com_det_title">
           <div class="content">

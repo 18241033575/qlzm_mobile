@@ -1,6 +1,6 @@
 <template>
   <!--账号管理-->
-  <div class="account_mag_all">
+  <div class="account_mag_all" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--列表-->
     <div class="account_mag">

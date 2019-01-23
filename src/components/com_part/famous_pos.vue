@@ -1,6 +1,6 @@
 <template>
       <!--名企招聘-->
-    <div class="famous_pos">
+    <div class="famous_pos" :class="{stop_scroll: this.openState}">
       <div class="famous">
         <div class="famous_pos_title">
           <div class="content">

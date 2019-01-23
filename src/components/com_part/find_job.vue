@@ -1,5 +1,5 @@
 <template>
-  <div class="find_job">
+  <div class="find_job" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--职位搜索-->
     <div class="search_job">

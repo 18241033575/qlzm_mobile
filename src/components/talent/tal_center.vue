@@ -1,5 +1,5 @@
 <template>
-    <div class="tal_center">
+    <div class="tal_center" :class="{stop_scroll: this.openState}">
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <!--顶部-->
       <div class="tal_center_top">
