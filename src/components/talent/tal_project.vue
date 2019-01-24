@@ -12,42 +12,19 @@
         <p><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加项目经验</span></p>
       </div>
       <div class="exp_list">
-        <div class="exp_cell">
+        <div class="exp_cell" v-for="(item,index) in this.projcetData" :key="index">
           <div class="content">
             <div class="exp_cell_box">
               <div class="exp_head">
-                贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_add_item@2x.png" alt="">编辑</span>
+                {{item.project}}<span :projcet-id="item.id" class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
               </div>
               <div class="bottom_msg">
-                <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-                <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-                <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-                <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-                <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-                <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-                <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-                <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="exp_cell">
-          <div class="content">
-            <div class="exp_cell_box">
-              <div class="exp_head">
-                贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
-              </div>
-              <div class="bottom_msg">
-                <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-                <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-                <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-                <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-                <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-                <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-                <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-                <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
+                <p><span class="left_lab">项目规模</span> <span class="right_msg">{{item.scale}}万</span></p>
+                <p><span class="left_lab">工程周期</span> <span class="right_msg">{{item.start_time + '-' + item.end_time}}</span></p>
+                <p><span class="left_lab">项目地点</span> <span class="right_msg">{{item.address}}</span></p>
+                <p><span class="left_lab">个人任职</span> <span class="right_msg">{{item.job}}</span></p>
+                <p><span class="left_lab">项目介绍</span> <span class="right_msg">{{item.introduction}}</span></p>
+                <p><span class="left_lab">个人业绩</span> <span class="right_msg">{{item.duties}}</span></p>
               </div>
             </div>
           </div>
@@ -134,59 +111,71 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+
   export default {
     name: "tal_project",
     components: {
       main_menu,
       menu_list_pic
     },
-  data() {
-    return {
-      /*总菜单状态*/
-      openState: false,
-      workExpSign: true,
-      editMsg: '',
-      jobNature: 0,
-      workNature: 1,
-      pickerOptions1: {
-        disabledDate(time) {
-          return time.getTime() > Date.now();
-        }
+    data() {
+      return {
+        /*总菜单状态*/
+        openState: false,
+        projcetData: {},
+        workExpSign: true,
+        editMsg: '',
+        jobNature: 0,
+        workNature: 1,
+        pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          }
+        },
+        value1: '',
+        value2: '',
+        checked: true
+      }
+    },
+    methods: {
+      /*总菜单操作s*/
+      get_sign(data) {
+        this.openState = !data;
       },
-      value1: '',
-      value2: '',
-      checked: true
+      getIsopen(data) {
+        this.openState = data;
+      },
+      /*总菜单操作e*/
+      add_work_exp() {
+        this.workExpSign = false;
+        this.editMsg = '添加项目经验'
+      },
+      is_jobNature() {
+        this.jobNature = 1
+      },
+      isn_jobNature() {
+        this.jobNature = 0
+      },
+      man_workNature() {
+        this.workNature = 1
+      },
+      ski_workNature() {
+        this.workNature = 2
+      },
+      oth_workNature() {
+        this.workNature = 3
+      },
+    },
+    created() {
+      let userInfo = JSON.parse(localStorage.getItem('USER'));
+      this.$ajax.get('/resume/projectexp',{params: {uid: userInfo.id}})
+        .then((res)=>{
+          console.log(res);
+          if (res.data.state != 400) {
+            this.projcetData = res.data
+          }
+        })
     }
-  },
-  methods: {
-    /*总菜单操作s*/
-    get_sign(data) {
-      this.openState = !data;
-    },
-    getIsopen(data) {
-      this.openState = data;
-    },
-    /*总菜单操作e*/
-    add_work_exp() {
-      this.workExpSign = false;
-      this.editMsg = '添加项目经验'
-    },
-    is_jobNature() {
-      this.jobNature = 1
-    },
-    isn_jobNature() {
-      this.jobNature = 0
-    },
-    man_workNature() {
-      this.workNature = 1
-    },
-    ski_workNature() {
-      this.workNature = 2
-    },
-    oth_workNature() {
-      this.workNature = 3
-    },
-  }
   }
 </script>
 

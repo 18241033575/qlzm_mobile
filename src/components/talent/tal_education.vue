@@ -12,49 +12,23 @@
         <p><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加教育经历</span></p>
       </div>
       <div class="exp_list">
-        <div class="exp_cell">
+        <div class="exp_cell" v-for="(item,index) in this.eduData" :key="index">
           <div class="content">
             <div class="exp_cell_box">
               <div class="exp_head">
-                贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_add_item@2x.png" alt="">编辑</span>
+                {{item.school}}<span :edu-data="item.id" class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
               </div>
               <div class="bottom_msg">
-                <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-                <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-                <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-                <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-                <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-                <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-                <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-                <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="exp_cell">
-          <div class="content">
-            <div class="exp_cell_box">
-              <div class="exp_head">
-                贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
-              </div>
-              <div class="bottom_msg">
-                <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-                <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-                <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-                <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-                <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-                <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-                <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-                <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
+                <p><span class="left_lab">学历</span> <span class="right_msg">{{item.education}}</span></p>
+                <p><span class="left_lab">专业</span> <span class="right_msg">{{item.major}}</span></p>
+                <p><span class="left_lab">在校时间</span> <span class="right_msg">{{item.start_time + '-' + item.end_time}}</span></p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!--编辑项目经验-->
+    <!--编辑教育经历-->
     <div class="tal_work_edit" v-show="!this.workExpSign">
       <div class="com_det_title">
         <div class="content">
@@ -125,6 +99,7 @@
       return {
         /*总菜单状态*/
         openState: false,
+        eduData: {},
         workExpSign: true,
         editMsg: '',
         jobNature: 0,
@@ -167,6 +142,16 @@
       oth_workNature() {
         this.workNature = 3
       },
+    },
+    created() {
+      let userInfo = JSON.parse(localStorage.getItem('USER'));
+      this.$ajax.get('/resume/eduexp',{params: {uid: userInfo.id}})
+        .then((res)=>{
+          if (res.data.state != 400) {
+            this.eduData = res.data;
+            // this.certData = res.data;
+          }
+        })
     }
   }
 </script>

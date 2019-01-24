@@ -12,42 +12,16 @@
           <p><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加证书</span></p>
         </div>
         <div class="exp_list">
-          <div class="exp_cell">
+          <div class="exp_cell" v-for="(item,index) in this.certData" :key="index">
             <div class="content">
               <div class="exp_cell_box">
                 <div class="exp_head">
-                  贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_add_item@2x.png" alt="">编辑</span>
+                  {{item.type + '-' + item.major}}<span :cert-id="item.id" class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
                 </div>
                 <div class="bottom_msg">
-                  <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-                  <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-                  <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-                  <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-                  <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-                  <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-                  <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-                  <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="exp_cell">
-            <div class="content">
-              <div class="exp_cell_box">
-                <div class="exp_head">
-                  贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
-                </div>
-                <div class="bottom_msg">
-                  <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-                  <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-                  <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-                  <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-                  <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-                  <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-                  <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-                  <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
+                  <p><span class="left_lab">注册情况</span> <span class="right_msg">{{item.reg_status==1?'转注':'初始'}}</span></p>
+                  <p><span class="left_lab">增项</span> <span class="right_msg">{{item.addition}}</span></p>
+                  <p><span class="left_lab">备注</span> <span class="right_msg">{{item.remark}}</span></p>
                 </div>
               </div>
             </div>
@@ -116,6 +90,7 @@
           /*总菜单状态*/
           openState: false,
           workExpSign: true,
+          certData: {},
           editMsg: '',
           jobNature: 0,
           workNature: 1,
@@ -157,6 +132,16 @@
         oth_workNature() {
           this.workNature = 3
         },
+      },
+      created() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.get('/resume/certificate',{params: {uid: userInfo.id}})
+            .then((res)=>{
+              console.log(res);
+              if (res.data.state != 400) {
+                this.certData = res.data;
+              }
+            })
       }
     }
 </script>

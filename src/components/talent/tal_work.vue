@@ -12,42 +12,19 @@
           <p><img src="/static/images/ic_add_item@2x.png" alt=""><span>添加工作经历</span></p>
         </div>
         <div class="exp_list">
-          <div class="exp_cell">
+          <div class="exp_cell" v-for="(item,index) in this.workData" :key="index">
             <div class="content">
               <div class="exp_cell_box">
                 <div class="exp_head">
-                  贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_add_item@2x.png" alt="">编辑</span>
+                  {{item.company}}<span :work-id="item.id" class="fr"><img src="/static/images/ic_add_item@2x.png" alt="">编辑</span>
                 </div>
                 <div class="bottom_msg">
-                  <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-                  <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-                  <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-                  <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-                  <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-                  <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-                  <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-                  <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="exp_cell">
-            <div class="content">
-              <div class="exp_cell_box">
-                <div class="exp_head">
-                  贵州知商网络开发有限公司<span class="fr"><img src="/static/images/ic_add_item@2x.png" alt="">编辑</span>
-                </div>
-                <div class="bottom_msg">
-                  <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-                  <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-                  <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-                  <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-                  <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-                  <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-                  <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-                  <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
+                  <p><span class="left_lab">职位名称</span> <span class="right_msg">{{item.job}}</span></p>
+                  <p><span class="left_lab">行业性质</span> <span class="right_msg">{{item.industry}}</span></p>
+                  <p><span class="left_lab">工作性质</span> <span class="right_msg">{{item.nature}}</span></p>
+                  <p><span class="left_lab">税前月薪(元)</span> <span class="right_msg">{{item.salary}}</span></p>
+                  <p><span class="left_lab">在职时间</span> <span class="right_msg">{{item.start_time + '-' + item.end_time}}</span></p>
+                  <p><span class="left_lab">工作职责</span> <span class="right_msg">{{item.duties}}</span></p>
                 </div>
               </div>
             </div>
@@ -139,6 +116,8 @@
           return {
             /*总菜单状态*/
             openState: false,
+            workData: {},
+            workEditData: {},
             workExpSign: true,
             editMsg: '',
             jobNature: 0,
@@ -182,6 +161,16 @@
           this.workNature = 3
         },
       },
+      created() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.get('/resume/workexp',{params: {uid: userInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                console.log(res);
+                this.workData = res.data;
+              }
+            })
+      }
     }
 </script>
 

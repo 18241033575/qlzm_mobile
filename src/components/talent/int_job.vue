@@ -12,12 +12,12 @@
       <div class="int_bottom">
         <div class="content">
           <div class="bottom_msg">
-            <p><span class="left_lab">求职类型</span> <span class="right_msg">全职</span></p>
-            <p><span class="left_lab">意向岗位</span> <span class="right_msg">项目经理</span></p>
-            <p><span class="left_lab">期望薪资</span> <span class="right_msg">8001-10000/月</span></p>
-            <p><span class="left_lab">工作地区</span> <span class="right_msg">贵州贵阳</span></p>
-            <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">随时</span></p>
-            <p><span class="left_lab">备注</span> <span class="right_msg">暂无备注</span></p>
+            <p><span class="left_lab">求职类型</span> <span class="right_msg">{{intJobData.nature}}</span></p>
+            <p><span class="left_lab">意向岗位</span> <span class="right_msg">{{intJobData.job_id}}</span></p>
+            <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary}}</span></p>
+            <p><span class="left_lab">工作地区</span> <span class="right_msg">{{intJobData.province + intJobData.city}}</span></p>
+            <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time}}</span></p>
+            <p><span class="left_lab">备注</span> <span class="right_msg">{{intJobData.remark}}</span></p>
           </div>
         </div>
       </div>
@@ -41,16 +41,16 @@
               <span class="edit_lab">求职类型</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.work_nature==1}" @click="have_job">全职</span><span class="choose_cell" :class="{choose_active:this.form.work_nature==0}" @click="wait_job">项目</span></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">意向岗位</span><span class="int_job_det fr">请选择<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">意向岗位</span><span class="int_job_det fr">{{intJobData.job_id || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">期望薪资</span><span class="int_job_det fr">面议<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">期望薪资</span><span class="int_job_det fr">{{intJobData.salary || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">工作地区</span><span class="int_job_det fr">请选择<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">工作地区</span><span class="int_job_det fr">{{(intJobData.province + intJobData.city) || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">预计到岗时间</span><span class="int_job_det fr">请选择<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">预计到岗时间</span><span class="int_job_det fr">{{intJobData.duty_time || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
           </div>
         </div>
@@ -60,7 +60,7 @@
           <div class="edit_cell specail_area">
             <span class="edit_lab">备注</span>
           </div>
-          <textarea placeholder="这里填写备注内容" name="remark" id="" cols="30" rows="10"></textarea>
+          <textarea placeholder="这里填写备注内容" v-model="remark" id="" cols="30" rows="10"></textarea>
         </div>
       </div>
       <div class="content">
@@ -76,6 +76,8 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
+  import {splicPic, transGender, transEducation, transWorkexp, transNature, transSalary, transArrive} from '../../../static/js/common.js'
     export default {
         name: "int_job",
       components: {
@@ -89,7 +91,9 @@
             int_job_edit: true,
             form: {
               work_nature: 1
-            }
+            },
+            intJobData: {},
+            remark: ''
           }
       },
       methods: {
@@ -114,11 +118,23 @@
           this.form.work_nature = 0
         }
       },
-      watch: {
-        openState(curVal,oldVal){
-        },
-        deep:true
-      },
+      created() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
+          .then((res)=>{
+            if (res.data.state!= 400) {
+              res.data.career_objective.province = res.data.career_objective.work_province;
+              res.data.career_objective.city = res.data.career_objective.work_city;
+              tranCity(res.data.career_objective,true,1);
+              tranProvince(res.data.career_objective,true);
+              transArrive(res.data.career_objective,true,1);
+              transNature(res.data.career_objective,1);
+              transSalary(res.data.career_objective,1);
+              this.intJobData = res.data.career_objective;
+              this.remark = this.intJobData.remark
+            }
+          });
+      }
     }
 </script>
 

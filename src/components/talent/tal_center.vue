@@ -66,7 +66,7 @@
                 <li>您有一份双11专属权益待查收<span>3小时前</span></li>
               </ul>
             </div>
-            <div class="msg_tip" v-show="this.newsNew">
+            <div class="msg_tip" v-show="this.newNews">
 
             </div>
             <img class="to_right_pic" src="/static/images/icon_goright.png" alt="">
@@ -124,7 +124,7 @@
             dev: 0,
             col: 0,
             down: 0,
-            newsNew: false
+            newNews: false
           }
       },
       methods: {
@@ -154,9 +154,11 @@
         this.down = userInfo.downloads;
 
         //是否有新消息
-        this.$ajax.get('/personal/hasnewmsg',{params:{}})
+        this.$ajax.get('/personal/hasnewmsg',{params:{uid: userInfo.id}})
           .then((res)=>{
-            console.log(res);
+            if (res.data.state != 400) {
+              this.newNews = res.data ==0?false:true
+            }
           })
       }
     }

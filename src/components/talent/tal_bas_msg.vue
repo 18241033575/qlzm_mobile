@@ -18,7 +18,7 @@
             <p><span class="left_lab">手机</span> <span class="right_msg">{{userInfoMsg.phone}}</span></p>
             <p><span class="left_lab">QQ</span> <span class="right_msg">{{userMsg.qq}}</span></p>
             <p><span class="left_lab">邮箱</span> <span class="right_msg">{{userMsg.email}}</span></p>
-            <p><span class="left_lab">就业情况</span> <span class="right_msg">{{userMsg.work_status}}</span></p>
+            <p><span class="left_lab">就业情况</span> <span class="right_msg">{{userMsg.work_status == 1?'已就业':'待就业'}}</span></p>
             <p><span class="left_lab">通讯地址</span> <span class="right_msg">{{userMsg.province + userMsg.city + userMsg.area}}</span></p>
             <p><span class="left_lab">街道</span> <span class="right_msg">{{userMsg.address}}</span></p>
           </div>
@@ -65,7 +65,7 @@
               <span class="edit_lab">电子邮箱</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
             </div>
             <div class="edit_cell special_cell">
-              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell">贵州省<img src="/static/images/down3j.png" alt=""></div><div class="comm_addr_cell">贵阳市<img src="/static/images/down3j.png" alt=""></div><div class="comm_addr_cell">南明区<img src="/static/images/down3j.png" alt=""></div></div>
+              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell">{{userMsg.province}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell">{{userMsg.city}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell">{{userMsg.area}}<img src="/static/images/font_down.png" alt=""></div></div>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">详细地址</span><input type="text" v-model="form.tal_addr" placeholder="详细地址">
@@ -88,6 +88,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {splicPic,transGender,transEducation,transWorkexp} from '../../../static/js/common.js'
     export default {
         name: "tal_bas_msg",
@@ -126,10 +127,12 @@
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
+                tranArea(res.data.base_info,true,1);
+                tranCity(res.data.base_info,true,1);
+                tranProvince(res.data.base_info,true);
                 transGender(res.data.base_info,true);
                 transEducation(res.data.base_info,1);
                 transWorkexp(res.data.base_info,1,'tal');
-                console.log(res.data.base_info);
                 this.userMsg = res.data.base_info;
                 this.form.tal_name = this.userMsg.name;
                 this.form.tal_idcard = this.userMsg.id_card;
@@ -339,7 +342,7 @@
   .comm_addr img{
     margin-left: 20px;
     width: 12px;
-    height: 6px;
+    height: 10px;
     vertical-align: middle;
   }
 </style>

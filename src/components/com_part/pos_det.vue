@@ -14,7 +14,7 @@
               <span class="ugent_sign" v-show="this.posDetData.is_urgent == 1">急聘</span><span class="pos_name">{{this.posDetData.office_name}}</span><span class="salary fr">{{this.posDetData.salary}}</span>
             </div>
             <div class="ugent_bottom">
-              <span class="tags">{{this.posDetData.city}}</span> | <span class="tags">{{this.posDetData.work_exp}}</span> | <span class="tags">{{this.posDetData.education}}</span> | <span
+              <span class="tags">{{this.posDetData.city}}</span> | <span class="tags">{{posDetData.work_exp}}</span> | <span class="tags">{{this.posDetData.hire_num}}人</span> | <span class="tags">{{this.posDetData.education}}</span> | <span
               class="tags">{{this.posDetData.nature}}</span><span class="update_time fr">{{this.posDetData.created_at}}</span>
               <p><img v-show="this.has_mSign" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyName}}</p>
             </div>
@@ -59,8 +59,20 @@
               <div class="com_det_title msg_cell_fz">
                 职位信息
               </div>
-              <div class="company_welfare">
-                <span>五险一金</span><span>五险一金</span><span>双休</span><span>五险一金</span><span>五险一金</span><span>双休</span><span>五险一金</span><span>五险一金</span><span>双休</span>
+              <div class="company_contract_cell">
+                <span class="label">招聘人数</span><span class="contract_msg">{{posDetData.hire_num==0?'若干':posDetData.hire_num}}人</span>
+              </div>
+              <div class="company_contract_cell">
+                <span class="label">性别限制</span><span class="contract_msg">{{posDetData.sex==1?'男':'女'}}</span>
+              </div>
+              <div class="company_contract_cell">
+                <span class="label">学历要求</span><span class="contract_msg">{{posDetData.education}}</span>
+              </div>
+              <div class="company_contract_cell">
+                <span class="label">工作经验</span><span class="contract_msg">{{posDetData.work_exp}}</span>
+              </div>
+              <div class="company_contract_cell">
+                <span class="label">持证要求</span><span class="contract_msg">{{pos_categoty + '-' + pos_major}}</span>
               </div>
             </div>
           </div>
@@ -73,7 +85,7 @@
               </div>
               <div class="company_info">
                 <p>
-                  恒大地产集团有限公司是中国恒大集团的下属控股企业大地产集团有限公司是中国恒大集团的下属控股企业，是集团的大地产集团有限公司是中国恒大集团的下属控股企业，是集团的大地产集团有限公司是中国恒大集团的下属控股企业，是集团的大地产集团有限公司是中国恒大集团的下属控股企业，是集团的大地产集团有限公司是中国恒大集团的下属控股企业，是集团的，是集团的地产业务主体，总部位于中国深圳。恒大集团是集地产、金融、健康、旅游及体育为一体的世界500强企业集团，总资产达万亿，年销售规模超4000亿，员工8万多人，解决就业130多万人，在全国180多个城市拥有地产项目500多个，已成为全球第一房企。
+                  {{posDetData.duty}}
                 </p>
                 <div class="shade"></div>
               </div>
@@ -119,7 +131,8 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover,splicPic,company_adv} from '../../../static/js/common.js'
+  import {tranProvince, tranCity} from  '../../../static/js/distpicker'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,company_adv} from '../../../static/js/common.js'
   export default {
     name: "pos_det",
     components: {
@@ -139,7 +152,9 @@
         apply_btn: '申请职位',
         otherPosData: {},
         otherPosNum: 0,
-        tags_sign: true
+        tags_sign: true,
+        pos_categoty: '',
+        pos_major: ''
       }
     },
     methods: {
@@ -171,7 +186,6 @@
       let id = this.$route.query.id;
       this.$ajax.get('/office/detail', {params:{id: id}})
         .then((res) => {
-          console.log(res);
           if (res.data.state != 400) {
             if (res.data.tags == '') {
               this.tags_sign = false;
@@ -179,7 +193,16 @@
               this.tags_sign = true;
               res.data.tags = company_adv(res.data.tags,true);
             }
+            tranCity(res.data,true,1);
+            tranProvince(res.data,true);
+            transEducation(res.data,1);
+            transNature(res.data,1);
+            transSalary(res.data,1);
+            res.data.created_at = getDistanceTime(res.data.created_at);
             this.posDetData = res.data;
+            this.pos_categoty = this.posDetData.cert_type.category;
+            this.pos_categoty = this.posDetData.cert_major.major;
+            transWorkexp(res.data,1,'company');
             this.has_mSign = this.posDetData.company_info.has_m == 1?true:false;
             this.companyName = this.posDetData.company_info.name
           }
@@ -508,4 +531,19 @@
     color: #ffffff;
   }
 
+  /*联系人*/
+  .company_contract_cell{
+    display: flex;
+    margin-top: 5px;
+    font-size: 12px;
+  }
+  .label{
+    display: inline-block;
+    width: 60px;
+    color: #919199;
+  }
+  .contract_msg{
+    flex-grow: 1;
+    color: #666666;
+  }
 </style>

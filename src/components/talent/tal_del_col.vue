@@ -28,6 +28,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../../static/js/common.js'
     export default {
         name: "tal_del_col",components: {
@@ -52,6 +53,7 @@
           this.$ajax.get('/personal/apply',{params:{uid: userInfo.id}})
             .then((res)=>{
               if(res.data.state != 400) {
+                tranCity(res.data,true,2,'office');
                 transWorkexp(res.data,2);
                 transNature(res.data,2);
                 transEducation(res.data,2);
@@ -64,6 +66,7 @@
           this.$ajax.get('/personal/collection',{params:{uid: userInfo.id}})
             .then((res)=>{
               if(res.data.state != 400) {
+                tranCity(res.data,true,2,'office');
                 transWorkexp(res.data,2);
                 transNature(res.data,2);
                 transEducation(res.data,2);

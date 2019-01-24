@@ -146,7 +146,8 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover,splicPic,company_adv} from '../../../static/js/common.js'
+  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,transComNature,transComScale,splicPic,company_adv} from '../../../static/js/common.js'
     export default {
         name: "company_det",
       components: {
@@ -179,6 +180,12 @@
               }
               res.data.logo = splicPic(res.data.logo,true);
               this.contactData = res.data.contact;
+
+              tranArea(res.data,true,1);
+              tranCity(res.data,true,1);
+              tranProvince(res.data,true);
+              transComScale(res.data,true,1);
+              transComNature(res.data,true,1);
               this.companyMsg = res.data;
             }
           });

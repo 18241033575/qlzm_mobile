@@ -1,8 +1,15 @@
 /*
   *地区选择插件整理
 */
+
+
+ /*
+  type = 1 --单个数据
+  type = 2 --数组
+  flag = true  数字转文字 反之
+ */
 /*地区选择*/
-function tranProvince(pro,flag) {
+function tranProvince(data,flag) {
   const PROVICE = {
     110000: '北京市',
     120000: '天津市',
@@ -40,11 +47,11 @@ function tranProvince(pro,flag) {
     820000: '澳门特别行政区'
   };
   if (flag) {
-    pro = PROVICE[pro]
+    data.province = PROVICE[data.province]
   }
 }
 
-function tranCity(data,flag,type) {
+function tranCity(data,flag,type,off) {
   const CITY = {
     110000: {
       110100: '北京城区'
@@ -486,9 +493,17 @@ function tranCity(data,flag,type) {
   };
   if (flag) {
     if (type == 2) {
-      for (let i = 0; i < data.length; i++) {
-        // midData[i] = CITY[data[i].province][data[i].city];
-        data[i].city = CITY[data[i].province][data[i].city];
+      if (off == 'office')
+      {
+        for (let i = 0; i < data.length; i++) {
+          // midData[i] = CITY[data[i].province][data[i].city];
+          data[i].office.city = CITY[data[i].office.province][data[i].office.city];
+        }
+      }else {
+        for (let i = 0; i < data.length; i++) {
+          // midData[i] = CITY[data[i].province][data[i].city];
+          data[i].city = CITY[data[i].province][data[i].city];
+        }
       }
     } else {
       // midData = CITY[data.province];
@@ -497,7 +512,7 @@ function tranCity(data,flag,type) {
   }
 }
 
-function tranArea(ci,ar,flag) {
+function tranArea(data,flag,type) {
   const AREA = {
     110100: {
       110101: '东城区',
@@ -4131,7 +4146,13 @@ function tranArea(ci,ar,flag) {
     }
   };
   if (flag) {
-    pro = AREA[pro]
+    if (type == 2) {
+      for (let i = 0; i < data.length; i++) {
+        data[i].area = CITY[data[i].city][data[i].area];
+      }
+    } else {
+      data.area = AREA[data.city][data.area];
+    }
   }
 }
 export {

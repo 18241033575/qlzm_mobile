@@ -210,8 +210,8 @@
             .then((res)=>{
               if(res.data.state != 400){
                 tranCity(res.data,true,2);
-                transSalary(res.data);
-                transNature(res.data);
+                transSalary(res.data,2);
+                transNature(res.data,2);
                 transEducation(res.data);
                 transWorkexp(res.data);
 

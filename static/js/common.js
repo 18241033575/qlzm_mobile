@@ -8,7 +8,7 @@
 /*字典部分*/
 
 // salary
-function transSalary(data,type) {
+function transSalary(data,type,off) {
   const salary = [
     "面议",
     "2000以下",
@@ -24,42 +24,51 @@ function transSalary(data,type) {
   ];
   let transData = data;
   if (type == 2) {
-    for (let i = 0; i < transData.length; i++) {
-
-      if (transData[i].salary != 0) {
-        transData[i].office.salary = (salary[transData[i].office.salary] + '元/月')
-      } else {
-        transData[i].office.salary = salary[transData[i].office.salary]
+    if (off == 'office') {
+      for (let i = 0; i < transData.length; i++) {
+        if (transData[i].salary != 0) {
+          transData[i].office.salary = (salary[transData[i].office.salary] + '元/月')
+        } else {
+          transData[i].office.salary = salary[transData[i].office.salary]
+        }
+      }
+    } else {
+      for (let i = 0; i < transData.length; i++) {
+        if (transData[i].salary != 0) {
+          transData[i].salary = (salary[transData[i].salary] + '元/月')
+        } else {
+          transData[i].salary = salary[transData[i].salary]
+        }
       }
     }
   } else {
-    for (let i = 0; i < transData.length; i++) {
-
-      if (transData[i].salary != 0) {
-        transData[i].salary = (salary[transData[i].salary] + '元/月')
+      if (transData.salary != 0) {
+        transData.salary = (salary[transData.salary] + '元/月')
       } else {
-        transData[i].salary = salary[transData[i].salary]
+        transData.salary = salary[transData.salary]
       }
-    }
   }
 }
 
-function transNature(data,type) {
+function transNature(data,type,off) {
   const nature = [
     "面议",
     "全职",
     "项目"
   ];
   let transData = data;
-
   if (type == 2) {
-    for (let i = 0; i < transData.length; i++) {
+    if (off == 'office') {
+      for (let i = 0; i < transData.length; i++) {
         transData[i].office.nature = nature[transData[i].office.nature]
+      }
+    }else {
+      for (let i = 0; i < transData.length; i++) {
+        transData[i].nature = nature[transData[i].nature]
+      }
     }
   } else {
-    for (let i = 0; i < transData.length; i++) {
-      transData[i].nature = nature[transData[i].nature]
-    }
+      transData.nature = nature[transData.nature]
   }
 }
 
@@ -277,30 +286,71 @@ function reverseOrder(data) {
   }
   return reverseData
 }
+function transComScale(data,flag,type) {
+  const company_scale = [
+    "占位",
+    "1-19人",
+    "20-49人",
+    "50-99人",
+    "100-199人",
+    "200-499人",
+    "500-999人",
+    "1000-4999人",
+    "5000人以上"
+  ]
+  if (flag) {
+    if (type == 2) {
+      for (let i = 0; i < data.length; i++) {
 
-var company_scale = [
-  "占位",
-  "1-19人",
-  "20-49人",
-  "50-99人",
-  "100-199人",
-  "200-499人",
-  "500-999人",
-  "1000-4999人",
-  "5000人以上"
-]
+      }
+    } else {
+      data.scale = company_scale[data.scale]
+    }
+  }
+}
+function transComNature(data,flag,type) {
+  const company_nature = [
+    "占位",
+    "国有企业",
+    "国有控股企业",
+    "外资企业",
+    "合资企业",
+    "私营企业",
+    "事业单位",
+    "国家行政机关",
+    "政府"
+  ];
+  if (flag) {
+    if (type == 2) {
+      for (let i = 0; i < data.length; i++) {
 
-var company_nature = [
-  "占位",
-  "国有企业",
-  "国有控股企业",
-  "外资企业",
-  "合资企业",
-  "私营企业",
-  "事业单位",
-  "国家行政机关",
-  "政府"
-];
+      }
+    } else {
+      data.nature = company_nature[data.nature]
+    }
+  }
+}
+function transArrive(data,flag,type) {
+  //到岗时间
+  const arrive_time = [
+    "未填写",
+    "随时",
+    "3天内",
+    "7天内",
+    "15天内",
+    "30天内"
+  ];
+  if (flag) {
+    if (type == 2) {
+      for (let i = 0; i < data.length; i++) {
+
+      }
+    } else {
+      data.duty_time = arrive_time[data.duty_time]
+    }
+  }
+}
+
 
 
 export {
@@ -314,5 +364,8 @@ export {
   tal_adv,
   splicLogo,
   splicFrontcover,
-  company_adv
+  company_adv,
+  transComScale,
+  transComNature,
+  transArrive
 }
