@@ -192,6 +192,11 @@
         this.$ajax.get('/office/company', {params: {cid: cid}})
           .then((res) => {
             if (res.data.state != 400) {
+              console.log(res.data.data);
+              tranCity(res.data.data,true,2);
+              transWorkexp(res.data.data,0,'com');
+              transEducation(res.data.data,0);
+              transNature(res.data.data,2);
               this.hotPosData = res.data;
               this.hotPosNum = res.data.data.length;
             }

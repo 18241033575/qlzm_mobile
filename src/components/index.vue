@@ -22,7 +22,7 @@
           </el-option>
           </el-select>
           <el-input class="search_text" v-model="search_text" placeholder="请输入关键词进行搜索！"></el-input>
-          <div class="search_btn">
+          <div class="search_btn" @click="search_all">
 
           </div>
         </div>
@@ -162,7 +162,7 @@
             bannerList: {
               0: "/static/images/banner03@2x.png",
               1: "/static/images/banner02@2x.png",
-              2: "/static/images/banner013@2x.png",
+              2: "/static/images/banner03@2x.png",
             },
             options: [{
               value: '1',
@@ -198,6 +198,11 @@
         news_det(e) {
           let id = e.currentTarget.getAttribute('news-id');
           this.$router.push({name: 'news_det',query:{id: id}})
+        },
+        search_all() {
+          if (this.search_text != '') {
+            this.$router.push({name: 'find_job',query:{office_name: this.search_text,province: '520000'}})
+          }
         }
       },
       watch: {
@@ -283,6 +288,11 @@
   }
   .search_box .el-input{
     width: auto;
+  }
+  .search_box .el-input__inner{
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
   }
   .search_text{
     flex-grow: 1;

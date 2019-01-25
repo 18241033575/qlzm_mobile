@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="pos_btn_group">
-          <div class="pos_btn collect_btn">
+          <div class="pos_btn collect_btn" @click="can_col_pos">
             {{collect_btn}}
           </div>
           <div class="pos_btn apply_btn" @click="apply_pos">
@@ -148,13 +148,15 @@
         has_mSign: false,
         companyName: '',
         tabSign: true,
-        collect_btn: '取消收藏职位',
+        collect_btn: '收藏职位',
         apply_btn: '申请职位',
         otherPosData: [],
         otherPosNum: 0,
         tags_sign: true,
         pos_categoty: '',
-        pos_major: ''
+        pos_major: '',
+        isCol: false,
+        isApply: false
       }
     },
     methods: {
@@ -166,9 +168,6 @@
         this.openState = data;
       },
       /*总菜单操作e*/
-      apply_pos() {
-
-      },
       tab_pos_det() {
         this.tabSign = true
       },
@@ -180,13 +179,53 @@
         let cid = e.currentTarget.getAttribute('cid');
         this.$router.push({name: 'pos_det',query:{id: id,cid: cid}});
         location.reload()
-      }
+      },
+      //收藏职位
+      can_col_pos() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        if (userInfo) {
+          if (!this.isCol) {
+            this.$ajax.get('/company_collect_position',{params: {id: 111,cid: 36, uid: userInfo.id}})
+              .then((res)=>{
+                console.log(res);
+                this.collect_btn = '取消收藏';
+                this.isCol = true
+              })
+          } else {
+            this.$ajax.post('/office/cancel/collection',{params:{office_id: 111, uid: userInfo.id}})
+              .then((res)=>{
+                console.log(res);
+                this.collect_btn = '收藏简历';
+                this.isCol = false
+              })
+          }
+
+        } else {
+          this.$router.push({name: 'index'})
+        }
+      },
+      //申请职位
+      apply_pos() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        if (userInfo) {
+          if (!this.isApply) {
+            this.$ajax.post('/personal/applyoffice', {office_id: 111, cid: 36, uid: userInfo.id})
+              .then((res) => {
+                console.log(res);
+                this.apply_btn = '已申请';
+                this.isApply = true
+              //
+              })
+          }
+        }
+      },
     },
     created() {
       let id = this.$route.query.id;
       this.$ajax.get('/office/detail', {params:{id: id}})
         .then((res) => {
           if (res.data.state != 400) {
+            console.log(res.data);
             if (res.data.tags == '') {
               this.tags_sign = false;
             } else {
@@ -222,7 +261,20 @@
             }
             // tranCity(this.otherPosData,true,2);
           }
-        })
+        });
+      let userInfo = JSON.parse(localStorage.getItem('USER'));
+      //  是否收藏、申请
+      if (userInfo) {
+        this.$ajax.post('/personal/isapply',{params: {uid: userInfo.id}})
+          .then((res)=>{
+            console.log(res);
+          });
+        this.$ajax.post('/personal/iscollect',{params: {uid: userInfo.id}})
+          .then((res)=>{
+            console.log(res);
+          })
+      }
+
     }
   }
 </script>

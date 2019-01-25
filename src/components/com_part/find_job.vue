@@ -1,11 +1,11 @@
 <template>
-  <div class="find_job" :class="{stop_scroll: this.openState}">
+  <div class="find_job" :class="{stop_scroll: this.openState || this.outBox}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--职位搜索-->
     <div class="search_job">
       <div class="content">
         <div class="search_box">
-          <input type="text" placeholder="请输入关键词进行搜索！"><span class="search_job_btn"><img src="/static/images/ic_search_gray@2x.png" alt=""></span>
+          <input type="text" v-model="keyword" placeholder="请输入关键词进行搜索！"><span @click="search_job_click" class="search_job_btn"><img src="/static/images/ic_search_gray@2x.png" alt=""></span>
         </div>
       </div>
     </div>
@@ -24,8 +24,8 @@
             <div class="only_ugent" :class="{active: this.ugentFlag}" @click="only_ugent">
               只看急聘
             </div>
-            <div class="filter_all">
-              筛选<img src="/static/images/filter.png" alt="filter">
+            <div class="filter_all" @click="job_filter">
+              筛选<img src="/static/images/filter.png" alt="filter" >
             </div>
           </div>
         </div>
@@ -72,8 +72,8 @@
       </div>
     </div>
     <!--筛选第一层-->
-    <div class="filter_all_box" v-show="false">
-      <div class="filter_bg">
+    <div class="filter_all_box" v-show="this.firstBox">
+      <div class="filter_bg" @click="firstBoxBg">
 
       </div>
       <div class="filter_det">
@@ -143,7 +143,7 @@
       </div>
     </div>
     <!--筛选第二层-->
-    <div class="filter_all_box" v-show="false">
+    <div class="filter_all_box" v-show="this.secondBox">
       <div class="filter_bg">
 
       </div>
@@ -196,11 +196,15 @@
         /*总菜单状态*/
         openState: false,
         sort_msg: '默认排序',
+        outBox: false,
+        firstBox: false,
+        secondBox: false,
         sortNum: 0,
         search_job: '',
         famFlag: false,
         ugentFlag: false,
         sort_sign: false,
+        keyword: '',
         find_jobData: {},
         sortList: {
           0: "默认排序",
@@ -218,6 +222,7 @@
       get_sign(data) {
         this.openState = !data;
       },
+      //排序
       sort_opera(e) {
         let sort_index = e.currentTarget.getAttribute('sort-num');
         if (this.sortNum == sort_index) {
@@ -225,6 +230,8 @@
         } else {
           this.sortNum = sort_index;
           console.log('请求数据');
+          this.find_jobParam.order = sort_index;
+          this.getjobData(this.find_jobParam)
         }
         this.sort_msg = this.sortList[sort_index];
         this.sort_sign = false
@@ -234,9 +241,15 @@
       },
       /*总菜单操作e*/
       getjobData(param) {
-        this.$ajax.get('/company_work',param)
+        let data = param;
+        this.$ajax.get('/company_work',{params: data})
           .then((res)=>{
             if (res.data.code == 200) {
+              tranCity(res.data.data,true,2);
+              transWorkexp(res.data.data,0);
+              transEducation(res.data.data,0);
+              transNature(res.data.data,2);
+              transSalary(res.data.data,2);
               this.find_jobData = res.data.data
             }
           })
@@ -255,9 +268,29 @@
       rotate() {
         this.sort_sign = !this.sort_sign
       },
+      //搜索
+      search_job_click() {
+        this.find_jobParam.office_name = this.keyword;
+        this.find_jobParam.province = '520000';
+        this.getjobData(this.find_jobParam)
+      },
+      //筛选
+      job_filter() {
+        this.outBox = true;
+        this.firstBox = true
+      },
+      firstBoxBg() {
+        this.outBox = false;
+        this.firstBox = false
+      }
     },
     created() {
-      this.$ajax.get('/company_work',this.find_jobParam)
+      if (this.$route.query.province) {
+        this.keyword = this.find_jobParam.office_name = this.$route.query.office_name;
+        this.find_jobParam.province = this.$route.query.province;
+      }
+      let data = this.find_jobParam;
+      this.$ajax.get('/company_work',{params: data})
         .then((res)=>{
           if (res.data.code == 200) {
             tranCity(res.data.data,true,2);
@@ -491,6 +524,7 @@
   .filter_det{
     width: 90%;
     height: 100vh;
+    overflow-y: scroll;
     background-color: #ffffff;
   }
   .filter_btn_group{
@@ -534,6 +568,9 @@
     width: 14px;
     height: 14px;
     vertical-align: middle;
+  }
+  .filter_part2{
+    margin-bottom: 52px;
   }
   .part2_cell_title{
     line-height: 36px;
