@@ -95,7 +95,7 @@
                 工作经验
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
+                <span class="filter_cell">十年以上</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -103,7 +103,7 @@
                 工作经验
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
+                <span class="filter_cell">10001-15000</span><span class="filter_cell">广西壮族自治区</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
               </div>
             </div>
             <div class="filter_part2_cell">
