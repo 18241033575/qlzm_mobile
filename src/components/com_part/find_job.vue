@@ -3,7 +3,11 @@
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--职位搜索-->
     <div class="search_job">
-      <input type="text" placeholder="请输入关键词进行搜索！">
+      <div class="content">
+        <div class="search_box">
+          <input type="text" placeholder="请输入关键词进行搜索！"><span class="search_job_btn"><img src="/static/images/ic_search_gray@2x.png" alt=""></span>
+        </div>
+      </div>
     </div>
     <!--筛选-->
     <div class="filter">
@@ -27,14 +31,14 @@
         </div>
       </div>
       <div class="sort_list" v-show="sort_sign">
-        <div class="sort_list_cell">
+        <div class="sort_list_cell" :sort-num="index" v-for="(item,index) in this.sortList" :key="index" @click="sort_opera">
           <div class="content">
             <div class="sort_list_cell_box">
-              默认排序 <img src="/static/images/ic_checked@2x.png" alt="checked">
+              {{item}} <img v-show="index==sortNum" src="/static/images/ic_checked@2x.png" alt="checked">
             </div>
           </div>
         </div>
-        <div class="sort_list_cell">
+       <!-- <div class="sort_list_cell">
           <div class="content">
             <div class="sort_list_cell_box">
               薪资水平 <img v-show="false" src="/static/images/ic_checked@2x.png" alt="checked">
@@ -47,7 +51,7 @@
               更新时间 <img v-show="false" src="/static/images/ic_checked@2x.png" alt="checked">
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
     <!--找工作-->
@@ -179,6 +183,8 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,company_adv} from '../../../static/js/common.js'
   export default {
     name: "find_job",
     components: {
@@ -190,11 +196,17 @@
         /*总菜单状态*/
         openState: false,
         sort_msg: '默认排序',
+        sortNum: 0,
         search_job: '',
         famFlag: false,
         ugentFlag: false,
         sort_sign: false,
         find_jobData: {},
+        sortList: {
+          0: "默认排序",
+          1: "薪资水平",
+          2: "更新时间"
+        },
         find_jobParam: {
           page: 1,
           row: 8
@@ -205,6 +217,17 @@
       /*总菜单操作s*/
       get_sign(data) {
         this.openState = !data;
+      },
+      sort_opera(e) {
+        let sort_index = e.currentTarget.getAttribute('sort-num');
+        if (this.sortNum == sort_index) {
+
+        } else {
+          this.sortNum = sort_index;
+          console.log('请求数据');
+        }
+        this.sort_msg = this.sortList[sort_index];
+        this.sort_sign = false
       },
       getIsopen(data) {
         this.openState = data;
@@ -237,6 +260,11 @@
       this.$ajax.get('/company_work',this.find_jobParam)
         .then((res)=>{
           if (res.data.code == 200) {
+            tranCity(res.data.data,true,2);
+            transWorkexp(res.data.data,0);
+            transEducation(res.data.data,0);
+            transNature(res.data.data,2);
+            transSalary(res.data.data,2);
             this.find_jobData = res.data.data
           }
         })
@@ -247,8 +275,6 @@
 <style scoped>
   /*搜索栏*/
   .search_job {
-    display: flex;
-    justify-content: space-between;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -257,10 +283,37 @@
     border-bottom: 1px solid #E1E4E6;
     background-color: #ffffff;
   }
-  .search_job .el-input {
-    height: 28px;
+  .search_box{
+    display: flex;
+    align-items: center;
+    /*justify-content: space-between;*/
+    line-height: 44px;
+    height: 44px;
   }
-
+  .search_box input {
+    width: 75%;
+    padding: 0;
+    padding-left: 10px;
+    border-width: 0;
+    height: 28px;
+    border: none;
+    background-color: #eaeaea;
+  }
+  .search_box input:focus{
+    outline: none;
+  }
+  .search_job_btn{
+    display: inline-block;
+    line-height: 28px;
+    width: 28px;
+    text-align: center;
+    background-color: #eaeaea;
+  }
+  .search_job_btn img{
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+  }
   .search_job .el-input--suffix .el-input__inner {
     height: 28px;
   }
@@ -273,6 +326,8 @@
 
   /*筛选*/
   .filter {
+    position: sticky;
+    top: 0;
     background-color: #ffffff;
   }
 
@@ -307,7 +362,7 @@
   }
   .sort_list{
     position: absolute;
-    top: 88px;
+    top: 45px;
     width: 100%;
     background-color: #ffffff;
     z-index: 999999;
@@ -390,13 +445,13 @@
 
   .ugent_bottom {
     margin-top: 10px;
+    color: #e1e4e6;
   }
-
   .ugent_bottom p {
     margin-top: 10px;
     font-size: 12px;
-    color: #919199;
     line-height: 12px;
+    color: #919199;
   }
 
   .ugent_bottom p img {
@@ -408,7 +463,7 @@
 
   .tags {
     font-size: 12px;
-    color: #919199;
+    color: #666666;
   }
 
   .update_time {

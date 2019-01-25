@@ -12,6 +12,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(elementUI);
 
 //数据请求
+// Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
 Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
 // Axios.defaults.baseURL= '/api';

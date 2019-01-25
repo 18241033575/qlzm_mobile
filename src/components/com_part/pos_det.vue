@@ -14,8 +14,8 @@
               <span class="ugent_sign" v-show="this.posDetData.is_urgent == 1">急聘</span><span class="pos_name">{{this.posDetData.office_name}}</span><span class="salary fr">{{this.posDetData.salary}}</span>
             </div>
             <div class="ugent_bottom">
-              <span class="tags">{{this.posDetData.city}}</span> | <span class="tags">{{posDetData.work_exp}}</span> | <span class="tags">{{this.posDetData.hire_num}}人</span> | <span class="tags">{{this.posDetData.education}}</span> | <span
-              class="tags">{{this.posDetData.nature}}</span><span class="update_time fr">{{this.posDetData.created_at}}</span>
+              <span class="tags">{{posDetData.city}}</span> | <span class="tags">{{posDetData.work_exp}}</span> | <span class="tags">{{posDetData.hire_num==0?'若干':posDetData.hire_num}}人</span> | <span class="tags">{{posDetData.education}}</span> | <span
+              class="tags">{{posDetData.nature}}</span><span class="update_time fr">{{posDetData.created_at}}</span>
               <p><img v-show="this.has_mSign" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyName}}</p>
             </div>
           </div>
@@ -131,7 +131,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import {tranProvince, tranCity} from  '../../../static/js/distpicker'
+  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,company_adv} from '../../../static/js/common.js'
   export default {
     name: "pos_det",
@@ -150,7 +150,7 @@
         tabSign: true,
         collect_btn: '取消收藏职位',
         apply_btn: '申请职位',
-        otherPosData: {},
+        otherPosData: [],
         otherPosNum: 0,
         tags_sign: true,
         pos_categoty: '',
@@ -193,6 +193,7 @@
               this.tags_sign = true;
               res.data.tags = company_adv(res.data.tags,true);
             }
+            tranArea(res.data,true,1);
             tranCity(res.data,true,1);
             tranProvince(res.data,true);
             transEducation(res.data,1);
@@ -214,10 +215,12 @@
           if (res.data.state != 400) {
             this.otherPosNum = res.data.data.length - 1;
             for (let i = 0;i < res.data.data.length; i++) {
-              if (res.data.data[i].id != id) {
+              console.log(res.data.data[i].id,id);
+              /*if (res.data.data[i].id != id) {
                 this.otherPosData[i] = res.data.data[i]
-              }
+              }*/
             }
+            // tranCity(this.otherPosData,true,2);
           }
         })
     }

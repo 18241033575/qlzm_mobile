@@ -47,7 +47,7 @@
   .get_smsCode{
     text-align: center;
     /*line-height: 38px;*/
-    width: 45%;
+    width: 44%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
