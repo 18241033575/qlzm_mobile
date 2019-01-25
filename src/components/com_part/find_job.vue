@@ -579,12 +579,14 @@
   }
   .part2_cell_body{
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     flex-wrap: wrap;
+
   }
   .filter_cell{
     display: inline-block;
     margin-bottom: 10px;
+    margin-right: 10px;
     width: 90px;
     line-height: 30px;
     background-color: #eaeaea;
