@@ -79,13 +79,13 @@
       <div class="filter_det">
         <div class="content">
           <div class="filter_part1">
-            <div class="filter_part1_cell">
+            <div class="filter_part1_cell" >
               省份<span class="fr">贵州省<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
-            <div class="filter_part1_cell">
+            <div class="filter_part1_cell" data-sign="city" @click="all_choose">
               城市<span class="fr">贵阳市<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
-            <div class="filter_part1_cell">
+            <div class="filter_part1_cell" data-sign="pos_type" @click="all_choose">
               职位类别<span class="fr">全部<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
           </div>
@@ -95,48 +95,48 @@
                 工作经验
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell">十年以上</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
+                <span class="filter_cell" :class="{com_active:index == workExpAct}" :workexp-id="index" @click="workexp_opera" v-for="(item,index) in this.workexpData" :key="index">{{item}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
               <div class="part2_cell_title">
-                工作经验
+                学历要求
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell">10001-15000</span><span class="filter_cell">广西壮族自治区</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
+                <span class="filter_cell" :class="{com_active:index == educationAct}" :education-id="index" @click="education_opera" v-for="(item,index) in this.educationData" :key="index">{{item}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
               <div class="part2_cell_title">
-                工作经验
+                工作性质
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
+                <span class="filter_cell" :class="{com_active:index == natureAct}" :nature-id="index" @click="nature_opera" v-for="(item,index) in this.natureData" :key="index">{{item}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
               <div class="part2_cell_title">
-                工作经验
+                薪资要求
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
+                <span class="filter_cell" :class="{com_active:index == salaryAct}" :salary-id="index" @click="salary_opera" v-for="(item,index) in this.salaryData" :key="index">{{item}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
               <div class="part2_cell_title">
-                工作经验
+                发布时间
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span><span class="filter_cell">高中</span>
+                <span class="filter_cell" :class="{com_active:index == offDayAct}" :offDay-id="index" @click="offDay_opera" v-for="(item,index) in this.offDayData" :key="index">{{item}}</span>
               </div>
             </div>
           </div>
         </div>
         <div class="filter_btn_group">
-          <div class="filter_btn reset_btn">
+          <div class="filter_btn reset_btn" @click="reset">
             重置
           </div>
-          <div class="filter_btn sub_btn">
+          <div class="filter_btn sub_btn" @click="filter_submit">
             确定
           </div>
         </div>
@@ -150,7 +150,7 @@
       <div class="filter_det">
         <div class="filter_s_title">
           <div class="content">
-            <img src="/static/images/left.png" alt="left">选择城市
+            <img @click="first_back" src="/static/images/left.png" alt="left">{{top_title}}
           </div>
         </div>
         <div class="content">
@@ -164,14 +164,6 @@
             <div class="filter_part1_cell second">
               贵阳市<img class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
-          </div>
-        </div>
-        <div class="filter_btn_group">
-          <div class="filter_btn reset_btn">
-            重置
-          </div>
-          <div class="filter_btn sub_btn">
-            确定
           </div>
         </div>
       </div>
@@ -206,6 +198,7 @@
         sort_sign: false,
         keyword: '',
         find_jobData: {},
+        top_title: '',
         sortList: {
           0: "默认排序",
           1: "薪资水平",
@@ -214,7 +207,57 @@
         find_jobParam: {
           page: 1,
           row: 8
-        }
+        },
+        workexpData: {
+          0: "不限",
+          1: "1年以下",
+          2: "1-3年",
+          3: "3-5年",
+          4: "5-10年",
+          5: "10年以上"
+        },
+        workExpAct: 0,
+        educationData: {
+          0: "不限",
+          1: "小学及以下",
+          2: "初中",
+          3: "中专",
+          4: "高中",
+          5: "大专",
+          6: "本科",
+          7: "硕士研究生",
+          8: "博士及以上"
+        },
+        educationAct: 0,
+        natureData: {
+          0: "不限",
+          1: "全职",
+          2: "项目"
+        },
+        natureAct: 0,
+        salaryData: {
+          0: "面议",
+          1: "2000以下",
+          2: "2001-4000",
+          3: "4001-6000",
+          4: "6001-8000",
+          5: "8001-10000",
+          6: "10001-15000",
+          7: "15001-25000",
+          8: "2.5w-5w",
+          9: "5w-10w",
+          10: "10w以上"
+        },
+        salaryAct: 0,
+        offDayData: {
+          0: "不限",
+          1: "今天",
+          2: "三天内",
+          3: "一周内",
+          4: "十五天内",
+          5: "一个月内"
+        },
+        offDayAct: 0,
       }
     },
     methods: {
@@ -282,6 +325,55 @@
       firstBoxBg() {
         this.outBox = false;
         this.firstBox = false
+      },
+      all_choose(e) {
+        let partSign = e.currentTarget.getAttribute('data-sign');
+        if (partSign == 'city') {
+          this.top_title = '选择城市'
+        } else if (partSign == 'pos_type') {
+          this.top_title = '选择职位类别'
+        }
+
+        this.secondBox = true
+      },
+      //返回第一层
+      first_back() {
+        this.firstBox = true;
+        this.secondBox = false
+      },
+      workexp_opera(e) {
+        let wi = e.currentTarget.getAttribute('workexp-id');
+        this.workExpAct = wi
+      },
+      education_opera(e) {
+        let wi = e.currentTarget.getAttribute('education-id');
+        this.educationAct = wi
+      },
+      nature_opera(e) {
+        let wi = e.currentTarget.getAttribute('nature-id');
+        this.natureAct = wi
+      },
+      salary_opera(e) {
+        let wi = e.currentTarget.getAttribute('salary-id');
+        this.salaryAct = wi
+      },
+      offDay_opera(e) {
+        let wi = e.currentTarget.getAttribute('offDay-id');
+        this.offDayAct = wi
+      },
+      reset() {
+        this.workExpAct = this.educationAct = this.natureAct = this.salaryAct = this.offDayAct = 0
+      },
+      filter_submit() {
+        this.find_jobParam.work_exp = this.workExpAct;
+        this.find_jobParam.education = this.educationAct;
+        this.find_jobParam.nature = this.natureAct;
+        this.find_jobParam.salary = this.salaryAct;
+        if (this.offDayAct != 0) {
+          this.find_jobParam.time = this.offDayAct;
+        }
+        this.getjobData(this.find_jobParam);
+        this.firstBox = false;
       }
     },
     created() {
@@ -587,7 +679,9 @@
     display: inline-block;
     margin-bottom: 10px;
     margin-right: 10px;
-    width: 90px;
+    width: 90px; -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     line-height: 30px;
     background-color: #eaeaea;
     -webkit-border-radius: 2px;
@@ -596,6 +690,14 @@
     text-align: center;
     font-size: 12px;
     color: #666666;
+    overflow: hidden;
+  }
+  /*单元选中样式*/
+  .com_active{
+    line-height: 28px;
+    border: 1px solid #5082E6;
+    background-color: #ffffff;
+    color: #5082e6;
   }
   /*第二层*/
   .filter_s_title{
@@ -603,6 +705,8 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    font-size: 14px;
+    color: #353535;
     border-bottom: 1px solid #E1E4E6;
   }
   .filter_s_title img{

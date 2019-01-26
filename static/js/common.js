@@ -52,7 +52,7 @@ function transSalary(data,type,off) {
 
 function transNature(data,type,off) {
   const nature = [
-    "面议",
+    "不限",
     "全职",
     "项目"
   ];
@@ -100,26 +100,19 @@ function transEducation(data,type) {
 }
 
 function transWorkexp(data,type,classify) {
+  //工作经验
+  let workexp = [
+    "应届生",
+    "1年以下",
+    "1-3年",
+    "3-5年",
+    "5-10年",
+    "10年以上"
+  ];
   if (classify == 'tal') {
-    //工作经验
-    var workexp = [
-      "应届生",
-      "1年以下",
-      "1-3年",
-      "3-5年",
-      "5-10年",
-      "10年以上"
-    ];
+    workexp[0] = "应届生"
   }else {
-    //工作经验
-    var workexp = [
-      "不限",
-      "1年以下",
-      "1-3年",
-      "3-5年",
-      "5-10年",
-      "10年以上"
-    ];
+    workexp[0] = "不限"
   }
 
   let transData = data;
