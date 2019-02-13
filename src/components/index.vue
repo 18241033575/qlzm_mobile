@@ -63,7 +63,7 @@
             <p>就业指导</p>
           </div>
         </router-link>
-        <router-link :to="{name: 'user_login'}">
+        <router-link :to="{name: 'news'}">
           <div class="nav_cell">
             <img src="/static/images/ic_news@2x.png" alt="">
             <p>新闻资讯</p>

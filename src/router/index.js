@@ -16,6 +16,8 @@ import success_page from '@/components/com_part/success_page'
 import account_manage from '@/components/com_part/account_manage'
 import change_phone from '@/components/com_part/change_phone'
 import change_password from '@/components/com_part/change_password'
+import news from '@/components/com_part/news'
+import news_info from '@/components/com_part/news_info'
 
 //个人中心页面
 import tal_center from '@/components/talent/tal_center'
@@ -103,6 +105,16 @@ export default new Router({
       path: '/change_password',
       name: 'change_password',
       component: change_password
+    },
+    {
+      path: '/news',
+      name: 'news',
+      component: news
+    },
+    {
+      path: '/news_info',
+      name: 'news_info',
+      component: news_info
     },
     {
       path: '/company_det',
