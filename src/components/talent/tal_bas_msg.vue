@@ -44,8 +44,16 @@
                 <img :src="this.editHeadPic" alt="">
               </div>
               <div class="top_msg">
-                <span class="upload_btn">上传图片</span>
-                <p>支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</p>
+                <el-upload
+                  class="avatar-uploader upload_btn"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  list-type="none"
+                  :on-success="upHeadPic">
+                  <el-button size="small" type="primary">点击上传</el-button>
+                  <div slot="tip" class="el-upload__tip">支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</div>
+                </el-upload>
+                <!--<span class="upload_btn">上传图片</span>-->
+                <!--<p>支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</p>-->
               </div>
             </div>
           </div>
@@ -53,7 +61,7 @@
         <div class="edit_bottom">
           <div class="content">
             <div class="edit_cell">
-              <span class="edit_lab">真实姓名</span><input type="text" v-model="form.tal_name" placeholder="真实姓名">
+              <span class="edit_lab">真实姓名</span><input type="text" maxlength="15" v-model="form.tal_name" placeholder="真实姓名">
             </div>
             <div class="edit_cell">
               <span class="edit_lab">身份证号码</span><input type="text" v-model="form.tal_idcard" maxlength="16" placeholder="身份证号码">
@@ -68,7 +76,7 @@
               <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell">{{userMsg.province}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell">{{userMsg.city}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell">{{userMsg.area}}<img src="/static/images/font_down.png" alt=""></div></div>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">详细地址</span><input type="text" v-model="form.tal_addr" placeholder="详细地址">
+              <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">
             </div>
             <div class="edit_cell">
               <span class="edit_lab">就业状态</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">已就业</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">待就业</span></span>
@@ -112,7 +120,7 @@
                 tal_email: '4',
                 tal_addr: '4',
                 tal_state: 1
-              }
+              },
           }
       },
       created() {
@@ -174,6 +182,9 @@
         },
         wait_job() {
           this.form.tal_state = 0
+        },
+        upHeadPic(res) {
+          console.log(res);
         }
       }
     }
@@ -261,11 +272,23 @@
   .upload_btn{
     display: inline-block;
     margin-top: 10px;
-    width: 80px;
+    /*width: 80px;
     line-height: 30px;
     text-align: center;
+
+    */
+  }
+  .upload_btn .el-button{
     color: #ffffff;
     background-color: #ff8236;
+    border-color: #ff8236;
+  }
+  .upload_btn .el-upload__tip{
+    color: #919199;
+    font-size: 12px;
+  }
+  .upload_btn .el-upload-list--none{
+    display: none;
   }
   .edit_cell {
     line-height: 44px;

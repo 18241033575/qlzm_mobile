@@ -48,27 +48,42 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: index
+      component: index,
+      meta: {
+        title: '骑驴找马一一建筑行业人力资源共享平台'
+      }
     },
     {
       path: '/user_reg',
       name: 'user_reg',
-      component: user_reg
+      component: user_reg,
+      meta: {
+        title: '人才注册'
+      }
     },
     {
       path: '/user_login',
       name: 'user_login',
-      component: user_login
+      component: user_login,
+      meta: {
+        title: '人才登录'
+      }
     },
     {
       path: '/find_job',
       name: 'find_job',
-      component: find_job
+      component: find_job,
+      meta: {
+        title: '找工作'
+      }
     },
     {
       path: '/famous_pos',
       name: 'famous_pos',
-      component: famous_pos
+      component: famous_pos,
+      meta: {
+        title: '名企招聘'
+      }
     },
     {
       path: '/success_page',
@@ -78,7 +93,10 @@ export default new Router({
     {
       path: '/account_manage',
       name: 'account_manage',
-      component: account_manage
+      component: account_manage,
+      meta: {
+        title: '账号管理'
+      }
      /* children:[
         {
           path: '',
@@ -109,27 +127,42 @@ export default new Router({
     {
       path: '/news',
       name: 'news',
-      component: news
+      component: news,
+      meta: {
+        title: '新闻资讯'
+      }
     },
     {
       path: '/news_info',
       name: 'news_info',
-      component: news_info
+      component: news_info,
+      meta: {
+        title: '咨询详情'
+      }
     },
     {
       path: '/company_det',
       name: 'company_det',
-      component: company_det
+      component: company_det,
+      meta: {
+        title: '企业详情'
+      }
     },
     {
       path: '/pos_det',
       name: 'pos_det',
-      component: pos_det
+      component: pos_det,
+      meta: {
+        title: '职位详情'
+      }
     },
     {
       path: '/tal_center',
       name: 'tal_center',
-      component: tal_center
+      component: tal_center,
+      meta: {
+        title: '个人中心'
+      }
     },
     {
       path: '/tal_resume',
@@ -203,3 +236,5 @@ export default new Router({
     }
   ]
 })
+
+

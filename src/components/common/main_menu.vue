@@ -86,7 +86,7 @@
             },
             4:{
               urlName: "新闻资讯",
-              urlRoute: "index"
+              urlRoute: "news"
             },
             5:{
               urlName: "关于我们",
@@ -106,9 +106,9 @@
           this.$emit('give_sign', this.isOpen);
         },
         exit_login() {
+          this.$router.push({name: 'index'});
           localStorage.clear();
           this.isLogin = false;
-          this.$router.push({name: 'index'})
         },
       },
       created() {
@@ -124,7 +124,7 @@
           this.isLogin = false;
         }
 
-      }
+      },
     }
 </script>
 
