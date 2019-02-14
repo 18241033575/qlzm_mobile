@@ -10,6 +10,10 @@
         <!--可以提取出来公共部分-->
         <div class="famous_body">
           <div class="content">
+            <ul
+              v-infinite-scroll="loadMore"
+              infinite-scroll-disabled="loading"
+              infinite-scroll-distance="10">
             <div class="famous_cell" :cid="item.cid" :company-id="item.id" v-for="(item,index) in famData" :key="index" @click="to_comDetail">
               <div class="famous_head fl">
                 <img :src="item.logo" alt="">
@@ -21,6 +25,7 @@
                 <p>招聘职位<span>&nbsp;&nbsp;{{item.offices.length}}个</span></p>
               </div>
             </div>
+            </ul>
           </div>
         </div>
       </div>
@@ -69,6 +74,18 @@
           //company-id
           let id = e.currentTarget.getAttribute('cid');
           this.$router.push({name: 'company_det',query:{id: id}})
+        },
+        loadMore() {
+          // alert(1)
+          //滚动触发事件
+          this.loading = true;
+          setTimeout(() => {
+            // let last = this.list[this.list.length - 1];
+            for (let i = 1; i <= 10; i++) {
+              this.list.push(last + i);
+            }
+            this.loading = false;
+          }, 2500);
         }
       }
     }
