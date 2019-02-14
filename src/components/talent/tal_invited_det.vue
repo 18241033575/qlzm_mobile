@@ -87,12 +87,16 @@
     line-height: 24px;
     font-size: 12px;
   }
+  .bottom_msg p{
+    display: flex;
+  }
   .bottom_msg .left_lab{
     display: inline-block;
-    width: 90px;
+    min-width: 90px;
     color: #919199;
   }
   .bottom_msg .right_msg{
+    flex-grow: 1;
     color: #666666;
   }
 </style>

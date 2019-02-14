@@ -268,8 +268,10 @@ function splicFrontcover(data) {
 }
 //倒序
 function reverseOrder(data) {
+  console.log(data);
   let len = data.length,
       reverseData = {};
+  console.log(len);
   if (len == undefined || len == 0) {
 
   } else {
@@ -277,6 +279,7 @@ function reverseOrder(data) {
       reverseData[i] = data[len - 1 - i];
     }
   }
+  console.log(reverseData);
   return reverseData
 }
 function transComScale(data,flag,type) {
@@ -360,5 +363,6 @@ export {
   company_adv,
   transComScale,
   transComNature,
-  transArrive
+  transArrive,
+  reverseOrder
 }

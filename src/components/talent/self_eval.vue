@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="eval_body_bottom">
-            <p>{{selfEvalData.evaluation}}</p>
+            <p>{{evaluation}}</p>
           </div>
         </div>
       </div>
@@ -37,12 +37,12 @@
       <div class="eval_body">
         <div class="content">
           <div class="eval_body_top">
-            <div class="adv_cell" adv_sign="index" :class="{adv_sign_active: true}" v-for="(item,index) in this.selfEvalData.tags" :key="index" @click="choose_adv">
+            <div class="adv_cell" :adv_sign="index+1" :class="{adv_sign_active: true}" v-for="(item,index) in this.selfEvalData.tags" :key="index" @click="choose_adv">
               {{item}}
             </div>
           </div>
           <div class="eval_body_bottom">
-            <textarea name="evaluation">{{selfEvalData.evaluation}}</textarea>
+            <textarea v-model="evaluation" name="evaluation"></textarea>
           </div>
         </div>
       </div>
@@ -71,7 +71,8 @@
             /*总菜单状态*/
             openState: false,
             selfEvalSign: true,
-            selfEvalData: {}
+            selfEvalData: {},
+            evaluation: ''
           }
       },
       methods: {
@@ -87,10 +88,19 @@
           this.selfEvalSign = false;
         },
         selfSave() {
-          this.selfEvalSign = true;
+          this.selfEvalData.flag = 3;
+          this.selfEvalData.evaluation = this.evaluation;
+          this.$ajax.post('/resume/userinfo',this.selfEvalData)
+            .then((res)=>{
+              console.log(res);
+              if (res.data.state == 200){
+                this.selfEvalSign = true;
+              }
+            })
         },
         choose_adv(e) {
-          let adv_sign = e.currentTarget.getAttribute('data-id');
+          let adv_sign = e.currentTarget.getAttribute('adv_sign');
+          console.log(adv_sign);
         }
       },
       created() {
@@ -100,6 +110,7 @@
             if (res.data.state!= 400) {
               res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,true);
               this.selfEvalData = res.data.evaluation;
+              this.evaluation = this.selfEvalData.evaluation
             }
           });
       }
@@ -117,13 +128,17 @@
     padding: 15px 0 5px;
   }
   .adv_cell{
-    padding: 9px 20px;
+    width: 75px;
+    line-height: 30px;
     margin-right: 10px;
     margin-bottom: 10px;
     text-align: center;
     background-color: #dce6fa;
     color: #5082e6;
     font-size: 12px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
   }
   .eval_body_bottom{
     text-align: center;

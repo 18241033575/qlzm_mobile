@@ -9,11 +9,8 @@
       </div>
       <div class="invited_body">
         <div class="content">
-          <div class="invited_cell" @click="invited_det">
-            <span class="new_sign"></span>您收到一份来自“贵州长右岸建设工程有限公司”的面试邀请
-          </div>
-          <div class="invited_cell">
-            <span class="new_sign"></span>   您收到一份来自“中国铁建”的面试邀请
+          <div class="invited_cell" v-for="(item,index) in invitedData" :key="index" @click="invited_det">
+            <span class="new_sign"></span>您收到一份来自“{{item.cname}}”的面试邀请
           </div>
         </div>
       </div>
@@ -34,13 +31,24 @@
           return {
             /*总菜单状态*/
             openState: false,
+            invitedData: {
+
+            },
           }
       },
       created() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
             .then((res)=>{
-              console.log(res);
+              console.log(res.data);
+              if (res.data.state != 400) {
+                for (let i = 0,len = res.data.length; i < len;i++) {
+                 /* res.data[i].cname = res.data[i].company.name;
+                  console.log(res.data[i].cname);*/
+                  // this.invitedData[i].cname = res.data[i].company.name;
+                }
+                this.invitedData = res.data;
+              }
             })
       },
       methods: {

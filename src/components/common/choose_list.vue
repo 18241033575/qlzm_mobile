@@ -1,56 +1,26 @@
 <template>
   <!--选择列表-->
-  <div class="choose_list" v-if="this.give_shade&&this.isOpen">
-    <!--弹出菜单-->
-    <!--阴影-->
-    <div class="bg_shawed" @click="nav_close" v-show="this.give_shade&&this.isOpen">
+  <div class="choose_list">
 
-    </div>
-    <div class="menu_box" v-show="this.give_shade&&this.isOpen">
-      <div class="menu_top">
-        <div class="content">
-          <div class="msg" v-if="isLogin">
-            <div class="msg_head">
-              <img :src="this.default_headPic" alt="">
-            </div>
-            <div class="msg_det">
-              <p class="msg_name">HI，<span class="user_name">{{userName}}</span></p>
-              <p class="greeting">欢迎回来，<span>下午好!</span></p>
-            </div>
-          </div>
-          <div class="btn_group" v-if="isLogin">
-            <router-link :to="{name: 'tal_center'}">
-              <div class="sub_btn btn_size">
-                个人中心
-              </div>
-            </router-link>
-            <router-link :to="{}">
-              <div class="cancel_btn btn_size" @click="exit_login">
-                退出登录
-              </div>
-            </router-link>
-          </div>
-          <div class="btn_group" v-if="!isLogin">
-            <router-link :to="{name: 'user_login'}">
-              <div class="sub_btn btn_size">
-                登录
-              </div>
-            </router-link>
-            <router-link :to="{name: 'user_reg'}">
-              <div class="cancel_btn btn_size">
-                注册
-              </div>
-            </router-link>
+
+    <!--筛选第一层-->
+    <div class="filter_all_box" v-show="this.isShow">
+      <div class="filter_bg">
+
+      </div>
+      <div class="filter_det">
+        <div class="choose_title">
+          <div class="content">
+            <img @click="go_back" src="/static/images/left-arrow.png" alt=""><span>{{chooseTitle}}</span>
           </div>
         </div>
-      </div>
-      <div class="menu_list">
         <div class="content">
-          <router-link :to="{name: item.urlRoute}" v-for="(item,index) in menuList" :key="index">
-            <div class="menu_list_cell">
-              {{item.urlName}}<img class="fr" src="/static/images/icon_goright.png" alt="">
-            </div>
-          </router-link>
+          <div class="classify_cell">
+            一级建造师<img class="fr" src="/static/images/ic_checked@2x.png" alt="">
+          </div>
+          <div class="classify_cell">
+            一级建造师<img class="fr" src="/static/images/ic_checked@2x.png" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -67,35 +37,8 @@
     name: "choose_list",
     data() {
       return {
-        menuList: {
-          0: {
-            urlName: "首页",
-            urlRoute: "index"
-          },
-          1: {
-            urlName: "找工作",
-            urlRoute: "find_job"
-          },
-          2:{
-            urlName: "名企招聘",
-            urlRoute: "famous_pos"
-          },
-          3:{
-            urlName: "就业指导",
-            urlRoute: "index"
-          },
-          4:{
-            urlName: "新闻资讯",
-            urlRoute: "index"
-          },
-          5:{
-            urlName: "关于我们",
-            urlRoute: "index"
-          },
-        },
-        isOpen: true,
-        openSign: false,
-        isLogin: false,
+        chooseTitle: '请选择证书类型',
+        isShow: true,
         default_headPic: '/static/images/ic_user_def@2x.png',
         userName: ''
       }
@@ -110,24 +53,72 @@
         this.isLogin = false;
         this.$router.push({name:'index'})
       },
-    },
-    created() {
-      let userInfo = JSON.parse(localStorage.getItem('USER'));
-      // console.log(userInfo);
-      if (userInfo) {
-        this.isLogin = true;
-        if (userInfo.photo != '') {
-          this.default_headPic = splicPic(userInfo.photo, true);
-        }
-        this.userName = userInfo.name || userInfo.phone;
-      }else {
-        this.isLogin = false;
+      go_back() {
+        this.isShow = false
       }
-
-    }
+    },
   }
 </script>
 
 <style scoped>
-
+  /*筛选弹层*/
+  .filter_all_box{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    /*overflow-y: scroll;*/
+    z-index: 9999999;
+  }
+  .filter_bg{
+    width: 10%;
+    height: 100vh;
+    background: rgba(0,0,0,.5);
+  }
+  .filter_det{
+    width: 90%;
+    height: 100vh;
+    overflow-y: scroll;
+    background-color: #ffffff;
+  }
+  .choose_title{
+    width: 100%;
+    line-height: 44px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
+  }
+  .choose_title img{
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
+  .choose_title{
+    font-size: 14px;
+    color: #353535;
+  }
+  .classify_cell{
+    line-height: 44px;
+    font-size: 14px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #EAEAEA;
+    color: #353535;
+  }
+  .classify_cell span{
+    color: #919199;
+  }
+  .classify_cell img{
+    margin-top: 11px;
+    margin-left: 5px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+  }
 </style>

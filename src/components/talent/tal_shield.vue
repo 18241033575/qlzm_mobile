@@ -14,7 +14,7 @@
     <div class="shield_list">
       <div class="content">
         <ul>
-          <li>中国石油化工集团公司<span class="fr" @click="shield_cancel">取消屏蔽</span></li>
+          <li v-for="(item,index) in shieldData" :key="index">{{item.company}}<span :uid="item.uid" :id="item.id" class="fr" @click="shield_cancel">取消屏蔽</span></li>
         </ul>
       </div>
     </div>
@@ -36,14 +36,19 @@
             /*总菜单状态*/
             openState: false,
             shieldSignState: true,
-            company_name: '123456'
+            company_name: '',
+            shieldData: {
+
+            }
           }
       },
       created() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/personal/shield',{params:{uid: userInfo.id}})
             .then((res)=>{
-              console.log(res);
+              if(res.data.state != 400) {
+                this.shieldData = res.data;
+              }
             })
       },
       methods: {
@@ -65,11 +70,20 @@
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.post('/personal/shield',{uid: userInfo.id,company: this.company_name})
             .then((res)=>{
-              console.log(res);
+              if (res.data) {
+
+                this.company_name = ''
+              }
             })
         },
-        shield_cancel() {
-
+        shield_cancel(e) {
+          let id = e.target.getAttribute('id');
+          let uid = e.target.getAttribute('uid');
+          console.log(id);
+          this.$ajax.post('personal/shield',{id: id,uid: uid})
+            .then((res)=>{
+              console.log(res);
+            })
         }
       }
     }

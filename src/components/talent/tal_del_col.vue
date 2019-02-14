@@ -55,9 +55,9 @@
               if(res.data.state != 400) {
                 tranCity(res.data,true,2,'office');
                 transWorkexp(res.data,2);
-                transNature(res.data,2);
+                transNature(res.data,2,'office');
                 transEducation(res.data,2);
-                transSalary(res.data,2);
+                transSalary(res.data,2,'office');
                 this.del_colData = res.data
               }
             })
@@ -68,10 +68,10 @@
               if(res.data.state != 400) {
                 tranCity(res.data,true,2,'office');
                 transWorkexp(res.data,2);
-                transNature(res.data,2);
+                transNature(res.data,2,'office');
                 transEducation(res.data,2);
                 getDistanceTime(res.data);
-                transSalary(res.data,2);
+                transSalary(res.data,2,'office');
                 this.del_colData = res.data
               }
             })

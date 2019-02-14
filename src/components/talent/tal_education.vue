@@ -38,13 +38,13 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">毕业院校</span><input type="text" placeholder="毕业院校">
+            <span class="edit_lab">毕业院校</span><input v-model="operaData.school" type="text" placeholder="毕业院校">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">项目地点</span><input type="text" placeholder="项目地点">
+            <span class="edit_lab">学历</span><input v-model="operaData.education" type="text" placeholder="项目地点">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">专业</span><input type="text" placeholder="专业">
+            <span class="edit_lab">专业</span><input v-model="operaData.major" type="text" placeholder="专业">
           </div>
           <div class="edit_cell special_cell">
             <span class="edit_lab">在校时间</span>
@@ -64,7 +64,7 @@
                 placeholder="选择日期"
                 :picker-options="pickerOptions1">
               </el-date-picker>
-              <el-checkbox v-model="checked">至今</el-checkbox>
+              <!--<el-checkbox v-model="checked">至今</el-checkbox>-->
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@
             <div class="edit_btn_cell del_btn">
               删除
             </div>
-            <div class="edit_btn_cell save_btn">
+            <div class="edit_btn_cell save_btn" @click="addEdu">
               保存
             </div>
           </div>
@@ -89,6 +89,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {transEducation} from '../../../static/js/common.js'
   export default {
     name: "tal_education",
     components: {
@@ -100,6 +101,11 @@
         /*总菜单状态*/
         openState: false,
         eduData: {},
+        operaData: {
+          school: '',
+          education: '',
+          major: ''
+        },
         workExpSign: true,
         editMsg: '',
         jobNature: 0,
@@ -142,12 +148,20 @@
       oth_workNature() {
         this.workNature = 3
       },
+      addEdu() {
+        this.$ajax.post('/resume/eduexp',this.operaData)
+          .then((res)=>{
+            console.log(res);
+          })
+      }
     },
     created() {
       let userInfo = JSON.parse(localStorage.getItem('USER'));
       this.$ajax.get('/resume/eduexp',{params: {uid: userInfo.id}})
         .then((res)=>{
           if (res.data.state != 400) {
+            console.log(res);
+            transEducation(res.data);
             this.eduData = res.data;
             // this.certData = res.data;
           }
@@ -158,4 +172,10 @@
 
 <style scoped>
   @import "../../../static/css/tal_resume.css";
+ /* .special_cell .el-date-editor .el-input__inner{
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    height: 44px;
+  }*/
 </style>

@@ -82,10 +82,10 @@
             <div class="filter_part1_cell" >
               省份<span class="fr">贵州省<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
-            <div class="filter_part1_cell" data-sign="city" @click="all_choose">
+            <div class="filter_part1_cell" :data-sign="city" @click="all_choose">
               城市<span class="fr">贵阳市<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
-            <div class="filter_part1_cell" data-sign="pos_type" @click="all_choose">
+            <div class="filter_part1_cell" :data-sign="pos_type" @click="all_choose">
               职位类别<span class="fr">全部<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
           </div>
