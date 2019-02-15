@@ -119,7 +119,7 @@
             openState: false,
             estimate_salary: '',
             ability_index: '',
-            integrity: 80,
+            integrity: 0,
             look: 0,
             dev: 0,
             col: 0,
@@ -141,9 +141,7 @@
         }
       },
       created() {
-          let userInfo = JSON.parse(localStorage.getItem('USER'));
-        //  个人价值指数
-        this.ability_index = userInfo.ability_index || 0;
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
         //  预估薪资水平
         this.estimate_salary = userInfo.estimate_salary/1000 +　'K';
 
@@ -153,11 +151,66 @@
         this.col = userInfo.collections;
         this.down = userInfo.downloads;
 
-        //是否有新消息
+        // 是否有新消息
         this.$ajax.get('/personal/hasnewmsg',{params:{uid: userInfo.id}})
           .then((res)=>{
             if (res.data.state != 400) {
               this.newNews = res.data ==0?false:true
+            }
+          });
+        // 简历完整度
+        let ResumeCompletion = 0;
+        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
+          .then((res)=>{
+            if(res.data.state != 400) {
+              if (res.data.base_info.id_card != '') {
+                ResumeCompletion += 15
+              }
+              if (res.data.career_objective != '') {
+                ResumeCompletion += 25
+              }
+              if (res.data.evaluation != '') {
+                ResumeCompletion += 5
+              }
+              this.integrity = ResumeCompletion;
+              //  个人价值指数
+              this.ability_index = res.data.base_info.ability_index || 0;
+            }
+          });
+         this.$ajax.get('/resume/certificate',{params:{uid: userInfo.id}})
+          .then((res)=> {
+            if(res.data.state != 400) {
+              if (res.data != '') {
+                ResumeCompletion += 15;
+                this.integrity = ResumeCompletion
+              }
+            }
+          });
+        this.$ajax.get('/resume/eduexp',{params:{uid: userInfo.id}})
+          .then((res)=> {
+            if(res.data.state != 400) {
+              if (res.data != '') {
+                ResumeCompletion += 10;
+                this.integrity = ResumeCompletion
+              }
+            }
+          });
+        this.$ajax.get('resume/projectexp',{params:{uid: userInfo.id}})
+          .then((res)=> {
+            if(res.data.state != 400) {
+              if (res.data != '') {
+                ResumeCompletion += 15;
+                this.integrity = ResumeCompletion
+              }
+            }
+          })
+        this.$ajax.get('/resume/workexp',{params:{uid: userInfo.id}})
+          .then((res)=> {
+            if(res.data.state != 400) {
+              if (res.data != '') {
+                ResumeCompletion += 15;
+                this.integrity = ResumeCompletion
+              }
             }
           })
       }

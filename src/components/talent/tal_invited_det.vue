@@ -10,19 +10,18 @@
     <div class="invited_body">
       <div class="content">
         <div class="invite_top">
-          <p>“中铁十二局集团有限公司海外公路工程项目部”的面试邀请</p>
-          <p class="send_time">刚刚</p>
+          <p>“{{inteDetData.name}}”的面试邀请</p>
+          <p class="send_time">{{intDetData.created_at}}</p>
         </div>
         <div class="bottom_msg">
-          <p><span class="left_lab">职位</span> <span class="right_msg">项目经理</span></p>
-          <p><span class="left_lab">联系人</span> <span class="right_msg">王先生</span></p>
-          <p><span class="left_lab">手机</span> <span class="right_msg">18285105688</span></p>
-          <p><span class="left_lab">座机</span> <span class="right_msg">0851-8595321</span></p>
-          <p><span class="left_lab">QQ</span> <span class="right_msg">5688651</span></p>
-          <p><span class="left_lab">邮箱</span> <span class="right_msg">18285105688@163.com</span></p>
-          <p><span class="left_lab">面试地址</span> <span class="right_msg">贵州省贵阳市南明区花果园财富广场1栋8楼</span></p>
-          <p><span class="left_lab">提醒事项</span> <span class="right_msg">亲爱的应聘者您好，根据公司的要求你需要自
-带一份纸质简历前来应聘哦！</span></p>
+          <p><span class="left_lab">职位</span> <span class="right_msg">{{intDetData.job}}</span></p>
+          <p><span class="left_lab">联系人</span> <span class="right_msg">{{intDetData.username}}</span></p>
+          <p><span class="left_lab">手机</span> <span class="right_msg">{{intDetData.phone}}</span></p>
+          <p><span class="left_lab">座机</span> <span class="right_msg">{{intDetData.tel}}</span></p>
+          <p><span class="left_lab">QQ</span> <span class="right_msg">{{intDetData.qq}}</span></p>
+          <p><span class="left_lab">邮箱</span> <span class="right_msg">{{intDetData.email}}</span></p>
+          <p><span class="left_lab">面试地址</span> <span class="right_msg">{{intDetData.address}}</span></p>
+          <p><span class="left_lab">提醒事项</span> <span class="right_msg">{{intDetData.remind}}</span></p>
         </div>
       </div>
     </div>
@@ -33,6 +32,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {getDistanceTime} from '../../../static/js/common.js'
     export default {
         name: "tal_invited_det",
       components: {
@@ -43,6 +43,8 @@
         return {
           /*总菜单状态*/
           openState: false,
+          intDetData: {},
+          inteDetData: {}
           }
         },
       methods: {
@@ -54,6 +56,25 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+      },
+      created() {
+        let id = this.$route.query.id;
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
+          .then((res)=>{
+            if (res.data.state != 400) {
+              let rdata = {};
+              for (let i = 0,len = res.data.length; i < len;i++) {
+                rdata[i] = res.data[i].company;
+                rdata[i].id = res.data[i].id;
+                if (id == rdata[i].id) {
+                  res.data[i].created_at = getDistanceTime(res.data[i].created_at);
+                  this.intDetData = res.data[i];
+                  this.inteDetData = rdata[i]
+                }
+              }
+            }
+          })
       }
     }
 </script>

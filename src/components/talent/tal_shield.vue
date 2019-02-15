@@ -72,7 +72,8 @@
             .then((res)=>{
               if (res.data) {
 
-                this.company_name = ''
+                this.company_name = '';
+                window.location.reload()
               }
             })
         },
@@ -83,6 +84,7 @@
           this.$ajax.post('personal/shield',{id: id,uid: uid})
             .then((res)=>{
               console.log(res);
+              window.location.reload()
             })
         }
       }

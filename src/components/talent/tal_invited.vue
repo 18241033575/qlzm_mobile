@@ -9,8 +9,8 @@
       </div>
       <div class="invited_body">
         <div class="content">
-          <div class="invited_cell" v-for="(item,index) in invitedData" :key="index" @click="invited_det">
-            <span class="new_sign"></span>您收到一份来自“{{item.cname}}”的面试邀请
+          <div class="invited_cell"  v-for="(item,index) in invitedData" :int-id="item.id" :key="index" @click="invited_det">
+            <span class="new_sign" v-show="item.isRead == 0"></span>您收到一份来自“{{item.name}}”的面试邀请
           </div>
         </div>
       </div>
@@ -34,20 +34,25 @@
             invitedData: {
 
             },
+            inviteData: {
+
+            }
           }
       },
       created() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
             .then((res)=>{
-              console.log(res.data);
+              console.log(res);
+              let rdata = {};
               if (res.data.state != 400) {
+                this.inviteData = res.data;
                 for (let i = 0,len = res.data.length; i < len;i++) {
-                 /* res.data[i].cname = res.data[i].company.name;
-                  console.log(res.data[i].cname);*/
-                  // this.invitedData[i].cname = res.data[i].company.name;
+                  rdata[i] = res.data[i].company;
+                  rdata[i].id = res.data[i].id;
+                  rdata[i].isRead = res.data[i].user_is_read
                 }
-                this.invitedData = res.data;
+                this.invitedData = rdata;
               }
             })
       },
@@ -60,8 +65,14 @@
           this.openState = data;
         },
         /*总菜单操作e*/
-        invited_det() {
-          this.$router.push({name: 'tal_invited_det'})
+        invited_det(e) {
+          let id = e.currentTarget.getAttribute('int-id');
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.post('/personal/interview/setread',{id: id,uid: userInfo.id})
+            .then((res)=>{
+
+            });
+          this.$router.push({name: 'tal_invited_det',query: {id: id}})
         }
       }
     }

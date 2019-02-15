@@ -114,11 +114,11 @@
             headPic: '/static/images/banner03@2x.png',
             edit: true,
             form: {
-                tal_name: '1',
-                tal_idcard: '2',
-                tal_qq: '3',
-                tal_email: '4',
-                tal_addr: '4',
+                tal_name: '',
+                tal_idcard: '',
+                tal_qq: '',
+                tal_email: '',
+                tal_addr: '',
                 tal_state: 1
               },
           }
@@ -149,9 +149,6 @@
                 this.form.tal_addr = this.userMsg.address;
                 this.form.tal_state = this.userMsg.work_status;
 
-                userInfo.ability_index = this.userMsg.ability_index;
-                userInfo = JSON.stringify(userInfo);
-                localStorage.setItem('USER',userInfo);
               }
             });
 
@@ -169,7 +166,8 @@
           this.edit = false;
         },
         to_edited() {
-          this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": 520000, "city": 520100, "area": 520103, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state})
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": 520000, "city": 520100, "area": 520103, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
                 this.edit = true;

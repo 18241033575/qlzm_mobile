@@ -5,7 +5,7 @@
 
     <!--筛选第一层-->
     <div class="filter_all_box" v-show="this.isShow">
-      <div class="filter_bg">
+      <div class="filter_bg" @click="bg_cancel">
 
       </div>
       <div class="filter_det">
@@ -55,8 +55,12 @@
       },
       go_back() {
         this.isShow = false
+      },
+      bg_cancel() {
+        this.isShow = false
       }
     },
+
   }
 </script>
 

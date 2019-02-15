@@ -171,6 +171,11 @@ function getDistanceTime(time) {
   return last;
 }
 
+//时间戳转标准时间
+function getLocalTime(nS) {
+  return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+}
+
 function tal_adv(data, flag) {
   const userTags = [
     "无",
@@ -364,5 +369,6 @@ export {
   transComScale,
   transComNature,
   transArrive,
-  reverseOrder
+  reverseOrder,
+  getLocalTime
 }

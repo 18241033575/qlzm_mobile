@@ -134,14 +134,28 @@
         },
       },
       created() {
-        let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.get('/resume/certificate',{params: {uid: userInfo.id}})
+          // 证书数据添加到缓存中
+        let certData = JSON.parse(localStorage.getItem('CERT'));
+        if (!certData) {
+          this.$ajax.get('/allcerts')
             .then((res)=>{
-              console.log(res);
+              //  放入本地数据
+              let params = {};
+              params = JSON.stringify(res.data);
+              localStorage.setItem('CERT',params);
+              sessionStorage.setItem('CERT',params);
+            })
+        }
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.$ajax.get('/resume/certificate',{params: {uid: userInfo.id}})
+            .then((res)=>{
               if (res.data.state != 400) {
+                console.log(certData);
+
                 this.certData = res.data;
               }
-            })
+            });
+
       }
     }
 </script>

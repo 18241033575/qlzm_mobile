@@ -45,6 +45,7 @@
             acount: '',
             sms_code: '',
             getSmsCode: '获取短信验证码',
+            getSmsState: true
           }
       },
       created() {
@@ -70,11 +71,14 @@
           }
         },
         change_submit() {
-          this.$router.push({name: 'success_page',query:{orig: 'phone'}})
-          /*this.$ajax.post('/perosnal/changephone',{phone: this.acount,sms_code: this.sms_code})
+          // this.$router.push({name: 'success_page',query:{orig: 'phone'}})
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          let uid = userInfo.id;
+          this.$ajax.post('/perosnal/changephone',{phone: this.acount,sms_code: this.sms_code,uid: uid})
             .then((res)=>{
+              console.log(res);
               this.$router.push({name: 'success_page'})
-            })*/
+            })
         }
       }
     }

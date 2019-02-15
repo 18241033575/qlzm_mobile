@@ -41,7 +41,7 @@
             <span class="edit_lab">毕业院校</span><input v-model="operaData.school" type="text" placeholder="毕业院校">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">学历</span><input v-model="operaData.education" type="text" placeholder="项目地点">
+            <span class="edit_lab">学历</span><span class="int_job_det fr">{{0 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
           </div>
           <div class="edit_cell">
             <span class="edit_lab">专业</span><input v-model="operaData.major" type="text" placeholder="专业">
