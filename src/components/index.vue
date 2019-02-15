@@ -131,7 +131,7 @@
             </div>
           </div>
         </div>
-        <router-link :to="{name: 'famous_pos'}" class="show_more">
+        <router-link :to="{name: 'news'}" class="show_more">
           更多新闻资讯
         </router-link>
       </div>
@@ -197,7 +197,7 @@
         },
         news_det(e) {
           let id = e.currentTarget.getAttribute('news-id');
-          this.$router.push({name: 'news_det',query:{id: id}})
+          this.$router.push({name: 'news_info',query:{id: id}})
         },
         search_all() {
           if (this.search_text != '') {

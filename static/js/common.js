@@ -175,6 +175,16 @@ function getDistanceTime(time) {
 function getLocalTime(nS) {
   return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
 }
+function timestampToTime(timestamp) {
+  timestamp = timestamp * 1000;
+  let date = new Date(timestamp );//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  let Y = date.getFullYear() + '-';
+  let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  let D = date.getDate()<10?'0' + date.getDate()+ ' ':date.getDate() + ' ';
+  let h = date.getHours() < 10?'0' + date.getHours() + ':':date.getHours() + ':';
+  let m = date.getMinutes()<10?'0' + date.getMinutes():date.getMinutes();
+  return Y+M+D+h+m;//时分秒可以根据自己的需求加上
+}
 
 function tal_adv(data, flag) {
   const userTags = [
@@ -262,10 +272,14 @@ function splicLogo(data) {
   }
 }
 
-function splicFrontcover(data) {
+function splicFrontcover(data,num) {
   for (let i = 0; i < data.length; i++) {
     if (data[i].frontcover == '') {
-      data[i].frontcover = '/static/images/article_def_img.png'
+      if (num == 2) {
+        data[i].frontcover = ''
+      } else {
+        data[i].frontcover = '/static/images/article_def_img.png'
+      }
     } else {
       data[i].frontcover = file_server + data[i].frontcover
     }
@@ -370,5 +384,6 @@ export {
   transComNature,
   transArrive,
   reverseOrder,
-  getLocalTime
+  getLocalTime,
+  timestampToTime
 }

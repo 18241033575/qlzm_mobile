@@ -8,12 +8,13 @@
     </div>
     <div class="news_total_list">
       <div class="content">
-        <div class="news_total_cell" @click="news_total_det">
+        <div class="news_total_cell" :news-id="item.id" v-for="(item,index) in newsData" :key="index" @click="news_total_det">
           <div class="news_total_cell_title">
-            <span>一项研究表明，运动所分泌激素可能有助于对抗阿尔茨海默病</span><img v-show="false" src="/static/images/banner03@2x.png" alt="">
+                                                  <!--暂时没有判断没有图片的情况-->
+            <span>{{item.title}}</span><img v-show="true" :src="item.frontcover" alt="">
           </div>
           <div class="news_total_cell_tip">
-            <span>刚刚刚刚刚刚</span>阅读<span>(98)</span>
+            <span>刚刚刚刚刚刚</span>阅读<span>({{item.visit}})</span>
           </div>
         </div>
       </div>
@@ -26,6 +27,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {splicFrontcover} from '../../../static/js/common.js'
     export default {
         name: "news",
       components: {
@@ -36,6 +38,7 @@
           return {
             /*总菜单状态*/
             openState: false,
+            newsData: {}
           }
       },
       methods: {
@@ -47,9 +50,21 @@
           this.openState = data;
         },
         /*总菜单操作e*/
-        news_total_det() {
-          this.$router.push({name: 'news_info'})
+        news_total_det(e) {
+          let id = e.currentTarget.getAttribute('news-id');
+          this.$router.push({name: 'news_info',query:{id:id}})
         }
+      },
+      created() {
+          this.$ajax.post('/news',{page: 1,operate: 'news'})
+            .then((res)=>{
+              console.log(res);
+              if (res.data.code == 200) {
+                splicFrontcover(res.data.data,2);
+                this.newsData = res.data.data
+              }
+              console.log(this.newsData);
+            })
       }
     }
 </script>

@@ -9,16 +9,14 @@
       <div class="content">
         <div class="news_info_top">
           <div class="news_info_top_title">
-            广东通报一镇纪委书记把《举报信》微信转给被举报人
+            {{news_infoData.title}}
           </div>
           <div class="news_info_top_tips">
-            <span>2018-12-11 16:23</span>阅读:<span>98</span>
+            <span>{{news_infoData.publish_at}}</span>阅读:<span>{{news_infoData.visit}}</span>
           </div>
         </div>
         <div class="news_info_msg">
-          <p>未经请示汇报便将该问题线索直接签批给覃巴镇党委书记张阁良和镇党委委员、纪委书记吴永洪处理。吴永洪经与分管扫黑除恶工作的覃巴镇党委副书记庄一峰商议后，严重违反线索管理规定，将《举报信》复印给被举报人之一的覃巴镇党委委员、副镇长宁伯承。其后，宁伯承经由覃巴镇那碌村村民潘添将《举报信》复印件照片通过微信转发给主要被举报对象那碌村原村长潘观景和那碌村委会原副主任潘阮平，导致了泄密事件的发生，潘观景通过他人打电话并到举报人家中质问和威胁举报人，造成恶劣的社会影响。
-          未经请示汇报便将该问题线索直接签批给覃巴镇党委书记张阁良和镇党委委员、纪委书记吴永洪处理。吴永洪经与分管扫黑除恶工作的覃巴镇党委副书记庄一峰商议后，严重违反线索管理规定，将《举报信》复印给被举报人之一的覃巴镇党委委员、副镇长宁伯承。其后，宁伯承经由覃巴镇那碌村村民潘添将《举报信》复印件照片通过微信转发给主要被举报对象那碌村原村长潘观景和那碌村委会原副主任潘阮平，导致了泄密事件的发生，潘观景通过他人打电话并到举报人家中质问和威胁举报人，造成恶劣的社会影响。
-          未经请示汇报便将该问题线索直接签批给覃巴镇党委书记张阁良和镇党委委员、纪委书记吴永洪处理。吴永洪经与分管扫黑除恶工作的覃巴镇党委副书记庄一峰商议后，严重违反线索管理规定，将《举报信》复印给被举报人之一的覃巴镇党委委员、副镇长宁伯承。其后，宁伯承经由覃巴镇那碌村村民潘添将《举报信》复印件照片通过微信转发给主要被举报对象那碌村原村长潘观景和那碌村委会原副主任潘阮平，导致了泄密事件的发生，潘观景通过他人打电话并到举报人家中质问和威胁举报人，造成恶劣的社会影响。</p>
+          {{news_infoData.content}}
         </div>
       </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -29,6 +27,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {timestampToTime} from '../../../static/js/common.js'
     export default {
         name: "news_info",
       components: {
@@ -39,6 +38,9 @@
         return {
           /*总菜单状态*/
           openState: false,
+          news_infoData: {
+
+          },
         }
       },
       methods: {
@@ -50,6 +52,18 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+      },
+      created() {
+        let id = this.$route.query.id;
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.$ajax.get('/news/detail/' + id)
+          .then((res)=>{
+            console.log(res);
+            if (res.data.state != 400) {
+              res.data.publish_at = timestampToTime(res.data.publish_at);
+              this.news_infoData = res.data
+            }
+          })
       }
     }
 </script>
