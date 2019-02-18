@@ -150,8 +150,21 @@
         this.$ajax.get('/resume/certificate',{params: {uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state != 400) {
-                console.log(certData);
-
+                res.data.forEach(function (item,ids) {
+                  for(let i = 0,len = certData.length;i < len;i++) {
+                    if (item.type == certData[i].id ) {
+                      item.type = certData[i].category;
+                      for(let j = 0,mlen = certData[i].majors.length; j < mlen; j++) {
+                        if (item.major == certData[i].majors[j].id) {
+                          item.major = certData[i].majors[j].major
+                        }
+                        if (item.addition == certData[i].majors[j].id) {
+                          item.addition = certData[i].majors[j].major
+                        }
+                      }
+                    }
+                  }
+                });
                 this.certData = res.data;
               }
             });

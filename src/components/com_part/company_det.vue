@@ -197,6 +197,7 @@
               transWorkexp(res.data.data,0,'com');
               transEducation(res.data.data,0);
               transNature(res.data.data,2);
+              transSalary(res.data.data,2);
               this.hotPosData = res.data;
               this.hotPosNum = res.data.data.length;
             }

@@ -135,8 +135,8 @@
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
-                tranArea(res.data.base_info,true,1);
-                tranCity(res.data.base_info,true,1);
+                tranArea(res.data.base_info,true,0);
+                tranCity(res.data.base_info,true,0);
                 tranProvince(res.data.base_info,true);
                 transGender(res.data.base_info,true);
                 transEducation(res.data.base_info,1);

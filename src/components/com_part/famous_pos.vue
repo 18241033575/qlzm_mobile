@@ -13,8 +13,8 @@
             <ul
               v-infinite-scroll="loadMore"
               infinite-scroll-disabled="loading"
-              infinite-scroll-distance="10">
-            <div class="famous_cell" :cid="item.cid" :company-id="item.id" v-for="(item,index) in famData" :key="index" @click="to_comDetail">
+              infinite-scroll-distance="8">
+            <li class="famous_cell" :cid="item.cid" :company-id="item.id" v-for="(item,index) in famData" :key="index" @click="to_comDetail">
               <div class="famous_head fl">
                 <img :src="item.logo" alt="">
               </div>
@@ -24,7 +24,7 @@
                 </div>
                 <p>招聘职位<span>&nbsp;&nbsp;{{item.offices.length}}个</span></p>
               </div>
-            </div>
+            </li>
             </ul>
           </div>
         </div>
@@ -49,11 +49,13 @@
             /*总菜单状态*/
             openState: false,
             famData: {},
-            pages: 1
+            pages: 1,
+            rows: 6,
+            loading: false
           }
       },
       created() {
-          this.$ajax.get('/company/famous',{params:{page: this.pages +1, rows: 6}})
+          this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
             .then((res)=>{
               if(res.data.state != 400) {
                 splicLogo(res.data);
@@ -76,14 +78,18 @@
           this.$router.push({name: 'company_det',query:{id: id}})
         },
         loadMore() {
-          // alert(1)
           //滚动触发事件
           this.loading = true;
           setTimeout(() => {
-            // let last = this.list[this.list.length - 1];
-            for (let i = 1; i <= 10; i++) {
-              this.list.push(last + i);
-            }
+            this.rows +=6;
+            console.log(this.rows);
+            this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
+              .then((res)=>{
+                if(res.data.state != 400) {
+                  splicLogo(res.data);
+                  this.famData = res.data
+                }
+              })
             this.loading = false;
           }, 2500);
         }

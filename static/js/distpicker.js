@@ -505,7 +505,11 @@ function tranCity(data,flag,type,off) {
           data[i].city = CITY[data[i].province][data[i].city];
         }
       }
-    } else {
+    }else if (type == 1) {
+      data = CITY[data[0]][data[1]];
+      return data
+    } else
+      {
       // midData = CITY[data.province];
       data.city = CITY[data.province][data.city];
     }

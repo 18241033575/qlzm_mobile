@@ -254,7 +254,6 @@
           if (res.data.state != 400) {
             this.otherPosNum = res.data.data.length - 1;
             for (let i = 0;i < res.data.data.length; i++) {
-              console.log(res.data.data[i].id,id);
               /*if (res.data.data[i].id != id) {
                 this.otherPosData[i] = res.data.data[i]
               }*/
@@ -265,11 +264,11 @@
       let userInfo = JSON.parse(localStorage.getItem('USER'));
       //  是否收藏、申请
       if (userInfo) {
-        this.$ajax.post('/personal/isapply',{params: {uid: userInfo.id}})
+        this.$ajax.post('/personal/isapply',{uid: userInfo.id,id: id})
           .then((res)=>{
             console.log(res);
           });
-        this.$ajax.post('/personal/iscollect',{params: {uid: userInfo.id}})
+        this.$ajax.post('/personal/iscollect',{uid: userInfo.id,id: id})
           .then((res)=>{
             console.log(res);
           })

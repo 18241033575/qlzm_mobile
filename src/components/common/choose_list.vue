@@ -38,7 +38,7 @@
     data() {
       return {
         chooseTitle: '请选择证书类型',
-        isShow: true,
+        isShow: false,
         default_headPic: '/static/images/ic_user_def@2x.png',
         userName: ''
       }

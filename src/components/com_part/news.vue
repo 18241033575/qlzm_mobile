@@ -8,15 +8,20 @@
     </div>
     <div class="news_total_list">
       <div class="content">
-        <div class="news_total_cell" :news-id="item.id" v-for="(item,index) in newsData" :key="index" @click="news_total_det">
-          <div class="news_total_cell_title">
-                                                  <!--暂时没有判断没有图片的情况-->
-            <span>{{item.title}}</span><img v-show="true" :src="item.frontcover" alt="">
+        <ul
+          v-infinite-scroll="loadMore"
+          infinite-scroll-disabled="loading"
+          infinite-scroll-distance="8">
+          <div class="news_total_cell" :news-id="item.id" v-for="(item,index) in newsData" :key="index" @click="news_total_det">
+            <div class="news_total_cell_title">
+                                                    <!--暂时没有判断没有图片的情况-->
+              <span>{{item.title}}</span><img v-show="true" :src="item.frontcover" alt="">
+            </div>
+            <div class="news_total_cell_tip">
+              <span>刚刚刚刚刚刚</span>阅读<span>({{item.visit}})</span>
+            </div>
           </div>
-          <div class="news_total_cell_tip">
-            <span>刚刚刚刚刚刚</span>阅读<span>({{item.visit}})</span>
-          </div>
-        </div>
+        </ul>
       </div>
     </div>
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -38,7 +43,8 @@
           return {
             /*总菜单状态*/
             openState: false,
-            newsData: {}
+            newsData: {},
+            pages: 1
           }
       },
       methods: {
@@ -53,6 +59,23 @@
         news_total_det(e) {
           let id = e.currentTarget.getAttribute('news-id');
           this.$router.push({name: 'news_info',query:{id:id}})
+        },
+        loadMore() {
+          //滚动触发事件
+          this.loading = true;
+          setTimeout(() => {
+            this.pages += 1;
+            this.$ajax.post('/news',{page: this.pages,operate: 'news'})
+              .then((res)=>{
+                console.log(res);
+                if (res.data.code == 200) {
+                  splicFrontcover(res.data.data,2);
+                  this.newsData = res.data.data
+                }
+                console.log(this.newsData);
+              })
+            this.loading = false;
+          }, 2500);
         }
       },
       created() {
