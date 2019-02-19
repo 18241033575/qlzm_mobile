@@ -163,9 +163,9 @@
             <div v-if="showMsg" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
               {{item}}<img v-show="cityCode[1] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
-            <div v-if="!showMsg" v-for="(item,index) in jobClassify" :classify-id="item.value" :key="index" class="filter_part1_cell second" @click="ClassifyVal">
+            <!--<div v-if="!showMsg" v-for="(item,index) in jobClassify" :classify-id="item.value" :key="index" class="filter_part1_cell second" @click="ClassifyVal">
               {{item.name}}<img v-show="classifyValue == item.value" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
@@ -756,24 +756,7 @@
     background-color: #5082e6;
     color: #ffffff;
   }
-  .filter_part1_cell{
-    line-height: 44px;
-    font-size: 14px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border-bottom: 1px solid #EAEAEA;
-    color: #353535;
-  }
-  .filter_part1_cell span{
-    color: #919199;
-  }
-  .filter_part1_cell img{
-    margin-left: 5px;
-    width: 14px;
-    height: 14px;
-    vertical-align: middle;
-  }
+
   .filter_part2{
     margin-bottom: 52px;
   }
@@ -811,30 +794,5 @@
     border: 1px solid #5082E6;
     background-color: #ffffff;
     color: #5082e6;
-  }
-  /*第二层*/
-  .filter_s_title{
-    line-height: 44px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: 14px;
-    color: #353535;
-    border-bottom: 1px solid #E1E4E6;
-  }
-  .filter_s_title img{
-    margin-right: 15px;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-  }
-  .second{
-    color: #919199;
-  }
-  .second img{
-    padding-top: 14px;
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
   }
 </style>

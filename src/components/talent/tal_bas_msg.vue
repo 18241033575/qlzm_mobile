@@ -73,7 +73,7 @@
               <span class="edit_lab">电子邮箱</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
             </div>
             <div class="edit_cell special_cell">
-              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell">{{userMsg.province}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell">{{userMsg.city}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell">{{userMsg.area}}<img src="/static/images/font_down.png" alt=""></div></div>
+              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province">{{userMsg.province}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{userMsg.city}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{userMsg.area}}<img src="/static/images/font_down.png" alt=""></div></div>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">
@@ -87,6 +87,32 @@
       <div class="content">
         <div class="bas_msg_btn" @click="to_edited">
           保存
+        </div>
+      </div>
+    </div>
+    <!--筛选第二层-->
+    <div class="filter_all_box" v-show="this.secondBox">
+      <div class="filter_bg" @click="secondBoxBg">
+
+      </div>
+      <div class="filter_det">
+        <div class="filter_s_title">
+          <div class="content">
+            <img @click="first_back" src="/static/images/left.png" alt="left">{{top_title}}
+          </div>
+        </div>
+        <div class="content">
+          <div class="filter_part1">
+            <div v-if="showMsg =='pro'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="ProCode">
+              {{item}}<img v-show="cityCode[0] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            </div>
+            <div v-if="showMsg == 'city'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
+              {{item}}<img v-show="cityCode[1] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            </div>
+            <div v-if="showMsg == 'area'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="AreaCode">
+              {{item}}<img v-show="cityCode[2] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -110,6 +136,13 @@
             openState: false,
             userInfoMsg: {},
             userMsg: {},
+            secondBox: false,
+            top_title: '',
+            cityCode: {
+
+            },
+            showMsg: 'pro',
+            beginData: {},
             editHeadPic: '/static/images/user-01@2x.png',
             headPic: '/static/images/banner03@2x.png',
             edit: true,
@@ -121,6 +154,13 @@
                 tal_addr: '',
                 tal_state: 1
               },
+            guiyangData: {
+
+            },
+            cityData: {
+
+            },
+
           }
       },
       created() {
@@ -135,6 +175,10 @@
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
+                this.beginData = res.data.base_info;
+                this.cityCode[0] = res.data.base_info.province;
+                this.cityCode[1] = res.data.base_info.city;
+                this.cityCode[2] = res.data.base_info.area;
                 tranArea(res.data.base_info,true,0);
                 tranCity(res.data.base_info,true,0);
                 tranProvince(res.data.base_info,true);
@@ -167,13 +211,39 @@
         },
         to_edited() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": 520000, "city": 520100, "area": 520103, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
+          this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": this.cityCode[0], "city": this.cityCode[1], "area": this.cityCode[2], "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
                 this.edit = true;
               }
             })
 
+        },
+        ProCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.cityCode[0] = cCode;
+        /*  this.cityCode[1] = '';
+          this.cityCode[2] = '';
+          // 替换相应位置0*/
+          this.secondBox = false
+        },
+        CityCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.cityCode[1] = cCode;
+          this.secondBox = false
+        },
+        AreaCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.cityCode[2] = cCode;
+          this.secondBox = false
+        },
+        secondBoxBg() {
+          // this.firstBox = false;
+          this.secondBox = false
+        },
+        first_back() {
+          this.firstBox = true;
+          this.secondBox = false
         },
         have_job() {
           this.form.tal_state = 1
@@ -183,7 +253,27 @@
         },
         upHeadPic(res) {
           console.log(res);
-        }
+        },
+        choose_province() {
+          this.guiyangData = tranProvince(this.beginData,true,'pro');
+          this.showMsg = 'pro';
+          this.secondBox = true;
+        },
+        choose_city() {
+          this.guiyangData = tranCity(this.cityCode,true,2,'city');
+          this.showMsg = 'city';
+          this.secondBox = true;
+        },
+        choose_area() {
+          this.guiyangData = tranArea(this.cityCode,true,5);
+          this.showMsg = 'area';
+          this.secondBox = true;
+        },
+      },
+      updated() {
+        this.userMsg.province = tranProvince(this.cityCode[0],true,'',2);
+        this.userMsg.city = tranCity(this.cityCode,true,3);
+        this.userMsg.area = tranArea(this.cityCode,true,3);
       }
     }
 </script>
@@ -366,4 +456,5 @@
     height: 10px;
     vertical-align: middle;
   }
+
 </style>
