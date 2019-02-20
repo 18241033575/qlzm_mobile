@@ -16,7 +16,7 @@
           <div class="content">
             <div class="exp_cell_box">
               <div class="exp_head">
-                {{item.school}}<span :edu-data="item.id" class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
+                {{item.school}}<span @click="edu_edit" :edu-data="item.id" class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
               </div>
               <div class="bottom_msg">
                 <p><span class="left_lab">学历</span> <span class="right_msg">{{item.education}}</span></p>
@@ -41,7 +41,7 @@
             <span class="edit_lab">毕业院校</span><input v-model="operaData.school" type="text" placeholder="毕业院校">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">学历</span><span class="int_job_det fr">{{0 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+            <span class="edit_lab">学历</span><span class="int_job_det fr" @click="choose_edu">{{transVal || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
           </div>
           <div class="edit_cell">
             <span class="edit_lab">专业</span><input v-model="operaData.major" type="text" placeholder="专业">
@@ -51,14 +51,14 @@
             <div class="block">
               <!--<span class="demonstration">带快捷选项</span>-->
               <el-date-picker
-                v-model="value2"
+                v-model="value1"
                 align="right"
                 type="date"
                 placeholder="选择日期"
                 :picker-options="pickerOptions1">
               </el-date-picker>
               <el-date-picker
-                v-model="value1"
+                v-model="value2"
                 align="right"
                 type="date"
                 placeholder="选择日期"
@@ -75,8 +75,28 @@
             <div class="edit_btn_cell del_btn">
               删除
             </div>
-            <div class="edit_btn_cell save_btn" @click="addEdu">
+            <div class="edit_btn_cell save_btn" @click="saveEdu">
               保存
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--筛选第二层-->
+    <div class="filter_all_box" v-show="this.secondBox">
+      <div class="filter_bg" @click="secondBoxBg">
+
+      </div>
+      <div class="filter_det">
+        <div class="filter_s_title">
+          <div class="content">
+            <img @click="first_back" src="/static/images/left.png" alt="left">选择学历
+          </div>
+        </div>
+        <div class="content">
+          <div class="filter_part1">
+            <div v-for="(item,index) in EduData" :edu-id="index" :key="index" class="filter_part1_cell second" @click="EduCode">
+              {{item}}<img v-show="selectedVal == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
           </div>
         </div>
@@ -89,7 +109,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import {transEducation} from '../../../static/js/common.js'
+  import {transEducation,transtime} from '../../../static/js/common.js'
   export default {
     name: "tal_education",
     components: {
@@ -117,7 +137,14 @@
         },
         value1: '',
         value2: '',
-        checked: true
+        checked: true,
+        secondBox: false,
+        EduData: {
+
+        },
+        selectedVal: '0',
+        transVal: '',
+        edit_Id: ''
       }
     },
     methods: {
@@ -148,11 +175,54 @@
       oth_workNature() {
         this.workNature = 3
       },
-      addEdu() {
+      saveEdu() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.operaData.uid = userInfo.id;
+        this.operaData.id = this.edit_Id;
+        this.operaData.start_time = JSON.stringify(this.value1).substring(1,11);
+        this.operaData.end_time = JSON.stringify(this.value2).substring(1,11);
         this.$ajax.post('/resume/eduexp',this.operaData)
           .then((res)=>{
             console.log(res);
           })
+      },
+      EduCode(e) {
+        let eduVal = e.currentTarget.getAttribute('edu-id');
+        this.selectedVal = eduVal;
+        this.operaData.education = this.transVal = transEducation(eduVal,4);
+        this.secondBox = false
+      },
+      secondBoxBg() {
+        // this.firstBox = false;
+        this.secondBox = false
+      },
+      first_back() {
+        this.secondBox = false
+      },
+      choose_edu() {
+        this.secondBox = true
+      },
+      edu_edit(e) {
+        let eduId = e.currentTarget.getAttribute('edu-data');
+        this.edit_Id = eduId;
+        for(let i = 0,len = this.eduData.length;i < len; i++) {
+          if (this.eduData[i].id == eduId) {
+            this.operaData.school = this.eduData[i].school;
+            this.operaData.education = this.eduData[i].education;
+            this.transVal = this.eduData[i].education;
+            for (let j = 0,len = this.EduData.length;j < len; j++) {
+              if (this.EduData[j] == this.transVal) {
+                this.selectedVal = j;
+              }
+            }
+
+            this.operaData.major = this.eduData[i].major;
+            this.value1 = this.eduData[i].start_time;
+            this.value2 = this.eduData[i].end_time;
+            this.workExpSign = false;
+            this.editMsg = '编辑教育经历'
+          }
+        }
       }
     },
     created() {
@@ -160,12 +230,12 @@
       this.$ajax.get('/resume/eduexp',{params: {uid: userInfo.id}})
         .then((res)=>{
           if (res.data.state != 400) {
-            console.log(res);
             transEducation(res.data);
             this.eduData = res.data;
             // this.certData = res.data;
           }
-        })
+        });
+      this.EduData = transEducation(this.EduData,3);
     }
   }
 </script>

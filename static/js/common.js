@@ -23,7 +23,9 @@ function transSalary(data,type,off) {
     "10w以上"
   ];
   let transData = data;
-  if (type == 2) {
+  if (type == 3) {
+    return salary
+  } else if (type == 2) {
     if (off == 'office') {
       for (let i = 0; i < transData.length; i++) {
         if (transData[i].salary != 0) {
@@ -86,7 +88,12 @@ function transEducation(data,type) {
     "博士及以上"
   ];
   let transData = data;
-  if (type == 2) {
+  if (type == 4) {
+    return education[data]
+  }else if (type == 3) {
+    return education
+  }
+  else if (type == 2) {
     for (let i = 0; i < transData.length; i++) {
         transData[i].office.education = education[transData[i].office.education]
     }
@@ -225,6 +232,13 @@ function timestampToTime(timestamp) {
   let h = date.getHours() < 10?'0' + date.getHours() + ':':date.getHours() + ':';
   let m = date.getMinutes()<10?'0' + date.getMinutes():date.getMinutes();
   return Y+M+D+h+m;//时分秒可以根据自己的需求加上
+}
+
+//时间转时间戳
+function transtime(t) {
+  let T = new Date(t);  // 将指定日期转换为标准日期格式。Fri Dec 08 2017 20:05:30 GMT+0800 (中国标准时间)
+  // console.log(T,T.getTime(),typeof T.getTime());
+  return JSON.stringify(T.getTime()).substring(0,10)
 }
 
 function tal_adv(data, flag) {
@@ -426,5 +440,6 @@ export {
   transArrive,
   reverseOrder,
   getLocalTime,
-  timestampToTime
+  timestampToTime,
+  transtime
 }

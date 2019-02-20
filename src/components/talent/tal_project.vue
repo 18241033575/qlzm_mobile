@@ -16,7 +16,7 @@
           <div class="content">
             <div class="exp_cell_box">
               <div class="exp_head">
-                {{item.project}}<span :projcet-id="item.id" class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
+                {{item.project}}<span @click="pro_edit" :projcet-id="item.id" class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
               </div>
               <div class="bottom_msg">
                 <p><span class="left_lab">项目规模</span> <span class="right_msg">{{item.scale}}万</span></p>
@@ -41,27 +41,28 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">项目名称</span><input type="text" placeholder="项目名称">
+            <span class="edit_lab">项目名称</span><input type="text" v-model="proAllData.project" placeholder="项目名称">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">项目地点</span><input type="text" placeholder="项目地点">
+            <span class="edit_lab">项目地点</span><input type="text" v-model="proAllData.address" placeholder="项目地点">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">项目规模(元)</span><input type="text" placeholder="项目规模">
+            <span class="edit_lab">项目规模(元)</span><input type="text" v-model="proAllData.scale" placeholder="项目规模">
           </div>
           <div class="edit_cell special_cell">
             <span class="edit_lab">在职时间</span>
             <div class="block">
               <!--<span class="demonstration">带快捷选项</span>-->
               <el-date-picker
-                v-model="value2"
+                v-model="value1"
                 align="right"
                 type="date"
                 placeholder="选择日期"
                 :picker-options="pickerOptions1">
               </el-date-picker>
               <el-date-picker
-                v-model="value1"
+                v-model="value2"
+                :disabled="checked"
                 align="right"
                 type="date"
                 placeholder="选择日期"
@@ -71,7 +72,7 @@
             </div>
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">个人职位</span><input type="text" placeholder="个人职位">
+            <span class="edit_lab">个人职位</span><input v-model="proAllData.job" type="text" placeholder="个人职位">
           </div>
         </div>
       </div>
@@ -80,7 +81,7 @@
           <div class="edit_cell specail_area">
             <span class="edit_lab">项目介绍</span>
           </div>
-          <textarea placeholder="简单的描述一下这个项目吧" name="remark"></textarea>
+          <textarea placeholder="简单的描述一下这个项目吧" v-model="proAllData.introduction"></textarea>
         </div>
       </div>
       <div class="remark">
@@ -88,7 +89,7 @@
           <div class="edit_cell specail_area">
             <span class="edit_lab">个人业绩</span>
           </div>
-          <textarea placeholder="在这里填写你在项目中的业绩" name="remark"></textarea>
+          <textarea placeholder="在这里填写你在项目中的业绩" v-model="proAllData.duties"></textarea>
         </div>
       </div>
       <div class="edit_btn_group">
@@ -97,7 +98,7 @@
             <div class="edit_btn_cell del_btn">
               删除
             </div>
-            <div class="edit_btn_cell save_btn">
+            <div class="edit_btn_cell save_btn" @click="pro_save">
               保存
             </div>
           </div>
@@ -134,7 +135,16 @@
         },
         value1: '',
         value2: '',
-        checked: true
+        checked: true,
+        proAllData: {
+          project: '',
+          scale: '',
+          address: '',
+          job: '',
+          introduction: '',
+          duties: ''
+        },
+        pro_Id: ''
       }
     },
     methods: {
@@ -165,6 +175,43 @@
       oth_workNature() {
         this.workNature = 3
       },
+      pro_save() {
+        if (this.checked) {
+          this.proAllData.end_time = 0;
+        }else {
+          this.proAllData.end_time = JSON.stringify(this.value2).substring(1,11);
+        }
+        this.proAllData.start_time = JSON.stringify(this.value1).substring(1,11);
+        this.proAllData.id = this.pro_Id;
+        this.$ajax.post('/resume/projectexp',this.proAllData)
+          .then((res)=>{
+            console.log(res);
+
+          })
+      },
+      pro_edit(e) {
+        let proId = e.currentTarget.getAttribute('projcet-id');
+        this.pro_Id = proId;
+        this.editMsg = '编辑项目经验';
+        this.workExpSign = false;
+        for (let i = 0,len = this.projcetData.length; i < len; i++) {
+          if (this.projcetData[i].id == proId) {
+            this.value1 = this.projcetData[i].start_time;
+            if (this.projcetData[i].end_time == 0) {
+              this.checked = true;
+            } else {
+              this.value2 = this.projcetData[i].end_time;
+              this.checked = false;
+            }
+            this.proAllData.project = this.projcetData[i].project;
+            this.proAllData.scale = this.projcetData[i].scale;
+            this.proAllData.address = this.projcetData[i].address;
+            this.proAllData.job = this.projcetData[i].job;
+            this.proAllData.introduction = this.projcetData[i].introduction;
+            this.proAllData.duties = this.projcetData[i].duties;
+          }
+        }
+      }
     },
     created() {
       let userInfo = JSON.parse(localStorage.getItem('USER'));

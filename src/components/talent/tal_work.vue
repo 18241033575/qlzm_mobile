@@ -16,12 +16,12 @@
             <div class="content">
               <div class="exp_cell_box">
                 <div class="exp_head">
-                  {{item.company}}<span :work-id="item.id" class="fr"><img src="/static/images/ic_add_item@2x.png" alt="">编辑</span>
+                  {{item.company}}<span @click="workexp_edit" :work-id="item.id" class="fr"><img src="/static/images/ic_edit.png" alt="">编辑</span>
                 </div>
                 <div class="bottom_msg">
                   <p><span class="left_lab">职位名称</span> <span class="right_msg">{{item.job}}</span></p>
-                  <p><span class="left_lab">行业性质</span> <span class="right_msg">{{item.industry}}</span></p>
-                  <p><span class="left_lab">工作性质</span> <span class="right_msg">{{item.nature}}</span></p>
+                  <p><span class="left_lab">行业性质</span> <span class="right_msg">{{item.tranJobNature}}</span></p>
+                  <p><span class="left_lab">工作性质</span> <span class="right_msg">{{item.workNature}}</span></p>
                   <p><span class="left_lab">税前月薪(元)</span> <span class="right_msg">{{item.salary}}</span></p>
                   <p><span class="left_lab">在职时间</span> <span class="right_msg">{{item.start_time + '-' + item.end_time}}</span></p>
                   <p><span class="left_lab">工作职责</span> <span class="right_msg">{{item.duties}}</span></p>
@@ -41,28 +41,29 @@
         <div class="exp_edit_list">
           <div class="content">
             <div class="edit_cell">
-              <span class="edit_lab">公司名称</span><input type="text"  placeholder="公司名称">
+              <span class="edit_lab">公司名称</span><input type="text" v-model="workexpAllData.company" placeholder="公司名称">
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">职位名称</span><input type="text" placeholder="职位名称">
+              <span class="edit_lab">职位名称</span><input type="text" v-model="workexpAllData.job" placeholder="职位名称">
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">税前月薪(元)</span><input type="text"  placeholder="税前月薪">
+              <span class="edit_lab">税前月薪(元)</span><input type="text" v-model="workexpAllData.salary" placeholder="税前月薪">
             </div>
             <div class="edit_cell special_cell">
               <span class="edit_lab">工程周期</span>
               <div class="block">
                 <!--<span class="demonstration">带快捷选项</span>-->
                 <el-date-picker
-                  v-model="value2"
+                  v-model="value1"
                   align="right"
                   type="date"
                   placeholder="选择日期"
                   :picker-options="pickerOptions1">
                 </el-date-picker>
                 <el-date-picker
-                  v-model="value1"
+                  v-model="value2"
                   align="right"
+                  :disabled="checked"
                   type="date"
                   placeholder="选择日期"
                   :picker-options="pickerOptions1">
@@ -71,7 +72,7 @@
               </div>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">行业性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.jobNature==1}" @click="is_jobNature">建筑业</span><span class="choose_cell" :class="{choose_active:this.jobNature==0}" @click="isn_jobNature">非建筑业</span></span>
+              <span class="edit_lab">行业性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.jobNature==1}" @click="is_jobNature">建筑行业</span><span class="choose_cell" :class="{choose_active:this.jobNature==0}" @click="isn_jobNature">非建筑行业</span></span>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.workNature==1}" @click="man_workNature">管理岗</span><span class="choose_cell" :class="{choose_active:this.workNature==2}" @click="ski_workNature">技术岗</span><span class="choose_cell" :class="{choose_active:this.workNature==3}" @click="oth_workNature">其他</span></span>
@@ -83,7 +84,7 @@
             <div class="edit_cell specail_area">
               <span class="edit_lab">工作职责</span>
             </div>
-            <textarea placeholder="在这里填写职责内容" name="remark" id="" cols="30" rows="10"></textarea>
+            <textarea placeholder="在这里填写职责内容" v-model="workexpAllData.duties" id="" cols="30" rows="10"></textarea>
           </div>
         </div>
         <div class="edit_btn_group">
@@ -92,7 +93,7 @@
               <div class="edit_btn_cell del_btn">
                 删除
               </div>
-              <div class="edit_btn_cell save_btn">
+              <div class="edit_btn_cell save_btn" @click="workexp_save">
                 保存
               </div>
             </div>
@@ -129,7 +130,16 @@
             },
             value1: '',
             value2: '',
-            checked: true
+            checked: true,
+            workexpAllData: {
+              company: '',
+              job: '',
+              salary: '',
+              duties: ''
+            },
+            workexp_Id: '',
+            tranJobNature: '',
+            tranWorkNature: ''
           }
       },
       methods: {
@@ -160,6 +170,45 @@
         oth_workNature() {
           this.workNature = 3
         },
+        workexp_save() {
+          if (this.checked) {
+            this.workexpAllData.end_time = 0;
+          }else {
+            this.workexpAllData.end_time = JSON.stringify(this.value2).substring(1,11);
+          }
+          this.workexpAllData.start_time = JSON.stringify(this.value1).substring(1,11);
+          this.workexpAllData.nature = this.workNature;
+          this.workexpAllData.industry = this.jobNature;
+          this.workexpAllData.id = this.workexp_Id;
+          this.$ajax.post('/resume/workexp',this.workexpAllData)
+            .then((res)=>{
+              console.log(res);
+
+            })
+        },
+        workexp_edit(e) {
+          let workexpId = e.currentTarget.getAttribute('work-id');
+          this.workexp_Id = workexpId;
+          this.editMsg = '编辑工作经历';
+          this.workExpSign = false;
+          for (let i = 0,len = this.workData.length; i < len; i++) {
+            if (this.workData[i].id == workexpId) {
+              this.value1 = this.workData[i].start_time;
+              if (this.workData[i].end_time == 0) {
+                this.checked = true;
+              } else {
+                this.value2 = this.workData[i].end_time;
+                this.checked = false;
+              }
+              this.workexpAllData.company = this.workData[i].company;
+              this.workexpAllData.job = this.workData[i].job;
+              this.workexpAllData.salary = this.workData[i].salary;
+              this.workexpAllData.duties = this.workData[i].duties;
+              this.workNature = this.workData[i].nature;
+              this.jobNature = this.workData[i].industry;
+            }
+          }
+        }
       },
       created() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
@@ -168,6 +217,20 @@
               if (res.data.state != 400) {
                 console.log(res);
                 this.workData = res.data;
+                for (let i = 0,len = this.workData.length; i < len; i++) {
+                  if (this.workData[i].industry == 0) {
+                    this.workData[i].tranJobNature = '非建筑行业'
+                  } else {
+                    this.workData[i].tranJobNature = '建筑行业'
+                  }
+                  if (this.workData[i].nature == 1) {
+                    this.workData[i].workNature = '管理岗'
+                  } else if (this.workData[i].nature == 2) {
+                    this.workData[i].workNature = '技术岗'
+                  } else {
+                    this.workData[i].workNature = '其他'
+                  }
+                }
               }
             })
       }
