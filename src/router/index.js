@@ -35,6 +35,9 @@ import self_eval from '@/components/talent/self_eval'
 import tal_privacy from '@/components/talent/tal_privacy'
 import tal_shield from '@/components/talent/tal_shield'
 
+//企业中心页面
+import release_office from '@/components/company/release_office'
+
 //个人中心组件
 import main_menu from '@/components/common/main_menu'
 
@@ -233,6 +236,11 @@ export default new Router({
       path: '/main_menu',
       name: 'main_menu',
       component: main_menu
+    },
+    {
+      path: '/release_office',
+      name: 'release_office',
+      component: release_office
     }
   ]
 })

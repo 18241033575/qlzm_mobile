@@ -51,7 +51,7 @@ function tranProvince(data,flag,adata,type) {
       return PROVICE
     } else {
       if (type == 2) {
-        data = PROVICE[data]
+        data = PROVICE[data];
         return data
       }else {
         data.province = PROVICE[data.province]

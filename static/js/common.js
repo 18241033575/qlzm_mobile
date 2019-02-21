@@ -37,17 +37,17 @@ function transSalary(data,type,off) {
     } else {
       for (let i = 0; i < transData.length; i++) {
         if (transData[i].salary != 0) {
-          transData[i].salary = (salary[transData[i].salary] + '元/月')
+          transData[i].transalary = (salary[transData[i].salary] + '元/月')
         } else {
-          transData[i].salary = salary[transData[i].salary]
+          transData[i].transalary = salary[transData[i].salary]
         }
       }
     }
   } else {
       if (transData.salary != 0) {
-        transData.salary = (salary[transData.salary] + '元/月')
+        transData.transalary = (salary[transData.salary] + '元/月')
       } else {
-        transData.salary = salary[transData.salary]
+        transData.transalary = salary[transData.salary]
       }
   }
 }
@@ -403,7 +403,6 @@ function transComNature(data,flag,type) {
 function transArrive(data,flag,type) {
   //到岗时间
   const arrive_time = [
-    "未填写",
     "随时",
     "3天内",
     "7天内",
@@ -411,10 +410,14 @@ function transArrive(data,flag,type) {
     "30天内"
   ];
   if (flag) {
-    if (type == 2) {
+    if (type == 3) {
+      return arrive_time;
+    } else if (type == 2) {
       for (let i = 0; i < data.length; i++) {
 
       }
+    } else if (type == 1) {
+      return arrive_time[data]
     } else {
       data.duty_time = arrive_time[data.duty_time]
     }

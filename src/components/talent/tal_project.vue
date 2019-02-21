@@ -20,7 +20,7 @@
               </div>
               <div class="bottom_msg">
                 <p><span class="left_lab">项目规模</span> <span class="right_msg">{{item.scale}}万</span></p>
-                <p><span class="left_lab">工程周期</span> <span class="right_msg">{{item.start_time + '-' + item.end_time}}</span></p>
+                <p><span class="left_lab">工程周期</span> <span class="right_msg">{{item.start_time + '-' + (item.end_time == 0?'至今':item.end_time)}}</span></p>
                 <p><span class="left_lab">项目地点</span> <span class="right_msg">{{item.address}}</span></p>
                 <p><span class="left_lab">个人任职</span> <span class="right_msg">{{item.job}}</span></p>
                 <p><span class="left_lab">项目介绍</span> <span class="right_msg">{{item.introduction}}</span></p>
@@ -183,10 +183,13 @@
         }
         this.proAllData.start_time = JSON.stringify(this.value1).substring(1,11);
         this.proAllData.id = this.pro_Id;
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.proAllData.uid = userInfo.id;
         this.$ajax.post('/resume/projectexp',this.proAllData)
           .then((res)=>{
-            console.log(res);
-
+            if (res.data.state == 200) {
+              this.workExpSign = true;
+            }
           })
       },
       pro_edit(e) {

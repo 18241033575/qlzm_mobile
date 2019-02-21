@@ -23,7 +23,7 @@
                   <p><span class="left_lab">行业性质</span> <span class="right_msg">{{item.tranJobNature}}</span></p>
                   <p><span class="left_lab">工作性质</span> <span class="right_msg">{{item.workNature}}</span></p>
                   <p><span class="left_lab">税前月薪(元)</span> <span class="right_msg">{{item.salary}}</span></p>
-                  <p><span class="left_lab">在职时间</span> <span class="right_msg">{{item.start_time + '-' + item.end_time}}</span></p>
+                  <p><span class="left_lab">在职时间</span> <span class="right_msg">{{item.start_time + '-' + (item.end_time == 0?'至今':item.end_time)}}</span></p>
                   <p><span class="left_lab">工作职责</span> <span class="right_msg">{{item.duties}}</span></p>
                 </div>
               </div>
@@ -180,10 +180,13 @@
           this.workexpAllData.nature = this.workNature;
           this.workexpAllData.industry = this.jobNature;
           this.workexpAllData.id = this.workexp_Id;
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.workexpAllData.uid = userInfo.id;
           this.$ajax.post('/resume/workexp',this.workexpAllData)
             .then((res)=>{
-              console.log(res);
-
+              if (res.data.state == 200) {
+                this.workExpSign = true;
+              }
             })
         },
         workexp_edit(e) {
@@ -215,8 +218,8 @@
           this.$ajax.get('/resume/workexp',{params: {uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state != 400) {
-                console.log(res);
                 this.workData = res.data;
+                console.log(this.workData);
                 for (let i = 0,len = this.workData.length; i < len; i++) {
                   if (this.workData[i].industry == 0) {
                     this.workData[i].tranJobNature = '非建筑行业'

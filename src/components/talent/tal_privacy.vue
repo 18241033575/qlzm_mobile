@@ -51,20 +51,22 @@
         },
         /*总菜单操作e*/
         changeState() {
-          this.$message({
-            message: '开启/关闭成功',
-            type: 'success'
-          });
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           let sta = this.privacy_state == true?1:-1;
-          this.$ajax.post('/resume/hiddenopen',{state: sta})
+          this.$ajax.post('/resume/hiddenopen',{state: sta,uid: userInfo.id})
             .then((res)=>{
-              //提示信息
-              this.$message({
-                message: '恭喜你，这是一条成功消息',
-                type: 'success'
-              });
-              console.log(res);
+              if (res.data.state == 200) {
+                //提示信息
+                this.$message({
+                  message: '操作成功',
+                  type: 'success'
+                });
+              } else {
+                this.$message({
+                  message: '操作失败',
+                  type: 'error'
+                });
+              }
             })
         }
       }

@@ -183,13 +183,16 @@
         this.operaData.end_time = JSON.stringify(this.value2).substring(1,11);
         this.$ajax.post('/resume/eduexp',this.operaData)
           .then((res)=>{
-            console.log(res);
+            if (res.data.state == 200) {
+              this.workExpSign = true;
+            }
           })
       },
       EduCode(e) {
         let eduVal = e.currentTarget.getAttribute('edu-id');
         this.selectedVal = eduVal;
-        this.operaData.education = this.transVal = transEducation(eduVal,4);
+        this.operaData.education = this.selectedVal;
+        this.transVal = transEducation(eduVal,4);
         this.secondBox = false
       },
       secondBoxBg() {

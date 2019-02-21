@@ -182,7 +182,7 @@
               this.contactData = res.data.contact;
 
               tranArea(res.data,true,1);
-              tranCity(res.data,true,1);
+              tranCity(res.data,true,4);
               tranProvince(res.data,true);
               transComScale(res.data,true,1);
               transComNature(res.data,true,1);
@@ -192,7 +192,6 @@
         this.$ajax.get('/office/company', {params: {cid: cid}})
           .then((res) => {
             if (res.data.state != 400) {
-              console.log(res.data.data);
               tranCity(res.data.data,true,2);
               transWorkexp(res.data.data,0,'com');
               transEducation(res.data.data,0);

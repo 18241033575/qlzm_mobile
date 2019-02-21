@@ -11,7 +11,7 @@
         <div class="content">
           <div class="ugent_cell">
             <div class="ugent_top">
-              <span class="ugent_sign" v-show="this.posDetData.is_urgent == 1">急聘</span><span class="pos_name">{{this.posDetData.office_name}}</span><span class="salary fr">{{this.posDetData.salary}}</span>
+              <span class="ugent_sign" v-show="this.posDetData.is_urgent == 1">急聘</span><span class="pos_name">{{this.posDetData.office_name}}</span><span class="salary fr">{{this.posDetData.transalary}}</span>
             </div>
             <div class="ugent_bottom">
               <span class="tags">{{posDetData.city}}</span> | <span class="tags">{{posDetData.work_exp}}</span> | <span class="tags">{{posDetData.hire_num==0?'若干':posDetData.hire_num}}人</span> | <span class="tags">{{posDetData.education}}</span> | <span
@@ -233,13 +233,14 @@
               res.data.tags = company_adv(res.data.tags,true);
             }
             tranArea(res.data,true,1);
-            tranCity(res.data,true,1);
-            tranProvince(res.data,true);
+            tranCity(res.data,true,4);
+            tranProvince(res.data,true,'');
             transEducation(res.data,1);
             transNature(res.data,1);
             transSalary(res.data,1);
             res.data.created_at = getDistanceTime(res.data.created_at);
             this.posDetData = res.data;
+            console.log(this.posDetData);
             this.pos_categoty = this.posDetData.cert_type.category;
             this.pos_categoty = this.posDetData.cert_major.major;
             transWorkexp(res.data,1,'company');
