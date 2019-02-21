@@ -1,85 +1,56 @@
 <template>
     <div class="release_office">
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-      <div class="tal_bas_msg" v-show="this.edit">
+      <div class="tal_msg_edit" v-show="this.edit">
         <div class="com_det_title">
           <div class="content">
             发布职位
           </div>
         </div>
-        <div class="tal_msg_det">
-          <div class="content">
-            <div class="top_pic">
-              <img :src="this.headPic" alt="">
-              <p class="tal_name">{{userInfoMsg.name}}</p>
-              <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education}}</span>|<span>{{userMsg.work_exp}}</span></p>
-            </div>
-            <div class="bottom_msg">
-              <p><span class="left_lab">手机</span> <span class="right_msg">{{userInfoMsg.phone}}</span></p>
-              <p><span class="left_lab">QQ</span> <span class="right_msg">{{userMsg.qq}}</span></p>
-              <p><span class="left_lab">邮箱</span> <span class="right_msg">{{userMsg.email}}</span></p>
-              <p><span class="left_lab">就业情况</span> <span class="right_msg">{{userMsg.work_status == 1?'已就业':'待就业'}}</span></p>
-              <p><span class="left_lab">通讯地址</span> <span class="right_msg">{{userMsg.province + userMsg.city + userMsg.area}}</span></p>
-              <p><span class="left_lab">街道</span> <span class="right_msg">{{userMsg.address}}</span></p>
-            </div>
-          </div>
-        </div>
-        <div class="content">
-          <div class="bas_msg_btn" @click="to_edit">
-            编辑
-          </div>
-        </div>
-      </div>
-      <div class="tal_msg_edit" v-show="!this.edit">
-        <div class="com_det_title">
-          <div class="content">
-            编辑基本信息
-          </div>
-        </div>
         <div class="tal_edit_det">
-          <div class="edit_top">
-            <div class="content">
-              <div class="edit_top_box">
-                <div class="top_pic">
-                  <img :src="this.editHeadPic" alt="">
-                </div>
-                <div class="top_msg">
-                  <el-upload
-                    class="avatar-uploader upload_btn"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    list-type="none"
-                    :on-success="upHeadPic">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</div>
-                  </el-upload>
-                  <!--<span class="upload_btn">上传图片</span>-->
-                  <!--<p>支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</p>-->
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="edit_bottom">
             <div class="content">
               <div class="edit_cell">
-                <span class="edit_lab">真实姓名</span><input type="text" maxlength="15" v-model="form.tal_name" placeholder="真实姓名">
+                <span class="edit_lab">职位名称</span><input type="text" maxlength="15" v-model="form.tal_name" placeholder="请输入职位名称">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">身份证号码</span><input type="text" v-model="form.tal_idcard" maxlength="16" placeholder="身份证号码">
+                <span class="edit_lab">招聘人数</span><input type="text" v-model="form.tal_idcard" maxlength="16" placeholder="招聘人数，默认为“若干”">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">QQ号码</span><input type="text" v-model="form.tal_qq" placeholder="QQ号码">
+                <span class="edit_lab">职位类别</span><span class="int_job_det fr" >{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">电子邮箱</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
+                <span class="edit_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">全职</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">项目</span></span>
+              </div>
+              <div class="edit_cell">
+                <span class="edit_lab">持证要求</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
               </div>
               <div class="edit_cell special_cell">
                 <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province">{{userMsg.province}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{userMsg.city}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{userMsg.area}}<img src="/static/images/font_down.png" alt=""></div></div>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">
+                <input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址，如：街道、门牌号等">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">就业状态</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">已就业</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">待就业</span></span>
+                <span class="edit_lab">薪资待遇</span><span class="int_job_det fr" >{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              </div>
+              <div class="edit_cell">
+                <span class="edit_lab">学历要求</span><span class="int_job_det fr" >{{(1) || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              </div>
+              <div class="edit_cell">
+                <span class="edit_lab">工作年限</span><span class="int_job_det fr" >{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              </div>
+              <div class="edit_cell">
+                <span class="edit_lab">性别限制</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="have_job">不限</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">男</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">女</span></span>
+              </div>
+              <div class="edit_cell">
+                <span class="edit_lab">职位亮点</span><span class="int_job_det fr" >{{(1) || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              </div>
+              <div class="edit_cell">
+                <span class="edit_lab">职位描述</span><span class="int_job_det fr" >{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              </div>
+              <div class="edit_cell">
+                <span class="edit_lab">加急招聘</span><span class="int_job_det fr" ><img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
             </div>
           </div>
@@ -165,37 +136,7 @@
         }
       },
       created() {
-        let userInfo = JSON.parse(localStorage.getItem('USER'));
 
-        //头像
-        if (userInfo.photo != '') {
-          this.editHeadPic = this.headPic = splicPic(userInfo.photo, true);
-        }
-        userInfo.name = userInfo.name == ''?userInfo.phone:userInfo.name;
-        this.userInfoMsg = userInfo;
-        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
-          .then((res)=>{
-            if (res.data.state!= 400) {
-              this.beginData = res.data.base_info;
-              this.cityCode[0] = res.data.base_info.province;
-              this.cityCode[1] = res.data.base_info.city;
-              this.cityCode[2] = res.data.base_info.area;
-              tranArea(res.data.base_info,true,0);
-              tranCity(res.data.base_info,true,0);
-              tranProvince(res.data.base_info,true);
-              transGender(res.data.base_info,true);
-              transEducation(res.data.base_info,1);
-              transWorkexp(res.data.base_info,1,'tal');
-              this.userMsg = res.data.base_info;
-              this.form.tal_name = this.userMsg.name;
-              this.form.tal_idcard = this.userMsg.id_card;
-              this.form.tal_qq = this.userMsg.qq;
-              this.form.tal_email = this.userMsg.email;
-              this.form.tal_addr = this.userMsg.address;
-              this.form.tal_state = this.userMsg.work_status;
-
-            }
-          });
 
       },
       methods: {
@@ -256,19 +197,19 @@
           console.log(res);
         },
         choose_province() {
-          this.guiyangData = tranProvince(this.beginData,true,'pro');
+         /* this.guiyangData = tranProvince(this.beginData,true,'pro');
           this.showMsg = 'pro';
-          this.secondBox = true;
+          this.secondBox = true;*/
         },
         choose_city() {
-          this.guiyangData = tranCity(this.cityCode,true,2,'city');
+         /* this.guiyangData = tranCity(this.cityCode,true,2,'city');
           this.showMsg = 'city';
-          this.secondBox = true;
+          this.secondBox = true;*/
         },
         choose_area() {
-          this.guiyangData = tranArea(this.cityCode,true,5);
+          /*this.guiyangData = tranArea(this.cityCode,true,5);
           this.showMsg = 'area';
-          this.secondBox = true;
+          this.secondBox = true;*/
         },
       },
       updated() {
@@ -280,5 +221,164 @@
 </script>
 
 <style scoped>
+  .top_pic img{
+    width: 75px;
+    height: 90px;
+  }
+  .top_pic .tal_name{
+    padding-bottom: 0;
+    font-size: 14px;
+    color: #666666;
+    font-weight: bold;
+  }
+  .top_pic p{
+    padding: 10px 0;
+  }
+  .top_pic p span{
+    padding: 0 5px;
+    font-size: 12px;
+    color: #919199;
+  }
+  .bottom_msg{
+    padding: 20px 0;
+    line-height: 24px;
+    font-size: 12px;
+  }
+  .bas_msg_btn{
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+    line-height: 44px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #5082e6;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+  }
+  /*编辑*/
+  .tal_edit_det{
+    background-color: #ffffff;
+  }
+  .top_pic img {
+    width: 70px;
+    height: 95px;
+  }
+  .top_msg{
+    margin-left: 15px;
+    padding-top: 15px;
+    color: #919199;
+  }
+  .top_msg p{
+    margin-top: 15px;
+    line-height: 18px;
+  }
+  .upload_btn{
+    display: inline-block;
+    margin-top: 10px;
+    /*width: 80px;
+    line-height: 30px;
+    text-align: center;
 
+    */
+  }
+  .upload_btn .el-button{
+    color: #ffffff;
+    background-color: #ff8236;
+    border-color: #ff8236;
+  }
+  .upload_btn .el-upload__tip{
+    color: #919199;
+    font-size: 12px;
+  }
+  .upload_btn .el-upload-list--none{
+    display: none;
+  }
+  .edit_cell {
+    line-height: 44px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-top: 1px solid #E1E4E6;
+    font-size: 14px;
+  }
+  .edit_cell .edit_lab {
+    display: inline-block;
+    width: 90px;
+    color: #353535;
+  }
+  .edit_cell input{
+    display: inline-block;
+    padding-left: 10px;
+    width: 65%;
+    line-height: 32px;
+    border: none;
+    color: #666666;
+  }
+  .edit_cell input ::placeholder{
+    color: #c2c2cc;
+  }
+  .edit_cell input:focus{
+    outline: none;
+  }
+  .choose_group{
+    display: inline-block;
+    margin-top: 10px;
+    width: 65%;
+    text-align: right;
+    line-height: 24px;
+  }
+  .choose_cell{
+    display: inline-block;
+    margin-left: 10px;
+    width: 60px;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #919199;
+    background-color: #ffffff;
+  }
+  .choose_active{
+    color: #5082e6;
+    background:rgba(80,130,230,.2);
+  }
+  .comm_addr{
+    display: flex;
+    width: 100%;
+    padding-bottom: 15px;
+  }
+  .comm_addr .comm_addr_cell{
+    justify-content: space-between;
+    margin-right: 10px;
+    width: 30%;
+    line-height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+  }
+  .comm_addr img{
+    margin-left: 20px;
+    width: 12px;
+    height: 10px;
+    vertical-align: middle;
+  }
+  .int_job_det{
+    color: #919199;
+  }
+  .int_job_det img{
+    margin-left: 10px;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+  }
 </style>
