@@ -123,7 +123,11 @@ function transWorkexp(data,type,classify) {
   }
 
   let transData = data;
-  if (type == 2) {
+  if (type == 5) {
+    return workexp
+  } else if(type == 4) {
+    return workexp[data]
+  }else if (type == 2) {
     for (let i = 0; i < transData.length; i++) {
         transData[i].office.work_exp = workexp[transData[i].office.work_exp]
     }
@@ -146,9 +150,9 @@ function transGender(data,flag) {
     data.gender = gender[data.gender]
   }
 }
-function transJobs() {
+function transJobs(data,type) {
   const jobs = [
-    {"name": "意向职位选择", "type": "optgroup"},
+    {"name": "意向职位选择", "value": 0, "type": "optgroup"},
     {"name": "工程项目管理", "value": 16, "type":1, 'salary':15000},
     {"name": "工程监理", "value": 17, "type":1, 'salary':10000},
     {"name": "安全管理/安全员", "value": 18, "type":1, 'salary':7000},
@@ -187,6 +191,15 @@ function transJobs() {
     {"name": "开发报建", "value": 36, "type":4, 'salary':6000},
     {"name": "工程资料管理", "value": 37, "type":4, 'salary':5000}
   ];
+  if (type == 5) {
+    return jobs
+  } else if(type == 1) {
+    for (let i = 0,len = jobs.length; i < len; i++) {
+      if (jobs[i].value == data) {
+        return jobs[i].name
+      }
+    }
+  }
 }
 
 
@@ -444,5 +457,6 @@ export {
   reverseOrder,
   getLocalTime,
   timestampToTime,
-  transtime
+  transtime,
+  transJobs
 }
