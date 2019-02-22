@@ -1,7 +1,7 @@
 <template>
     <div class="release_office" :class="{stop_scroll: this.openState || scrollSign}">
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-      <div class="tal_msg_edit" v-show="this.edit">
+      <div class="tal_msg_edit">
         <div class="com_det_title">
           <div class="content">
             发布职位
@@ -56,8 +56,7 @@
                 <span class="edit_lab">职位描述</span><span class="int_job_det fr" >{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">加急招聘</span><span class="int_job_det fr" > <el-switch class="switch_btn" @change="changeState"
-                                                                                            v-model="isUgent">
+                <span class="edit_lab">加急招聘</span><span class="int_job_det fr" > <el-switch class="switch_btn" v-model="isUgent">
             </el-switch></span>
               </div>
             </div>
@@ -123,7 +122,6 @@
         return {
           /*总菜单状态*/
           openState: false,
-          userInfoMsg: {},
           userMsg: {},
           secondBox: false,
           top_title: '',
@@ -134,9 +132,9 @@
           },
           showMsg: '',
           beginData: {},
+          //弹层数据标识、转换数据
           posTypeNum: '0',
           tranPosType: '',
-          genderNum: 0,
           tranGender: '',
           certTypeNum: 0,
           tranCertType: '',
@@ -150,8 +148,9 @@
           tranEdu: '',
           workexpNum: 0,
           tranWorkexp: '',
-          edit: true,
+          //性别、工作性质标识
           JobNature: 1,
+          genderNum: 0,
           form: {
             office_name: '',
             hire_num: '',
@@ -160,6 +159,7 @@
             tal_addr: '',
             tal_state: 1
           },
+          //遍历数据
           CommonData: {
 
           }
@@ -178,9 +178,6 @@
           this.openState = data;
         },
         /*总菜单操作e*/
-        to_edit() {
-          this.edit = false;
-        },
         release() {
           console.log('发布成功');
         },
@@ -206,12 +203,14 @@
           this.secondBox = false;
           this.scrollSign = false;
         },
+        //工作性质选择
         all_nature() {
           this.JobNature = 1
         },
         pro_nature() {
           this.JobNature = 2
         },
+        //性别限制选择
         all_sex() {
           this.genderNum = 0
         },
@@ -220,9 +219,6 @@
         },
         woman_sex() {
           this.genderNum = 2
-        },
-        upHeadPic(res) {
-          console.log(res);
         },
         choose_province() {
          /* this.guiyangData = tranProvince(this.beginData,true,'pro');
@@ -239,9 +235,7 @@
           this.showMsg = 'area';
           this.secondBox = true;*/
         },
-        changeState() {
-          console.log(this.isUgent);
-        },
+        //职位类别选择
         pos_type() {
           this.secondBox = true;
           this.top_title = '职位类别';
@@ -256,6 +250,7 @@
           this.secondBox = false;
           this.scrollSign = false;
         },
+        //证书类型
         certType() {
           this.secondBox = true;
           this.scrollSign = true;
@@ -297,6 +292,7 @@
             }
           }
         },
+        //证书专业
         certMajor() {
           this.secondBox = true;
           this.scrollSign = true;
@@ -345,6 +341,7 @@
             }
           }
         },
+        //薪资待遇
         choose_salary() {
           this.scrollSign = true;
           this.secondBox = true;
@@ -360,6 +357,7 @@
           transSalary(this.salaryNum,1);
           this.tranSalary = this.salaryNum.transalary;
         },
+        //学历要求
         choose_edu() {
           this.scrollSign = true;
           this.secondBox = true;
@@ -374,6 +372,7 @@
           this.secondBox = false;
           this.tranEdu = transEducation(eduId,4);
         },
+        //工作年限要求
         choose_workexp() {
           this.scrollSign = true;
           this.secondBox = true;
