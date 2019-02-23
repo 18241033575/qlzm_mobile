@@ -129,7 +129,6 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import choose_list from '../../components/common/choose_list'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {splicPic, transGender, transEducation, transWorkexp, transNature, transSalary, transArrive} from '../../../static/js/common.js'
     export default {

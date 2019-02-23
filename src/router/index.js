@@ -36,7 +36,14 @@ import tal_privacy from '@/components/talent/tal_privacy'
 import tal_shield from '@/components/talent/tal_shield'
 
 //企业中心页面
+import enterp_center from '@/components/company/enterp_center'
+import recruit_manage from '@/components/company/recruit_manage'
+import recruit_set from '@/components/company/recruit_set'
+import pos_manage from '@/components/company/pos_manage'
 import release_office from '@/components/company/release_office'
+import enterp_com_resume from '@/components/company/enterp_com_resume'
+import enterp_info from '@/components/company/enterp_info'
+import enterp_contract from '@/components/company/enterp_contract'
 
 //个人中心组件
 import main_menu from '@/components/common/main_menu'
@@ -237,10 +244,46 @@ export default new Router({
       name: 'main_menu',
       component: main_menu
     },
+    //企业中心
+    {
+      path: '/enterp_center',
+      name: 'enterp_center',
+      component: enterp_center
+    },
+    {
+      path: '/recruit_manage',
+      name: 'recruit_manage',
+      component: recruit_manage
+    },
+    {
+      path: '/recruit_set',
+      name: 'recruit_set',
+      component: recruit_set
+    },
+    {
+      path: '/pos_manage',
+      name: 'pos_manage',
+      component: pos_manage
+    },
     {
       path: '/release_office',
       name: 'release_office',
       component: release_office
+    },
+    {
+      path: '/enterp_com_resume',
+      name: 'enterp_com_resume',
+      component: enterp_com_resume
+    },
+    {
+      path: '/enterp_info',
+      name: 'enterp_info',
+      component: enterp_info
+    },
+    {
+      path: '/enterp_contract',
+      name: 'enterp_contract',
+      component: enterp_contract
     }
   ]
 })
