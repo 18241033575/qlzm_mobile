@@ -9,7 +9,7 @@
       <div class="resume_list">
         <div class="resume_list_cell">
           <div class="content">
-            <p class="tal_name">张三<img class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
+            <p class="tal_name">张三<img v-show="!opera_state" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img v-show="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
             <p class="tal_det"><span>男</span><span>|</span><span>33岁</span><span>|</span><span>无经验</span><span>|</span><span>博士及以上</span><span>|</span><span>建筑工程</span></p>
             <p class="tal_det">期望薪资:<span class="hope_salary">6001 - 8000/月</span></p>
           </div>
@@ -47,6 +47,7 @@
         return {
           /*总菜单状态*/
           openState: false,
+          opera_state: true,
         }
       },
       methods: {

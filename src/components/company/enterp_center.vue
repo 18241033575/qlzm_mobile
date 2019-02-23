@@ -9,7 +9,7 @@
       <div class="enterp_msg">
         <div class="content">
           <div class="com_logo fl">
-            <img src="/static/images/banner03@2x.png" alt="">
+            <img src="/static/images/company_def_logo.png" alt="">
           </div>
           <div class="com_msg fl">
             <p class="com_name">中国石油天然气集团有限公司</p>
@@ -145,9 +145,19 @@
     background-color: #ffffff;
     margin-bottom: 10px;
   }
-  .com_logo img{
+  .com_logo{
     width: 68px;
     height: 68px;
+    border-radius: 200px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    overflow: hidden;
+  }
+  .com_logo img{
+    width: 100%;
+    height: 100%;
   }
   .com_msg{
     margin-left: 15px;

@@ -16,7 +16,7 @@
                 <div class="pos_name">
                   <img v-show="companyMsg.has_m==1" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyMsg.name}}
                 </div>
-                <p><span class="tags">{{companyMsg.nature}}</span> | <span class="tags">{{companyMsg.scale}}</span> | <span class="tags">{{companyMsg.province + companyMsg.city}}</span></p>
+                <p><span class="tags">{{companyMsg.nature}}</span> | <span class="tags">{{companyMsg.scale}}</span> | <span class="tags">{{(companyMsg.province || '未知') + (companyMsg.city || '')}}</span></p>
               </div>
             </div>
           </div>
@@ -102,7 +102,7 @@
                   企业地址
                 </div>
                 <div class="company_address">
-                  {{companyMsg.province +　companyMsg.city + companyMsg.area + companyMsg.address}}
+                  {{(companyMsg.province || '') +　(companyMsg.city || '') + (companyMsg.area || '') + companyMsg.address}}
                 </div>
               </div>
             </div>

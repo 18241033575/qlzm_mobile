@@ -14,7 +14,7 @@
               <span class="ugent_sign" v-show="this.posDetData.is_urgent == 1">急聘</span><span class="pos_name">{{this.posDetData.office_name}}</span><span class="salary fr">{{this.posDetData.transalary}}</span>
             </div>
             <div class="ugent_bottom">
-              <span class="tags">{{posDetData.city}}</span> | <span class="tags">{{posDetData.work_exp}}</span> | <span class="tags">{{posDetData.hire_num==0?'若干':posDetData.hire_num}}人</span> | <span class="tags">{{posDetData.education}}</span> | <span
+              <span class="tags">{{posDetData.city || '未知'}}</span> | <span class="tags">{{posDetData.work_exp}}</span> | <span class="tags">{{posDetData.hire_num==0?'若干':posDetData.hire_num}}人</span> | <span class="tags">{{posDetData.education}}</span> | <span
               class="tags">{{posDetData.nature}}</span><span class="update_time fr">{{posDetData.created_at}}</span>
               <p><img v-show="this.has_mSign" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyName}}</p>
             </div>
@@ -117,7 +117,7 @@
                 工作地址
               </div>
               <div class="company_address">
-                {{this.posDetData.province + this.posDetData.city + this.posDetData.area + this.posDetData.address}}
+                {{(this.posDetData.province || '') + (this.posDetData.city || '') + (this.posDetData.area || '') + this.posDetData.address}}
               </div>
             </div>
           </div>
@@ -225,7 +225,6 @@
       this.$ajax.get('/office/detail', {params:{id: id}})
         .then((res) => {
           if (res.data.state != 400) {
-            console.log(res.data);
             if (res.data.tags == '') {
               this.tags_sign = false;
             } else {
@@ -240,7 +239,6 @@
             transSalary(res.data,1);
             res.data.created_at = getDistanceTime(res.data.created_at);
             this.posDetData = res.data;
-            console.log(this.posDetData);
             this.pos_categoty = this.posDetData.cert_type.category;
             this.pos_categoty = this.posDetData.cert_major.major;
             transWorkexp(res.data,1,'company');

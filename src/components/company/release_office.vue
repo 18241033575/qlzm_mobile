@@ -56,8 +56,7 @@
                 <span class="edit_lab">职位描述</span><span class="int_job_det fr" >{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">加急招聘</span><span class="int_job_det fr" > <el-switch class="switch_btn" v-model="isUgent">
-            </el-switch></span>
+                <span class="edit_lab">加急招聘</span><span class="int_job_det fr" > <el-switch class="switch_btn" v-model="isUgent"></el-switch></span>
               </div>
             </div>
           </div>

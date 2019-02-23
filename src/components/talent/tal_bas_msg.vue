@@ -19,7 +19,7 @@
             <p><span class="left_lab">QQ</span> <span class="right_msg">{{userMsg.qq}}</span></p>
             <p><span class="left_lab">邮箱</span> <span class="right_msg">{{userMsg.email}}</span></p>
             <p><span class="left_lab">就业情况</span> <span class="right_msg">{{userMsg.work_status == 1?'已就业':'待就业'}}</span></p>
-            <p><span class="left_lab">通讯地址</span> <span class="right_msg">{{userMsg.province + userMsg.city + userMsg.area}}</span></p>
+            <p><span class="left_lab">通讯地址</span> <span class="right_msg">{{(userMsg.province || '未知') + (userMsg.city || '') + (userMsg.area || '')}}</span></p>
             <p><span class="left_lab">街道</span> <span class="right_msg">{{userMsg.address}}</span></p>
           </div>
         </div>
