@@ -41,7 +41,7 @@
             },
             1: {
               urlName: "企业风采",
-              urlRoute: "find_job"
+              urlRoute: "enterp_mien"
             },
             2:{
               urlName: "联系信息",
@@ -49,7 +49,7 @@
             },
             3: {
               urlName: "企业认证",
-              urlRoute: "index"
+              urlRoute: "enterp_ident"
             }
           },
         }

@@ -51,6 +51,8 @@ import auto_recruit from '@/components/company/auto_recruit'
 import mem_server from '@/components/company/mem_server'
 import invoice_msg from '@/components/company/invoice_msg'
 import tax_invoice from '@/components/company/tax_invoice'
+import enterp_mien from '@/components/company/enterp_mien'
+import enterp_ident from '@/components/company/enterp_ident'
 
 //个人中心组件
 import main_menu from '@/components/common/main_menu'
@@ -316,6 +318,16 @@ export default new Router({
       path: '/tax_invoice',
       name: 'tax_invoice',
       component: tax_invoice
+    },
+    {
+      path: '/enterp_mien',
+      name: 'enterp_mien',
+      component: enterp_mien
+    },
+    {
+      path: '/enterp_ident',
+      name: 'enterp_ident',
+      component: enterp_ident
     }
   ]
 })
