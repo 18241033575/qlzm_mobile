@@ -59,6 +59,7 @@
     margin-top: 10px;
     background-color: #ffffff;
     margin-bottom: 44px;
+    padding-bottom: 15px;
   }
   .mien_btn{
     padding-top: 15px;
