@@ -12,9 +12,9 @@
             <img src="/static/images/company_def_logo.png" alt="">
           </div>
           <div class="com_msg fl">
-            <p class="com_name">中国石油天然气集团有限公司</p>
+            <p class="com_name">中国石油天然气集团有限公司团有限团有限团有限团有限团有限</p>
             <p class="com_msg_det">
-              <span>私营企业</span><span>|</span><span>500-999人</span><span>|</span><span>贵州省贵阳市</span>
+              <span>私营企业</span><span>|</span><span>500-999人</span><span>|</span><span>贵州省贵阳市贵州省贵阳市贵州省贵阳市</span>
             </p>
             <p class="com_msg_iden"><img src="/static/images/ic_cm_authed@2x.png" alt="">未认证<span class="go_iden">[去认证]</span></p>
             <p v-if="false" class="com_msg_idened"><img src="" alt="">已认证</p>
@@ -79,11 +79,11 @@
               },
               1: {
                 urlName: "会员服务",
-                urlRoute: "find_job"
+                urlRoute: "mem_server"
               },
               2:{
                 urlName: "企业信息设置",
-                urlRoute: "enterp_info"
+                urlRoute: "enterp_info_set"
               },
               3:{
                 urlName: "账号管理",
@@ -161,7 +161,14 @@
   }
   .com_msg{
     margin-left: 15px;
+    width: 70%;
   }
+  .com_msg p{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .com_msg .com_name{
     padding-top: 5px;
     font-size: 16px;
@@ -174,7 +181,7 @@
     color: #919199;
   }
   .com_msg .com_msg_det span{
-    padding-right: 10px;
+    padding-right: 5px;
   }
   .com_msg_iden,.com_msg_idened{
     margin-top: 3px;

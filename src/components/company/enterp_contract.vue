@@ -87,7 +87,6 @@
     margin-top: 10px;
     background-color: #ffffff;
   }
-
   .edit_cell {
     line-height: 44px;
     -webkit-box-sizing: border-box;

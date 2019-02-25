@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
+
+//注册、登录、主页
 import index from '@/components/index'
 import user_reg from '@/components/reg_log/user_reg'
 import user_login from '@/components/reg_log/user_login'
@@ -43,7 +45,12 @@ import pos_manage from '@/components/company/pos_manage'
 import release_office from '@/components/company/release_office'
 import enterp_com_resume from '@/components/company/enterp_com_resume'
 import enterp_info from '@/components/company/enterp_info'
+import enterp_info_set from '@/components/company/enterp_info_set'
 import enterp_contract from '@/components/company/enterp_contract'
+import auto_recruit from '@/components/company/auto_recruit'
+import mem_server from '@/components/company/mem_server'
+import invoice_msg from '@/components/company/invoice_msg'
+import tax_invoice from '@/components/company/tax_invoice'
 
 //个人中心组件
 import main_menu from '@/components/common/main_menu'
@@ -276,6 +283,11 @@ export default new Router({
       component: enterp_com_resume
     },
     {
+      path: '/enterp_info_set',
+      name: 'enterp_info_set',
+      component: enterp_info_set
+    },
+    {
       path: '/enterp_info',
       name: 'enterp_info',
       component: enterp_info
@@ -284,6 +296,26 @@ export default new Router({
       path: '/enterp_contract',
       name: 'enterp_contract',
       component: enterp_contract
+    },
+    {
+      path: '/auto_recruit',
+      name: 'auto_recruit',
+      component: auto_recruit
+    },
+    {
+      path: '/mem_server',
+      name: 'mem_server',
+      component: mem_server
+    },
+    {
+      path: '/invoice_msg',
+      name: 'invoice_msg',
+      component: invoice_msg
+    },
+    {
+      path: '/tax_invoice',
+      name: 'tax_invoice',
+      component: tax_invoice
     }
   ]
 })

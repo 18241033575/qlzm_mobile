@@ -9,7 +9,7 @@
       <div class="set_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">自动招聘</span><span class="int_job_det fr">未开启<img src="/static/images/ic_right@2x.png" alt=""></span>
+            <span class="edit_lab">自动招聘</span><span @click="auto_set" class="int_job_det fr">未开启<img src="/static/images/ic_right@2x.png" alt=""></span>
           </div>
           <div class="edit_cell">
             <span class="edit_lab">招聘优势</span><span class="int_job_det fr"><img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -54,6 +54,9 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+        auto_set() {
+          this.$router.push({name: 'auto_recruit'})
+        }
       }
     }
 </script>
