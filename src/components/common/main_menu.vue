@@ -18,24 +18,24 @@
             </div>
           </div>
           <div class="btn_group" v-if="isLogin">
-            <router-link :to="{name: 'tal_center'}">
+            <div class="com_center" @click="go_center">
               <div class="sub_btn btn_size">
-                个人中心
+                {{center}}
               </div>
-            </router-link>
-            <router-link :to="{}">
-              <div class="cancel_btn btn_size" @click="exit_login">
+            </div>
+            <router-link :to="{name: 'index'}">
+              <div class="cancel_btn btn_size">
                 退出登录
               </div>
             </router-link>
           </div>
           <div class="btn_group" v-if="!isLogin">
-            <router-link :to="{name: 'user_login'}">
+            <router-link :to="{name: 'login'}">
               <div class="sub_btn btn_size">
                 登录
               </div>
             </router-link>
-            <router-link :to="{name: 'user_reg'}">
+            <router-link :to="{name: 'reg_type_choose'}">
               <div class="cancel_btn btn_size">
                 注册
               </div>
@@ -97,7 +97,9 @@
           openSign: false,
           isLogin: false,
           default_headPic: '/static/images/ic_user_def@2x.png',
-          userName: ''
+          userName: '',
+          center: '个人中心',
+          centerUrl: 'tal_center'
         }
       },
       methods: {
@@ -105,25 +107,34 @@
           this.isOpen = true;
           this.$emit('give_sign', this.isOpen);
         },
-        exit_login() {
-          this.$router.push({name: 'index'});
-          localStorage.clear();
-          this.isLogin = false;
-        },
+        go_center() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          if (userInfo) {
+            this.$router.push({name: 'tal_center'})
+          }else {
+            this.$router.push({name: 'enterp_center'})
+          }
+        }
       },
       created() {
         let userInfo = JSON.parse(localStorage.getItem('USER'));
-        // console.log(userInfo);
         if (userInfo) {
+          this.center = '个人中心';
           this.isLogin = true;
           if (userInfo.photo != '') {
             this.default_headPic = splicPic(userInfo.photo, true);
           }
           this.userName = userInfo.name || userInfo.phone;
-        }else {
-          this.isLogin = false;
         }
-
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        if (companyInfo) {
+          this.center = '企业中心';
+          this.isLogin = true;
+          if (companyInfo.logo != '') {
+            this.default_headPic = splicPic(companyInfo.logo, true);
+          }
+          this.userName = companyInfo.name || companyInfo.logo;
+        }
       },
     }
 </script>
@@ -201,6 +212,13 @@
     clear: both;
     display: flex;
     justify-content: space-between;
+  }
+  .menu_top .com_center{
+    line-height: 34px;
+    display: inline-block;
+    width: 45%;
+    text-align: center;
+    font-size: 14px;
   }
   .menu_top a{
     display: inline-block;

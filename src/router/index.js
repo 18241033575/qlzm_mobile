@@ -5,7 +5,9 @@ import HelloWorld from '@/components/HelloWorld'
 //注册、登录、主页
 import index from '@/components/index'
 import user_reg from '@/components/reg_log/user_reg'
-import user_login from '@/components/reg_log/user_login'
+import enterp_reg from '@/components/reg_log/enterp_reg'
+import reg_type_choose from '@/components/reg_log/reg_type_choose'
+import login from '@/components/reg_log/login'
 
 
 
@@ -81,9 +83,25 @@ export default new Router({
       }
     },
     {
-      path: '/user_login',
-      name: 'user_login',
-      component: user_login,
+      path: '/enterp_reg',
+      name: 'enterp_reg',
+      component: enterp_reg,
+      meta: {
+        title: '建筑企业注册'
+      }
+    },
+    {
+      path: '/reg_type_choose',
+      name: 'reg_type_choose',
+      component: reg_type_choose,
+      meta: {
+        title: '注册类型选择'
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login,
       meta: {
         title: '人才登录'
       }

@@ -86,6 +86,7 @@
   }
   .common_btn{
     margin-top: 20px;
+    padding: 0;
     width: 92%;
     line-height: 40px;
     background-color: #5082E6;
@@ -146,5 +147,6 @@
     box-sizing: border-box;
     border-bottom: 1px solid #E1E4E6;
     background-color: #ffffff;
+    text-align: left;
   }
 </style>

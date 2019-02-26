@@ -16,7 +16,7 @@
             <p class="com_msg_det">
               <span>私营企业</span><span>|</span><span>500-999人</span><span>|</span><span>贵州省贵阳市贵州省贵阳市贵州省贵阳市</span>
             </p>
-            <p class="com_msg_iden"><img src="/static/images/ic_cm_authed@2x.png" alt="">未认证<span class="go_iden">[去认证]</span></p>
+            <p class="com_msg_iden"><img src="/static/images/ic_cm_authed@2x.png" alt="">未认证<span @click="go_ident" class="go_iden">[去认证]</span></p>
             <p v-if="false" class="com_msg_idened"><img src="" alt="">已认证</p>
           </div>
         </div>
@@ -105,6 +105,16 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+        go_ident() {
+          this.$router.push({name: 'enterp_ident'})
+        }
+      },
+      created() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.get('/company_info',{params: {cid: companyInfo.id,name: 'all'}})
+            .then((res)=>{
+              console.log(res);
+            })
       }
     }
 </script>
