@@ -9,15 +9,15 @@
       <div class="enterp_msg">
         <div class="content">
           <div class="com_logo fl">
-            <img src="/static/images/company_def_logo.png" alt="">
+            <img :src="centerDetData.logo" alt="">
           </div>
           <div class="com_msg fl">
-            <p class="com_name">中国石油天然气集团有限公司团有限团有限团有限团有限团有限</p>
+            <p class="com_name">{{enterp_centerData.name}}</p>
             <p class="com_msg_det">
-              <span>私营企业</span><span>|</span><span>500-999人</span><span>|</span><span>贵州省贵阳市贵州省贵阳市贵州省贵阳市</span>
+              <span>{{centerDetData.nature}}</span><span>|</span><span>{{centerDetData.scale}}</span><span>|</span><span>{{(centerDetData.province || '未知') + (centerDetData.city || '')}}</span>
             </p>
-            <p class="com_msg_iden"><img src="/static/images/ic_cm_authed@2x.png" alt="">未认证<span @click="go_ident" class="go_iden">[去认证]</span></p>
-            <p v-if="false" class="com_msg_idened"><img src="" alt="">已认证</p>
+            <p v-if="enterp_centerData.state != 1" class="com_msg_iden"><img src="/static/images/ic_cm_authed@2x.png" alt="">未认证<span @click="go_ident" class="go_iden">[去认证]</span></p>
+            <p v-if="enterp_centerData.state == 1" class="com_msg_idened"><img src="/static/images/ic_cm_auth.png" alt="">已认证</p>
           </div>
         </div>
       </div>
@@ -62,6 +62,8 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
+  import {transComNature,transComScale,splicLogo} from '../../../static/js/common.js'
     export default {
         name: "enterp_center",
       components: {
@@ -94,6 +96,12 @@
                 urlRoute: "news"
               }
             },
+            enterp_centerData: {
+
+            },
+            centerDetData: {
+
+            },
           }
       },
       methods: {
@@ -111,9 +119,17 @@
       },
       created() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          this.$ajax.get('/company_info',{params: {cid: companyInfo.id,name: 'all'}})
+          this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
             .then((res)=>{
-              console.log(res);
+              if (res.state != 400) {
+                this.enterp_centerData = res.data;
+                transComScale(res.data.info,true);
+                transComNature(res.data.info,true,1);
+                splicLogo(res.data.info,1);
+                tranCity(res.data.info,true,0);
+                tranProvince(res.data.info,true);
+                this.centerDetData = res.data.info;
+              }
             })
       }
     }
@@ -202,7 +218,7 @@
     margin-right: 5px;
     width: 16px;
     height: 16px;
-    vertical-align: middle;
+    vertical-align: top;
   }
   .go_iden{
     margin-left: 10px;

@@ -21,15 +21,15 @@
       <div class="content">
         <div class="mem_opera_list">
           <router-link :to="{name: 'index'}" class="mem_opera_cell">
-            <img src="/static/images/ic_cm_resume@2x.png" alt="">
+            <img src="/static/images/ic_cm_integral@2x.png" alt="">
             <p>我的积分</p>
           </router-link>
           <router-link :to="{name: 'index'}" class="mem_opera_cell">
-            <img src="/static/images/ic_cm_resume@2x.png" alt="">
+            <img src="/static/images/ic_cm_record@2x.png" alt="">
             <p>消费记录</p>
           </router-link>
           <router-link :to="{name: 'invoice_msg'}" class="mem_opera_cell">
-            <img src="/static/images/ic_cm_resume@2x.png" alt="">
+            <img src="/static/images/ic_cm_invoice@2x.png" alt="">
             <p>发票信息设置</p>
           </router-link>
         </div>

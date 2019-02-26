@@ -330,12 +330,20 @@ function splicPic(data, add) {
   }
 }
 
-function splicLogo(data) {
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].logo == '') {
-      data[i].logo = '/static/images/company_def_logo.png'
+function splicLogo(data,type) {
+  if (type == 1){
+    if (data.logo == '') {
+      data.logo = '/static/images/company_def_logo.png'
     } else {
-      data[i].logo = file_server + data[i].logo
+      data.logo = file_server + data.logo
+    }
+  } else {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].logo == '') {
+        data[i].logo = '/static/images/company_def_logo.png'
+      } else {
+        data[i].logo = file_server + data[i].logo
+      }
     }
   }
 }
@@ -380,7 +388,7 @@ function transComScale(data,flag,type) {
     "500-999人",
     "1000-4999人",
     "5000人以上"
-  ]
+  ];
   if (flag) {
     if (type == 2) {
       for (let i = 0; i < data.length; i++) {
@@ -409,7 +417,7 @@ function transComNature(data,flag,type) {
 
       }
     } else {
-      data.nature = company_nature[data.nature]
+      data.nature = company_nature[data.nature];
     }
   }
 }

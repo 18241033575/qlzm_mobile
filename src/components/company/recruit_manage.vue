@@ -50,22 +50,22 @@
         <div class="content">
           <p class="count_title">数据统计</p>
           <div class="data_cell">
-            <span class="data_cell_label">发布的职位</span><span class="fr"><span class="data_num">12</span>个</span>
+            <span class="data_cell_label">发布的职位</span><span class="fr"><span class="data_num">{{countData.position}}</span>个</span>
           </div>
           <div class="data_cell">
-            <span class="data_cell_label">发出的面试邀请</span><span class="fr"><span class="data_num">125</span>次</span>
+            <span class="data_cell_label">发出的面试邀请</span><span class="fr"><span class="data_num">{{countData.invite}}</span>次</span>
           </div>
           <div class="data_cell">
-            <span class="data_cell_label">下载简历</span><span class="fr"><span class="data_num">201</span>份</span>
+            <span class="data_cell_label">下载简历</span><span class="fr"><span class="data_num">{{countData.down}}</span>份</span>
           </div>
           <div class="data_cell">
-            <span class="data_cell_label">收藏简历</span><span class="fr"><span class="data_num">500</span>份</span>
+            <span class="data_cell_label">收藏简历</span><span class="fr"><span class="data_num">{{countData.collect}}</span>份</span>
           </div>
           <div class="data_cell">
-            <span class="data_cell_label">职位浏览量</span><span class="fr"><span class="data_num">1889</span>次</span>
+            <span class="data_cell_label">职位浏览量</span><span class="fr"><span class="data_num">{{countData.position_num}}</span>次</span>
           </div>
           <div class="data_cell">
-            <span class="data_cell_label">职位被收藏</span><span class="fr"><span class="data_num">2078</span>次</span>
+            <span class="data_cell_label">职位被收藏</span><span class="fr"><span class="data_num">{{countData.collect_num}}</span>次</span>
           </div>
         </div>
       </div>
@@ -87,6 +87,9 @@
           return {
             /*总菜单状态*/
             openState: false,
+            countData: {
+
+            },
           }
         },
       methods: {
@@ -98,6 +101,15 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+      },
+      created() {
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.get('/company_count',{params: {cid: companyInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                this.countData = res.data;
+              }
+            })
       }
     }
 </script>

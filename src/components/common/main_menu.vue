@@ -23,7 +23,7 @@
                 {{center}}
               </div>
             </div>
-            <router-link :to="{name: 'index'}">
+            <router-link :to="{name: 'login'}">
               <div class="cancel_btn btn_size">
                 退出登录
               </div>
