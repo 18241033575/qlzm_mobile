@@ -43,18 +43,55 @@
             <p class="data_cell_label">普通会员</p>
             <p class="">完成企业认证，无优惠！</p>
         </div>
-        <div class="data_cell">
+        <div class="data_cell" v-for="(item,index) in this.memData">
           <p class="data_cell_label">黄金会员</p>
           <p class="">累计充值达10000元，充值享<span class="discount">9折</span>优惠</p>
         </div>
       </div>
     </div>
+    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "mem_server"
+        name: "mem_server",
+      components: {
+        main_menu,
+        menu_list_pic,
+      },
+      data () {
+        return {
+          /*总菜单状态*/
+          openState: false,
+          memData: {
+
+          },
+        }
+      },
+      methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
+      },
+      created() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.get('/company_info',{params: {name: 'member',cid: companyInfo.id}})
+            .then((res)=>{
+              console.log(res);
+              if (res.data.state != 400) {
+                this.memData = res.data.standard;
+              }
+            })
+      }
     }
 </script>
 
