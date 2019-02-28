@@ -22,23 +22,23 @@
               <img src="/static/images/ic_cm_mannage@2x.png" alt="">
               <p>职位管理</p>
             </router-link>
-            <router-link :to="{name: 'enterp_com_resume',query: {orig: 1}}" class="opera_list_cell">
+            <router-link :to="{name: 'enterp_com_resume',query: {orign: 'app'}}" class="opera_list_cell">
               <img src="/static/images/ic_cm_resume@2x.png" alt="">
               <p>应聘简历</p>
             </router-link>
-            <router-link :to="{name: 'enterp_com_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'enterp_com_resume',query: {orign: 'buy'}}" class="opera_list_cell">
               <img src="/static/images/ic_cm_buyres@2x.png" alt="">
               <p>购买的简历</p>
             </router-link>
-            <router-link :to="{name: 'enterp_com_resume',query: {orig: 2}}" class="opera_list_cell">
+            <router-link :to="{name: 'enterp_com_resume',query: {orign: 'collect'}}" class="opera_list_cell">
               <img src="/static/images/ic_cm_collection@2x.png" alt="">
               <p>收藏简历</p>
             </router-link>
-            <router-link :to="{name: 'enterp_com_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'enterp_com_resume',query: {orign: 'invite'}}" class="opera_list_cell">
               <img src="/static/images/ic_cm_ms@2x.png" alt="">
               <p>面试邀请</p>
             </router-link>
-            <router-link :to="{name: 'enterp_com_resume',query: {orig: 2}}" class="opera_list_cell">
+            <router-link :to="{name: 'enterp_com_resume',query: {orign: 'collected'}}" class="opera_list_cell">
               <img src="/static/images/ic_cm_colme@2x.png" alt="">
               <p>收藏过我</p>
             </router-link>

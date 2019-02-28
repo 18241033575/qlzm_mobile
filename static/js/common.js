@@ -444,7 +444,33 @@ function transArrive(data,flag,type) {
     }
   }
 }
+// 根据生日计算年龄
+function getTrueAge(data,type) {
 
+  if (type == 2) {
+    for (let i = 0,len = data.length; i < len;i++) {
+      data[i].age = getAge(data[i].birthday)
+    }
+  } else {
+    getAge(data)
+  }
+  function getAge(data) {
+    let trueAge;
+    if ('' != data && 0 != data) {
+      var timestamp = parseInt(data + '000'),
+        nowData = new Date(),
+        newData = new Date(timestamp);
+      if ((newData.getMonth() <= newData.getMonth()) && (newData.getDay() <= nowData.getDay())) {
+        trueAge = (nowData.getFullYear() - newData.getFullYear()) + '岁';
+      } else {
+        trueAge = (nowData.getFullYear() - newData.getFullYear() - 1) + '岁';
+      }
+    } else {
+      trueAge = '未知';
+    }
+    return trueAge
+  }
+}
 
 
 export {
@@ -466,5 +492,6 @@ export {
   getLocalTime,
   timestampToTime,
   transtime,
-  transJobs
+  transJobs,
+  getTrueAge
 }

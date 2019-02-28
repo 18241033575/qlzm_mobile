@@ -29,15 +29,15 @@
               <img src="/static/images/ic_cm_post@2x.png" alt="">
               <p>发布职位</p>
             </router-link>
-            <router-link :to="{name: 'enterp_com_resume',query: {orig: 1}}" class="opera_list_cell">
+            <router-link :to="{name: 'enterp_com_resume',query: {orign: 'app'}}" class="opera_list_cell">
               <img src="/static/images/ic_cm_resume@2x.png" alt="">
               <p>应聘简历</p>
             </router-link>
-            <router-link :to="{name: 'enterp_com_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'enterp_com_resume',query:{orign: 'buy'}}" class="opera_list_cell">
               <img src="/static/images/ic_cm_buyres@2x.png" alt="">
               <p>购买的简历</p>
             </router-link>
-            <router-link :to="{name: 'enterp_com_resume',query: {orig: 2}}" class="opera_list_cell">
+            <router-link :to="{name: 'enterp_com_resume',query: {orign: 'collect'}}" class="opera_list_cell">
               <img src="/static/images/ic_cm_collection@2x.png" alt="">
               <p>收藏简历</p>
             </router-link>

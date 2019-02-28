@@ -8,14 +8,14 @@
     </div>
     <div class="com_mem">
       <div class="com_logo">
-        <img src="/static/images/company_def_logo.png" alt="">
+        <img :src="this.companyData.logo" alt="">
         <div class="vip_sign" v-show="false">
           <img src="/static/images/diamond-blue-small.png" alt="">
         </div>
       </div>
-      <p class="com_name">中国石油天然气集团有限公司</p>
-      <p class="iden_msg">您当前还未认证！<span class="go_iden">[去认证]</span></p>
-      <p class="consumption" v-show="false">累计消费<span class="consumption_total">￥5000.00</span>元</p>
+      <p class="com_name">{{companyData.name}}</p>
+      <p v-if="(this.companyData.level < 1)" class="iden_msg">您当前还未认证！<span class="go_iden">[去认证]</span></p>
+      <p v-if="(companyData.level > 0)" class="consumption">累计消费<span class="consumption_total">￥{{sonsumptRecord}}</span>元</p>
     </div>
     <div class="mem_opera">
       <div class="content">
@@ -44,8 +44,8 @@
             <p class="">完成企业认证，无优惠！</p>
         </div>
         <div class="data_cell" v-for="(item,index) in this.memData">
-          <p class="data_cell_label">黄金会员</p>
-          <p class="">累计充值达10000元，充值享<span class="discount">9折</span>优惠</p>
+          <p class="data_cell_label">{{item.name}}</p>
+          <p class="">累计充值达{{item.condition}}元，充值享<span class="discount">{{item.sale}}折</span>优惠</p>
         </div>
       </div>
     </div>
@@ -57,6 +57,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {splicLogo} from '../../../static/js/common.js'
     export default {
         name: "mem_server",
       components: {
@@ -70,6 +71,10 @@
           memData: {
 
           },
+          companyData: {
+
+          },
+          sonsumptRecord: 0
         }
       },
       methods: {
@@ -83,14 +88,21 @@
         /*总菜单操作e*/
       },
       created() {
-          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          this.$ajax.get('/company_info',{params: {name: 'member',cid: companyInfo.id}})
-            .then((res)=>{
-              console.log(res);
-              if (res.data.state != 400) {
-                this.memData = res.data.standard;
-              }
-            })
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        splicLogo(companyInfo,1);
+        this.companyData = companyInfo;
+        this.$ajax.get('/vip/levels')
+          .then((res)=>{
+            if (res.data.state != 400) {
+              this.memData = res.data;
+            }
+          })
+        this.$ajax.get('/company/recharge/lump-sum',{params: {cid: companyInfo.id}})
+          .then((res)=>{
+            if (res.data.state != 400) {
+              this.sonsumptRecord = res.data;
+            }
+          })
       }
     }
 </script>
