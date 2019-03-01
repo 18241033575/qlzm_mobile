@@ -55,6 +55,7 @@ import invoice_msg from '@/components/company/invoice_msg'
 import tax_invoice from '@/components/company/tax_invoice'
 import enterp_mien from '@/components/company/enterp_mien'
 import enterp_ident from '@/components/company/enterp_ident'
+import pos_highlights from '@/components/company/pos_highlights'
 
 //个人中心组件
 import main_menu from '@/components/common/main_menu'
@@ -346,6 +347,11 @@ export default new Router({
       path: '/enterp_ident',
       name: 'enterp_ident',
       component: enterp_ident
+    },
+    {
+      path: '/pos_highlights',
+      name: 'pos_highlights',
+      component: pos_highlights
     }
   ]
 })

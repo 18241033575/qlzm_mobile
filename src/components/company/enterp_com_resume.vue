@@ -1,6 +1,6 @@
 <template>
   <!--企业中心 应聘、购买、收藏、面试邀请、被收藏简历列表-->
-    <div class="com_resume">
+    <div class="com_resume" :class="{stop_scroll: this.boxState}">
       <div class="com_det_title">
         <div class="content">
           {{comTitle}}
@@ -26,10 +26,10 @@
         <div class="opera_list" v-if="this.orign == 'buy'">
           <div class="content">
             <div class="opera_cell">
-              删除记录
-            </div>
-            <div class="opera_cell">
               下载简历
+            </div>
+            <div class="opera_cell pos_del">
+              删除记录
             </div>
           </div>
         </div>
@@ -42,14 +42,15 @@
         </div>
         <div class="opera_list" v-if="this.orign == 'invite'">
           <div class="content">
+
             <div class="opera_cell">
-              删除
+              录用
             </div>
-            <div class="opera_cell">
+            <div class="opera_cell pos_del">
               未录用
             </div>
             <div class="opera_cell pos_del">
-              录用
+              删除
             </div>
           </div>
         </div>
@@ -136,7 +137,7 @@
           }else if (org == 'buy') {
             this.orign = 'buy';
             this.comTitle = '购买的简历';
-            this.$ajax.get('/company_by_resume',{params:{cid: companyInfo.id}})
+            this.$ajax.get('/resume/already-buy',{params:{cid: companyInfo.id}})
               .then((res)=>{
                 if (res.data.state != 400) {
                   transSalary(res.data,2);
@@ -148,10 +149,30 @@
               })
           }else if (org == 'collect') {
             this.orign = 'collect';
-            this.comTitle = '收藏的简历'
+            this.comTitle = '收藏的简历';
+            this.$ajax.get('/resume/get-collect',{params:{cid: companyInfo.id}})
+              .then((res)=>{
+                if (res.data.state != 400) {
+                  transSalary(res.data,2);
+                  getTrueAge(res.data,2);
+                  transEducation(res.data,0);
+                  transWorkexp(res.data,0);
+                  this.commonData = res.data;
+                }
+              })
           }else if (org == 'invite') {
             this.orign = 'invite';
-            this.comTitle = '发出的面试邀请'
+            this.comTitle = '发出的面试邀请';
+            this.$ajax.get('/company/get-interviews',{params:{cid: companyInfo.id}})
+              .then((res)=>{
+                if (res.data.state != 400) {
+                  transSalary(res.data,2);
+                  getTrueAge(res.data,2);
+                  transEducation(res.data,0);
+                  transWorkexp(res.data,0);
+                  this.commonData = res.data;
+                }
+              })
           }else if (org == 'collected') {
             this.orign = 'collected';
             this.comTitle = '收藏过我';
@@ -189,6 +210,10 @@
     height: 22px;
   }
   .tal_det{
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     font-size: 12px;
     color: #919199;
     line-height: 24px;
@@ -202,7 +227,7 @@
   }
   /*职位管理操作弹层*/
   .pos_opera_box{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     display: flex;

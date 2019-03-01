@@ -98,7 +98,7 @@
       <div class="filter_det">
         <div class="filter_s_title">
           <div class="content">
-            <img @click="first_back" src="/static/images/left.png" alt="left">{{top_title}}
+            <img @click="secondBoxBg" src="/static/images/left.png" alt="left">{{top_title}}
           </div>
         </div>
         <div class="content">
@@ -214,6 +214,10 @@
           this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": this.cityCode[0], "city": this.cityCode[1], "area": this.cityCode[2], "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
+                // 提交但是没有生效
+                // 重新给userMsg赋值并处理数据
+                console.log(this.userMsg);
+
                 this.edit = true;
               }
             })
@@ -238,11 +242,6 @@
           this.secondBox = false
         },
         secondBoxBg() {
-          // this.firstBox = false;
-          this.secondBox = false
-        },
-        first_back() {
-          this.firstBox = true;
           this.secondBox = false
         },
         have_job() {

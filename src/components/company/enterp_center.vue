@@ -9,7 +9,7 @@
       <div class="enterp_msg">
         <div class="content">
           <div class="com_logo fl">
-            <img :src="centerDetData.logo" alt="">
+            <img :src="centerDetData.logo || '/static/images/company_def_logo.png'" alt="">
           </div>
           <div class="com_msg fl">
             <p class="com_name">{{enterp_centerData.name}}</p>

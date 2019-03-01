@@ -7,25 +7,11 @@
         </div>
       </div>
       <div class="resume_list">
-        <div class="resume_list_cell">
+        <div class="resume_list_cell" v-for="(item,index) in this.manageData" :key="index">
           <div class="content">
-            <p class="tal_name"><span>一级建造师</span>-<span>建筑工程</span><img @click="pos_opera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
-            <p class="tal_det"><span class="s_sign ugent">急聘</span><span v-show="false" class="s_sign unrelease">未发布</span><span class="s_sign releaseing">发布中</span><span class="s_sign auto">自动</span><span>三天前</span><span>|</span><span>5人投递</span></p>
-            <p class="tal_det"><span class="hope_salary">6001 - 8000/月</span><span>贵阳</span><span>|</span><span>三年以上</span><span>|</span><span>大专</span><span>|</span><span>全职</span></p>
-          </div>
-        </div>
-        <div class="resume_list_cell">
-          <div class="content">
-            <p class="tal_name"><span>一级建造师</span>-<span>建筑工程</span><img class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
-            <p class="tal_det"><span class="s_sign ugent">急聘</span><span v-show="false" class="s_sign unrelease">未发布</span><span class="s_sign releaseing">发布中</span><span class="s_sign auto">自动</span><span>三天前</span><span>|</span><span>5人投递</span></p>
-            <p class="tal_det"><span class="hope_salary">6001 - 8000/月</span><span>贵阳</span><span>|</span><span>三年以上</span><span>|</span><span>大专</span><span>|</span><span>全职</span></p>
-          </div>
-        </div>
-        <div class="resume_list_cell">
-          <div class="content">
-            <p class="tal_name"><span>一级建造师</span>-<span>建筑工程</span><img class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
-            <p class="tal_det"><span class="s_sign ugent">急聘</span><span v-show="false" class="s_sign unrelease">未发布</span><span class="s_sign releaseing">发布中</span><span class="s_sign auto">自动</span><span>三天前</span><span>|</span><span>5人投递</span></p>
-            <p class="tal_det"><span class="hope_salary">6001 - 8000/月</span><span>贵阳</span><span>|</span><span>三年以上</span><span>|</span><span>大专</span><span>|</span><span>全职</span></p>
+            <p class="tal_name"><span>{{item.office_name}}</span><img :id="item.id" :cid="item.cid" @click="pos_opera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
+            <p class="tal_det"><span v-if="item.is_urgent == 1" class="s_sign ugent">急聘</span><span v-show="item.is_release == 0" class="s_sign unrelease">未发布</span><span v-show="item.is_release == 1" class="s_sign releaseing">发布中</span><span v-if="item.is_auto == 1" class="s_sign auto">自动</span><span>{{item.up_time}}</span><span>|</span><span>{{item.user_apply.length}}人投递</span></p>
+            <p class="tal_det"><span class="hope_salary">{{item.transalary}}</span><span>{{item.city}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.nature==1?'项目':'全职'}}</span></p>
           </div>
         </div>
       </div>
@@ -56,6 +42,8 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {tranCity} from  '../../../static/js/distpicker'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../../static/js/common.js'
     export default {
         name: "pos_manage",
       components: {
@@ -66,7 +54,10 @@
         return {
           /*总菜单状态*/
           openState: false,
-          opera_state: false
+          opera_state: false,
+          manageData: {
+
+          },
         }
       },
       methods: {
@@ -84,6 +75,22 @@
         cancel_opera() {
           this.opera_state = false;
         }
+      },
+      created() {
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                tranCity(res.data,true,2);
+                transWorkexp(res.data,0);
+                transEducation(res.data,0);
+                transSalary(res.data,2);
+                for (let i = 0,len = res.data.length;i < len;i++) {
+                  res.data[i].up_time = getDistanceTime(res.data[i],2)
+                }
+                this.manageData = res.data;
+              }
+            })
       }
     }
 </script>

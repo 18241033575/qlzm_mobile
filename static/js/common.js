@@ -54,7 +54,6 @@ function transSalary(data,type,off) {
 
 function transNature(data,type,off) {
   const nature = [
-    "不限",
     "全职",
     "项目"
   ];
@@ -109,19 +108,12 @@ function transEducation(data,type) {
 function transWorkexp(data,type,classify) {
   //工作经验
   let workexp = [
-    "应届生",
     "1年以下",
     "1-3年",
     "3-5年",
     "5-10年",
     "10年以上"
   ];
-  if (classify == 'tal') {
-    workexp[0] = "应届生"
-  }else {
-    workexp[0] = "不限"
-  }
-
   let transData = data;
   if (type == 5) {
     return workexp
@@ -203,33 +195,45 @@ function transJobs(data,type) {
 }
 
 
-function getDistanceTime(time) {
-  var now = Date.parse(new Date()),
-    diff,
-    last;
-  if (time == 0 || time == '' || !time) {
-    return last = '未知时间';
+function getDistanceTime(time,type,off) {
+  if (type == 2) {
+    if (off == 'office') {
+      return getDTime(time.office.updated_at)
+    }else {
+      return getDTime(time.updated_at)
+    }
+  } else {
+    getDTime(time)
   }
-  diff = now / 1000 - time;
-  if (diff > (3600 * 24 * 30)) {
-    last = '1月前'
+  function getDTime(time) {
+    let now = Date.parse(new Date()),
+      diff,
+      last;
+    if (time == 0 || time == '' || !time) {
+      return last = '未知时间';
+    }
+    diff = now / 1000 - time;
+    if (diff > (3600 * 24 * 30)) {
+      last = '1月前'
+    }
+    else if (diff > (3600 * 24 * 7) && diff <= (3600 * 24 * 30)) {
+      last = Math.floor(diff / (3600 * 24 * 7)) + '周前';
+    }
+    else if (diff > (3600 * 24) && diff <= (3600 * 24 * 7)) {
+      last = Math.floor(diff / (3600 * 24)) + '天前';
+    }
+    else if (diff > 3600 && diff <= (3600 * 24)) {
+      last = Math.floor(diff / 3600) + '小时前';
+    }
+    else if (diff <= 3600 && diff > 60) {
+      last = Math.floor(diff / 60) + '分钟前';
+    }
+    else if (diff <= 60 || diff == undefined) {
+      last = '刚刚';
+    }
+    return last;
   }
-  else if (diff > (3600 * 24 * 7) && diff <= (3600 * 24 * 30)) {
-    last = Math.floor(diff / (3600 * 24 * 7)) + '周前';
-  }
-  else if (diff > (3600 * 24) && diff <= (3600 * 24 * 7)) {
-    last = Math.floor(diff / (3600 * 24)) + '天前';
-  }
-  else if (diff > 3600 && diff <= (3600 * 24)) {
-    last = Math.floor(diff / 3600) + '小时前';
-  }
-  else if (diff <= 3600 && diff > 60) {
-    last = Math.floor(diff / 60) + '分钟前';
-  }
-  else if (diff <= 60 || diff == undefined) {
-    last = '刚刚';
-  }
-  return last;
+
 }
 
 //时间戳转标准时间

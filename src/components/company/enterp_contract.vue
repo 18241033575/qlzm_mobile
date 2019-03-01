@@ -9,22 +9,22 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">联系人</span><input type="text"  placeholder="如: 张经理、王先生等">
+            <span class="edit_lab">联系人</span><input type="text" v-model="contractData.username"  placeholder="如: 张经理、王先生等(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">手机号码</span><input type="text"  placeholder="手机号码">
+            <span class="edit_lab">手机号码</span><input type="text" v-model="contractData.phone" placeholder="手机号码(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">座机号码</span><input type="text"  placeholder="座机号码">
+            <span class="edit_lab">座机号码</span><input type="text" v-model="contractData.tel" placeholder="座机号码">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">微信</span><input type="text"  placeholder="微信">
+            <span class="edit_lab">微信</span><input type="text" v-model="contractData.wx" placeholder="微信">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">QQ</span><input type="text"  placeholder="QQ">
+            <span class="edit_lab">QQ</span><input type="text" v-model="contractData.qq" placeholder="QQ">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">电子邮箱</span><input type="text"  placeholder="电子邮箱">
+            <span class="edit_lab">电子邮箱</span><input type="text" v-model="contractData.email"  placeholder="电子邮箱">
           </div>
         </div>
       </div>
@@ -49,24 +49,9 @@
         return {
           /*总菜单状态*/
           openState: false,
-          menuList: {
-            0: {
-              urlName: "企业资料",
-              urlRoute: "recruit_manage"
-            },
-            1: {
-              urlName: "企业风采",
-              urlRoute: "find_job"
-            },
-            2:{
-              urlName: "联系信息",
-              urlRoute: "enterp_contract"
-            },
-            3: {
-              urlName: "企业认证",
-              urlRoute: "index"
-            }
-          },
+          contractData: {
+
+          }
         }
       },
       methods: {
@@ -78,6 +63,13 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+      },
+      created() {
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.get('/company_contacts')
+            .then((res)=>{
+              console.log(res);
+            })
       }
     }
 </script>

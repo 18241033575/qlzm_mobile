@@ -15,7 +15,7 @@
           </div>
           <div class="ugent_bottom">
             <span class="tags">{{item.office.city}}</span> | <span class="tags">{{item.office.work_exp}}</span> | <span class="tags">{{item.office.education}}</span> | <span
-            class="tags">{{item.office.nature}}</span><span class="update_time fr">{{item.created_at}}</span>
+            class="tags">{{item.office.nature}}</span><span class="update_time fr">{{item.office.up_time}}</span>
             <p><img v-if="item.office.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company.name}}</p>
           </div>
         </div>
@@ -40,7 +40,7 @@
             /*总菜单状态*/
             openState: false,
             titleMsg: '简历投递记录',
-            del_colData: {}
+            del_colData: {},
           }
       },
       created() {
@@ -58,7 +58,10 @@
                 transNature(res.data,2,'office');
                 transEducation(res.data,2);
                 transSalary(res.data,2,'office');
-                this.del_colData = res.data
+                for (let i = 0,len = res.data.length;i < len;i++) {
+                  res.data[i].office.up_time = getDistanceTime(res.data[i],2,'office')
+                }
+                this.del_colData = res.data;
               }
             })
         }else {
@@ -72,6 +75,9 @@
                 transEducation(res.data,2);
                 getDistanceTime(res.data);
                 transSalary(res.data,2,'office');
+                for (let i = 0,len = res.data.length;i < len;i++) {
+                  res.data[i].office.up_time = getDistanceTime(res.data[i],2,'office')
+                }
                 this.del_colData = res.data
               }
             })
@@ -134,6 +140,7 @@
 
   .ugent_bottom {
     margin-top: 10px;
+    color: #919199;
   }
 
   .ugent_bottom p {
@@ -152,7 +159,6 @@
 
   .tags {
     font-size: 12px;
-    color: #919199;
   }
 
   .update_time {
