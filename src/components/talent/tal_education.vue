@@ -69,13 +69,22 @@
           </div>
         </div>
       </div>
-      <div class="edit_btn_group">
+      <div class="edit_btn_group" v-if="!this.save_editSign">
         <div class="content">
           <div class="group_box">
             <div class="edit_btn_cell del_btn">
               删除
             </div>
             <div class="edit_btn_cell save_btn" @click="saveEdu">
+              保存
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="edit_btn_group" v-if="this.save_editSign">
+        <div class="content">
+          <div class="group_box">
+            <div class="save_btn_cell save_btn" @click="saveEdu">
               保存
             </div>
           </div>
@@ -120,6 +129,7 @@
       return {
         /*总菜单状态*/
         openState: false,
+        save_editSign: true,
         eduData: {},
         operaData: {
           school: '',
@@ -157,8 +167,10 @@
       },
       /*总菜单操作e*/
       add_work_exp() {
+        this.save_editSign = true;
         this.workExpSign = false;
-        this.editMsg = '添加教育经历'
+        this.editMsg = '添加教育经历';
+        // 时间初始化 、行业性质、工作性质初始化  ；删除功能 和 新增功能
       },
       is_jobNature() {
         this.jobNature = 1
@@ -207,6 +219,7 @@
       },
       edu_edit(e) {
         let eduId = e.currentTarget.getAttribute('edu-data');
+        this.save_editSign = false;
         this.edit_Id = eduId;
         for(let i = 0,len = this.eduData.length;i < len; i++) {
           if (this.eduData[i].id == eduId) {

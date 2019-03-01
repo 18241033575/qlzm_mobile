@@ -475,7 +475,7 @@ function getTrueAge(data,type) {
     return trueAge
   }
 }
-
+// 工作经验和教育经历公司和个人应该有不同的版本
 
 export {
   transSalary,

@@ -59,13 +59,22 @@
             <textarea placeholder="在这里填写备注内容" v-model="remark" name="remark"></textarea>
           </div>
         </div>
-        <div class="edit_btn_group">
+        <div class="edit_btn_group" v-if="!this.save_editSign">
           <div class="content">
             <div class="group_box">
               <div class="edit_btn_cell del_btn">
                 删除
               </div>
               <div class="edit_btn_cell save_btn" @click="certSave">
+                保存
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="edit_btn_group" v-if="this.save_editSign">
+          <div class="content">
+            <div class="group_box">
+              <div class="save_btn_cell save_btn" @click="certSave">
                 保存
               </div>
             </div>
@@ -115,6 +124,7 @@
         return {
           /*总菜单状态*/
           openState: false,
+          save_editSign: true,
           workExpSign: true,
           certData: {},
           editMsg: '',
@@ -149,8 +159,10 @@
         },
         /*总菜单操作e*/
         add_work_exp() {
+          this.save_editSign = true;
           this.workExpSign = false;
-          this.editMsg = '添加证书'
+          this.editMsg = '添加证书';
+          // 时间初始化 、行业性质、工作性质初始化  ；删除功能 和 新增功能
         },
         man_workNature() {
           this.regState = 0
@@ -278,6 +290,7 @@
         },
         certEdit(e) {
           let certEditId = e.currentTarget.getAttribute('cert-id');
+          this.save_editSign = false;
           this.certEdit_id = certEditId;
           this.workExpSign = false;
           this.editMsg = '编辑证书';

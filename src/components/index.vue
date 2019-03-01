@@ -219,9 +219,7 @@
                 transNature(res.data,2);
                 transEducation(res.data);
                 transWorkexp(res.data);
-
                 this.ugentData = res.data;
-                console.log(this.ugentData);
                 for (let i = 0;i < this.ugentData.length; i++) {
                   this.ugentData[i].created_at = getDistanceTime(this.ugentData[i].created_at)
                 }

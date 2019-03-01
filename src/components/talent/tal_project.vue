@@ -92,13 +92,22 @@
           <textarea placeholder="在这里填写你在项目中的业绩" v-model="proAllData.duties"></textarea>
         </div>
       </div>
-      <div class="edit_btn_group">
+      <div class="edit_btn_group" v-if="!this.save_editSign">
         <div class="content">
           <div class="group_box">
             <div class="edit_btn_cell del_btn">
               删除
             </div>
             <div class="edit_btn_cell save_btn" @click="pro_save">
+              保存
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="edit_btn_group" v-if="this.save_editSign">
+        <div class="content">
+          <div class="group_box">
+            <div class="save_btn_cell save_btn" @click="pro_save">
               保存
             </div>
           </div>
@@ -123,6 +132,7 @@
       return {
         /*总菜单状态*/
         openState: false,
+        save_editSign: true,
         projcetData: {},
         workExpSign: true,
         editMsg: '',
@@ -157,8 +167,10 @@
       },
       /*总菜单操作e*/
       add_work_exp() {
+        this.save_editSign = true;
         this.workExpSign = false;
-        this.editMsg = '添加项目经验'
+        this.editMsg = '添加项目经验';
+        // 时间初始化 、行业性质、工作性质初始化  ；删除功能 和 新增功能
       },
       is_jobNature() {
         this.jobNature = 1
@@ -194,6 +206,7 @@
       },
       pro_edit(e) {
         let proId = e.currentTarget.getAttribute('projcet-id');
+        this.save_editSign = false;
         this.pro_Id = proId;
         this.editMsg = '编辑项目经验';
         this.workExpSign = false;

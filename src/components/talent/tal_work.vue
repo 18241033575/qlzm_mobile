@@ -87,13 +87,22 @@
             <textarea placeholder="在这里填写职责内容" v-model="workexpAllData.duties" id="" cols="30" rows="10"></textarea>
           </div>
         </div>
-        <div class="edit_btn_group">
+        <div class="edit_btn_group" v-if="!this.save_editSign">
           <div class="content">
             <div class="group_box">
               <div class="edit_btn_cell del_btn">
                 删除
               </div>
               <div class="edit_btn_cell save_btn" @click="workexp_save">
+                保存
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="edit_btn_group" v-if="this.save_editSign">
+          <div class="content">
+            <div class="group_box">
+              <div class="save_btn_cell save_btn" @click="workexp_save">
                 保存
               </div>
             </div>
@@ -117,6 +126,7 @@
           return {
             /*总菜单状态*/
             openState: false,
+            save_editSign: true,
             workData: {},
             workEditData: {},
             workExpSign: true,
@@ -152,8 +162,15 @@
         },
         /*总菜单操作e*/
         add_work_exp() {
+          this.save_editSign = true;
           this.workExpSign = false;
-          this.editMsg = '添加工作经历'
+          this.editMsg = '添加工作经历';
+          this.workexpAllData.company = '';
+          this.workexpAllData.job = '';
+          this.workexpAllData.salary = '';
+          this.workexpAllData.duties = '';
+          // 时间初始化 、行业性质、工作性质初始化  ；删除功能 和 新增功能
+
         },
         is_jobNature() {
           this.jobNature = 1
@@ -191,6 +208,7 @@
         },
         workexp_edit(e) {
           let workexpId = e.currentTarget.getAttribute('work-id');
+          this.save_editSign = false;
           this.workexp_Id = workexpId;
           this.editMsg = '编辑工作经历';
           this.workExpSign = false;
