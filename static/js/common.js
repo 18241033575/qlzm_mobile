@@ -329,7 +329,6 @@ const file_upload = '//file.wiiwork.com/v1/upload';
 //拼接图片地址
 function splicPic(data, add) {
   if (add) {
-
     return data = file_server + data;
   }
 }

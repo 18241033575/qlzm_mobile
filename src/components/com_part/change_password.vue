@@ -8,9 +8,9 @@
       </div>
     </div>
     <div class="phone_cell">
-      <el-input class="common_input" v-model="acount" placeholder="请输入旧密码"></el-input>
-      <el-input class="common_input" v-model="password" type="password" placeholder="设置新密码"></el-input>
-      <el-input class="common_input" v-model="config_password" type="password" placeholder="重复新密码"></el-input>
+      <el-input class="common_input" maxlength="16" minlength="6" v-model="old_password" placeholder="请输入旧密码"></el-input>
+      <el-input class="common_input" @blur="blur()" maxlength="16" minlength="6"  v-model="password" type="password" placeholder="设置新密码"></el-input>
+      <el-input class="common_input" @blur="blur()" maxlength="16" minlength="6"  v-model="config_password" type="password" placeholder="重复新密码"></el-input>
     </div>
     <div class="content">
       <div class="bas_msg_btn" @click="change_submit">
@@ -34,7 +34,7 @@
           return {
             /*总菜单状态*/
             openState: false,
-            acount: '',
+            old_password: '',
             password: '',
             config_password: ''
           }
@@ -49,9 +49,25 @@
         },
         /*总菜单操作e*/
         change_submit() {
-          this.$router.push({name: 'success_page',query:{orig: 'password'}})
-        }
-      }
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if (companyInfo) {
+            this.$ajax.post('/company/changepasswd',{cid: companyInfo.id,old_password: this.old_password,password: this.password,config_password: this.config_password})
+              .then((res)=>{
+
+              })
+          }
+          // this.$router.push({name: 'success_page',query:{orig: 'password'}})
+          /*this.$ajax.post('/perosnal/changepasswd',{old_password: this.old_password,password: this.password,config_password: this.config_password})
+            .then((res)=>{
+
+            })*/
+        },
+        blur() {
+          if (this.password != this.config_password) {
+            console.log(1);
+          }
+        },
+       }
     }
 </script>
 

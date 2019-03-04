@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 
 //注册、登录、主页
 import index from '@/components/index'
@@ -22,6 +21,9 @@ import change_phone from '@/components/com_part/change_phone'
 import change_password from '@/components/com_part/change_password'
 import news from '@/components/com_part/news'
 import news_info from '@/components/com_part/news_info'
+import resume_det from '@/components/com_part/resume_det'
+import report from '@/components/com_part/report'
+import resume_invite from '@/components/com_part/resume_invite'
 
 //个人中心页面
 import tal_center from '@/components/talent/tal_center'
@@ -192,6 +194,30 @@ export default new Router({
       component: pos_det,
       meta: {
         title: '职位详情'
+      }
+    },
+    {
+      path: '/resume_det',
+      name: 'resume_det',
+      component: resume_det,
+      meta: {
+        title: '简历详情'
+      }
+    },
+    {
+      path: '/report',
+      name: 'report',
+      component: report,
+      meta: {
+        title: ''
+      }
+    },
+    {
+      path: '/resume_invite',
+      name: 'resume_invite',
+      component: resume_invite,
+      meta: {
+        title: ''
       }
     },
     {

@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-      <div class="enterp_button">
+      <div class="enterp_button" @click="save_contract">
         保存
       </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -63,12 +63,29 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+        save_contract() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.contractData.cid = companyInfo.id;
+          console.log(this.contractData);
+          this.$ajax.post('/company/contact-set', this.contractData)
+            .then((res)=>{
+              console.log(res);
+              if (res.data.state == 200) {
+                this.$message({
+                  message: '保存成功',
+                  type: 'success'
+                });
+              }
+            })
+        }
       },
       created() {
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          this.$ajax.get('/company_contacts')
+          this.$ajax.get('/company/get-contact',{params:{cid: companyInfo.id}})
             .then((res)=>{
-              console.log(res);
+              if (res.data.state != 400) {
+                this.contractData = res.data;
+              }
             })
       }
     }

@@ -12,16 +12,16 @@
             <span class="edit_lab">企业名称</span><input type="text"  placeholder="企业名称">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" :class="{idented:false}"><img src="" alt="">上传图片</span>
+            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" v-show="identData.state != 1">上传图片</span><span class="fr uppic_ident" v-show="identData.state != 1">重新上传</span><span class="fr idented" v-show="identData.state == 1"><img src="/static/images/ic_cm_auth.png" alt="">已认证</span>
           </div>
           <div class="ident_img">
-            <img v-show="false" class="license" src="/static/images/banner03@2x.png" alt="">
-            <img src="/static/images/ic_cm_pic@2x.png" alt="">
+            <img v-show="identData.state == 1" class="license" :src="identData.license" alt="">
+            <img v-show="identData.state != 1" src="/static/images/ic_cm_pic@2x.png" alt="">
             <p>支持JPG、PNG，大小不要超过2MB！</p>
           </div>
         </div>
       </div>
-      <div class="enterp_button">
+      <div class="enterp_button" v-show="identData.state != 1">
         提交认证
       </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -32,6 +32,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {splicPic} from '../../../static/js/common.js'
     export default {
         name: "enterp_ident",
       components: {
@@ -42,24 +43,9 @@
         return {
           /*总菜单状态*/
           openState: false,
-          menuList: {
-            0: {
-              urlName: "企业资料",
-              urlRoute: "enterp_info"
-            },
-            1: {
-              urlName: "企业风采",
-              urlRoute: "enterp_mien"
-            },
-            2:{
-              urlName: "联系信息",
-              urlRoute: "enterp_contract"
-            },
-            3: {
-              urlName: "企业认证",
-              urlRoute: "enterp_ident"
-            }
-          },
+          identData: {
+
+          }
         }
       },
       methods: {
@@ -71,8 +57,20 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+      },
+      created() {
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        this.$ajax.get('/company/get-auth',{params: {cid: companyInfo.id}})
+          .then((res)=>{
+            if (res.data.state != 400) {
+              splicPic(res.data.license,true);
+              this.identData = res.data;
+              console.log(this.identData);
+
+            }
+          })
       }
-    }
+     }
 </script>
 
 <style scoped>
@@ -159,6 +157,13 @@
     color: #919199;
   }
   .idented{
+    font-size: 14px;
     color: #ff8236;
+  }
+  .idented img{
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
   }
 </style>
