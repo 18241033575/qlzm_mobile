@@ -6,6 +6,22 @@
           全部职位
         </div>
       </div>
+      <div class="list">
+        <div class="content">
+          <div class="list_cell">
+            一键
+          </div>
+          <div class="list_cell">
+            一键
+          </div>
+          <div class="list_cell">
+            一键
+          </div>
+          <div class="list_cell">
+            一键
+          </div>
+        </div>
+      </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
@@ -36,20 +52,20 @@
           this.openState = data;
         },
         /*总菜单操作e*/
-        uploadLicense() {
-          this.uploadSign = true;
-        },
-        submitLicense() {
-          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          this.$ajax.post('/company/auth-set', {cid: companyInfo.id, license: this.licenseUrl})
-            .then((res) => {
-              console.log(res);
-            })
-        }
       }
     }
 </script>
 
 <style scoped>
-
+  .com_det_title{
+    background-color: #f0f1f5;
+  }
+  .list{
+    background-color: #ffffff;
+  }
+  .list_cell{
+    font-size: 14px;
+    color: #666666;
+    line-height: 44px;
+  }
 </style>

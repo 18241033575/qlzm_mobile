@@ -12,16 +12,16 @@
             <span class="edit_lab">企业名称</span><input type="text" :readonly="identData.state == 1"  v-model="companyInfo.name" placeholder="企业名称">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state != 1 && !uploadSign">上传图片</span><span class="fr uppic_ident" v-show="identData.state != 1 && uploadSign">重新上传</span><span class="fr idented" v-show="identData.state == 1"><img src="/static/images/ic_cm_auth.png" alt="">已认证</span>
+            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state == 0 && !uploadSign">上传图片</span><span class="fr uppic_ident" v-show="identData.state == 0 && uploadSign">重新上传</span><span class="fr uppic_ident" v-show="identData.state == -2">验证中</span><span class="fr idented" v-show="identData.state == 1"><img src="/static/images/ic_cm_auth.png" alt="">已认证</span>
           </div>
           <div class="ident_img">
-            <img v-show="identData.state == 1" class="license" :src="identData.license" alt="">
-            <img v-show="identData.state != 1" src="/static/images/ic_cm_pic@2x.png" alt="">
-            <p v-show="identData.state != 1">支持JPG、PNG，大小不要超过2MB！</p>
+            <img v-show="identData.state != 0" class="license" :src="identData.license" alt="">
+            <img v-show="identData.state == 0" src="/static/images/ic_cm_pic@2x.png" alt="">
+            <p v-show="identData.state == 0">支持JPG、PNG，大小不要超过2MB！</p>
           </div>
         </div>
       </div>
-      <div class="enterp_button" v-show="identData.state != 1" @click="submitLicense">
+      <div class="enterp_button" v-show="identData.state == 0" @click="submitLicense">
         提交认证
       </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -70,6 +70,9 @@
           this.$ajax.post('/company/auth-set',{cid: companyInfo.id,license: this.licenseUrl})
             .then((res)=>{
               console.log(res);
+              if (res.data.state == 200) {
+
+              }
             })
         }
       },
@@ -79,6 +82,7 @@
         this.$ajax.get('/company/get-auth',{params: {cid: companyInfo.id}})
           .then((res)=>{
             if (res.data.state != 400) {
+              // res.data.state = 0;
               this.licenseUrl = res.data.license;
               res.data.license = splicPic(res.data.license,true);
               this.identData = res.data;
