@@ -1,7 +1,7 @@
 <template>
   <div class="invoice_all">
     <!--增值税发票-->
-    <div class="tax_invoice" v-show="false">
+    <div class="tax_invoice" v-show="org=='tax'">
       <div class="com_det_title">
         <div class="content">
           增值税发票
@@ -10,28 +10,28 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">单位名称</span><input type="text"  placeholder="单位名称(必填)">
+            <span class="edit_lab">单位名称</span><input type="text" v-model="invTax.title"  placeholder="单位名称(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">纳税人识别号</span><input type="text"  placeholder="纳税人识别号(必填)">
+            <span class="edit_lab">纳税人识别号</span><input type="text" v-model="invTax.number"  placeholder="纳税人识别号(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">企业注册地址</span><input type="text"  placeholder="企业注册地址(必填)">
+            <span class="edit_lab">企业注册地址</span><input type="text" v-model="invTax.reg_address"  placeholder="企业注册地址(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">企业注册电话</span><input type="text"  placeholder="企业注册电话(必填)">
+            <span class="edit_lab">企业注册电话</span><input type="text" v-model="invTax.reg_tel" placeholder="企业注册电话(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">开户银行</span><input type="text"  placeholder="开户银行(必填)">
+            <span class="edit_lab">开户银行</span><input type="text" v-model="invTax.bank" placeholder="开户银行(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">银行账户</span><input type="text"  placeholder="银行账户(必填)">
+            <span class="edit_lab">银行账户</span><input type="text" v-model="invTax.bank_account" placeholder="银行账户(必填)">
           </div>
         </div>
       </div>
     </div>
     <!--普通发票-->
-    <div class="total_inv" v-show="false">
+    <div class="total_inv" v-show="org=='total'">
       <div class="com_det_title">
         <div class="content">
           普通发票
@@ -40,16 +40,16 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">发票抬头</span><input type="text"  placeholder="发票抬头(必填)">
+            <span class="edit_lab">发票抬头</span><input type="text" v-model="invTotal.title" placeholder="发票抬头(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">纳税人识别号</span><input type="text"  placeholder="纳税人识别号(必填)">
+            <span class="edit_lab">纳税人识别号</span><input type="text" maxlength="20" v-model="invTotal.number"  placeholder="纳税人识别号(必填)">
           </div>
         </div>
       </div>
     </div>
     <!--收件信息-->
-    <div class="in_inv">
+    <div class="in_inv" v-show="org=='msg'">
       <div class="com_det_title">
         <div class="content">
           收件信息
@@ -58,22 +58,22 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">收件人姓名</span><input type="text"  placeholder="收件人姓名(必填)">
+            <span class="edit_lab">收件人姓名</span><input type="text" v-model="invMsg.name" placeholder="收件人姓名(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">收件人手机</span><input type="text"  placeholder="收件人手机(必填)">
+            <span class="edit_lab">收件人手机</span><input type="text" v-model="invMsg.phone" placeholder="收件人手机(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">E-mail</span><input type="text"  placeholder="用于接收电子发票(必填)">
+            <span class="edit_lab">E-mail</span><input type="text" v-model="invMsg.email" placeholder="用于接收电子发票(必填)">
           </div>
           <div class="edit_cell special_cell ">
-            <span class="edit_lab">收件地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province"><span class="place_msg">{{userMsg.province || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place_msg">{{userMsg.city || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place_msg">{{userMsg.area || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
-            <input type="text" maxlength="20"  placeholder="详细地址，如：街道、门牌号等">
+            <span class="edit_lab">收件地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province"><span class="place_msg">{{transPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place_msg">{{transCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place_msg">{{transArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
+            <input type="text" maxlength="20" v-model="invMsg.address" placeholder="详细地址，如：街道、门牌号等">
           </div>
         </div>
       </div>
     </div>
-    <div class="enterp_button">
+    <div class="enterp_button" @click="inv_save">
       保存
     </div>
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -96,8 +96,33 @@
         return {
           /*总菜单状态*/
           openState: false,
-          userMsg: {},
           secondBox: false,
+          org: '',
+          backData: true,
+          invTotal: {
+            title: '',
+            number: ''
+          },
+          invTax: {
+            title: '',
+            number: '',
+            reg_address: '',
+            reg_tel: '',
+            bank: '',
+            bank_account: ''
+          },
+          invMsg: {
+            name: '',
+            phone: '',
+            email: '',
+            province: '',
+            city: '',
+            area: '',
+            address: ''
+          },
+          transPro: '',
+          transCity: '',
+          transArea: ''
         }
       },
       methods: {
@@ -124,6 +149,108 @@
           this.showMsg = 'area';
           this.secondBox = true;*/
         },
+        inv_save() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if (this.org == 'tax') {
+            if (!this.backData) {
+              this.$ajax.post('/company/add-vat-invoice',{cid: companyInfo.id,title: this.invTax.title,taxpayer_identification_number: parseInt(this.invTax.number),reg_address:  this.invTax.reg_address,
+                reg_tel: this.invTax.reg_tel,bank: this.invTax.bank,bank_account: this.invTax.bank_account})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$message({
+                      message: '保存成功',
+                      type: 'success'
+                    })
+                  }
+                })
+            } else {
+              this.$ajax.post(' /company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$message({
+                      message: '保存成功',
+                      type: 'success'
+                    })
+                  }
+                })
+            }
+          }
+          if (this.org == 'total') {
+            if (!this.backData) {
+              this.$ajax.post('/company/add-general-invoice',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$message({
+                      message: '保存成功',
+                      type: 'success'
+                    })
+                  }
+                })
+            } else {
+              this.$ajax.post(' /company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$message({
+                      message: '保存成功',
+                      type: 'success'
+                    })
+                  }
+                })
+            }
+
+          }
+        }
+      },
+      created() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.org = this.$route.query.org;
+        if (this.org == 'tax') {
+          this.$ajax.get('/company/vat-invoice',{params: {cid: companyInfo.id}})
+            .then((res)=>{
+              if (res.data != null) {
+                this.backData = true;
+                this.invTax.title = res.data.title;
+                this.invTax.number = res.data.taxpayer_identification_number;
+                this.invTax.reg_address = res.data.reg_address;
+                this.invTax.reg_tel = res.data.reg_tel;
+                this.invTax.bank = res.data.bank;
+                this.invTax.bank_account = res.data.bank_account;
+              } else {
+                this.backData = false;
+              }
+            })
+        }
+          if (this.org == 'total') {
+            this.$ajax.get('/company/general-invoice',{params: {cid: companyInfo.id}})
+              .then((res)=>{
+                if (res.data != null) {
+                  this.backData = true;
+                  this.invTotal.title = res.data.title;
+                  this.invTotal.number = res.data.taxpayer_identification_number;
+                } else {
+                  this.backData = false;
+                }
+              })
+          }
+
+        if (this.org == 'msg') {
+          this.$ajax.get('/company/get-addressee',{params: {cid: companyInfo.id}})
+            .then((res)=>{
+              if (res.data != null) {
+                this.backData = true;
+                this.invMsg.name = res.data.name;
+                this.invMsg.phone = res.data.phone;
+                this.invMsg.email = res.data.email;
+                this.invMsg.province = res.data.province;
+                this.invMsg.city = res.data.city;
+                this.invMsg.area = res.data.area;
+                this.invMsg.address = res.data.address;
+              } else {
+                this.backData = false;
+              }
+            })
+        }
+
       }
     }
 </script>

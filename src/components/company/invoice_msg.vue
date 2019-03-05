@@ -9,7 +9,7 @@
     <!--分类链接-->
     <div class="menu_list">
       <div class="content">
-        <router-link :to="{name: item.urlRoute}" v-for="(item,index) in menuList" :key="index">
+        <router-link :to="{name: item.urlRoute,query: {org: item.org}}" v-for="(item,index) in menuList" :key="index">
           <div class="menu_list_cell" >
             {{item.urlName}}<img class="fr" src="/static/images/icon_goright.png" alt="">
           </div>
@@ -45,15 +45,18 @@
           menuList: {
             0: {
               urlName: "增值税发票信息设置",
-              urlRoute: "tax_invoice"
+              urlRoute: "tax_invoice",
+              org: "tax"
             },
             1: {
               urlName: "普通发票信息设置",
-              urlRoute: "tax_invoice"
+              urlRoute: "tax_invoice",
+              org: "total"
             },
             2:{
               urlName: "收件信息设置",
-              urlRoute: "tax_invoice"
+              urlRoute: "tax_invoice",
+              org: "msg"
             }
           },
         }
