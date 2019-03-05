@@ -211,7 +211,8 @@
         }
       },
       created() {
-        this.$ajax.get('/resume/userinfo',{params:{uid: 13}})
+        let uid = this.$route.query.uid;
+        this.$ajax.get('/resume/userinfo',{params:{uid: uid}})
           .then((res)=>{
             if (res.data.state!= 400) {
               tranArea(res.data.base_info,true,0);
@@ -223,7 +224,7 @@
               this.userMsg = res.data.base_info;
             }
           });
-        this.$ajax.get('/resume/userinfo',{params:{uid: 13}})
+        this.$ajax.get('/resume/userinfo',{params:{uid: uid}})
           .then((res)=>{
             if (res.data.state!= 400) {
               // this.ArriveId = res.data.career_objective.duty_time;
@@ -244,7 +245,7 @@
               this.remark = this.intJobData.remark
             }
           });
-        this.$ajax.get('/resume/workexp',{params: {uid: 13}})
+        this.$ajax.get('/resume/workexp',{params: {uid: uid}})
           .then((res)=>{
             if (res.data.state != 400) {
               this.workData = res.data;
@@ -264,7 +265,7 @@
               }
             }
           });
-        this.$ajax.get('/resume/eduexp',{params: {uid: 13}})
+        this.$ajax.get('/resume/eduexp',{params: {uid: uid}})
           .then((res)=>{
             if (res.data.state != 400) {
               transEducation(res.data);
@@ -284,7 +285,7 @@
               sessionStorage.setItem('CERT',params);
             })
         }
-        this.$ajax.get('/resume/certificate',{params: {uid: 13}})
+        this.$ajax.get('/resume/certificate',{params: {uid: uid}})
           .then((res)=>{
             if (res.data.state != 400) {
               // this.certAllData = res.data;
@@ -313,7 +314,7 @@
               this.certsData = res.data;
             }
           });
-        this.$ajax.get('/resume/userinfo',{params:{uid: 13}})
+        this.$ajax.get('/resume/userinfo',{params:{uid: uid}})
           .then((res)=>{
             if (res.data.state!= 400) {
               res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,true);

@@ -7,9 +7,9 @@
         </div>
       </div>
       <div class="resume_list">
-        <div class="resume_list_cell" v-for="(item,index) in this.commonData" :key="index" @click="tal_det">
+        <div class="resume_list_cell" v-for="(item,index) in this.commonData" :uid="item.uid" :key="index" @click="tal_det">
           <div class="content">
-            <p class="tal_name">{{item.name}}<img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
+            <p class="tal_name">{{item.name}}<img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
             <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
             <p class="tal_det">期望薪资:<span class="hope_salary">{{item.transalary}}</span></p>
           </div>
@@ -123,7 +123,8 @@
             })
         },
         tal_det(e) {
-          this.$router.push({name: 'resume_det'})
+          let uid = e.currentTarget.getAttribute('uid');
+          this.$router.push({name: 'resume_det',query: {uid: uid}});
         }
       },
       created() {
