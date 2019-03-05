@@ -76,19 +76,31 @@
               urlName: "找工作",
               urlRoute: "find_job"
             },
-            2:{
+            2: {
+              urlName: "找人才",
+              urlRoute: "find_job"
+            },
+            3:{
               urlName: "名企招聘",
               urlRoute: "famous_pos"
             },
-            3:{
+            4:{
+              urlName: "劳务派遣",
+              urlRoute: "famous_pos"
+            },
+            5:{
+              urlName: "骑驴找马",
+              urlRoute: "famous_pos"
+            },
+            6:{
               urlName: "就业指导",
               urlRoute: "index"
             },
-            4:{
+            7:{
               urlName: "新闻资讯",
               urlRoute: "news"
             },
-            5:{
+            8:{
               urlName: "关于我们",
               urlRoute: "index"
             },

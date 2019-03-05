@@ -20,7 +20,7 @@
     <div class="mem_opera">
       <div class="content">
         <div class="mem_opera_list">
-          <router-link :to="{name: 'index'}" class="mem_opera_cell">
+          <router-link :to="{name: 'my_integral'}" class="mem_opera_cell">
             <img src="/static/images/ic_cm_integral@2x.png" alt="">
             <p>我的积分</p>
           </router-link>

@@ -24,6 +24,7 @@ import news_info from '@/components/com_part/news_info'
 import resume_det from '@/components/com_part/resume_det'
 import report from '@/components/com_part/report'
 import resume_invite from '@/components/com_part/resume_invite'
+import all_pos from '@/components/com_part/all_pos'
 
 //个人中心页面
 import tal_center from '@/components/talent/tal_center'
@@ -58,6 +59,7 @@ import tax_invoice from '@/components/company/tax_invoice'
 import enterp_mien from '@/components/company/enterp_mien'
 import enterp_ident from '@/components/company/enterp_ident'
 import pos_highlights from '@/components/company/pos_highlights'
+import my_integral from '@/components/company/my_integral'
 
 //个人中心组件
 import main_menu from '@/components/common/main_menu'
@@ -221,6 +223,14 @@ export default new Router({
       }
     },
     {
+      path: '/all_pos',
+      name: 'all_pos',
+      component: all_pos,
+      meta: {
+        title: ''
+      }
+    },
+    {
       path: '/tal_center',
       name: 'tal_center',
       component: tal_center,
@@ -378,6 +388,11 @@ export default new Router({
       path: '/pos_highlights',
       name: 'pos_highlights',
       component: pos_highlights
+    },
+    {
+      path: '/my_integral',
+      name: 'my_integral',
+      component: my_integral
     }
   ]
 })

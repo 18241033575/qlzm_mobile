@@ -39,7 +39,7 @@
     <!--主导航-->
     <div class="main_nav_cell">
       <div class="content">
-        <router-link :to="{}">
+        <router-link :to="{name: 'all_pos'}">
           <div class="nav_cell">
             <img src="/static/images/ic_jobs@2x.png" alt="">
             <p>全部职位</p>
@@ -51,16 +51,16 @@
             <p>找工作</p>
          </div>
         </router-link>
+        <router-link :to="{}">
+          <div class="nav_cell">
+            <img src="/static/images/ic_rencai@2x.png" alt="">
+            <p>找人才</p>
+          </div>
+        </router-link>
         <router-link :to="{name: 'famous_pos'}">
           <div class="nav_cell">
             <img src="/static/images/ic_mingqi@2x.png" alt="">
             <p>名企招聘</p>
-          </div>
-        </router-link>
-        <router-link :to="{}">
-          <div class="nav_cell">
-            <img src="/static/images/ic_jyzd@2x.png" alt="">
-            <p>就业指导</p>
           </div>
         </router-link>
         <router-link :to="{name: 'news'}">
