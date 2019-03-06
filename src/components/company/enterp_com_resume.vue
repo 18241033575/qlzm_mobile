@@ -7,11 +7,18 @@
         </div>
       </div>
       <div class="resume_list">
-        <div class="resume_list_cell" v-for="(item,index) in this.commonData" :uid="item.uid" :key="index" @click="tal_det">
+        <div class="resume_list_cell" v-if="!orignState" v-for="(item,index) in this.commonData" :uid="item.uid" :key="index" @click="tal_det">
           <div class="content">
             <p class="tal_name">{{item.name}}<img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
             <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
             <p class="tal_det">期望薪资:<span class="hope_salary">{{item.transalary}}</span></p>
+          </div>
+        </div>
+        <div class="resume_list_cell" v-if="orignState" v-for="(item,index) in this.commonData" :uid="item.user_info.uid" :key="index" @click="tal_det">
+          <div class="content">
+            <p class="tal_name">{{item.user_info.name}}<span class="app_pos" >(应聘职位: {{item.office.office_name}})</span><img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
+            <p class="tal_det"><span>{{item.user_info.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.user_info.work_exp}}</span><span>|</span><span>{{item.user_info.education}}</span><span>|</span><span>{{item.user_info.major==''?'无专业':item.user_info.major}}</span></p>
+            <p class="tal_det">期望薪资:<span class="hope_salary">{{item.user_info.transalary}}</span></p>
           </div>
         </div>
       </div>
@@ -84,6 +91,7 @@
           opera_state: true,
           comTitle: '',
           boxState: false,
+          orignState: true,
           info_id: 0,
           uid: 0,
           orign: '',
@@ -129,14 +137,23 @@
       },
       created() {
           let  org = this.$route.query.orign;
+          this.orignState = org == 'app'?true:false;
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.opera_state = org=='app'? true:false;
           if (org == 'app') {
             this.orign = 'app';
             this.comTitle = '应聘简历';
-            this.$ajax.get()
+            this.$ajax.get('/resume/get-apply',{params:{cid: companyInfo.id}})
               .then((res)=>{
-                console.log(res);
+                if (res.data.state != 400) {
+                  for (let i = 0,len = res.data.length;i < len;i++) {
+                    res.data[i].age = getTrueAge(res.data[i].user_info.birthday,1);
+                    res.data[i].user_info.salary = transSalary(res.data[i].user_info,1);
+                    res.data[i].user_info.education = transEducation(res.data[i].user_info,1);
+                    res.data[i].user_info.work_exp = transWorkexp(res.data[i].user_info,1);
+                  }
+                  this.commonData = res.data;
+                }
               })
           }else if (org == 'buy') {
             this.orign = 'buy';
@@ -258,5 +275,10 @@
   }
   .pos_del{
     color: #ff5959;
+  }
+  .app_pos{
+    margin-left: 5px;
+    font-size: 12px;
+    color: #919199;
   }
 </style>

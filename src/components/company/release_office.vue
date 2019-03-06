@@ -178,7 +178,15 @@
         },
         /*总菜单操作e*/
         release() {
-          console.log('发布成功');
+          if (this.form.hire_num == '') {
+            this.form.hire_num = 0;
+          }
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/office/first-release',{office_name: this.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
+            province: 520000,city: 520100,area: 520101,address: '',salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: '',hire_num: this.form.hire_num,tags: [0,1],has_m: 1,is_urgent: 1})
+            .then((res)=>{
+              console.log(res);
+            })
         },
         ProCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');

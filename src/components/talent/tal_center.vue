@@ -136,7 +136,7 @@
         },
         /*总菜单操作e*/
         to_msg() {
-            this.$router.push({name: 'tal_invited'})
+            this.$router.push({name: 'sys_msg'})
         }
       },
       created() {

@@ -97,7 +97,7 @@ function transEducation(data,type) {
         transData[i].office.education = education[transData[i].office.education]
     }
   }else if(type == 1) {
-    transData.education = education[transData.education]
+    return transData.education = education[transData.education]
   }else {
     for (let i = 0; i < transData.length; i++) {
       transData[i].education = education[transData[i].education]
@@ -124,7 +124,7 @@ function transWorkexp(data,type,classify) {
         transData[i].office.work_exp = workexp[transData[i].office.work_exp]
     }
   }else if(type == 1) {
-    transData.work_exp = workexp[transData.work_exp]
+    return transData.work_exp = workexp[transData.work_exp]
   }else {
     for (let i = 0; i < transData.length; i++) {
       transData[i].work_exp = workexp[transData[i].work_exp]
@@ -203,7 +203,7 @@ function getDistanceTime(time,type,off) {
       return getDTime(time.updated_at)
     }
   } else {
-    getDTime(time)
+    return getDTime(time)
   }
   function getDTime(time) {
     let now = Date.parse(new Date()),
@@ -455,7 +455,7 @@ function getTrueAge(data,type) {
       data[i].age = getAge(data[i].birthday)
     }
   } else {
-    getAge(data)
+     return getAge(data)
   }
   function getAge(data) {
     let trueAge;

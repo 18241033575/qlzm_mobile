@@ -199,6 +199,30 @@
             }
 
           }
+          if (this.org == 'msg') {
+            if (!this.backData) {
+              this.$ajax.post('/company/add-addressee',{cid: companyInfo.id,name: this.invMsg.name,phone : this.invMsg.phone,email : this.invMsg.email,province : this.invMsg.province,city : this.invMsg.city,area : this.invMsg.area,address : this.invMsg.address})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$message({
+                      message: '保存成功',
+                      type: 'success'
+                    })
+                  }
+                })
+            } else {
+              this.$ajax.post(' /company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$message({
+                      message: '保存成功',
+                      type: 'success'
+                    })
+                  }
+                })
+            }
+
+          }
         }
       },
       created() {
@@ -220,7 +244,7 @@
               }
             })
         }
-          if (this.org == 'total') {
+        if (this.org == 'total') {
             this.$ajax.get('/company/general-invoice',{params: {cid: companyInfo.id}})
               .then((res)=>{
                 if (res.data != null) {
@@ -236,6 +260,7 @@
         if (this.org == 'msg') {
           this.$ajax.get('/company/get-addressee',{params: {cid: companyInfo.id}})
             .then((res)=>{
+              console.log(res);
               if (res.data != null) {
                 this.backData = true;
                 this.invMsg.name = res.data.name;

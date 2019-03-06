@@ -25,6 +25,8 @@ import resume_det from '@/components/com_part/resume_det'
 import report from '@/components/com_part/report'
 import resume_invite from '@/components/com_part/resume_invite'
 import all_pos from '@/components/com_part/all_pos'
+import sys_msg from '@/components/com_part/sys_msg'
+import sys_msg_det from '@/components/com_part/sys_msg_det'
 
 //个人中心页面
 import tal_center from '@/components/talent/tal_center'
@@ -226,6 +228,22 @@ export default new Router({
       path: '/all_pos',
       name: 'all_pos',
       component: all_pos,
+      meta: {
+        title: ''
+      }
+    },
+    {
+      path: '/sys_msg',
+      name: 'sys_msg',
+      component: sys_msg,
+      meta: {
+        title: ''
+      }
+    },
+    {
+      path: '/sys_msg_det',
+      name: 'sys_msg_det',
+      component: sys_msg_det,
       meta: {
         title: ''
       }

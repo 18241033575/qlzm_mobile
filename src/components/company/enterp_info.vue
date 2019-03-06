@@ -131,6 +131,9 @@
           this.secondBox = false;
           this.scrollSign = false;
         },
+      },
+      created() {
+
       }
     }
 </script>

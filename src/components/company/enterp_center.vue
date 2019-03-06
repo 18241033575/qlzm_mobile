@@ -93,7 +93,7 @@
               },
               4:{
                 urlName: "消息",
-                urlRoute: "news"
+                urlRoute: "sys_msg"
               }
             },
             enterp_centerData: {
