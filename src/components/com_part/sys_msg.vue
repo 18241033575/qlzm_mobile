@@ -58,9 +58,11 @@
             });*/
          this.$ajax.post('/message/setisread',{member: 2,msg_id: id,cid: companyInfo.id})
            .then((res)=>{
-             console.log(res);
+             if (res.data.state == 200) {
+               this.$router.push({name: 'sys_msg_det',query: {id: id}});
+             }
            })
-          // this.$router.push({name: 'sys_msg_det',query: {id: id}})
+
         }
       },
       created() {

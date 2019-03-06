@@ -133,7 +133,11 @@
         },
       },
       created() {
-
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        this.$ajax.get('/company/get-info',{params: {cid: companyInfo.id}})
+          .then((res)=>{
+            console.log(res);
+          })
       }
     }
 </script>
