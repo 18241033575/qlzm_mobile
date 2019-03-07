@@ -12,8 +12,8 @@
             <p class="upload_btn">上传图片</p>
             <p class="upload_tips">支持JPG、PNG,大小不要超过2MB,最多可上传8张！</p>
           </div>
-          <div class="mien_pic_cell">
-            <img class="mien_pic" src="/static/images/banner03@2x.png" alt="">
+          <div class="mien_pic_cell" v-for="(item,index) in infoData" :key="index">
+            <img class="mien_pic" :src="item" alt="">
             <img class="mien_pic_del" src="/static/images/ic_cm_delete@2x.png" alt="">
           </div>
         </div>
@@ -39,6 +39,9 @@
         return {
           /*总菜单状态*/
           openState: false,
+          infoData: {
+
+          },
         }
       },
       methods: {
@@ -50,6 +53,16 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+      },
+      created() {
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        this.$ajax.get('/company/get-info',{params: {cid: companyInfo.id}})
+          .then((res)=>{
+            if(res.data.state != 400) {
+              // this.infoData = res.data.style;
+              // console.log(this.infoData[0]);
+            }
+          })
       }
     }
 </script>

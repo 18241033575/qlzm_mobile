@@ -11,20 +11,20 @@
           <div class="edit_bottom">
             <div class="content">
               <div class="edit_cell border-none">
-                <span class="edit_lab">企业名称</span><input type="text" maxlength="15" placeholder="请输入职位名称">
+                <span class="edit_lab">企业名称</span><input type="text" v-model="infoData.name" maxlength="15" placeholder="请输入职位名称">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">企业性质</span><span class="int_job_det fr">{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+                <span class="edit_lab">企业性质</span><span class="int_job_det fr" @click="entNature">{{tranNature || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">企业规模</span><span class="int_job_det fr">{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+                <span class="edit_lab">企业规模</span><span class="int_job_det fr" @click="entScale">{{tranScale || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell special_cell ">
                 <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell">请选择<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell">请选择<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" >请选择<img src="/static/images/font_down.png" alt=""></div></div>
-                <input type="text" maxlength="20" placeholder="详细地址，如：街道、门牌号等">
+                <input type="text" v-model="infoData.address" maxlength="20" placeholder="详细地址，如：街道、门牌号等">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">企业简介</span><span class="int_job_det fr" >请选择<img src="/static/images/ic_right@2x.png" alt=""></span>
+                <span class="edit_lab">企业简介</span><span class="int_job_det fr"><img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
             </div>
           </div>
@@ -46,11 +46,11 @@
           </div>
           <div class="content">
             <div class="filter_part1">
-              <div v-if="showMsg == 'posType'" v-for="(item,index) in CommonData" :posType-id="item.value" :key="index" class="filter_part1_cell second" @click="posTypeCode">
-                {{item.name}}<img v-show="posTypeNum == item.value" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg == 'entNature'" v-for="(item,index) in CommonData" :posType-id="index+1" :key="index" class="filter_part1_cell second" @click="ent_nature">
+                {{item}}<img v-show="infoData.nature == index+1" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
-              <div v-if="showMsg =='cert_type'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="CertCode">
-                {{item.category}}<img v-show="certTypeNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg =='entScale'" v-for="(item,index) in CommonData" :city-id="index+1" :key="index" class="filter_part1_cell second" @click="ent_scale">
+                {{item}}<img v-show="infoData.scale == index+1" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
               <div v-if="showMsg == 'cert_major'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="MajorCode">
                 {{item.major}}<img v-show="certMajorNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
@@ -76,6 +76,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {companyNature,companyScale} from '../../../static/js/common.js'
     export default {
         name: "enterp_info",
       components: {
@@ -96,6 +97,9 @@
           },
           showMsg: '',
           beginData: {},
+          // 123
+          tranNature: '',
+          tranScale: '',
           //弹层数据标识、转换数据
           posTypeNum: '0',
           tranPosType: '',
@@ -115,7 +119,10 @@
           //遍历数据
           CommonData: {
 
-          }
+          },
+          infoData: {
+
+          },
         }
       },
       methods: {
@@ -131,12 +138,40 @@
           this.secondBox = false;
           this.scrollSign = false;
         },
+        // 企业性质
+        entNature() {
+          this.secondBox = true;
+          this.top_title = '企业性质';
+          this.showMsg = 'entNature';
+          this.CommonData = companyNature(this.CommonData,3);
+        },
+        ent_nature(e) {
+          this.infoData.nature = e.currentTarget.getAttribute('posType-id');
+          this.tranNature = companyNature(this.infoData.nature,2);
+          this.secondBox = false;
+        },
+        // 企业规模
+        entScale() {
+          this.secondBox = true;
+          this.top_title = '企业规模';
+          this.showMsg = 'entScale';
+          this.CommonData = companyScale(this.CommonData,3);
+        },
+        ent_scale(e) {
+          this.infoData.scale = e.currentTarget.getAttribute('city-id');
+          this.tranScale = companyScale(this.infoData.scale,2);
+          this.secondBox = false;
+        }
       },
       created() {
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
         this.$ajax.get('/company/get-info',{params: {cid: companyInfo.id}})
           .then((res)=>{
-            console.log(res);
+            if(res.data.state != 400) {
+              this.infoData = res.data;
+              this.tranNature = companyNature(this.infoData.nature,2);
+              this.tranScale = companyScale(this.infoData.scale,2);
+            }
           })
       }
     }

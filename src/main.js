@@ -14,6 +14,7 @@ import 'mint-ui/lib/style.css'
 Vue.use(elementUI);
 Vue.use(mintUI);
 
+
 //数据请求
 // Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
 Axios.defaults.baseURL = 'http://qlzm.com';

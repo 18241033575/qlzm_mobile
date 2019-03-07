@@ -366,10 +366,8 @@ function splicFrontcover(data,num) {
 }
 //倒序
 function reverseOrder(data) {
-  console.log(data);
   let len = data.length,
       reverseData = {};
-  console.log(len);
   if (len == undefined || len == 0) {
 
   } else {
@@ -377,7 +375,6 @@ function reverseOrder(data) {
       reverseData[i] = data[len - 1 - i];
     }
   }
-  console.log(reverseData);
   return reverseData
 }
 function transComScale(data,flag,type) {
@@ -474,6 +471,43 @@ function getTrueAge(data,type) {
     return trueAge
   }
 }
+
+function companyNature(data,type) {
+  const company_nature = [
+    "国有企业",
+    "国有控股企业",
+    "外资企业",
+    "合资企业",
+    "私营企业",
+    "事业单位",
+    "国家行政机关",
+    "政府"
+  ];
+  if (type == 3) {
+    return company_nature;
+  } else if (type ==2) {
+    return company_nature[data-1]
+  }
+}
+
+function companyScale(data,type) {
+  const company_scale = [
+    "1-19人",
+    "20-49人",
+    "50-99人",
+    "100-199人",
+    "200-499人",
+    "500-999人",
+    "1000-4999人",
+    "5000人以上"
+  ];
+  if (type == 3) {
+    return company_scale;
+  } else if (type ==2) {
+    return company_scale[data-1]
+  }
+}
+
 // 工作经验和教育经历公司和个人应该有不同的版本
 
 export {
@@ -496,5 +530,7 @@ export {
   timestampToTime,
   transtime,
   transJobs,
-  getTrueAge
+  getTrueAge,
+  companyNature,
+  companyScale
 }
