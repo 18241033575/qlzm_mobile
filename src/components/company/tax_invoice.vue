@@ -164,7 +164,7 @@
                   }
                 })
             } else {
-              this.$ajax.post(' /company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+              this.$ajax.post('/company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
                 .then((res)=>{
                   if (res.data.state == 200) {
                     this.$message({
@@ -187,7 +187,7 @@
                   }
                 })
             } else {
-              this.$ajax.post(' /company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+              this.$ajax.post('/company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
                 .then((res)=>{
                   if (res.data.state == 200) {
                     this.$message({
@@ -211,7 +211,7 @@
                   }
                 })
             } else {
-              this.$ajax.post(' /company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+              this.$ajax.post('/company/set-addressee',{cid: companyInfo.id,name: this.invMsg.name,phone : this.invMsg.phone,email : this.invMsg.email,province : this.invMsg.province,city : this.invMsg.city,area : this.invMsg.area,address : this.invMsg.address})
                 .then((res)=>{
                   if (res.data.state == 200) {
                     this.$message({

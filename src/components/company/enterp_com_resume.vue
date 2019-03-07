@@ -42,7 +42,7 @@
         </div>
         <div class="opera_list" v-if="this.orign == 'collect'">
           <div class="content">
-            <div class="opera_cell">
+            <div class="opera_cell" @click="cancel_col">
               取消收藏
             </div>
           </div>
@@ -133,6 +133,13 @@
         tal_det(e) {
           let uid = e.currentTarget.getAttribute('uid');
           this.$router.push({name: 'resume_det',query: {uid: uid}});
+        },
+        cancel_col() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/resume/cancel-collect',{uid: this.uid,cid: companyInfo.id})
+            .then((res)=>{
+              console.log(res);
+            })
         }
       },
       created() {
