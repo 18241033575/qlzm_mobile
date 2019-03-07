@@ -34,7 +34,7 @@
                 </div>
               </div>
               <div class="edit_cell special_cell ">
-                <span class="edit_lab">工作地点</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province">{{userMsg.province || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{userMsg.city || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{userMsg.area || '请选择'}}<img src="/static/images/font_down.png" alt=""></div></div>
+                <span class="edit_lab">工作地点</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro">{{userMsg.province || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{userMsg.city || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{userMsg.area || '请选择'}}<img src="/static/images/font_down.png" alt=""></div></div>
                 <input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址，如：街道、门牌号等">
               </div>
               <div class="edit_cell">
@@ -98,6 +98,17 @@
               <div v-if="showMsg == 'workexp'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="WorkexpCode">
                 {{item}}<img v-show="workexpNum == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
+
+              <div v-if="showMsg =='pro'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="ProCode">
+                {{item}}<img v-show="infoData.province == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              </div>
+              <div v-if="showMsg == 'city'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
+                {{item}}<img v-show="infoData.city == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              </div>
+              <div v-if="showMsg == 'area'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="AreaCode">
+                {{item}}<img v-show="infoData.area == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              </div>
+
             </div>
           </div>
         </div>
@@ -161,7 +172,13 @@
           //遍历数据
           CommonData: {
 
-          }
+          },
+          addrData: {
+
+          },
+          infoData: {
+
+          },
         }
       },
       created() {
@@ -182,29 +199,11 @@
             this.form.hire_num = 0;
           }
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          this.$ajax.post('/office/first-release',{office_name: this.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
+          this.$ajax.post('/office/first-release',{office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
             province: 520000,city: 520100,area: 520101,address: '',salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: '',hire_num: this.form.hire_num,tags: [0,1],has_m: 1,is_urgent: 1})
             .then((res)=>{
               console.log(res);
             })
-        },
-        ProCode(e) {
-          let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode[0] = cCode;
-          /*  this.cityCode[1] = '';
-            this.cityCode[2] = '';
-            // 替换相应位置0*/
-          this.secondBox = false
-        },
-        CityCode(e) {
-          let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode[1] = cCode;
-          this.secondBox = false;
-        },
-        AreaCode(e) {
-          let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode[2] = cCode;
-          this.secondBox = false;
         },
         secondBoxBg() {
           this.secondBox = false;
@@ -226,21 +225,6 @@
         },
         woman_sex() {
           this.genderNum = 2
-        },
-        choose_province() {
-         /* this.guiyangData = tranProvince(this.beginData,true,'pro');
-          this.showMsg = 'pro';
-          this.secondBox = true;*/
-        },
-        choose_city() {
-         /* this.guiyangData = tranCity(this.cityCode,true,2,'city');
-          this.showMsg = 'city';
-          this.secondBox = true;*/
-        },
-        choose_area() {
-          /*this.guiyangData = tranArea(this.cityCode,true,5);
-          this.showMsg = 'area';
-          this.secondBox = true;*/
         },
         //职位类别选择
         pos_type() {
@@ -393,6 +377,46 @@
           this.scrollSign = false;
           this.secondBox = false;
           this.tranWorkexp = transWorkexp(expId,4);
+        },
+        // 地址选择
+        choose_pro() {
+          this.secondBox = true;
+          this.showMsg = 'pro';
+          this.top_title = '选择省份';
+          this.addrData = tranProvince(this.infoData,true,'pro');
+        },
+        ProCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.province = cCode;
+          this.tranPro = tranProvince(this.infoData.province,true,'',2);
+          this.tranCity = '';
+          this.tranArea = '';
+          this.secondBox = false
+        },
+        choose_city() {
+          this.secondBox = true;
+          this.showMsg = 'city';
+          this.top_title = '选择城市/地区';
+          this.addrData = tranCity(this.infoData,true,2,'city');
+        },
+        CityCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.city = cCode;
+          this.tranCity = tranCity(this.infoData,true,3);
+          this.tranArea = '';
+          this.secondBox = false
+        },
+        choose_area() {
+          this.secondBox = true;
+          this.showMsg = 'area';
+          this.top_title = '选择区/县';
+          this.addrData = tranArea(this.infoData,true,5);
+        },
+        AreaCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.area = cCode;
+          this.tranArea = tranArea(this.infoData,true,3);
+          this.secondBox = false
         },
       },
     }

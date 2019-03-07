@@ -19,8 +19,8 @@
               <div class="edit_cell">
                 <span class="edit_lab">企业规模</span><span class="int_job_det fr" @click="entScale">{{tranScale || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
-              <div class="edit_cell special_cell ">
-                <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell">请选择<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell">请选择<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" >请选择<img src="/static/images/font_down.png" alt=""></div></div>
+              <div class="edit_cell special_cell">
+                <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro">{{tranPro || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{tranCity || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{tranArea || '请选择'}}<img src="/static/images/font_down.png" alt=""></div></div>
                 <input type="text" v-model="infoData.address" maxlength="20" placeholder="详细地址，如：街道、门牌号等">
               </div>
               <div class="edit_cell">
@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div class="bas_msg_btn">
+        <div class="bas_msg_btn" @click="infoSave">
           保存
         </div>
       </div>
@@ -46,23 +46,14 @@
           </div>
           <div class="content">
             <div class="filter_part1">
-              <div v-if="showMsg == 'entNature'" v-for="(item,index) in CommonData" :posType-id="index+1" :key="index" class="filter_part1_cell second" @click="ent_nature">
-                {{item}}<img v-show="infoData.nature == index+1" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg =='pro'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="ProCode">
+                {{item}}<img v-show="infoData.province == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
-              <div v-if="showMsg =='entScale'" v-for="(item,index) in CommonData" :city-id="index+1" :key="index" class="filter_part1_cell second" @click="ent_scale">
-                {{item}}<img v-show="infoData.scale == index+1" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg == 'city'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
+                {{item}}<img v-show="infoData.city == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
-              <div v-if="showMsg == 'cert_major'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="MajorCode">
-                {{item.major}}<img v-show="certMajorNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-              </div>
-              <div v-if="showMsg == 'salary'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="SalaryCode">
-                {{item}}<img v-show="salaryNum.salary == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-              </div>
-              <div v-if="showMsg == 'education'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="EduCode">
-                {{item}}<img v-show="educationNum == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-              </div>
-              <div v-if="showMsg == 'workexp'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="WorkexpCode">
-                {{item}}<img v-show="workexpNum == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg == 'area'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="AreaCode">
+                {{item}}<img v-show="infoData.area == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
             </div>
           </div>
@@ -77,6 +68,7 @@
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
   import {companyNature,companyScale} from '../../../static/js/common.js'
+  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
     export default {
         name: "enterp_info",
       components: {
@@ -90,34 +82,16 @@
           userMsg: {},
           secondBox: false,
           top_title: '',
-          isUgent: true,
           scrollSign: false,
-          cityCode: {
-
-          },
           showMsg: '',
-          beginData: {},
-          // 123
+          // 转换文字
           tranNature: '',
           tranScale: '',
-          //弹层数据标识、转换数据
-          posTypeNum: '0',
-          tranPosType: '',
-          tranGender: '',
-          certTypeNum: 0,
-          tranCertType: '',
-          certMajorNum: 0,
-          tranCertMajor: '',
-          salaryNum: {
-            salary: 0
-          },
-          tranSalary: '',
-          educationNum: 0,
-          tranEdu: '',
-          workexpNum: 0,
-          tranWorkexp: '',
+          tranPro: '',
+          tranCity: '',
+          tranArea: '',
           //遍历数据
-          CommonData: {
+          addrData: {
 
           },
           infoData: {
@@ -161,6 +135,54 @@
           this.infoData.scale = e.currentTarget.getAttribute('city-id');
           this.tranScale = companyScale(this.infoData.scale,2);
           this.secondBox = false;
+        },
+        // 地址选择
+        choose_pro() {
+          this.secondBox = true;
+          this.showMsg = 'pro';
+          this.top_title = '选择省份';
+          this.addrData = tranProvince(this.infoData,true,'pro');
+        },
+        ProCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.province = cCode;
+          this.tranPro = tranProvince(this.infoData.province,true,'',2);
+          this.tranCity = '';
+          this.tranArea = '';
+          this.secondBox = false
+        },
+        choose_city() {
+          this.secondBox = true;
+          this.showMsg = 'city';
+          this.top_title = '选择城市/地区';
+          this.addrData = tranCity(this.infoData,true,2,'city');
+        },
+        CityCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.city = cCode;
+          this.tranCity = tranCity(this.infoData,true,3);
+          this.tranArea = '';
+          this.secondBox = false
+        },
+        choose_area() {
+          this.secondBox = true;
+          this.showMsg = 'area';
+          this.top_title = '选择区/县';
+          this.addrData = tranArea(this.infoData,true,5);
+        },
+        AreaCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.area = cCode;
+          this.tranArea = tranArea(this.infoData,true,3);
+          this.secondBox = false
+        },
+        // 保存
+        infoSave() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/company/info-set',{cid: companyInfo.id,logo: this.infoData.logo,name: this.infoData.name,nature: this.infoData.nature,scale: this.infoData.scale,province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.infoData.address,introduction: this.infoData.introduction})
+            .then((res)=>{
+              console.log(res);
+            })
         }
       },
       created() {
@@ -171,6 +193,10 @@
               this.infoData = res.data;
               this.tranNature = companyNature(this.infoData.nature,2);
               this.tranScale = companyScale(this.infoData.scale,2);
+
+              this.tranPro = tranProvince(this.infoData.province,true,'',2);
+              this.tranCity = tranCity(this.infoData,true,3);
+              this.tranArea = tranArea(this.infoData,true,3);
             }
           })
       }

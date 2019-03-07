@@ -67,7 +67,7 @@
             <span class="edit_lab">E-mail</span><input type="text" v-model="invMsg.email" placeholder="用于接收电子发票(必填)">
           </div>
           <div class="edit_cell special_cell ">
-            <span class="edit_lab">收件地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province"><span class="place_msg">{{transPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place_msg">{{transCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place_msg">{{transArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
+            <span class="edit_lab">收件地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place_msg">{{transPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place_msg">{{transCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place_msg">{{transArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
             <input type="text" maxlength="20" v-model="invMsg.address" placeholder="详细地址，如：街道、门牌号等">
           </div>
         </div>
@@ -75,6 +75,32 @@
     </div>
     <div class="enterp_button" @click="inv_save">
       保存
+    </div>
+    <!--筛选第二层-->
+    <div class="filter_all_box" v-show="this.secondBox">
+      <div class="filter_bg" @click="secondBoxBg">
+
+      </div>
+      <div class="filter_det">
+        <div class="filter_s_title">
+          <div class="content">
+            <img @click="secondBoxBg" src="/static/images/left.png" alt="left">{{top_title}}
+          </div>
+        </div>
+        <div class="content">
+          <div class="filter_part1">
+            <div v-if="showMsg =='pro'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="ProCode">
+              {{item}}<img v-show="invMsg.province == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            </div>
+            <div v-if="showMsg == 'city'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
+              {{item}}<img v-show="invMsg.city == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            </div>
+            <div v-if="showMsg == 'area'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="AreaCode">
+              {{item}}<img v-show="invMsg.area == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
@@ -97,8 +123,14 @@
           /*总菜单状态*/
           openState: false,
           secondBox: false,
+          scrollSign: false,
           org: '',
           backData: true,
+          top_title: '',
+          showMsg: '',
+          tranPro: '',
+          tranCity: '',
+          tranArea: '',
           invTotal: {
             title: '',
             number: ''
@@ -122,7 +154,16 @@
           },
           transPro: '',
           transCity: '',
-          transArea: ''
+          transArea: '',
+          addData: {
+
+          },
+          addrData: {
+
+          },
+          infoData: {
+
+          },
         }
       },
       methods: {
@@ -133,21 +174,51 @@
         getIsopen(data) {
           this.openState = data;
         },
+        secondBoxBg() {
+          this.secondBox = false;
+          this.scrollSign = false;
+        },
         /*总菜单操作e*/
-        choose_province() {
-          /* this.guiyangData = tranProvince(this.beginData,true,'pro');
-           this.showMsg = 'pro';
-           this.secondBox = true;*/
+        // 地址选择
+        choose_pro() {
+          this.secondBox = true;
+          this.showMsg = 'pro';
+          this.top_title = '选择省份';
+          this.addrData = tranProvince(this.infoData,true,'pro');
+          console.log(this.addrData);
+        },
+        ProCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.province = cCode;
+          this.tranPro = tranProvince(this.infoData.province,true,'',2);
+          this.tranCity = '';
+          this.tranArea = '';
+          this.secondBox = false
         },
         choose_city() {
-          /* this.guiyangData = tranCity(this.cityCode,true,2,'city');
-           this.showMsg = 'city';
-           this.secondBox = true;*/
+          this.secondBox = true;
+          this.showMsg = 'city';
+          this.top_title = '选择城市/地区';
+          this.addrData = tranCity(this.infoData,true,2,'city');
+        },
+        CityCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.city = cCode;
+          this.tranCity = tranCity(this.infoData,true,3);
+          this.tranArea = '';
+          this.secondBox = false
         },
         choose_area() {
-          /*this.guiyangData = tranArea(this.cityCode,true,5);
+          this.secondBox = true;
           this.showMsg = 'area';
-          this.secondBox = true;*/
+          this.top_title = '选择区/县';
+          this.addrData = tranArea(this.infoData,true,5);
+        },
+        AreaCode(e) {
+          let cCode = e.currentTarget.getAttribute('city-id');
+          this.infoData.area = cCode;
+          this.tranArea = tranArea(this.infoData,true,3);
+          this.secondBox = false
         },
         inv_save() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
