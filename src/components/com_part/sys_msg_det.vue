@@ -57,35 +57,35 @@
       },
       created() {
         let id = this.$route.query.id;
-        /*let userInfo = JSON.parse(localStorage.getItem('USER'));
-        this.$ajax.get('/company/get-messages' + id)
-          .then((res)=>{
-            console.log(res);
-            if (res.data.state != 400) {
-              res.data.publish_at = timestampToTime(res.data.publish_at);
-              this.news_infoData = res.data
-            }
-          })*/
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        if (userInfo) {
+          this.$ajax.get('/personal/sysmsg',{params: {uid: userInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                for (let i = 0,len = res.data.length; i < len;i++) {
+                  if (res.data[i].id == id) {
+                    this.msgDetData = res.data[i];
+                  }
+                }
+              }
+            });
+        }
+
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-        this.$ajax.get('/company/get-messages',{params: {cid: companyInfo.id}})
-          .then((res)=>{
-            if (res.data.state != 400) {
-              for (let i = 0,len = res.data.length; i < len;i++) {
+        if (companyInfo) {
+          this.$ajax.get('/company/get-messages',{params: {cid: companyInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                for (let i = 0,len = res.data.length; i < len;i++) {
                   if (res.data[i].id == id) {
                     this.msgDetData = res.data[i];
                     this.msgDetData.created_at = getDistanceTime(this.msgDetData.created_at,0);
-                    console.log(this.msgDetData);
                   }
+                }
               }
-              this.msgData = res.data;
-              /* for (let i = 0,len = res.data.length; i < len;i++) {
-                 rdata[i] = res.data[i].company;
-                 rdata[i].id = res.data[i].id;
-                 rdata[i].isRead = res.data[i].user_is_read
-               }
-               this.invitedData = rdata;*/
-            }
-          })
+            })
+        }
+
       }
     }
 </script>

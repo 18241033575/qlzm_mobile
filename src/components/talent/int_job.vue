@@ -108,13 +108,13 @@
         <div class="content">
           <div class="filter_part1">
             <div class="pro_cell">
-              <div v-for="(item,index) in ProData" :city-id="index" :key="index" :class="{pro_active:cityCode[0] == index}" class=" filter_part1_cell  second" @click="WorkAreaCode">
+              <div v-for="(item,index) in ProData" :city-id="index" :key="index" :class="{pro_active:cityCode.province == index}" class=" filter_part1_cell  second" @click="WorkAreaCode">
                 {{item}}
               </div>
             </div>
             <div class="pro_cell city_cell">
               <div v-for="(item,index) in cityData" :city-id="index" :key="index" class=" filter_part1_cell  second" @click="WorkCityCode">
-                {{item}}<img v-show="cityCode[1] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+                {{item}}<img v-show="cityCode.city == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
             </div>
           </div>
@@ -214,7 +214,7 @@
         },
         save_job() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/resume/userinfo',{job: this.intJobData.job_id,nature:this.form.work_nature,salary: this.intJobData.salary,duty_time: this.ArriveId,remark: this.remark,flag: 2,job_id: this.intJobData.job_id,work_province: this.cityCode[0],work_city: this.cityCode[1],uid: userInfo.id})
+          this.$ajax.post('/resume/userinfo',{job: this.intJobData.job_id,nature:this.form.work_nature,salary: this.intJobData.salary,duty_time: this.ArriveId,remark: this.remark,flag: 2,job_id: this.intJobData.job_id,work_province: this.cityCode.province,work_city: this.cityCode.city,uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
                 this.int_job_edit = true;
@@ -252,13 +252,13 @@
         },
         WorkAreaCode(e) {
           let areaCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode[0] = areaCode;
+          this.cityCode.province = areaCode;
           this.cityData = tranCity(this.cityCode,true,2,'city');
-          this.intJobData.province = tranProvince(this.cityCode[0],true,'',2)
+          this.intJobData.province = tranProvince(this.cityCode.province,true,'',2)
         },
         WorkCityCode(e) {
           let areaCityCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode[1] = areaCityCode;
+          this.cityCode.city = areaCityCode;
           this.doubleBox = false;
           this.intJobData.city = tranCity(this.cityCode,true,1)
         },
@@ -282,6 +282,7 @@
         pro_city() {
           this.doubleBox = true;
           this.ProData = tranProvince(this.ProData,true,'pro');
+          this.cityData = tranCity(this.cityCode,true,2,'city');
         },
         arrive_time() {
           this.secondBox = true;
@@ -304,8 +305,8 @@
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
           .then((res)=>{
             if (res.data.state!= 400) {
-              this.cityCode[0] = res.data.career_objective.work_province;
-              this.cityCode[1] = res.data.career_objective.work_city;
+              this.cityCode.province = res.data.career_objective.work_province;
+              this.cityCode.city = res.data.career_objective.work_city;
               this.ArriveId = res.data.career_objective.duty_time;
               res.data.career_objective.province = res.data.career_objective.work_province;
               res.data.career_objective.city = res.data.career_objective.work_city;

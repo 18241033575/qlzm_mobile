@@ -187,16 +187,18 @@
           if (!this.isCol) {
             this.$ajax.get('/company_collect_position',{params: {id: 111,cid: 36, uid: userInfo.id}})
               .then((res)=>{
-                console.log(res);
-                this.collect_btn = '取消收藏';
-                this.isCol = true
+                if (res.data.state != 400) {
+                  this.collect_btn = '取消收藏';
+                  this.isCol = true;
+                }
               })
           } else {
             this.$ajax.post('/office/cancel/collection',{params:{office_id: 111, uid: userInfo.id}})
               .then((res)=>{
-                console.log(res);
-                this.collect_btn = '收藏简历';
-                this.isCol = false
+                if (res.data.state != 400) {
+                  this.collect_btn = '收藏简历';
+                  this.isCol = false;
+                }
               })
           }
 
@@ -211,10 +213,10 @@
           if (!this.isApply) {
             this.$ajax.post('/personal/applyoffice', {office_id: 111, cid: 36, uid: userInfo.id})
               .then((res) => {
-                console.log(res);
-                this.apply_btn = '已申请';
-                this.isApply = true
-              //
+                if (res.data.state != 400) {
+                  this.apply_btn = '已申请';
+                  this.isApply = true;
+                }
               })
           }
         }
@@ -265,11 +267,22 @@
       if (userInfo) {
         this.$ajax.post('/personal/isapply',{uid: userInfo.id,id: id})
           .then((res)=>{
-            console.log(res);
+            if (res.data) {
+              this.apply_btn = '已申请';
+              this.isApply = true;
+            } else{
+
+            }
           });
         this.$ajax.post('/personal/iscollect',{uid: userInfo.id,id: id})
           .then((res)=>{
-            console.log(res);
+            if (res.data) {
+              this.collect_btn = '取消收藏';
+              this.isCol = true;
+            } else {
+              this.collect_btn = '收藏简历';
+              this.isCol = false;
+            }
           })
       }
 

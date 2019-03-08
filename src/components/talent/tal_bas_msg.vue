@@ -104,13 +104,13 @@
         <div class="content">
           <div class="filter_part1">
             <div v-if="showMsg =='pro'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="ProCode">
-              {{item}}<img v-show="cityCode[0] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              {{item}}<img v-show="cityCode.province == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
             <div v-if="showMsg == 'city'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
-              {{item}}<img v-show="cityCode[1] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              {{item}}<img v-show="cityCode.city == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
             <div v-if="showMsg == 'area'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="AreaCode">
-              {{item}}<img v-show="cityCode[2] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              {{item}}<img v-show="cityCode.area == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
           </div>
         </div>
@@ -176,9 +176,9 @@
             .then((res)=>{
               if (res.data.state!= 400) {
                 this.beginData = res.data.base_info;
-                this.cityCode[0] = res.data.base_info.province;
-                this.cityCode[1] = res.data.base_info.city;
-                this.cityCode[2] = res.data.base_info.area;
+                this.cityCode.province = res.data.base_info.province;
+                this.cityCode.city = res.data.base_info.city;
+                this.cityCode.area = res.data.base_info.area;
                 tranArea(res.data.base_info,true,0);
                 tranCity(res.data.base_info,true,0);
                 tranProvince(res.data.base_info,true);
@@ -211,7 +211,7 @@
         },
         to_edited() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": this.cityCode[0], "city": this.cityCode[1], "area": this.cityCode[2], "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
+          this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": this.cityCode.province, "city": this.cityCode.city, "area": this.cityCode.area, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
                 // 提交但是没有生效
@@ -225,7 +225,7 @@
         },
         ProCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode[0] = cCode;
+          this.cityCode.province = cCode;
         /*  this.cityCode[1] = '';
           this.cityCode[2] = '';
           // 替换相应位置0*/
@@ -233,12 +233,12 @@
         },
         CityCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode[1] = cCode;
+          this.cityCode.city = cCode;
           this.secondBox = false
         },
         AreaCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode[2] = cCode;
+          this.cityCode.area = cCode;
           this.secondBox = false
         },
         secondBoxBg() {
@@ -270,7 +270,7 @@
         },
       },
       updated() {
-        this.userMsg.province = tranProvince(this.cityCode[0],true,'',2);
+        this.userMsg.province = tranProvince(this.cityCode.province,true,'',2);
         this.userMsg.city = tranCity(this.cityCode,true,3);
         this.userMsg.area = tranArea(this.cityCode,true,3);
       }

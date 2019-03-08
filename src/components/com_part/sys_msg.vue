@@ -51,50 +51,44 @@
         msg_det(e) {
           let id = e.currentTarget.getAttribute('int-id');
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-         /* let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/personal/interview/setread',{id: id,uid: userInfo.id})
-            .then((res)=>{
-
-            });*/
-         this.$ajax.post('/message/setisread',{member: 2,msg_id: id,cid: companyInfo.id})
-           .then((res)=>{
-             if (res.data.state == 200) {
-               this.$router.push({name: 'sys_msg_det',query: {id: id}});
-             }
-           })
-
+          if (companyInfo) {
+            this.$ajax.post('/message/setisread',{member: 2,msg_id: id,cid: companyInfo.id})
+              .then((res)=>{
+                if (res.data.state == 200) {
+                  this.$router.push({name: 'sys_msg_det',query: {id: id}});
+                }
+              })
+          }
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          if (userInfo) {
+            this.$ajax.post('/message/setisread',{member: 1,msg_id: id,uid: userInfo.id})
+              .then((res)=>{
+                if (res.data.state == 200) {
+                  this.$router.push({name: 'sys_msg_det',query: {id: id}});
+                }
+              });
+          }
         }
       },
       created() {
-        /*let userInfo = JSON.parse(localStorage.getItem('USER'));
-        this.$ajax.get('/personal/sysmsg',{params: {uid: userInfo.id}})
-          .then((res)=>{
-            let rdata = {};
-            if (res.data.state != 400) {
-              this.inviteData = res.data;
-              for (let i = 0,len = res.data.length; i < len;i++) {
-                rdata[i] = res.data[i].company;
-                rdata[i].id = res.data[i].id;
-                rdata[i].isRead = res.data[i].user_is_read
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        if (userInfo) {
+          this.$ajax.get('/personal/sysmsg',{params: {uid: userInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                this.msgData = res.data;
               }
-              this.invitedData = rdata;
-            }
-          })*/
+            });
+        }
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-        this.$ajax.get('/company/get-messages',{params: {cid: companyInfo.id}})
-          .then((res)=>{
-            console.log(res);
-            // let rdata = {};
-            if (res.data.state != 400) {
-              this.msgData = res.data;
-              /* for (let i = 0,len = res.data.length; i < len;i++) {
-                 rdata[i] = res.data[i].company;
-                 rdata[i].id = res.data[i].id;
-                 rdata[i].isRead = res.data[i].user_is_read
-               }
-               this.invitedData = rdata;*/
-            }
-          })
+        if (companyInfo) {
+          this.$ajax.get('/company/get-messages',{params: {cid: companyInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                this.msgData = res.data;
+              }
+            })
+        }
       },
     }
 </script>
