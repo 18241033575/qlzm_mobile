@@ -55,6 +55,13 @@
               <div v-if="showMsg == 'area'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="AreaCode">
                 {{item}}<img v-show="infoData.area == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
+              <div v-if="showMsg == 'entNature'" v-for="(item,index) in addrData" :posType-id="index+1" :key="index" class="filter_part1_cell second" @click="ent_nature">
+                {{item}}<img v-show="infoData.nature == index+1" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              </div>
+              <div v-if="showMsg == 'entScale'" v-for="(item,index) in addrData" :city-id="index+1" :key="index" class="filter_part1_cell second" @click="ent_scale">
+                {{item}}<img v-show="infoData.scale == index+1" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              </div>
+
             </div>
           </div>
         </div>
@@ -97,6 +104,7 @@
           infoData: {
 
           },
+
         }
       },
       methods: {
@@ -117,7 +125,7 @@
           this.secondBox = true;
           this.top_title = '企业性质';
           this.showMsg = 'entNature';
-          this.CommonData = companyNature(this.CommonData,3);
+          this.addrData = companyNature(this.addrData,3);
         },
         ent_nature(e) {
           this.infoData.nature = e.currentTarget.getAttribute('posType-id');
@@ -129,7 +137,7 @@
           this.secondBox = true;
           this.top_title = '企业规模';
           this.showMsg = 'entScale';
-          this.CommonData = companyScale(this.CommonData,3);
+          this.addrData = companyScale(this.addrData,3);
         },
         ent_scale(e) {
           this.infoData.scale = e.currentTarget.getAttribute('city-id');

@@ -13,19 +13,19 @@
             <span class="edit_lab">单位名称</span><input type="text" v-model="invTax.title"  placeholder="单位名称(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">纳税人识别号</span><input type="text" v-model="invTax.number"  placeholder="纳税人识别号(必填)">
+            <span class="edit_lab">纳税人识别号</span><input type="text" v-model="invTax.number" maxlength="20" placeholder="纳税人识别号(必填)">
           </div>
           <div class="edit_cell">
             <span class="edit_lab">企业注册地址</span><input type="text" v-model="invTax.reg_address"  placeholder="企业注册地址(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">企业注册电话</span><input type="text" v-model="invTax.reg_tel" placeholder="企业注册电话(必填)">
+            <span class="edit_lab">企业注册电话</span><input maxlength="15" type="text" v-model="invTax.reg_tel" placeholder="企业注册电话(必填)">
           </div>
           <div class="edit_cell">
             <span class="edit_lab">开户银行</span><input type="text" v-model="invTax.bank" placeholder="开户银行(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">银行账户</span><input type="text" v-model="invTax.bank_account" placeholder="银行账户(必填)">
+            <span class="edit_lab">银行账户</span><input type="text" maxlength="19" v-model="invTax.bank_account" placeholder="银行账户(必填)">
           </div>
         </div>
       </div>
@@ -161,9 +161,6 @@
           addrData: {
 
           },
-          infoData: {
-
-          },
         }
       },
       methods: {
@@ -184,47 +181,46 @@
           this.secondBox = true;
           this.showMsg = 'pro';
           this.top_title = '选择省份';
-          this.addrData = tranProvince(this.infoData,true,'pro');
-          console.log(this.addrData);
+          this.addrData = tranProvince(this.invMsg,true,'pro');
         },
         ProCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.infoData.province = cCode;
-          this.tranPro = tranProvince(this.infoData.province,true,'',2);
-          this.tranCity = '';
-          this.tranArea = '';
+          this.invMsg.province = cCode;
+          this.transPro = tranProvince(this.invMsg.province,true,'',2);
+          this.transCity = '';
+          this.transArea = '';
           this.secondBox = false
         },
         choose_city() {
           this.secondBox = true;
           this.showMsg = 'city';
           this.top_title = '选择城市/地区';
-          this.addrData = tranCity(this.infoData,true,2,'city');
+          this.addrData = tranCity(this.invMsg,true,2,'city');
         },
         CityCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.infoData.city = cCode;
-          this.tranCity = tranCity(this.infoData,true,3);
-          this.tranArea = '';
+          this.invMsg.city = cCode;
+          this.transCity = tranCity(this.invMsg,true,3);
+          this.transArea = '';
           this.secondBox = false
         },
         choose_area() {
           this.secondBox = true;
           this.showMsg = 'area';
           this.top_title = '选择区/县';
-          this.addrData = tranArea(this.infoData,true,5);
+          this.addrData = tranArea(this.invMsg,true,5);
         },
         AreaCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.infoData.area = cCode;
-          this.tranArea = tranArea(this.infoData,true,3);
+          this.invMsg.area = cCode;
+          this.transArea = tranArea(this.invMsg,true,3);
           this.secondBox = false
         },
         inv_save() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (this.org == 'tax') {
             if (!this.backData) {
-              this.$ajax.post('/company/add-vat-invoice',{cid: companyInfo.id,title: this.invTax.title,taxpayer_identification_number: parseInt(this.invTax.number),reg_address:  this.invTax.reg_address,
+              this.$ajax.post('/company/add-vat-invoice',{cid: companyInfo.id,title: this.invTax.title,taxpayer_identification_number: this.invTax.number,reg_address:  this.invTax.reg_address,
                 reg_tel: this.invTax.reg_tel,bank: this.invTax.bank,bank_account: this.invTax.bank_account})
                 .then((res)=>{
                   if (res.data.state == 200) {
@@ -235,7 +231,8 @@
                   }
                 })
             } else {
-              this.$ajax.post('/company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+              this.$ajax.post('/company/vat-invoice-set',{cid: companyInfo.id,title: this.invTax.title,taxpayer_identification_number: this.invTax.number,reg_address:  this.invTax.reg_address,
+                reg_tel: this.invTax.reg_tel,bank: this.invTax.bank,bank_account: this.invTax.bank_account})
                 .then((res)=>{
                   if (res.data.state == 200) {
                     this.$message({
@@ -248,7 +245,7 @@
           }
           if (this.org == 'total') {
             if (!this.backData) {
-              this.$ajax.post('/company/add-general-invoice',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+              this.$ajax.post('/company/add-general-invoice',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: this.invTotal.number})
                 .then((res)=>{
                   if (res.data.state == 200) {
                     this.$message({
@@ -258,7 +255,7 @@
                   }
                 })
             } else {
-              this.$ajax.post('/company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: parseInt(this.invTotal.number)})
+              this.$ajax.post('/company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: this.invTotal.number})
                 .then((res)=>{
                   if (res.data.state == 200) {
                     this.$message({
@@ -331,7 +328,6 @@
         if (this.org == 'msg') {
           this.$ajax.get('/company/get-addressee',{params: {cid: companyInfo.id}})
             .then((res)=>{
-              console.log(res);
               if (res.data != null) {
                 this.backData = true;
                 this.invMsg.name = res.data.name;
@@ -341,6 +337,9 @@
                 this.invMsg.city = res.data.city;
                 this.invMsg.area = res.data.area;
                 this.invMsg.address = res.data.address;
+                this.transPro = tranProvince(this.invMsg.province,true,'',2);
+                this.transCity = tranCity(this.invMsg,true,3);
+                this.transArea = tranArea(this.invMsg,true,3);
               } else {
                 this.backData = false;
               }
