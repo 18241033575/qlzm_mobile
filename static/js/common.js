@@ -72,7 +72,29 @@ function transNature(data,type,off) {
       transData.nature = nature[transData.nature]
   }
 }
-
+function transNature1(data,type,off) {
+  const nature = [
+    "不限",
+    "全职",
+    "项目"
+  ];
+  let transData = data;
+  if (type == 2) {
+    if (off == 'office') {
+      for (let i = 0; i < transData.length; i++) {
+        transData[i].office.nature = nature[transData[i].office.nature]
+      }
+    }else {
+      for (let i = 0; i < transData.length; i++) {
+        transData[i].nature = nature[transData[i].nature]
+      }
+    }
+  } else if (type == 3) {
+      return nature
+  } else {
+    transData.nature = nature[transData.nature]
+  }
+}
 function transEducation(data,type) {
   // education
   const education = [
@@ -122,6 +144,33 @@ function transWorkexp(data,type,classify) {
   }else if (type == 2) {
     for (let i = 0; i < transData.length; i++) {
         transData[i].office.work_exp = workexp[transData[i].office.work_exp]
+    }
+  }else if(type == 1) {
+    return transData.work_exp = workexp[transData.work_exp]
+  }else {
+    for (let i = 0; i < transData.length; i++) {
+      transData[i].work_exp = workexp[transData[i].work_exp]
+    }
+  }
+}
+function transWorkexp1(data,type,classify) {
+  //工作经验
+  let workexp = [
+    "不限",
+    "1年以下",
+    "1-3年",
+    "3-5年",
+    "5-10年",
+    "10年以上"
+  ];
+  let transData = data;
+  if (type == 5) {
+    return workexp
+  } else if(type == 4) {
+    return workexp[data]
+  }else if (type == 2) {
+    for (let i = 0; i < transData.length; i++) {
+      transData[i].office.work_exp = workexp[transData[i].office.work_exp]
     }
   }else if(type == 1) {
     return transData.work_exp = workexp[transData.work_exp]
@@ -515,8 +564,10 @@ export {
   transGender,
   transEducation,
   transWorkexp,
+  transWorkexp1,
   getDistanceTime,
   transNature,
+  transNature1,
   splicPic,
   tal_adv,
   splicLogo,

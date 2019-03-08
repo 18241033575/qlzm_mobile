@@ -64,11 +64,11 @@
             infinite-scroll-distance="8">
             <div class="ugent_cell" v-for="(item,index) in find_jobData" :key="index">
               <div class="ugent_top">
-                <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
+                <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
               </div>
               <div class="ugent_bottom">
                 <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
-                class="tags">{{item.nature}}</span><span class="update_time fr">{{item.created_at}}</span>
+                class="tags">{{item.nature}}</span><span class="update_time fr">{{item.created_time}}</span>
                 <p><img v-if="item.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company_name}}</p>
               </div>
             </div>
@@ -91,7 +91,7 @@
               城市<span class="fr">{{tranCode}}<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
             <div class="filter_part1_cell" data-sign="pos_type" @click="all_choose">
-              职位类别<span class="fr">{{tranValue}}<img src="/static/images/icon_goright.png" alt=""></span>
+              职位类别<span class="fr">{{tranPosType || '请选择'}}<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
           </div>
           <div class="filter_part2">
@@ -108,7 +108,7 @@
                 学历要求
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == educationAct}" :education-id="index" @click="education_opera" v-for="(item,index) in this.educationData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:index == educationAct}" :education-id="index" @click="education_opera" v-for="(item,index) in educationData" :key="index">{{item}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -116,7 +116,7 @@
                 工作性质
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == natureAct}" :nature-id="index" @click="nature_opera" v-for="(item,index) in this.natureData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:index == natureAct}" :nature-id="index" @click="nature_opera" v-for="(item,index) in natureData" :key="index">{{item}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -124,7 +124,7 @@
                 薪资要求
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == salaryAct}" :salary-id="index" @click="salary_opera" v-for="(item,index) in this.salaryData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:index == salaryAct}" :salary-id="index" @click="salary_opera" v-for="(item,index) in salaryData" :key="index">{{item}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -132,7 +132,7 @@
                 发布时间
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == offDayAct}" :offDay-id="index" @click="offDay_opera" v-for="(item,index) in this.offDayData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:index == offDayAct}" :offDay-id="index" @click="offDay_opera" v-for="(item,index) in offDayData" :key="index">{{item}}</span>
               </div>
             </div>
           </div>
@@ -160,12 +160,12 @@
         </div>
         <div class="content">
           <div class="filter_part1">
-            <div v-if="showMsg" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
+            <div v-if="showMsg=='city'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
               {{item}}<img v-show="cityCode[1] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
-            <!--<div v-if="!showMsg" v-for="(item,index) in jobClassify" :classify-id="item.value" :key="index" class="filter_part1_cell second" @click="ClassifyVal">
-              {{item.name}}<img v-show="classifyValue == item.value" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-            </div>-->
+            <div v-if="showMsg == 'posType'" v-for="(item,index) in jobClassify" :posType-id="item.value" :key="index" class="filter_part1_cell second" @click="posTypeCode">
+              {{item.name}}<img v-show="posTypeNum == item.value" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            </div>
           </div>
         </div>
       </div>
@@ -178,7 +178,7 @@
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,company_adv} from '../../../static/js/common.js'
+  import {transSalary,getDistanceTime,transNature1,transEducation,transWorkexp1,transArrive,transJobs} from '../../../static/js/common.js'
   export default {
     name: "find_job",
     components: {
@@ -193,7 +193,7 @@
         outBox: false,
         firstBox: false,
         secondBox: false,
-        showMsg: true,
+        showMsg: '',
         sortNum: 0,
         search_job: '',
         famFlag: false,
@@ -202,14 +202,14 @@
         keyword: '',
         find_jobData: {},
         top_title: '',
+        posTypeNum: 0,
         loading: false,
         cityCode: {
           0:'520000',
           1:'520100'
         },
-        classifyValue: '0',
         tranCode: '',
-        tranValue: '全部',
+        tranPosType: '全部',
         sortList: {
           0: "默认排序",
           1: "薪资水平",
@@ -219,107 +219,40 @@
           page: 1,
           row: 8
         },
-        workexpData: {
-          0: "不限",
-          1: "1年以下",
-          2: "1-3年",
-          3: "3-5年",
-          4: "5-10年",
-          5: "10年以上"
-        },
         workExpAct: 0,
-        educationData: {
-          0: "不限",
-          1: "小学及以下",
-          2: "初中",
-          3: "中专",
-          4: "高中",
-          5: "大专",
-          6: "本科",
-          7: "硕士研究生",
-          8: "博士及以上"
-        },
         educationAct: 0,
-        natureData: {
-          0: "不限",
-          1: "全职",
-          2: "项目"
-        },
         natureAct: 0,
-        salaryData: {
-          0: "面议",
-          1: "2000以下",
-          2: "2001-4000",
-          3: "4001-6000",
-          4: "6001-8000",
-          5: "8001-10000",
-          6: "10001-15000",
-          7: "15001-25000",
-          8: "2.5w-5w",
-          9: "5w-10w",
-          10: "10w以上"
-        },
         salaryAct: 0,
-        offDayData: {
-          0: "不限",
-          1: "今天",
-          2: "三天内",
-          3: "一周内",
-          4: "十五天内",
-          5: "一个月内"
-        },
         offDayAct: 0,
-        guiyangData: {
-        520100: '贵阳市',
-        520200: '六盘水市',
-        520300: '遵义市',
-        520400: '安顺市',
-        520500: '毕节市',
-        520600: '铜仁市',
-        522300: '黔西南布依族苗族自治州',
-        522600: '黔东南苗族侗族自治州',
-        522700: '黔南布依族苗族自治州'
+        workexpData: {
+
         },
-        jobClassify: [
-          {"name": "意向职位选择", "value": 0, "type": "optgroup"},
-          {"name": "工程项目管理", "value": 16, "type":1, 'salary':15000},
-          {"name": "工程监理", "value": 17, "type":1, 'salary':10000},
-          {"name": "安全管理/安全员", "value": 18, "type":1, 'salary':7000},
-          {"name": "建筑工程验收", "value": 19, "type":1, 'salary':4500},
-          {"name": "建筑施工现场管理", "value": 20, "type":1, 'salary':6000},
-          {"name": "施工队长", "value": 21, "type":1, 'salary':10000},
-          {"name": "施工员", "value": 22, "type":1, 'salary':6000},
-          {"name": "工程设备管理", "value": 23, "type":1, 'salary':6000},
-          {"name": "建筑工程安全管理", "value": 24, "type":1, 'salary':7500},
-          {"name": "工程总监", "value": 25, "type":1, 'salary':15000},
-          {"name": "建筑工程师/总工", "value": 1, "type": 2, 'salary':20000},
-          {"name": "土木/土建工程师", "value": 2, "type": 2, 'salary':9000},
-          {"name": "造价师/预算师", "value": 3, "type": 2, 'salary':10000},
-          {"name": "幕墙工程师", "value": 4, "type": 2, 'salary':8000},
-          {"name": "安防工程师", "value": 5, "type": 2, 'salary':7000},
-          {"name": "道路桥梁技术", "value": 6, "type": 2, 'salary':8000},
-          {"name": "给排水/制冷/暖通", "value": 7, "type": 2, 'salary':6000},
-          {"name": "岩土工程师", "value": 8, "type": 2, 'salary':10000},
-          {"name": "水利/港口工程技术", "value": 9, "type": 2, 'salary':8000},
-          {"name": "市政工程师", "value": 10, "type": 2, 'salary':15000},
-          {"name": "综合布线/弱电", "value": 11, "type": 2, 'salary':11000},
-          {"name": "爆破工程师", "value": 12, "type": 2, 'salary':12000},
-          {"name": "楼宇自动化", "value": 13, "type": 2, 'salary':20000},
-          {"name": "架线和管道工程技术", "value": 14, "type": 2, 'salary':7000},
-          {"name": "土建勘察", "value": 15, "type": 2, 'salary':12000},
-          {"name": "测绘/测量", "value": 26,"type":3, 'salary':6000},
-          {"name": "园林/景观设计", "value": 27,"type":3, 'salary':8000},
-          {"name": "建筑设计师/制图师", "value": 28,"type":3, 'salary':6000},
-          {"name": "建筑制图", "value": 29,"type":3, 'salary':8500},
-          {"name": "室内装潢设计", "value": 30,"type":3, 'salary':7000},
-          {"name": "城市规划与设计", "value": 31,"type":3, 'salary':12500},
-          {"name": "软装设计师", "value": 32,"type":3, 'salary':10000},
-          {"name": "硬装设计师", "value": 33,"type":3, 'salary':9000},
-          {"name": "橱柜设计师", "value": 34,"type":3, 'salary':10500},
-          {"name": "资料员", "value": 35, "type":4, 'salary':6000},
-          {"name": "开发报建", "value": 36, "type":4, 'salary':6000},
-          {"name": "工程资料管理", "value": 37, "type":4, 'salary':5000}
-        ]
+        educationData: {
+
+        },
+        natureData: {
+
+        },
+        salaryData: {
+
+        },
+        offDayData: {
+
+        },
+        guiyangData: {
+          520100: '贵阳市',
+          520200: '六盘水市',
+          520300: '遵义市',
+          520400: '安顺市',
+          520500: '毕节市',
+          520600: '铜仁市',
+          522300: '黔西南布依族苗族自治州',
+          522600: '黔东南苗族侗族自治州',
+          522700: '黔南布依族苗族自治州'
+        },
+        jobClassify: {
+
+        },
       }
     },
     methods: {
@@ -351,9 +284,9 @@
           .then((res)=>{
             if (res.data.code == 200) {
               tranCity(res.data.data,true,2);
-              transWorkexp(res.data.data,0);
+              transWorkexp1(res.data.data,0);
               transEducation(res.data.data,0);
-              transNature(res.data.data,2);
+              transNature1(res.data.data,2);
               transSalary(res.data.data,2);
               this.find_jobData = res.data.data
             }
@@ -382,7 +315,12 @@
       //筛选
       job_filter() {
         this.outBox = true;
-        this.firstBox = true
+        this.firstBox = true;
+        this.workexpData = transWorkexp1(this.workexpData,5);
+        this.educationData = transEducation(this.educationData,3);
+        this.natureData = transNature1(this.natureData,3);
+        this.salaryData = transSalary(this.salaryData,3);
+        this.offDayData = transArrive(this.offDayData,true,3);
       },
       firstBoxBg() {
         this.outBox = false;
@@ -395,10 +333,11 @@
       all_choose(e) {
         let partSign = e.currentTarget.getAttribute('data-sign');
         if (partSign == 'city') {
-          this.showMsg = true;
+          this.showMsg = 'city';
           this.top_title = '选择城市'
         } else if (partSign == 'pos_type') {
-          this.showMsg = false;
+          this.jobClassify = transJobs(this.jobClassify,5);
+          this.showMsg = 'posType';
           this.top_title = '选择职位类别'
         }
 
@@ -433,8 +372,8 @@
       reset() {
         this.workExpAct = this.educationAct = this.natureAct = this.salaryAct = this.offDayAct = 0;
         this.cityCode[1] = '520100';
-        this.tranValue = '全部';
-        this.classifyValue = '0'
+        this.tranPosType = '全部';
+        this.posTypeNum = 0
       },
       filter_submit() {
         this.find_jobParam.work_exp = this.workExpAct;
@@ -467,12 +406,14 @@
         this.firstBox = true;
         this.secondBox = false
       },
-      ClassifyVal(e) {
-        let cClassify = e.currentTarget.getAttribute('classify-id');
-        this.classifyValue = cClassify;
+      posTypeCode(e) {
+        let pos_code = e.currentTarget.getAttribute('posType-id');
+        this.posTypeNum = pos_code;
+        this.tranPosType = transJobs(pos_code,1);
         this.firstBox = true;
-        this.secondBox = false
-      }
+        this.secondBox = false;
+        // this.scrollSign = false;
+      },
     },
     created() {
       if (this.$route.query.province) {
@@ -480,17 +421,20 @@
         this.find_jobParam.province = this.$route.query.province;
       }
       let data = this.find_jobParam;
-     /* this.$ajax.get('/company_work',{params: data})
+      this.$ajax.get('/company_work',{params: data})
         .then((res)=>{
           if (res.data.code == 200) {
             tranCity(res.data.data,true,2);
-            transWorkexp(res.data.data,0);
+            transWorkexp1(res.data.data,0);
             transEducation(res.data.data,0);
-            transNature(res.data.data,2);
+            transNature1(res.data.data,2);
             transSalary(res.data.data,2);
+            for (let i = 0,len = res.data.data.length;i < len;i++) {
+              res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
+            }
             this.find_jobData = res.data.data
           }
-        });*/
+        });
       this.tranCode = tranCity(this.cityCode,true,1)
     },
     updated() {
@@ -498,11 +442,11 @@
       this.find_jobParam.city = this.cityCode[1];
       for (let i = 0,len = this.jobClassify.length; i < len; i++) {
         if (this.jobClassify[i].value == this.classifyValue) {
-          this.tranValue = this.jobClassify[i].name;
+          this.tranPosType = this.jobClassify[i].name;
         }
       }
-      if (this.classifyValue == '0') {
-        this.tranValue = '全部';
+      if (this.posTypeNum == '0') {
+        this.tranPosType = '全部';
       }
 
 
