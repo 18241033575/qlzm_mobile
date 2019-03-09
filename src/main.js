@@ -3,19 +3,22 @@
 import Vue from 'vue'
 import elementUI from 'element-ui'
 import mintUI from 'mint-ui'
-import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker} from 'element-ui';
+import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification} from 'element-ui';
+import { Toast } from 'mint-ui';
 import App from './App'
 import router from './router'
 import Axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'mint-ui/lib/style.css'
 
-
 Vue.use(elementUI);
 Vue.use(mintUI);
 
 
-//数据请求
+// 数据请求
+// 正式服
+// Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
+// 测试服
 // Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
 Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
@@ -39,9 +42,14 @@ Vue.use(Input);
 Vue.use(Icon);
 Vue.use(Dialog);
 Vue.use(DatePicker);
+Vue.use(Notification);
 Vue.component(Message.name, Message);//用以解决刷新自动弹出message
 // Vue.use(Message);
 
+
+
+// mint-ui组件调用
+// Vue.component(Toast.name, Toast);
 
 Vue.config.productionTip = false;
 

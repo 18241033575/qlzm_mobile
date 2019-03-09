@@ -42,7 +42,7 @@
         </div>
         <div class="opera_list" v-if="this.orign == 'collect'">
           <div class="content">
-            <div class="opera_cell" @click="cancel_col">
+            <div class="opera_cell" @click.stop="cancel_col">
               取消收藏
             </div>
           </div>
@@ -63,7 +63,7 @@
         </div>
         <div class="opera_list" v-if="this.orign == 'collected'">
           <div class="content">
-            <div class="opera_cell" @click="collect_resume">
+            <div class="opera_cell" @click.stop="collect_resume">
               加入收藏
             </div>
           </div>

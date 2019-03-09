@@ -21,7 +21,7 @@
         :value="item.value">
       </el-option>
       </el-select>
-      <el-input class="common_input" v-model="acount" placeholder="请输入手机号码"></el-input>
+      <el-input class="common_input" v-model="account" placeholder="请输入手机号码"></el-input>
       <el-input class="common_input" v-if="this.loginTypeSign" v-model="password" type="password" placeholder="请输入密码"></el-input>
       <div class="sms_group" v-if="!this.loginTypeSign">
         <el-input class="common_input_sms fl" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
@@ -34,8 +34,8 @@
         width="80%">
         <span>{{showMsg}}</span>
         <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="handleClose">确 定</el-button>
-  </span>
+          <el-button type="primary" @click="handleClose">确 定</el-button>
+        </span>
       </el-dialog>
     </div>
 </template>
@@ -45,7 +45,7 @@
         name: "login",
       data() {
         return {
-          acount: '',
+          account: '',
           password: '',
           active: false,
           sms_code: '',
@@ -68,14 +68,16 @@
       methods: {
         login_type1() {
           this.active = false;
+          this.account = '';
         },
         login_type2() {
           this.active = true;
+          this.account = '';
         },
         comLogin() {
           if (!this.active) {
             if (this.value == 2) {
-              this.$ajax.post('/sms/login',{"phone": this.acount,"type": 1,"member":1,"sms_code": this.sms_code})
+              this.$ajax.post('/sms/login',{"phone": this.account,"type": 1,"member":1,"sms_code": this.sms_code})
                 .then((res)=>{
                   if (res.data.state == 400) {
                     this.reqSuc = false;
@@ -93,7 +95,7 @@
                   }
                 })
             }else {
-              this.$ajax.post('/member/login',{"phone": this.acount,"account": this.acount,"password": this.password,"type": 1})
+              this.$ajax.post('/member/login',{"phone": this.account,"account": this.account,"password": this.password,"type": 1})
                 .then((res)=>{
                   if (res.data.state == 400) {
                     this.reqSuc = false;
@@ -114,7 +116,7 @@
             }
           }else {
             if (this.value == 2) {
-              this.$ajax.post('/sms/login',{"phone": this.acount,"type": 1,"member":1,"sms_code": this.sms_code})
+              this.$ajax.post('/sms/login',{"phone": this.account,"type": 1,"member":1,"sms_code": this.sms_code})
                 .then((res)=>{
                   if (res.data.state == 400) {
                     this.reqSuc = false;
@@ -132,7 +134,7 @@
                   }
                 })
             }else {
-              this.$ajax.post('/member/login',{"phone": this.acount,"account": this.acount,"password": this.password,"type": 2})
+              this.$ajax.post('/member/login',{"phone": this.account,"account": this.account,"password": this.password,"type": 2})
                 .then((res)=>{
                   if (res.data.state == 400) {
                     this.reqSuc = false;
@@ -163,10 +165,27 @@
         getCode() {
           if (this.getSmsState) {
             this.getSmsState = false;
-            this.$ajax.get('/sms',{params: {type:1,member:1,phone:this.acount}})
-              .then((res)=>{
-                console.log(res);
-              })
+            if(active) {
+              this.$ajax.get('/sms',{params: {type:1,member:1,phone:this.account}})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$message({
+                      message: '获取验证码成功',
+                      type: 'success'
+                    })
+                  }
+                })
+            }else {
+              this.$ajax.get('/sms',{params: {type:1,member:2,phone:this.account}})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$message({
+                      message: '获取验证码成功',
+                      type: 'success'
+                    })
+                  }
+                })
+            }
           }
         },
       },

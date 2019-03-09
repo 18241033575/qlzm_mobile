@@ -23,7 +23,7 @@
                 <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro">{{tranPro || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{tranCity || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{tranArea || '请选择'}}<img src="/static/images/font_down.png" alt=""></div></div>
                 <input type="text" v-model="infoData.address" maxlength="20" placeholder="详细地址，如：街道、门牌号等">
               </div>
-              <div class="edit_cell">
+              <div class="edit_cell" @click="edit_intro">
                 <span class="edit_lab">企业简介</span><span class="int_job_det fr"><img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
             </div>
@@ -66,6 +66,20 @@
           </div>
         </div>
       </div>
+      <!--企业简介-->
+      <div class="ent_intro" v-show="introSign">
+        <div class="filter_s_title">
+          <div class="content">
+            <img @click="intro_back" src="/static/images/left.png" alt="left">企业简介
+          </div>
+        </div>
+        <div class="content">
+          <textarea v-model="infoData.introduction" placeholder="请填写职位描述" name="evaluation"></textarea>
+        </div>
+        <div class="bas_msg_btn" @click="intro_sub">
+          确定
+        </div>
+      </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
@@ -91,6 +105,8 @@
           top_title: '',
           scrollSign: false,
           showMsg: '',
+          introSign: false,
+          editIntro: '',
           // 转换文字
           tranNature: '',
           tranScale: '',
@@ -187,10 +203,30 @@
         // 保存
         infoSave() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          this.$ajax.post('/company/info-set',{cid: companyInfo.id,logo: this.infoData.logo,name: this.infoData.name,nature: this.infoData.nature,scale: this.infoData.scale,province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.infoData.address,introduction: this.infoData.introduction})
+          this.$ajax.post('/company/info-set',{cid: companyInfo.id,logo: this.infoData.logo,name: this.infoData.name,nature: this.infoData.nature,scale: this.infoData.scale,province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.infoData.address,introduction: this.editIntro})
             .then((res)=>{
-              console.log(res);
+              if (res.data.state == 200) {
+                this.$notify.success({
+                  title: '提示',
+                  message: '保存成功',
+                  showClose: false,
+                  duration: 800
+                });
+                setTimeout(()=>{
+                    this.$router.push({name: 'enterp_info_set'})
+                },1000)
+              }
             })
+        },
+        intro_sub() {
+          this.editIntro = this.infoData.introduction;
+          this.introSign = false;
+        },
+        edit_intro() {
+          this.introSign = true;
+        },
+        intro_back() {
+          this.introSign = false;
         }
       },
       created() {
@@ -201,10 +237,10 @@
               this.infoData = res.data;
               this.tranNature = companyNature(this.infoData.nature,2);
               this.tranScale = companyScale(this.infoData.scale,2);
-
               this.tranPro = tranProvince(this.infoData.province,true,'',2);
               this.tranCity = tranCity(this.infoData,true,3);
               this.tranArea = tranArea(this.infoData,true,3);
+              this.editIntro = this.infoData.introduction;
             }
           })
       }
@@ -366,5 +402,37 @@
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
+  }
+  /*企业简介*/
+  .ent_intro{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
+    z-index: 999999999;
+  }
+  .ent_intro .filter_s_title{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
+  }
+  .ent_intro textarea{
+    width: 90%;
+    min-height: 130px;
+    height: 400px;
+    padding: 15px;
+    font-size: 14px;
+    color: #919199;
+    border: none;
+  }
+  .ent_intro textarea::placeholder{
+    font-size: 14px;
+    color: #c2c2cc;
+  }
+  .ent_intro textarea:focus{
+    outline: none;
   }
 </style>

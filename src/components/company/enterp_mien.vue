@@ -29,6 +29,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {splicPic} from '../../../static/js/common.js'
     export default {
         name: "enterp_mien",
       components: {
@@ -59,8 +60,10 @@
         this.$ajax.get('/company/get-info',{params: {cid: companyInfo.id}})
           .then((res)=>{
             if(res.data.state != 400) {
-              // this.infoData = res.data.style;
-              // console.log(this.infoData[0]);
+              this.infoData = JSON.parse(res.data.style);
+              for (let i = 0,len = this.infoData.length;i < len;i++) {
+                this.infoData[i] = splicPic(this.infoData[i],true);
+              }
             }
           })
       }
