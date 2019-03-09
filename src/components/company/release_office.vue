@@ -34,7 +34,7 @@
                 </div>
               </div>
               <div class="edit_cell special_cell ">
-                <span class="edit_lab">工作地点</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro">{{userMsg.province || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{userMsg.city || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{userMsg.area || '请选择'}}<img src="/static/images/font_down.png" alt=""></div></div>
+                <span class="edit_lab">工作地点</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro">{{tranPro || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{tranCity || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{tranArea || '请选择'}}<img src="/static/images/font_down.png" alt=""></div></div>
                 <input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址，如：街道、门牌号等">
               </div>
               <div class="edit_cell">
@@ -158,6 +158,9 @@
           tranEdu: '',
           workexpNum: 0,
           tranWorkexp: '',
+          tranPro: '',
+          tranCity: '',
+          tranArea: '',
           //性别、工作性质标识
           JobNature: 1,
           genderNum: 0,

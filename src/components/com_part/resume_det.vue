@@ -133,6 +133,7 @@
           /*总菜单状态*/
           openState: false,
           headPic: '/static/images/banner03@2x.png',
+          uid: '',
           userMsg: {
 
           },
@@ -207,12 +208,12 @@
           this.$router.push({name: 'resume_invite'})
         },
         report() {
-          this.$router.push({name: 'report'})
+          this.$router.push({name: 'report',query: {uid: this.uid}})
         }
       },
       created() {
-        let uid = this.$route.query.uid;
-        this.$ajax.get('/resume/userinfo',{params:{uid: uid}})
+        this.uid = this.$route.query.uid;
+        this.$ajax.get('/resume/userinfo',{params:{uid: this.uid}})
           .then((res)=>{
             if (res.data.state!= 400) {
               tranArea(res.data.base_info,true,0);
@@ -224,7 +225,7 @@
               this.userMsg = res.data.base_info;
             }
           });
-        this.$ajax.get('/resume/userinfo',{params:{uid: uid}})
+        this.$ajax.get('/resume/userinfo',{params:{uid: this.uid}})
           .then((res)=>{
             if (res.data.state!= 400) {
               // this.ArriveId = res.data.career_objective.duty_time;
@@ -245,7 +246,7 @@
               this.remark = this.intJobData.remark
             }
           });
-        this.$ajax.get('/resume/workexp',{params: {uid: uid}})
+        this.$ajax.get('/resume/workexp',{params: {uid: this.uid}})
           .then((res)=>{
             if (res.data.state != 400) {
               this.workData = res.data;
@@ -265,7 +266,7 @@
               }
             }
           });
-        this.$ajax.get('/resume/eduexp',{params: {uid: uid}})
+        this.$ajax.get('/resume/eduexp',{params: {uid: this.uid}})
           .then((res)=>{
             if (res.data.state != 400) {
               transEducation(res.data);
@@ -285,7 +286,7 @@
               sessionStorage.setItem('CERT',params);
             })
         }
-        this.$ajax.get('/resume/certificate',{params: {uid: uid}})
+        this.$ajax.get('/resume/certificate',{params: {uid: this.uid}})
           .then((res)=>{
             if (res.data.state != 400) {
               // this.certAllData = res.data;
@@ -314,7 +315,7 @@
               this.certsData = res.data;
             }
           });
-        this.$ajax.get('/resume/userinfo',{params:{uid: uid}})
+        this.$ajax.get('/resume/userinfo',{params:{uid: this.uid}})
           .then((res)=>{
             if (res.data.state!= 400) {
               res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,true);

@@ -142,7 +142,15 @@
             })
         },
         del_resume() {
-
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/resume/delete-already-buy',{cid: companyInfo.id,uid: this.uid})
+            .then((res)=>{
+              if(res.data.state ==200) {
+                this.boxState = false;
+                // 删除cid的数据
+                console.log(this.commonData);
+              }
+            })
         }
       },
       created() {
