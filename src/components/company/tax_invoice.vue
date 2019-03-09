@@ -224,10 +224,15 @@
                 reg_tel: this.invTax.reg_tel,bank: this.invTax.bank,bank_account: this.invTax.bank_account})
                 .then((res)=>{
                   if (res.data.state == 200) {
-                    this.$message({
+                    this.$notify.success({
+                      title: '提示',
                       message: '保存成功',
-                      type: 'success'
-                    })
+                      showClose: false,
+                      duration: 800
+                    });
+                    setTimeout(()=>{
+                      this.$router.push({name: 'invoice_msg'})
+                    },1000)
                   }
                 })
             } else {
@@ -235,10 +240,15 @@
                 reg_tel: this.invTax.reg_tel,bank: this.invTax.bank,bank_account: this.invTax.bank_account})
                 .then((res)=>{
                   if (res.data.state == 200) {
-                    this.$message({
+                    this.$notify.success({
+                      title: '提示',
                       message: '保存成功',
-                      type: 'success'
-                    })
+                      showClose: false,
+                      duration: 800
+                    });
+                    setTimeout(()=>{
+                      this.$router.push({name: 'invoice_msg'})
+                    },1000)
                   }
                 })
             }
@@ -248,20 +258,30 @@
               this.$ajax.post('/company/add-general-invoice',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: this.invTotal.number})
                 .then((res)=>{
                   if (res.data.state == 200) {
-                    this.$message({
+                    this.$notify.success({
+                      title: '提示',
                       message: '保存成功',
-                      type: 'success'
-                    })
+                      showClose: false,
+                      duration: 800
+                    });
+                    setTimeout(()=>{
+                      this.$router.push({name: 'invoice_msg'})
+                    },1000)
                   }
                 })
             } else {
               this.$ajax.post('/company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: this.invTotal.number})
                 .then((res)=>{
                   if (res.data.state == 200) {
-                    this.$message({
+                    this.$notify.success({
+                      title: '提示',
                       message: '保存成功',
-                      type: 'success'
-                    })
+                      showClose: false,
+                      duration: 800
+                    });
+                    setTimeout(()=>{
+                      this.$router.push({name: 'invoice_msg'})
+                    },1000)
                   }
                 })
             }
@@ -272,20 +292,30 @@
               this.$ajax.post('/company/add-addressee',{cid: companyInfo.id,name: this.invMsg.name,phone : this.invMsg.phone,email : this.invMsg.email,province : this.invMsg.province,city : this.invMsg.city,area : this.invMsg.area,address : this.invMsg.address})
                 .then((res)=>{
                   if (res.data.state == 200) {
-                    this.$message({
+                    this.$notify.success({
+                      title: '提示',
                       message: '保存成功',
-                      type: 'success'
-                    })
+                      showClose: false,
+                      duration: 800
+                    });
+                    setTimeout(()=>{
+                      this.$router.push({name: 'invoice_msg'})
+                    },1000)
                   }
                 })
             } else {
               this.$ajax.post('/company/set-addressee',{cid: companyInfo.id,name: this.invMsg.name,phone : this.invMsg.phone,email : this.invMsg.email,province : this.invMsg.province,city : this.invMsg.city,area : this.invMsg.area,address : this.invMsg.address})
                 .then((res)=>{
                   if (res.data.state == 200) {
-                    this.$message({
+                    this.$notify.success({
+                      title: '提示',
                       message: '保存成功',
-                      type: 'success'
-                    })
+                      showClose: false,
+                      duration: 800
+                    });
+                    setTimeout(()=>{
+                      this.$router.push({name: 'invoice_msg'})
+                    },1000)
                   }
                 })
             }

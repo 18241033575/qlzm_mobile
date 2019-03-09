@@ -60,6 +60,7 @@
 .bottom_msg .right_msg{
   flex-grow: 1;
   color: #666666;
+  word-break: break-all;
 }
 .exp_edit_list{
   margin-top: 10px;

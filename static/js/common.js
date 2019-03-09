@@ -389,6 +389,12 @@ function splicLogo(data,type) {
     } else {
       data.logo = file_server + data.logo
     }
+  }else if (type == 2) {
+    if (data == '') {
+      return '/static/images/company_def_logo.png'
+    } else {
+      return file_server + data
+    }
   } else {
     for (let i = 0; i < data.length; i++) {
       if (data[i].logo == '') {

@@ -66,15 +66,18 @@
         save_contract() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.contractData.cid = companyInfo.id;
-          console.log(this.contractData);
           this.$ajax.post('/company/contact-set', this.contractData)
             .then((res)=>{
-              console.log(res);
               if (res.data.state == 200) {
-                this.$message({
+                this.$notify.success({
+                  title: '提示',
                   message: '保存成功',
-                  type: 'success'
+                  showClose: false,
+                  duration: 800
                 });
+                setTimeout(()=>{
+                  this.$router.push({name: 'enterp_info_set'})
+                },1000)
               }
             })
         }

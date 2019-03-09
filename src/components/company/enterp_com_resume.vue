@@ -35,7 +35,7 @@
             <div class="opera_cell">
               下载简历
             </div>
-            <div class="opera_cell pos_del">
+            <div class="opera_cell pos_del" @click.stop="del_resume">
               删除记录
             </div>
           </div>
@@ -140,6 +140,9 @@
             .then((res)=>{
               console.log(res);
             })
+        },
+        del_resume() {
+
         }
       },
       created() {

@@ -4,7 +4,6 @@ import Vue from 'vue'
 import elementUI from 'element-ui'
 import mintUI from 'mint-ui'
 import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification} from 'element-ui';
-import { Toast } from 'mint-ui';
 import App from './App'
 import router from './router'
 import Axios from 'axios'
@@ -42,14 +41,12 @@ Vue.use(Input);
 Vue.use(Icon);
 Vue.use(Dialog);
 Vue.use(DatePicker);
-Vue.use(Notification);
+Vue.component(Notification.name, Notification);
 Vue.component(Message.name, Message);//用以解决刷新自动弹出message
 // Vue.use(Message);
 
 
 
-// mint-ui组件调用
-// Vue.component(Toast.name, Toast);
 
 Vue.config.productionTip = false;
 

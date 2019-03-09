@@ -8,13 +8,13 @@
     </div>
     <div class="com_mem">
       <div class="com_logo">
-        <img :src="this.companyData.logo" alt="">
+        <img :src="this.companyData.tranLogo" alt="">
         <div class="vip_sign" v-show="false">
           <img src="/static/images/diamond-blue-small.png" alt="">
         </div>
       </div>
       <p class="com_name">{{companyData.name}}</p>
-      <p v-if="(this.companyData.level < 1)" class="iden_msg">您当前还未认证！<span class="go_iden">[去认证]</span></p>
+      <p v-if="(companyData.level < 1)" class="iden_msg">您当前还未认证！<span class="go_iden">[去认证]</span></p>
       <p v-if="(companyData.level > 0)" class="consumption">累计消费<span class="consumption_total">￥{{sonsumptRecord}}</span>元</p>
     </div>
     <div class="mem_opera">
@@ -90,7 +90,14 @@
       created() {
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
         splicLogo(companyInfo,1);
-        this.companyData = companyInfo;
+        this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
+          .then((res)=>{
+            if (res.state != 400) {
+              console.log(res);
+              this.companyData = res.data;
+              this.companyData.tranLogo = splicLogo(this.companyData.info.logo,2)
+            }
+          })
         this.$ajax.get('/vip/levels')
           .then((res)=>{
             if (res.data.state != 400) {

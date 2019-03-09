@@ -9,7 +9,7 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">企业名称</span><input type="text" :readonly="identData.state == 1"  v-model="companyInfo.name" placeholder="企业名称">
+            <span class="edit_lab">企业名称</span><input type="text" :readonly="identData.state == 1"  v-model="entName" placeholder="企业名称">
           </div>
           <div class="edit_cell">
             <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state == 0 && !uploadSign">上传图片</span><span class="fr uppic_ident" v-show="identData.state == 0 && uploadSign">重新上传</span><span class="fr uppic_ident" v-show="identData.state == -2">验证中</span><span class="fr idented" v-show="identData.state == 1"><img src="/static/images/ic_cm_auth.png" alt="">已认证</span>
@@ -45,6 +45,7 @@
           openState: false,
           uploadSign: false,
           licenseUrl: '',
+          entName: '',
           identData: {
 
           },
@@ -82,10 +83,15 @@
         this.$ajax.get('/company/get-auth',{params: {cid: companyInfo.id}})
           .then((res)=>{
             if (res.data.state != 400) {
-              // res.data.state = 0;
               this.licenseUrl = res.data.license;
               res.data.license = splicPic(res.data.license,true);
               this.identData = res.data;
+            }
+          })
+        this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
+          .then((res)=>{
+            if (res.state != 400) {
+              this.entName = res.data.name;
             }
           })
       }
