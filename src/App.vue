@@ -78,7 +78,7 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    width: 100%;
+    width: 90%;
     line-height: 40px;
     border: 1px solid #E1E4E6;
     margin: 0;

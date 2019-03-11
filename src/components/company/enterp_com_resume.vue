@@ -35,14 +35,14 @@
             <div class="opera_cell">
               下载简历
             </div>
-            <div class="opera_cell pos_del" @click.stop="del_resume">
+            <div class="opera_cell pos_del" @click="del_resume">
               删除记录
             </div>
           </div>
         </div>
         <div class="opera_list" v-if="this.orign == 'collect'">
           <div class="content">
-            <div class="opera_cell" @click.stop="cancel_col">
+            <div class="opera_cell" @click="cancel_col">
               取消收藏
             </div>
           </div>
@@ -138,17 +138,29 @@
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/resume/cancel-collect',{uid: this.uid,cid: companyInfo.id})
             .then((res)=>{
-              console.log(res);
+              if (res.data.state == 200) {
+                for (let i = 0,len = this.commonData.length; i < len;i++) {
+                  // 报错 暂时没有找到原因，功能正常
+                  if (this.commonData[i].id == this.info_id) {
+                    // 删除相应数组
+                    this.commonData.splice(i,1);
+                  }
+                }
+              }
             })
         },
         del_resume() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/resume/delete-already-buy',{cid: companyInfo.id,uid: this.uid})
             .then((res)=>{
-              if(res.data.state ==200) {
-                this.boxState = false;
-                // 删除cid的数据
-                console.log(this.commonData);
+              if (res.data.state == 200) {
+                for (let i = 0,len = this.commonData.length; i < len;i++) {
+                  // 报错 暂时没有找到原因，功能正常
+                  if (this.commonData[i].id == this.info_id) {
+                    // 删除相应数组
+                    this.commonData.splice(i,1);
+                  }
+                }
               }
             })
         }
@@ -171,6 +183,7 @@
                     res.data[i].user_info.work_exp = transWorkexp(res.data[i].user_info,1);
                   }
                   this.commonData = res.data;
+
                 }
               })
           }else if (org == 'buy') {
@@ -197,6 +210,7 @@
                   transEducation(res.data,0);
                   transWorkexp(res.data,0);
                   this.commonData = res.data;
+                  console.log(this.commonData);
                 }
               })
           }else if (org == 'invite') {

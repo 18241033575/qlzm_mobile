@@ -203,7 +203,7 @@
           }
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/office/first-release',{office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
-            province: 520000,city: 520100,area: 520101,address: '',salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: '',hire_num: this.form.hire_num,tags: [0,1],has_m: 1,is_urgent: 1})
+            province: 520000,city: 520100,area: 520101,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: '',hire_num: this.form.hire_num,tags: [0,1],has_m: 1,is_urgent: 1})
             .then((res)=>{
               console.log(res);
             })
@@ -288,6 +288,14 @@
         },
         //证书专业
         certMajor() {
+          if(this.certTypeNum == 0) {
+            this.$message({
+              showClose: false,
+              message: '请先选择证书类型',
+              type:　'warning'
+            });
+            return
+          }
           this.secondBox = true;
           this.scrollSign = true;
           let certData = JSON.parse(localStorage.getItem('CERT'));

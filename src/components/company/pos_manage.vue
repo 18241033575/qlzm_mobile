@@ -19,16 +19,16 @@
       <div class="pos_opera_box" @click="cancel_opera" v-show="this.opera_state">
         <div class="opera_list">
           <div class="content">
-            <div class="opera_cell">
+            <div class="opera_cell" v-show="!isrelease" @click="release_off">
               发布
             </div>
-            <div class="opera_cell">
+            <div class="opera_cell" v-show="!isrelease" @click="edit_off">
               编辑
             </div>
-            <div class="opera_cell pos_del">
+            <div class="opera_cell pos_del" v-show="!isrelease" @click="del_off">
               删除
             </div>
-            <div class="opera_cell">
+            <div class="opera_cell" v-show="isrelease" @click="unrelease">
               撤回
             </div>
           </div>
@@ -55,6 +55,9 @@
           /*总菜单状态*/
           openState: false,
           opera_state: false,
+          isrelease: true,
+          id: 0,
+          cid: 0,
           manageData: {
 
           },
@@ -70,10 +73,64 @@
         },
         /*总菜单操作e*/
         pos_opera(e) {
+          this.id = e.currentTarget.getAttribute('id');
+          this.cid = e.currentTarget.getAttribute('cid');
+          for (let i = 0,len = this.manageData.length; i < len;i++) {
+            if (this.manageData[i].id == this.id) {
+              this.isrelease = this.manageData[i].is_release == 0?false:true;
+            }
+          }
           this.opera_state = true;
         },
         cancel_opera() {
           this.opera_state = false;
+        },
+        // 撤回
+        unrelease() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/office/revoked-release',{id: this.id,cid: companyInfo.id})
+            .then((res)=>{
+              if (res.data.state ==200) {
+                for (let i = 0,len = this.manageData.length; i < len;i++) {
+                  if (this.manageData[i].id == this.id) {
+                    this.manageData[i].is_release = 0;
+                  }
+                }
+              }
+            })
+        },
+        // 发布
+        release_off() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/office/release',{id: this.id,cid: companyInfo.id})
+            .then((res)=>{
+              if (res.data.state ==200) {
+                for (let i = 0,len = this.manageData.length; i < len;i++) {
+                  if (this.manageData[i].id == this.id) {
+                    this.manageData[i].is_release = 1;
+                  }
+                }
+              }
+            })
+        },
+        // 删除
+        del_off() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/office/delete',{id: this.id,cid: companyInfo.id})
+            .then((res)=>{
+              if (res.data.state ==200) {
+                for (let i = 0,len = this.manageData.length; i < len;i++) {
+                  if (this.manageData[i].id == this.id) {
+                    // 删除相应数组
+                    this.manageData.splice(i,1);
+                  }
+                }
+              }
+            })
+        },
+        // 编辑
+        edit_off() {
+          this.$router.push({name: 'release_office',query: {id: this.id,cid: this.cid}});
         }
       },
       created() {
