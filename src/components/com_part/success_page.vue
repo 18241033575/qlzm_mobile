@@ -36,11 +36,14 @@
           let orig = this.$route.query.orig;
           if (orig == 'phone') {
             this.success_msg = '手机号码修改成功！';
-            this.tips_msg = '下次登录请使用新手机号码登录。'
+            this.tips_msg = '3s后返回登录页面。'
           }else if(orig == 'password') {
             this.success_msg = '密码修改成功！';
-            this.tips_msg = '下次登录请使用新密码登录。'
+            this.tips_msg = '3s后返回登录页面。'
           }
+          setTimeout(()=>{
+            this.$router.push({name: 'login'});
+          },3000);
       },
       methods: {
         /*总菜单操作s*/

@@ -8,9 +8,9 @@
       </div>
     </div>
     <div class="phone_cell">
-      <el-input class="common_input" maxlength="16" minlength="6" v-model="old_password" placeholder="请输入旧密码"></el-input>
-      <el-input class="common_input" @blur="blur()" maxlength="16" minlength="6"  v-model="password" type="password" placeholder="设置新密码"></el-input>
-      <el-input class="common_input" @blur="blur()" maxlength="16" minlength="6"  v-model="config_password" type="password" placeholder="重复新密码"></el-input>
+      <el-input class="common_input" maxlength="16" minlength="6" v-model="param.old_password" placeholder="请输入旧密码"></el-input>
+      <el-input class="common_input" maxlength="16" minlength="6"  v-model="param.password" type="password" placeholder="设置新密码"></el-input>
+      <el-input class="common_input" maxlength="16" minlength="6"  v-model="param.password_confirm" type="password" placeholder="重复新密码"></el-input>
     </div>
     <div class="content">
       <div class="bas_msg_btn" @click="change_submit">
@@ -34,9 +34,11 @@
           return {
             /*总菜单状态*/
             openState: false,
-            old_password: '',
-            password: '',
-            config_password: ''
+            param:　{
+              old_password: '',
+              password: '',
+              password_confirm: ''
+            }
           }
       },
       methods: {
@@ -50,11 +52,37 @@
         /*总菜单操作e*/
         change_submit() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          console.log(this.password == this.config_password);
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
           if (companyInfo) {
-            this.$ajax.post('/company/changepasswd',{cid: companyInfo.id,old_password: this.old_password,password: JSON.parse(this.password),config_password: JSON.parse(this.config_password)})
+            this.param.cid = companyInfo.id;
+            this.$ajax.post('/company/changepasswd',this.param)
               .then((res)=>{
-
+                if (res.data.state == 200) {
+                  this.$router.push({name: 'success_page',query: {orig: 'password'}})
+                }else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500,
+                  });
+                }
+              })
+          }
+          if (userInfo) {
+            this.param.uid = userInfo.id;
+            this.$ajax.post('/personal/changepasswd',this.param)
+              .then((res)=>{
+                if (res.data.state == 200) {
+                  this.$router.push({name: 'success_page',query: {orig: 'password'}})
+                }else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500,
+                  });
+                }
               })
           }
           // this.$router.push({name: 'success_page',query:{orig: 'password'}})
@@ -62,11 +90,6 @@
             .then((res)=>{
 
             })*/
-        },
-        blur() {
-          if (this.password != this.config_password) {
-            console.log(1);
-          }
         },
        }
     }

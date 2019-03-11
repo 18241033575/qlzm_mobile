@@ -73,12 +73,15 @@
         change_submit() {
           // this.$router.push({name: 'success_page',query:{orig: 'phone'}})
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          let uid = userInfo.id;
-          this.$ajax.post('/perosnal/changephone',{phone: this.acount,sms_code: this.sms_code,uid: uid})
-            .then((res)=>{
-              console.log(res);
-              this.$router.push({name: 'success_page'})
-            })
+          if (userInfo) {
+            let uid = userInfo.id;
+            this.$ajax.post('/personal/changephone',{phone: this.acount,sms_code: this.sms_code,uid: uid})
+              .then((res)=>{
+                console.log(res);
+                // this.$router.push({name: 'success_page'})
+              })
+          }
+
         }
       }
     }
