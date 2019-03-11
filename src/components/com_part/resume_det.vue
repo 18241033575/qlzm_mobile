@@ -6,10 +6,11 @@
           简历详情
         </div>
       </div>
+      <!--基本信息-->
       <div class="tal_msg_det">
         <div class="content">
           <div class="top_pic">
-            <img :src="this.headPic" alt="">
+            <img :src="userMsg.photo" alt="">
             <p class="tal_name">{{userMsg.name}}</p>
             <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education}}</span>|<span>{{userMsg.work_exp}}</span></p>
           </div>
@@ -23,18 +24,20 @@
           </div>
         </div>
       </div>
+      <!--求职意向-->
       <div class="int_bottom">
         <div class="content">
           <div class="bottom_msg">
             <p><span class="left_lab">求职类型</span> <span class="right_msg">{{intJobData.nature}}</span></p>
-            <p><span class="left_lab">意向岗位</span> <span class="right_msg">{{intJobData.tranJob_id}}</span></p>
-            <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.transalary}}</span></p>
+            <p><span class="left_lab">意向岗位</span> <span class="right_msg">{{intJobData.job_id}}</span></p>
+            <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary}}</span></p>
             <p><span class="left_lab">工作地区</span> <span class="right_msg">{{(intJobData.province || '未知') + (intJobData.city || '')}}</span></p>
             <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time}}</span></p>
             <p><span class="left_lab">备注</span> <span class="right_msg">{{intJobData.remark}}</span></p>
           </div>
         </div>
       </div>
+      <!--工作经历-->
       <div class="exp_list">
         <div class="exp_cell" v-for="(item,index) in this.workData" :key="index">
           <div class="content">
@@ -54,6 +57,7 @@
           </div>
         </div>
       </div>
+      <!--教育经历-->
       <div class="exp_list">
         <div class="exp_cell" v-for="(item,index) in this.eduData" :key="index">
           <div class="content">
@@ -70,6 +74,7 @@
           </div>
         </div>
       </div>
+      <!--证书-->
       <div class="exp_list">
         <div class="exp_cell" v-for="(item,index) in this.certsData" :key="index">
           <div class="content">
@@ -79,13 +84,14 @@
               </div>
               <div class="bottom_msg">
                 <p><span class="left_lab">注册情况</span> <span class="right_msg">{{item.tranreg_status}}</span></p>
-                <p><span class="left_lab">增项</span> <span class="right_msg">{{item.tranaddition}}</span></p>
+                <p><span class="left_lab">增项</span> <span class="right_msg">{{additionData}}</span></p>
                 <p><span class="left_lab">备注</span> <span class="right_msg">{{item.remark}}</span></p>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!--自我评价-->
       <div class="eval_body">
         <div class="content">
           <div class="eval_body_top">
@@ -98,6 +104,7 @@
           </div>
         </div>
       </div>
+      <!--操作-->
       <div class="resume_btn" v-show="true">
         <div class="resume_invite resume_btn_cell" @click="interview">
           面试邀请
@@ -132,27 +139,15 @@
         return {
           /*总菜单状态*/
           openState: false,
-          headPic: '/static/images/banner03@2x.png',
           uid: '',
-          userMsg: {
-
-          },
-          intJobData: {
-
-          },
-          workData: {
-
-          },
-          eduData: {
-
-          },
-          certsData: {
-
-          },
-          selfEvalData: {
-
-          },
+          userMsg: {},
+          intJobData: {},
+          workData: {},
+          eduData: {},
+          certsData: {},
+          selfEvalData: {},
           evaluation: '',
+          additionData: '暂无',
           jobClassify: [
             {"name": "意向职位选择", "value": 0, "type": "optgroup"},
             {"name": "工程项目管理", "value": 16, "type":1, 'salary':15000},
@@ -213,43 +208,44 @@
       },
       created() {
         this.uid = this.$route.query.uid;
-        this.$ajax.get('/resume/userinfo',{params:{uid: this.uid}})
-          .then((res)=>{
-            if (res.data.state!= 400) {
+        let certData = JSON.parse(localStorage.getItem('CERT'));
+        if (!certData) {
+          this.$ajax.get('/allcerts')
+            .then((res)=>{
+              //  放入本地数据
+              let params = {};
+              params = JSON.stringify(res.data);
+              localStorage.setItem('CERT',params);
+              sessionStorage.setItem('CERT',params);
+            })
+        }
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        if (companyInfo) {
+          this.$ajax.get('/resume/view/' + this.uid,{params: {cid: companyInfo.id}})
+            .then((res)=>{
+              // 基本信息
               tranArea(res.data.base_info,true,0);
               tranCity(res.data.base_info,true,0);
               tranProvince(res.data.base_info,true);
-              transGender(res.data.base_info,true);
-              transEducation(res.data.base_info,1);
+              // transGender(res.data.base_info,true);
+              // transEducation(res.data.base_info,1);
               transWorkexp(res.data.base_info,1,'tal');
+              res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
               this.userMsg = res.data.base_info;
-            }
-          });
-        this.$ajax.get('/resume/userinfo',{params:{uid: this.uid}})
-          .then((res)=>{
-            if (res.data.state!= 400) {
-              // this.ArriveId = res.data.career_objective.duty_time;
-              res.data.career_objective.province = res.data.career_objective.work_province;
-              res.data.career_objective.city = res.data.career_objective.work_city;
-              tranCity(res.data.career_objective,true,0);
-              tranProvince(res.data.career_objective,true);
-              transArrive(res.data.career_objective,true,0);
-              transNature(res.data.career_objective,1);
-              transSalary(res.data.career_objective,1);
-              this.intJobData = res.data.career_objective;
 
-              for (let i = 0,len = this.jobClassify.length; i < len;i++) {
-                if (this.jobClassify[i].value == this.intJobData.job_id) {
-                  this.intJobData.tranJob_id = this.jobClassify[i].name;
-                }
-              }
-              this.remark = this.intJobData.remark
-            }
-          });
-        this.$ajax.get('/resume/workexp',{params: {uid: this.uid}})
-          .then((res)=>{
-            if (res.data.state != 400) {
-              this.workData = res.data;
+              // 求职意向
+              res.data.career.province = res.data.career.work_province;
+              res.data.career.city = res.data.career.work_city;
+              tranCity(res.data.career,true,0);
+              tranProvince(res.data.career,true);
+              // transArrive(res.data.career,true,0);
+              // transNature(res.data.career,1);
+              // transSalary(res.data.career,1);
+              this.intJobData = res.data.career;
+              this.remark = this.intJobData.remark;
+
+              // 工作经历
+              this.workData = res.data.work_exp;
               for (let i = 0,len = this.workData.length; i < len; i++) {
                 if (this.workData[i].industry == 0) {
                   this.workData[i].tranJobNature = '非建筑行业'
@@ -264,65 +260,56 @@
                   this.workData[i].workNature = '其他'
                 }
               }
-            }
-          });
-        this.$ajax.get('/resume/eduexp',{params: {uid: this.uid}})
-          .then((res)=>{
-            if (res.data.state != 400) {
-              transEducation(res.data);
-              this.eduData = res.data;
-              // this.certData = res.data;
-            }
-          });
-        // this.EduData = transEducation(this.EduData,3);
-        let certData = JSON.parse(localStorage.getItem('CERT'));
-        if (!certData) {
-          this.$ajax.get('/allcerts')
-            .then((res)=>{
-              //  放入本地数据
-              let params = {};
-              params = JSON.stringify(res.data);
-              localStorage.setItem('CERT',params);
-              sessionStorage.setItem('CERT',params);
-            })
-        }
-        this.$ajax.get('/resume/certificate',{params: {uid: this.uid}})
-          .then((res)=>{
-            if (res.data.state != 400) {
-              // this.certAllData = res.data;
-              res.data.forEach(function (item,ids) {
-                if (item.reg_status == 0) {
-                  item.tranreg_status = '不限'
-                } else if (item.reg_status == 1) {
-                  item.tranreg_status = '初始'
-                } else {
-                  item.tranreg_status = '转注'
-                }
-                for(let i = 0,len = certData.length;i < len;i++) {
-                  if (item.type == certData[i].id ) {
-                    item.trantype = certData[i].category;
-                    for(let j = 0,mlen = certData[i].majors.length; j < mlen; j++) {
-                      if (item.major == certData[i].majors[j].id) {
-                        item.tranmajor = certData[i].majors[j].major
-                      }
-                      if (item.addition == certData[i].majors[j].id) {
-                        item.tranaddition = certData[i].majors[j].major
-                      }
-                    }
-                  }
-                }
-              });
-              this.certsData = res.data;
-            }
-          });
-        this.$ajax.get('/resume/userinfo',{params:{uid: this.uid}})
-          .then((res)=>{
-            if (res.data.state!= 400) {
-              res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,true);
+
+              // 项目经验
+              transEducation(res.data.edu_exp);
+              this.eduData = res.data.edu_exp;
+
+              // 证书
+              let certs = JSON.parse(res.data.user_certs);
+                certs.forEach(function (item,ids) {
+                   if (item.reg_status == 0) {
+                     item.tranreg_status = '不限'
+                   } else if (item.reg_status == 1) {
+                     item.tranreg_status = '初始'
+                   } else {
+                     item.tranreg_status = '转注'
+                   }
+                   for(let i = 0,len = certData.length;i < len;i++) {
+                     if (item.type == certData[i].id ) {
+                       item.trantype = certData[i].category;
+                       for(let j = 0,mlen = certData[i].majors.length; j < mlen; j++) {
+                         if (item.major == certData[i].majors[j].id) {
+                           item.tranmajor = certData[i].majors[j].major
+                         }
+
+                         /* if (item.addition == certData[i].majors[j].id) {
+                            item.tranaddition = certData[i].majors[j].major
+                          }*/
+                       }
+                     }
+                   }
+                 });
+              this.certsData = certs;
+
+              // 自我评价
+              // res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,true);
               this.selfEvalData = res.data.evaluation;
-              this.evaluation = this.selfEvalData.evaluation
-            }
-          });
+              this.evaluation = this.selfEvalData.evaluation;
+            });
+        } else {
+          this.$ajax.get('/resume/view/' + this.uid)
+            .then((res)=>{
+              console.log(res);
+            });
+        }
+
+
+        for (let i = 0,len = this.jobClassify.length; i < len;i++) {
+          if (this.jobClassify[i].value == this.intJobData.job_id) {
+            this.intJobData.tranJob_id = this.jobClassify[i].name;
+          }
+        }
       }
     }
 </script>

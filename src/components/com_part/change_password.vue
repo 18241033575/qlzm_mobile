@@ -50,8 +50,9 @@
         /*总菜单操作e*/
         change_submit() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          console.log(this.password == this.config_password);
           if (companyInfo) {
-            this.$ajax.post('/company/changepasswd',{cid: companyInfo.id,old_password: this.old_password,password: this.password,config_password: this.config_password})
+            this.$ajax.post('/company/changepasswd',{cid: companyInfo.id,old_password: this.old_password,password: JSON.parse(this.password),config_password: JSON.parse(this.config_password)})
               .then((res)=>{
 
               })

@@ -14,7 +14,7 @@
                 <span class="edit_lab">职位名称</span><input type="text" maxlength="15" v-model="form.office_name" placeholder="请输入职位名称">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">招聘人数</span><input type="text" v-model="form.hire_num" maxlength="8" placeholder="招聘人数，默认为“若干”">
+                <span class="edit_lab">招聘人数</span><input type="number" v-model="form.hire_num" placeholder="招聘人数，默认为“若干”">
               </div>
               <div class="edit_cell">
                 <span class="edit_lab">职位类别</span><span class="int_job_det fr" @click="pos_type" >{{tranPosType || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -173,15 +173,9 @@
             tal_state: 1
           },
           //遍历数据
-          CommonData: {
-
-          },
-          addrData: {
-
-          },
-          infoData: {
-
-          },
+          CommonData: {},
+          addrData: {},
+          infoData: {},
         }
       },
       created() {

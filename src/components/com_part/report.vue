@@ -90,7 +90,16 @@
           if (companyInfo) {
             this.$ajax.post('/company/complaint',{cid: companyInfo.id,member_id: this.member_id,member_type: this.member_type,type: this.reportType,content: this.content})
               .then((res)=>{
-                console.log(res);
+                if (res.data.state == 200) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '举报成功',
+                    showClose: false,
+                    duration: 800
+                  });
+                  this.reportType = 1;
+                  this.content = '';
+                }
               })
           }
 

@@ -26,6 +26,32 @@
           <div class="edit_cell">
             <span class="edit_lab">面试地点</span><input type="text" v-model="contractData.address"  placeholder="必填">
           </div>
+          <div class="edit_cell">
+            <span class="edit_lab">面试时间</span>
+            <el-date-picker
+              v-model="inviteTime"
+              align="right"
+              type="datetime"
+              placeholder="选择日期"
+              :picker-options="pickerOptions1">
+            </el-date-picker>
+          </div>
+          <div class="edit_cell">
+            <span class="edit_lab">邀请方式</span><input type="text" v-model="contractData.address"  placeholder="必填">
+          </div>
+        </div>
+      </div>
+      <div class="tip">
+        <div class="content">
+          <div class="eval_body_bottom">
+            <textarea  name="evaluation" placeholder="在这里填写用于提醒应聘者的相关事项"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+
+        <div class="bas_msg_btn" >
+          发送邀请
         </div>
       </div>
     </div>
@@ -36,8 +62,14 @@
         name: "resume_invite",
       data() {
           return {
+            inviteTime: '',
             contractData: {
 
+            },
+            pickerOptions1: {
+              disabledDate(time) {
+                return time.getTime() < Date.now();
+              }
             },
           }
       }
@@ -85,5 +117,47 @@
     color: #ffffff;
     background-color: #5082e6;
     font-size: 14px;
+  }
+  .tip{
+    margin-top: 30px;
+    background-color: #ffffff;
+  }
+  .eval_body_bottom{
+    text-align: center;
+  }
+  .eval_body_bottom p{
+    padding: 15px 0;
+    font-size: 14px;
+    text-align: left;
+    color: #666666;
+    line-height: 18px;
+  }
+  .eval_body_bottom textarea{
+    width: 90%;
+    min-height: 130px;
+    padding: 15px;
+    font-size: 14px;
+    color: #919199;
+    border: none;
+  }
+  .eval_body_bottom textarea:focus{
+    outline:none;
+    border: none;
+  }
+  .eval_body_bottom textarea::placeholder{
+    font-size: 14px;
+    color: #c2c2cc;
+  }
+  .bas_msg_btn{
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+    line-height: 44px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #5082e6;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
   }
 </style>
