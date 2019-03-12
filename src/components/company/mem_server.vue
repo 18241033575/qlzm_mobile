@@ -93,17 +93,16 @@
         this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
           .then((res)=>{
             if (res.state != 400) {
-              console.log(res);
               this.companyData = res.data;
               this.companyData.tranLogo = splicLogo(this.companyData.info.logo,2)
             }
-          })
+          });
         this.$ajax.get('/vip/levels')
           .then((res)=>{
             if (res.data.state != 400) {
               this.memData = res.data;
             }
-          })
+          });
         this.$ajax.get('/company/recharge/lump-sum',{params: {cid: companyInfo.id}})
           .then((res)=>{
             if (res.data.state != 400) {
