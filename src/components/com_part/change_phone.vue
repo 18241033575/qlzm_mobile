@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="phone_cell">
-      <el-input class="common_input" v-model="acount" placeholder="请输入新的手机号码"></el-input>
+      <el-input class="common_input" v-model="param.phone" placeholder="请输入新的手机号码"></el-input>
       <div class="sms_group">
         <el-input class="common_input_sms fl" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
       </div>
@@ -42,7 +42,10 @@
             /*总菜单状态*/
             openState: false,
             nowPhone: '',
-            acount: '',
+            param: {
+              phone: '',
+              type: 4
+            },
             sms_code: '',
             getSmsCode: '获取短信验证码',
             getSmsState: true
@@ -64,24 +67,63 @@
         getCode() {
           if (this.getSmsState) {
             this.getSmsState = false;
-            this.$ajax.get('/sms',{params: {type:1,member:1,phone:this.acount}})
+            let userInfo = JSON.parse(localStorage.getItem('USER'));
+            let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+            if (userInfo) {
+              this.param.member = 1;
+            }
+            if (companyInfo) {
+              this.param.member = 2;
+            }
+            this.$ajax.get('/sms',{params: this.param})
               .then((res)=>{
-                console.log(res);
+                if (res.data.state == 200) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500,
+                  });
+                }
               })
           }
         },
         change_submit() {
-          // this.$router.push({name: 'success_page',query:{orig: 'phone'}})
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           if (userInfo) {
             let uid = userInfo.id;
-            this.$ajax.post('/personal/changephone',{phone: this.acount,sms_code: this.sms_code,uid: uid})
+            this.$ajax.post('/personal/changephone',{phone: this.param.phone,sms_code: this.sms_code,uid: uid})
               .then((res)=>{
-                console.log(res);
-                // this.$router.push({name: 'success_page'})
+                if (res.data.state == 200) {
+                  this.$router.push({name: 'success_page',query:{orig: 'phone'}})
+                } else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500,
+                  });
+                }
               })
           }
 
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if (companyInfo) {
+            let cid = companyInfo.id;
+            this.$ajax.post('/company/changephone',{phone: this.param.phone,sms_code: this.sms_code,cid: cid})
+              .then((res)=>{
+                if (res.data.state == 200) {
+                  this.$router.push({name: 'success_page',query:{orig: 'phone'}})
+                } else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500,
+                  });
+                }
+              })
+          }
         }
       }
     }

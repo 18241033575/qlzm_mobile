@@ -13,6 +13,7 @@ import 'mint-ui/lib/style.css'
 Vue.use(elementUI);
 Vue.use(mintUI);
 
+Vue.use(require('vue-wechat-title'));
 
 // 数据请求
 // 正式服

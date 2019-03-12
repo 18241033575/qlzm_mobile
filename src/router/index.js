@@ -70,6 +70,7 @@ Vue.use(Router);
 
 
 
+
 export default new Router({
   mode: 'history',
   routes: [
@@ -85,49 +86,31 @@ export default new Router({
       path: '/user_reg',
       name: 'user_reg',
       component: user_reg,
-      meta: {
-        title: '人才注册'
-      }
     },
     {
       path: '/enterp_reg',
       name: 'enterp_reg',
       component: enterp_reg,
-      meta: {
-        title: '建筑企业注册'
-      }
     },
     {
       path: '/reg_type_choose',
       name: 'reg_type_choose',
       component: reg_type_choose,
-      meta: {
-        title: '注册类型选择'
-      }
     },
     {
       path: '/login',
       name: 'login',
       component: login,
-      meta: {
-        title: '人才登录'
-      }
     },
     {
       path: '/find_job',
       name: 'find_job',
       component: find_job,
-      meta: {
-        title: '找工作'
-      }
     },
     {
       path: '/famous_pos',
       name: 'famous_pos',
       component: famous_pos,
-      meta: {
-        title: '名企招聘'
-      }
     },
     {
       path: '/success_page',
@@ -138,9 +121,6 @@ export default new Router({
       path: '/account_manage',
       name: 'account_manage',
       component: account_manage,
-      meta: {
-        title: '账号管理'
-      }
      /* children:[
         {
           path: '',
@@ -172,89 +152,56 @@ export default new Router({
       path: '/news',
       name: 'news',
       component: news,
-      meta: {
-        title: '新闻资讯'
-      }
     },
     {
       path: '/news_info',
       name: 'news_info',
       component: news_info,
-      meta: {
-        title: '咨询详情'
-      }
     },
     {
       path: '/company_det',
       name: 'company_det',
       component: company_det,
-      meta: {
-        title: '企业详情'
-      }
     },
     {
       path: '/pos_det',
       name: 'pos_det',
       component: pos_det,
-      meta: {
-        title: '职位详情'
-      }
     },
     {
       path: '/resume_det',
       name: 'resume_det',
       component: resume_det,
-      meta: {
-        title: '简历详情'
-      }
     },
     {
       path: '/report',
       name: 'report',
       component: report,
-      meta: {
-        title: ''
-      }
     },
     {
       path: '/resume_invite',
       name: 'resume_invite',
       component: resume_invite,
-      meta: {
-        title: ''
-      }
     },
     {
       path: '/all_pos',
       name: 'all_pos',
       component: all_pos,
-      meta: {
-        title: ''
-      }
     },
     {
       path: '/sys_msg',
       name: 'sys_msg',
       component: sys_msg,
-      meta: {
-        title: ''
-      }
     },
     {
       path: '/sys_msg_det',
       name: 'sys_msg_det',
       component: sys_msg_det,
-      meta: {
-        title: ''
-      }
     },
     {
       path: '/tal_center',
       name: 'tal_center',
       component: tal_center,
-      meta: {
-        title: '个人中心'
-      }
     },
     {
       path: '/tal_resume',

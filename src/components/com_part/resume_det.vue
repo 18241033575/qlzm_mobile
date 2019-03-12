@@ -224,9 +224,21 @@
           this.$ajax.get('/resume/view/' + this.uid,{params: {cid: companyInfo.id}})
             .then((res)=>{
               // 基本信息
-              tranArea(res.data.base_info,true,0);
-              tranCity(res.data.base_info,true,0);
-              tranProvince(res.data.base_info,true);
+              if (res.data.base_info.area == 0) {
+                res.data.base_info.area = '';
+              } else {
+                tranArea(res.data.base_info,true,0);
+              }
+              if (res.data.base_info.city == 0) {
+                res.data.base_info.city = '';
+              } else {
+                tranCity(res.data.base_info,true,0);
+              }
+              if (res.data.base_info.province == 0) {
+                res.data.base_info.province = '未知';
+              } else {
+                tranProvince(res.data.base_info,true);
+              }
               // transGender(res.data.base_info,true);
               // transEducation(res.data.base_info,1);
               transWorkexp(res.data.base_info,1,'tal');
@@ -236,8 +248,16 @@
               // 求职意向
               res.data.career.province = res.data.career.work_province;
               res.data.career.city = res.data.career.work_city;
-              tranCity(res.data.career,true,0);
-              tranProvince(res.data.career,true);
+              if (res.data.career.city == 0) {
+                res.data.career.city = '';
+              } else {
+                tranCity(res.data.career,true,0);
+              }
+              if (res.data.career.province == 0) {
+                res.data.career.province = '未知';
+              } else {
+                tranProvince(res.data.career,true);
+              }
               // transArrive(res.data.career,true,0);
               // transNature(res.data.career,1);
               // transSalary(res.data.career,1);

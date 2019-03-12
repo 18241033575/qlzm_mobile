@@ -1,11 +1,11 @@
 <template>
-  <div class="main" :class="{stop_scroll: this.openState}">
+  <div class="main" :class="{stop_scroll: this.openState}" v-wechat-title="$route.meta.title = webTitle">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <!--头部-->
     <div class="head">
       <div class="content">
         <div class="head_top">
-          <span class="fl">贵阳&nbsp;<img src="/static/images/down3j.png" alt=""></span><img class="logo" src="/static/images/logo.png" alt="">
+          <span class="fl">贵州省&nbsp;<img src="/static/images/down3j.png" alt=""></span><img class="logo" src="/static/images/logo.png" alt="">
         </div>
       </div>
     </div>
@@ -87,6 +87,9 @@
             </div>
           </div>
         </div>
+        <router-link :to="{name: 'find_job',query:{ugent: 1}}" class="show_more">
+          更多急聘职位
+        </router-link>
       </div>
     </div>
     <!--名企招聘-->
@@ -176,7 +179,9 @@
             openState: false,
             ugentData: {},
             famousData: {},
-            newsData: {}
+            newsData: {},
+            baseData: {},
+            webTitle: '',
           }
       },
       methods: {
@@ -239,6 +244,18 @@
               this.newsData = res.data.data
             }
           })
+        this.$ajax.get('/get-system-configs')
+          .then((res)=>{
+            if (res.data.state != 400) {
+              this.baseData = res.data;
+
+              res.data.forEach((item,ids)=> {
+                if (item.id == 13) {
+                  this.webTitle = item.value;
+                }
+              })
+            }
+          })
       }
     }
 </script>
@@ -266,6 +283,7 @@
     vertical-align: middle;
   }
   .logo{
+    margin-left: -15px;
     width: 88px;
     height: 24px;
   }

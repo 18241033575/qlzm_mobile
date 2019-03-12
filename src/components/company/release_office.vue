@@ -67,6 +67,8 @@
           </div>
         </div>
       </div>
+
+      
       <!--筛选第二层-->
       <div class="filter_all_box" v-show="this.secondBox">
         <div class="filter_bg" @click="secondBoxBg">
@@ -137,11 +139,11 @@
           top_title: '',
           isUgent: true,
           scrollSign: false,
-          cityCode: {
-
-          },
+          cityCode: {},
           showMsg: '',
           beginData: {},
+          id: 0,
+          editData: {},
           //弹层数据标识、转换数据
           posTypeNum: '0',
           tranPosType: '',
@@ -177,10 +179,6 @@
           addrData: {},
           infoData: {},
         }
-      },
-      created() {
-
-
       },
       methods: {
         /*总菜单操作s*/
@@ -424,6 +422,22 @@
           this.secondBox = false
         },
       },
+      created() {
+          this.id = this.$route.query.id;
+          let cid = this.$route.query.cid;
+          if (this.id != 0) {
+            this.$ajax.get('/office/management',{params: {cid: cid}})
+              .then((res)=>{
+                if (res.data.state != 400) {
+                   for (let i = 0,len = res.data.length;i < len;i++) {
+                     if (res.data[i].id == this.id) {
+                       this.editData = res.data[i];
+                     }
+                   }
+                }
+              })
+          }
+      }
     }
 </script>
 

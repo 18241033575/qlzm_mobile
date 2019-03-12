@@ -111,7 +111,6 @@
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {transWorkexp,transEducation,transSalary,transJobs} from '../../../static/js/common.js'
     export default {
         name: "tax_invoice",
       components: {

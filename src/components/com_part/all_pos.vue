@@ -8,17 +8,8 @@
       </div>
       <div class="list">
         <div class="content">
-          <div class="list_cell">
-            一键
-          </div>
-          <div class="list_cell">
-            一键
-          </div>
-          <div class="list_cell">
-            一键
-          </div>
-          <div class="list_cell">
-            一键
+          <div class="list_cell" v-for="(item,index) in this.allPosData" :key="index" v-show="item.value != 0" :data-id="item.value" @click="job_pos">
+            {{item.name}}
           </div>
         </div>
       </div>
@@ -30,6 +21,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {transJobs} from '../../../static/js/common.js'
     export default {
         name: "all_pos",
       components: {
@@ -40,7 +32,7 @@
         return {
           /*总菜单状态*/
           openState: false,
-
+          allPosData: {},
         }
       },
       methods: {
@@ -52,6 +44,13 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+        job_pos(e) {
+          let job_id = e.currentTarget.getAttribute('data-id');
+          this.$router.push({name: 'find_job',query: {job_id: job_id}})
+        }
+      },
+      created() {
+        this.allPosData = transJobs(this.allPosData,5);
       }
     }
 </script>
