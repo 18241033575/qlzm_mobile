@@ -14,7 +14,7 @@
                 <span class="edit_lab">职位名称</span><input type="text" maxlength="15" v-model="form.office_name" placeholder="请输入职位名称">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">招聘人数</span><input type="number" v-model="form.hire_num" placeholder="招聘人数，默认为“若干”">
+                <span class="edit_lab">招聘人数</span><input type="number" @keyup.native="hire_num" v-model="form.hire_num" placeholder="招聘人数，默认为“若干”">
               </div>
               <div class="edit_cell">
                 <span class="edit_lab">职位类别</span><span class="int_job_det fr" @click="pos_type" >{{tranPosType || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -50,10 +50,10 @@
                 <span class="edit_lab">性别限制</span><span class="fr choose_group la_choose_group"><span class="choose_cell" :class="{choose_active:this.genderNum == 0}" @click="all_sex">不限</span><span class="choose_cell" :class="{choose_active:this.genderNum == 1}" @click="man_sex">男</span><span class="choose_cell" :class="{choose_active:this.genderNum == 2}" @click="woman_sex">女</span></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">职位亮点</span><span class="int_job_det fr" >{{(1) || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+                <span class="edit_lab">职位亮点</span><span class="int_job_det fr"><img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
-              <div class="edit_cell">
-                <span class="edit_lab">职位描述</span><span class="int_job_det fr" >{{1 || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <div class="edit_cell" @click="pos_desc">
+                <span class="edit_lab">职位描述</span><span class="int_job_det fr" ><img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
                 <span class="edit_lab">加急招聘</span><span class="int_job_det fr" > <el-switch class="switch_btn" v-model="isUgent"></el-switch></span>
@@ -68,7 +68,20 @@
         </div>
       </div>
 
-      
+      <!--职位描述-->
+      <div class="ent_intro" v-show="introSign">
+        <div class="filter_s_title">
+          <div class="content">
+            <img @click="intro_back" src="/static/images/left.png" alt="left">职位描述
+          </div>
+        </div>
+        <div class="content">
+          <textarea v-model="infoData.duty" placeholder="请填写职位描述" name="evaluation"></textarea>
+        </div>
+        <div class="bas_msg_btn" @click="intro_sub">
+          确定
+        </div>
+      </div>
       <!--筛选第二层-->
       <div class="filter_all_box" v-show="this.secondBox">
         <div class="filter_bg" @click="secondBoxBg">
@@ -143,7 +156,8 @@
           showMsg: '',
           beginData: {},
           id: 0,
-          editData: {},
+          introSign: false,
+          duty: '',
           //弹层数据标识、转换数据
           posTypeNum: '0',
           tranPosType: '',
@@ -169,10 +183,9 @@
           form: {
             office_name: '',
             hire_num: '',
-            tal_qq: '',
-            tal_email: '',
             tal_addr: '',
-            tal_state: 1
+            tal_state: 1,
+            ugent: 0
           },
           //遍历数据
           CommonData: {},
@@ -190,15 +203,45 @@
         },
         /*总菜单操作e*/
         release() {
-          if (this.form.hire_num == '') {
+          if (this.form.hire_num == '' || this.form.hire_num == '若干') {
             this.form.hire_num = 0;
           }
+          this.form.ugent = this.isUgent == true?1:0;
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          this.$ajax.post('/office/first-release',{office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
-            province: 520000,city: 520100,area: 520101,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: '',hire_num: this.form.hire_num,tags: [0,1],has_m: 1,is_urgent: 1})
-            .then((res)=>{
-              console.log(res);
-            })
+          if (this.id == 0) {
+            this.$ajax.post('/office/first-release',{office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
+              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: [0,1],is_urgent: this.form.ugent})
+              .then((res)=>{
+                if (res.data.state == 200) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '发布成功',
+                    showClose: false,
+                    duration: 800
+                  });
+                  setTimeout(()=>{
+                    this.$router.push({name: 'pos_manage'})
+                  },1000)
+                }
+              })
+          } else {
+            this.$ajax.post('/office/edit',{id: this.id,office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,is_release: 1,
+              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: [0,1],is_urgent: this.form.ugent})
+              .then((res)=>{
+                if (res.data.state == 200) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '发布成功',
+                    showClose: false,
+                    duration: 800
+                  });
+                  setTimeout(()=>{
+                    this.$router.push({name: 'pos_manage'})
+                  },1000)
+                }
+              })
+          }
+
         },
         secondBoxBg() {
           this.secondBox = false;
@@ -241,16 +284,6 @@
           this.secondBox = true;
           this.scrollSign = true;
           let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           this.showMsg = 'cert_type';
           this.CommonData = certData;
           this.top_title = '选择证书类型'
@@ -280,6 +313,7 @@
         },
         //证书专业
         certMajor() {
+          let certData = JSON.parse(localStorage.getItem('CERT'));
           if(this.certTypeNum == 0) {
             this.$message({
               showClose: false,
@@ -290,17 +324,6 @@
           }
           this.secondBox = true;
           this.scrollSign = true;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           this.showMsg = 'cert_major';
           for (let i = 0,len = certData.length; i < len; i++) {
             if (certData[i].id == this.certTypeNum) {
@@ -314,17 +337,6 @@
           this.certMajorNum = majorId;
           this.secondBox = false;
           this.scrollSign = false;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           for (let i = 0,len = certData.length; i < len; i++) {
             if (certData[i].id == this.certTypeNum) {
               for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
@@ -421,18 +433,84 @@
           this.tranArea = tranArea(this.infoData,true,3);
           this.secondBox = false
         },
+        intro_back() {
+          this.introSign = false;
+          this.scrollSign = false;
+        },
+        intro_sub() {
+          this.duty = this.infoData.duty;
+          this.scrollSign = false;
+          this.introSign = false;
+        },
+        pos_desc() {
+          this.scrollSign = true;
+          this.introSign = true;
+        },
+        hire_num() {
+          /*this.form.hire_num = this.form.hire_num.replace(/[^\.\d]/g,'');
+          this.form.hire_num = this.form.hire_num.replace('.','');*/
+        }
       },
       created() {
           this.id = this.$route.query.id;
-          let cid = this.$route.query.cid;
+          let certData = JSON.parse(localStorage.getItem('CERT'));
+          if (!certData) {
+            this.$ajax.get('/allcerts')
+              .then((res)=>{
+                certData = res.data;
+                //  放入本地数据
+                let params = {};
+                params = JSON.stringify(res.data);
+                localStorage.setItem('CERT',params);
+                sessionStorage.setItem('CERT',params);
+              })
+          }
           if (this.id != 0) {
-            this.$ajax.get('/office/management',{params: {cid: cid}})
+            let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+            this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
               .then((res)=>{
                 if (res.data.state != 400) {
-                   for (let i = 0,len = res.data.length;i < len;i++) {
-                     if (res.data[i].id == this.id) {
-                       this.editData = res.data[i];
-                     }
+                  for (let i = 0,len = res.data.length;i < len;i++) {
+                    if (res.data[i].id == this.id) {
+                      console.log(res.data[i]);
+                      this.infoData.province = res.data[i].province;
+                      this.tranPro = tranProvince(this.infoData.province,true,'',2);
+                      this.infoData.city = res.data[i].city;
+                      this.tranCity = tranCity(this.infoData,true,3);
+                      this.infoData.area = res.data[i].area;
+                      this.tranArea = tranArea(this.infoData,true,3);
+                      this.infoData.duty = res.data[i].duty;
+                      this.form.office_name = res.data[i].office_name;
+                      this.form.tal_addr = res.data[i].address;
+                      this.form.hire_num = res.data[i].hire_num == 0?'若干':res.data[i].hire_num;
+                      this.posTypeNum = res.data[i].job_id;
+                      this.tranPosType = transJobs(this.posTypeNum,1);
+                      this.certTypeNum = res.data[i].cert_categories_id;
+                      for (let i = 0,len = certData.length; i < len; i++) {
+                        if (certData[i].id == this.certTypeNum) {
+                          this.tranCertType = certData[i].category;
+                        }
+                      }
+                      this.certMajorNum = res.data[i].cert_majors_id;
+                      for (let i = 0,len = certData.length; i < len; i++) {
+                        if (certData[i].id == this.certTypeNum) {
+                          for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
+                            if (certData[i].majors[j].id == this.certMajorNum) {
+                              this.tranCertMajor = certData[i].majors[j].major
+                            }
+                          }
+                        }
+                      }
+                      this.JobNature = res.data[i].nature;
+                      this.salaryNum.salary = res.data[i].salary;
+                      transSalary(this.salaryNum,1);
+                      this.tranSalary = this.salaryNum.transalary;
+                      this.educationNum = res.data[i].education;
+                      this.tranEdu = transEducation(this.educationNum,4);
+                      this.workexpNum = res.data[i].work_exp;
+                      this.tranWorkexp = transWorkexp(this.workexpNum,4);
+                      this.isUgent = res.data[i].is_urgent == 1?true:false;
+                    }
                    }
                 }
               })
@@ -701,5 +779,38 @@
     width: 16px;
     height: 16px;
     vertical-align: middle;
+  }
+  /*职位描述*/
+  .ent_intro{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #ffffff;
+    z-index: 999999999;
+  }
+  .ent_intro .filter_s_title{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
+  }
+  .ent_intro textarea{
+    width: 90%;
+    min-height: 130px;
+    height: 400px;
+    padding: 15px;
+    font-size: 14px;
+    color: #919199;
+    border: none;
+  }
+  .ent_intro textarea::placeholder{
+    font-size: 14px;
+    color: #c2c2cc;
+  }
+  .ent_intro textarea:focus{
+    outline: none;
   }
 </style>
