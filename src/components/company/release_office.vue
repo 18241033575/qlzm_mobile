@@ -469,6 +469,7 @@
             let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
             this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
               .then((res)=>{
+                console.log(res.data);
                 if (res.data.state != 400) {
                   for (let i = 0,len = res.data.length;i < len;i++) {
                     if (res.data[i].id == this.id) {
@@ -501,6 +502,8 @@
                           }
                         }
                       }
+                      this.posTypeNum = res.data[i].category;
+                      this.tranPosType = transJobs(this.posTypeNum,1);
                       this.JobNature = res.data[i].nature;
                       this.salaryNum.salary = res.data[i].salary;
                       transSalary(this.salaryNum,1);
@@ -510,6 +513,7 @@
                       this.workexpNum = res.data[i].work_exp;
                       this.tranWorkexp = transWorkexp(this.workexpNum,4);
                       this.isUgent = res.data[i].is_urgent == 1?true:false;
+                      this.genderNum = res.data[i].sex;
                     }
                    }
                 }

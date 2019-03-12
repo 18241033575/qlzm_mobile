@@ -70,13 +70,13 @@
                 <div class="com_det_title msg_cell_fz">
                   企业简介
                 </div>
-                <div class="company_info">
+                <div class="company_info" :class="{shade_info: this.shadeSign}">
                   <p>{{companyMsg.introduction}}
                   </p>
-                  <div class="shade"></div>
+                  <div class="shade" v-if="shadeSign"></div>
                 </div>
                 <!--思路：开始固定高度，超出隐藏。点击后自动高度-->
-                <div class="show_all">查看全部</div>
+                <div class="show_all" v-if="shadeSign" @click="look_all">查看全部</div>
               </div>
             </div>
           </div>
@@ -164,7 +164,8 @@
             hotPosData: [],
             companyDetSign: true,
             hotPosNum: 0,
-            tags_sign: true
+            tags_sign: true,
+            shadeSign: true
           }
       },
       created() {
@@ -180,7 +181,6 @@
               }
               res.data.logo = splicPic(res.data.logo,true);
               this.contactData = res.data.contact;
-
               tranArea(res.data,true,1);
               tranCity(res.data,true,4);
               tranProvince(res.data,true);
@@ -192,13 +192,15 @@
         this.$ajax.get('/office/company', {params: {cid: cid}})
           .then((res) => {
             if (res.data.state != 400) {
+              // 没有city字段
+              /*console.log(res.data.data);
               tranCity(res.data.data,true,2);
               transWorkexp(res.data.data,0,'com');
               transEducation(res.data.data,0);
               transNature(res.data.data,2);
               transSalary(res.data.data,2);
               this.hotPosData = res.data;
-              this.hotPosNum = res.data.data.length;
+              this.hotPosNum = res.data.data.length;*/
             }
           })
       },
@@ -222,6 +224,9 @@
           let cid = e.currentTarget.getAttribute('cid');
           this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
         },
+        look_all() {
+          this.shadeSign = false;
+        }
       }
     }
 </script>
@@ -417,8 +422,11 @@
   /*简介*/
   .company_info{
     position: relative;
-    height: 130px;
+    height: auto;
     overflow: hidden;
+  }
+  .shade_info{
+    height: 130px;
   }
   .company_info p{
     text-indent: 2em;

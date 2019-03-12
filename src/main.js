@@ -6,12 +6,15 @@ import mintUI from 'mint-ui'
 import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification} from 'element-ui';
 import App from './App'
 import router from './router'
+import VueQuillEditor from 'vue-quill-editor'
 import Axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'mint-ui/lib/style.css'
 
+
 Vue.use(elementUI);
 Vue.use(mintUI);
+Vue.use(VueQuillEditor);
 
 Vue.use(require('vue-wechat-title'));
 
@@ -19,8 +22,8 @@ Vue.use(require('vue-wechat-title'));
 // 正式服
 // Axios.defaults.baseURL = 'http://qlzm.com.cn';
 // 测试服
-// Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
-Axios.defaults.baseURL = 'http://qlzm.com';
+Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
+// Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
 // Axios.defaults.baseURL= '/api';
 

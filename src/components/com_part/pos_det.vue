@@ -87,10 +87,10 @@
                 <p>
                   {{posDetData.duty}}
                 </p>
-                <div class="shade"></div>
+                <div class="shade" v-if="shadeSign"></div>
               </div>
               <!--思路：开始固定高度，超出隐藏。点击后自动高度-->
-              <div class="show_all">查看全部</div>
+              <div class="show_all" v-if="shadeSign" @click="look_all">查看全部</div>
             </div>
           </div>
         </div>
@@ -156,7 +156,8 @@
         pos_categoty: '',
         pos_major: '',
         isCol: false,
-        isApply: false
+        isApply: false,
+        shadeSign: true
       }
     },
     methods: {
@@ -221,6 +222,9 @@
           }
         }
       },
+      look_all() {
+        this.shadeSign = false;
+      }
     },
     created() {
       let id = this.$route.query.id;
