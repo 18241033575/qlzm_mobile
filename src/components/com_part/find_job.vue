@@ -38,20 +38,6 @@
             </div>
           </div>
         </div>
-       <!-- <div class="sort_list_cell">
-          <div class="content">
-            <div class="sort_list_cell_box">
-              薪资水平 <img v-show="false" src="/static/images/ic_checked@2x.png" alt="checked">
-            </div>
-          </div>
-        </div>
-        <div class="sort_list_cell">
-          <div class="content">
-            <div class="sort_list_cell_box">
-              更新时间 <img v-show="false" src="/static/images/ic_checked@2x.png" alt="checked">
-            </div>
-          </div>
-        </div>-->
       </div>
     </div>
     <!--找工作-->

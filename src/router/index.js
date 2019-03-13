@@ -12,6 +12,7 @@ import login from '@/components/reg_log/login'
 
 //公共组件
 import find_job from '@/components/com_part/find_job'
+import find_talent from '@/components/com_part/find_talent'
 import famous_pos from '@/components/com_part/famous_pos'
 import company_det from '@/components/com_part/company_det'
 import pos_det from '@/components/com_part/pos_det'
@@ -109,6 +110,11 @@ export default new Router({
       path: '/find_job',
       name: 'find_job',
       component: find_job,
+    },
+    {
+      path: '/find_talent',
+      name: 'find_talent',
+      component: find_talent,
     },
     {
       path: '/famous_pos',

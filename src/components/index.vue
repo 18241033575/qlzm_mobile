@@ -51,7 +51,7 @@
             <p>找工作</p>
          </div>
         </router-link>
-        <router-link :to="{}">
+        <router-link :to="{name: 'find_talent'}">
           <div class="nav_cell">
             <img src="/static/images/ic_rencai@2x.png" alt="">
             <p>找人才</p>
