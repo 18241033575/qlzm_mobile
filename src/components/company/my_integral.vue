@@ -12,7 +12,7 @@
             <div class="balance_title">
               积分余额
             </div>
-            <span class="balance_num">{{integral}}</span><span class="go_charge fr">去充值>></span>
+            <span class="balance_num">{{integral}}</span><span class="go_charge fr" @click="go_recharge">去充值>></span>
           </div>
         </div>
       </div>
@@ -115,6 +115,9 @@
           this.openState = data;
         },
         /*总菜单操作e*/
+        go_recharge() {
+          this.$router.push({name: 'recharge'})
+        }
       },
       created() {
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));

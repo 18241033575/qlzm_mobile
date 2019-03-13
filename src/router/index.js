@@ -27,6 +27,9 @@ import resume_invite from '@/components/com_part/resume_invite'
 import all_pos from '@/components/com_part/all_pos'
 import sys_msg from '@/components/com_part/sys_msg'
 import sys_msg_det from '@/components/com_part/sys_msg_det'
+import recharge from '@/components/com_part/recharge'
+import transfer from '@/components/com_part/transfer'
+import charge_online from '@/components/com_part/charge_online'
 
 //个人中心页面
 import tal_center from '@/components/talent/tal_center'
@@ -198,6 +201,22 @@ export default new Router({
       name: 'sys_msg_det',
       component: sys_msg_det,
     },
+    {
+      path: '/recharge',
+      name: 'recharge',
+      component: recharge,
+    },
+    {
+      path: '/transfer',
+      name: 'transfer',
+      component: transfer,
+    },
+    {
+      path: '/charge_online',
+      name: 'charge_online',
+      component: charge_online,
+    },
+    //个人中心
     {
       path: '/tal_center',
       name: 'tal_center',

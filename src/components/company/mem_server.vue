@@ -101,6 +101,8 @@
           .then((res)=>{
             if (res.data.state != 400) {
               this.memData = res.data;
+              let param = JSON.stringify(res.data);
+              localStorage.setItem('VIP',param);
             }
           });
         this.$ajax.get('/company/recharge/lump-sum',{params: {cid: companyInfo.id}})

@@ -45,20 +45,16 @@
           </div>
         </div>
         <div class="company_msg" v-show="this.companyDetSign">
-          <div class="company_msg_cell">
+          <div class="company_msg_cell" v-if="styleSign">
             <div class="content">
               <div class="cell_box">
                 <div class="com_det_title msg_cell_fz">
                   企业风采
                 </div>
                 <div class="company_mien">
-                  <div class="mien_cell fl">
-                    <img src="/static/images/banner03@2x.png" alt="">
-                    <p>恒大地产秉承“民生地产”理念，在中国280多个城市拥有项目800多个，与全球800多家知名企业战略合作</p>
-                  </div>
-                  <div class="mien_cell fl">
-                    <img src="/static/images/banner03@2x.png" alt="">
-                    <p>恒大地产秉承“民生地产”理念，在中国280多个城市拥有项目800多个，与全球800多家知名企业战略合作</p>
+                  <div class="mien_cell fl" >
+                    <img src="" alt="">
+                    <p></p>
                   </div>
                 </div>
               </div>
@@ -165,7 +161,8 @@
             companyDetSign: true,
             hotPosNum: 0,
             tags_sign: true,
-            shadeSign: true
+            shadeSign: true,
+            styleSign: true　
           }
       },
       created() {
@@ -178,6 +175,11 @@
               } else {
                 this.tags_sign = true;
                 res.data.tags = company_adv(res.data.tags,true);
+              }
+              if (res.data.style.length == 0 || res.data.style == '') {
+                this.styleSign = false;
+              } else {
+                this.styleSign = true;
               }
               res.data.logo = splicPic(res.data.logo,true);
               this.contactData = res.data.contact;

@@ -248,7 +248,8 @@
           .then((res)=>{
             if (res.data.state != 400) {
               this.baseData = res.data;
-
+              let param = JSON.stringify(res.data);
+              localStorage.setItem('BASSET',param);
               res.data.forEach((item,ids)=> {
                 if (item.id == 13) {
                   this.webTitle = item.value;
