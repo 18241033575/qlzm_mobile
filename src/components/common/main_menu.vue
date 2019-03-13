@@ -23,11 +23,11 @@
                 {{center}}
               </div>
             </div>
-            <router-link :to="{name: 'login'}">
+            <div class="com_center" @click="exit">
               <div class="cancel_btn btn_size">
                 退出登录
               </div>
-            </router-link>
+            </div>
           </div>
           <div class="btn_group" v-if="!isLogin">
             <router-link :to="{name: 'login'}">
@@ -126,6 +126,11 @@
           }else {
             this.$router.push({name: 'enterp_center'})
           }
+        },
+        exit() {
+          this.$router.push({name: 'login'});
+          localStorage.clear('COMPANY');
+          localStorage.clear('USER');
         }
       },
       created() {

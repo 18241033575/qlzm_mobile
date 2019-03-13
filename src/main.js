@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import elementUI from 'element-ui'
 import mintUI from 'mint-ui'
-import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification} from 'element-ui';
+import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification, MessageBox} from 'element-ui';
 import App from './App'
 import router from './router'
 import VueQuillEditor from 'vue-quill-editor'
@@ -46,6 +46,7 @@ Vue.use(Icon);
 Vue.use(Dialog);
 Vue.use(DatePicker);
 Vue.component(Notification.name, Notification);
+// Vue.component(MessageBox.name, MessageBox);
 Vue.component(Message.name, Message);//用以解决刷新自动弹出message
 // Vue.use(Message);
 

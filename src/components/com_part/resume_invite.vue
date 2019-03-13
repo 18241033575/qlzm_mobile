@@ -72,6 +72,15 @@
               }
             },
           }
+      },
+      created() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.get('/company/get-contact',{params: {cid: companyInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                this.contractData = res.data;
+              }
+            })
       }
     }
 </script>

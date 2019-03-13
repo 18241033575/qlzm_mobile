@@ -198,7 +198,7 @@
         },
         to_comDetail(e) {
           let id = e.currentTarget.getAttribute('company-cid');
-          this.$router.push({name: 'company_det',query:{id: id}})
+          this.$router.push({name: 'company_det',query:{cid: id}})
         },
         news_det(e) {
           let id = e.currentTarget.getAttribute('news-id');

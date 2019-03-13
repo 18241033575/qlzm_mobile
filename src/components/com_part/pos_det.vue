@@ -16,7 +16,7 @@
             <div class="ugent_bottom">
               <span class="tags">{{posDetData.city || '未知'}}</span> | <span class="tags">{{posDetData.work_exp}}</span> | <span class="tags">{{posDetData.hire_num==0?'若干':posDetData.hire_num}}人</span> | <span class="tags">{{posDetData.education}}</span> | <span
               class="tags">{{posDetData.nature}}</span><span class="update_time fr">{{posDetData.created_at}}</span>
-              <p><img v-show="this.has_mSign" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyName}}</p>
+              <p @click="com_det" :id="this.posDetData.id" :cid="this.posDetData.cid"><img v-show="this.has_mSign" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyName}}</p>
             </div>
           </div>
         </div>
@@ -43,7 +43,7 @@
         <div class="content">
           <div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in this.otherPosData" :key="index" @click="to_posDetail">
             <div class="ugent_top">
-              <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
+              <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
             </div>
             <div class="ugent_bottom">
               <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
@@ -83,10 +83,13 @@
               <div class="com_det_title msg_cell_fz">
                 职位描述
               </div>
-              <div class="company_info">
+              <div class="company_info" :class="{shade_info: this.shadeSign}">
                 <p>
                   {{posDetData.duty}}
                 </p>
+                <quill-editor v-model="posDetData.duty"
+                              :config="editorOption">
+                </quill-editor>
                 <div class="shade" v-if="shadeSign"></div>
               </div>
               <!--思路：开始固定高度，超出隐藏。点击后自动高度-->
@@ -117,13 +120,23 @@
                 工作地址
               </div>
               <div class="company_address">
-                {{(this.posDetData.province || '') + (this.posDetData.city || '') + (this.posDetData.area || '') + this.posDetData.address}}
+                {{(this.posDetData.province || '') + (this.posDetData.city =='未知'?'': this.posDetData.city || '') + (this.posDetData.area =='未知'?'':this.posDetData.area || '') + this.posDetData.address}}
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="80%">
+      <span>确定前往个人登录页面？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="tal_login">确 定</el-button>
+      </span>
+    </el-dialog>
     <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
@@ -150,14 +163,19 @@
         tabSign: true,
         collect_btn: '收藏职位',
         apply_btn: '申请职位',
-        otherPosData: [],
+        otherPosData: {},
         otherPosNum: 0,
         tags_sign: true,
         pos_categoty: '',
         pos_major: '',
         isCol: false,
         isApply: false,
-        shadeSign: true
+        shadeSign: true,
+        indexPos: 0,
+        dialogVisible: false,
+        editorOption: {
+
+        }
       }
     },
     methods: {
@@ -204,7 +222,13 @@
           }
 
         } else {
-          this.$router.push({name: 'index'})
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          console.log(companyInfo);
+          if (companyInfo) {
+            this.dialogVisible = true;
+          }else {
+            this.$router.push({name: 'login'})
+          }
         }
       },
       //申请职位
@@ -220,14 +244,33 @@
                 }
               })
           }
+        } else {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if (companyInfo) {
+            this.dialogVisible = true;
+          }else {
+            this.$router.push({name: 'login'})
+          }
         }
       },
       look_all() {
         this.shadeSign = false;
+      },
+      com_det(e) {
+        let id = e.currentTarget.getAttribute('id');
+        let cid = e.currentTarget.getAttribute('cid');
+        this.$router.push({name: 'company_det',query:{id: id,cid: cid}})
+      },
+      tal_login() {
+        this.dialogVisible = false;
+        localStorage.clear('COMPANY');
+        this.$router.push({name: 'login'})
       }
     },
     created() {
+
       let id = this.$route.query.id;
+      let cid = this.$route.query.cid;
       this.$ajax.get('/office/detail', {params:{id: id}})
         .then((res) => {
           if (res.data.state != 400) {
@@ -253,17 +296,23 @@
           }
         });
 
-      let cid = this.$route.query.cid;
+
       this.$ajax.get('/office/company', {params:{cid: cid}})
         .then((res) => {
           if (res.data.state != 400) {
-            this.otherPosNum = res.data.data.length - 1;
-            for (let i = 0;i < res.data.data.length; i++) {
-              /*if (res.data.data[i].id != id) {
-                this.otherPosData[i] = res.data.data[i]
-              }*/
+            for (let i = 0,len = res.data.data.length;i < len;i++) {
+              if (res.data.data[i].id == id) {
+                this.indexPos = i;
+              }
             }
-            // tranCity(this.otherPosData,true,2);
+            this.otherPosNum = res.data.data.length - 1;
+            tranCity(res.data.data,true,2);
+            transWorkexp(res.data.data,0);
+            transEducation(res.data.data,0);
+            transNature(res.data.data,2);
+            transSalary(res.data.data,2);
+            this.otherPosData = res.data.data;
+            this.otherPosData.splice(this.indexPos,1);
           }
         });
       let userInfo = JSON.parse(localStorage.getItem('USER'));
@@ -507,12 +556,14 @@
   }
 
   /*简介*/
-  .company_info {
+  .company_info{
     position: relative;
-    height: 130px;
+    height: auto;
     overflow: hidden;
   }
-
+  .shade_info{
+    height: 130px;
+  }
   .company_info p {
     text-indent: 2em;
     font-size: 12px;

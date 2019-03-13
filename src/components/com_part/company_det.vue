@@ -14,7 +14,8 @@
               </div>
               <div class="famous_msg fl">
                 <div class="pos_name">
-                  <img v-show="companyMsg.has_m==1" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyMsg.name}}
+                  <img v-show="companyMsg.has_m==1" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyMsg.name}}<span @click="report" class="fr report"><img
+                  src="/static/images/report.png" alt="">举报</span>
                 </div>
                 <p><span class="tags">{{companyMsg.nature}}</span> | <span class="tags">{{companyMsg.scale}}</span> | <span class="tags">{{(companyMsg.province || '未知') + (companyMsg.city || '')}}</span></p>
               </div>
@@ -33,15 +34,24 @@
         </div>
         <div class="hot_post" v-show="!this.companyDetSign">
           <div class="content">
-            <div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in this.hotPosData.data" :key="index" @click="to_posDetail">
+            <div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in this.hotPosData" :key="index" @click="to_posDetail">
               <div class="ugent_top">
-                <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
+                <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
               </div>
               <div class="ugent_bottom">
                 <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
                 class="tags">{{item.nature}}</span><span class="update_time fr">{{item.update_at}}</span>
               </div>
             </div>
+            <!--<div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in this.hotPosData" :key="index" @click="to_posDetail">
+              <div class="ugent_top">
+                <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
+              </div>
+              <div class="ugent_bottom">
+                <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
+                class="tags">{{item.nature}}</span><span class="update_time fr">{{item.update_at}}</span>
+              </div>
+            </div>-->
           </div>
         </div>
         <div class="company_msg" v-show="this.companyDetSign">
@@ -134,6 +144,16 @@
           </div>
         </div>
       </div>
+      <el-dialog
+        title="提示"
+        :visible.sync="dialogVisible"
+        width="80%">
+        <span>确定前往登录页面?</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="tal_login">确 定</el-button>
+        </span>
+      </el-dialog>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
@@ -157,16 +177,19 @@
             msg: "企业详情",
             companyMsg: {},
             contactData: {},
-            hotPosData: [],
+            hotPosData: {},
             companyDetSign: true,
             hotPosNum: 0,
             tags_sign: true,
             shadeSign: true,
-            styleSign: true　
+            styleSign: true,
+            dialogVisible: false,
+            cid: 0
           }
       },
       created() {
-        let cid = this.$route.query.id;
+        let cid = this.$route.query.cid;
+        this.cid = cid;
         this.$ajax.get('/api/company/detail'+ '/' + cid)
           .then((res) => {
             if (res.data.state != 400) {
@@ -194,6 +217,13 @@
         this.$ajax.get('/office/company', {params: {cid: cid}})
           .then((res) => {
             if (res.data.state != 400) {
+              this.hotPosNum = res.data.data.length;
+              tranCity(res.data.data,true,2);
+              transWorkexp(res.data.data,0);
+              transEducation(res.data.data,0);
+              transNature(res.data.data,2);
+              transSalary(res.data.data,2);
+              this.hotPosData = res.data.data;
               // 没有city字段
               /*console.log(res.data.data);
               tranCity(res.data.data,true,2);
@@ -228,6 +258,25 @@
         },
         look_all() {
           this.shadeSign = false;
+        },
+        report() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          if (companyInfo) {
+            if (companyInfo.id != this.cid) {
+              this.$router.push({name: 'report',query: {member_id: companyInfo.id,cid:this.cid}})
+            } else {
+              // 自己举报自己
+            }
+          }else if (userInfo) {
+            this.$router.push({name: 'report',query: {uid:this.cid}})
+          }else {
+            this.dialogVisible = true;
+          }
+        },
+        tal_login() {
+          this.dialogVisible = false;
+          this.$router.push({name: 'login'})
         }
       }
     }
@@ -498,5 +547,14 @@
   .contract_msg{
     flex-grow: 1;
     color: #666666;
+  }
+  .report{
+    margin-right: 10px;
+    font-size: 12px;
+    color: #919199;
+  }
+  .report img{
+    margin-right: 0;
+    vertical-align: top;
   }
 </style>

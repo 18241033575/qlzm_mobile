@@ -6,7 +6,7 @@
  /*
   type = 1 --单个数据
   type = 2 --数组
-  flag = true  数字转文字 反之
+  flag = true  无用字段。
  */
 /*地区选择*/
 function tranProvince(data,flag,adata,type) {
@@ -54,7 +54,11 @@ function tranProvince(data,flag,adata,type) {
         data = PROVICE[data];
         return data
       }else {
-        data.province = PROVICE[data.province]
+        if (PROVICE[data.province]) {
+          data.province = PROVICE[data.province]
+        } else {
+          data.province = '未知'
+        }
       }
     }
   }
@@ -513,7 +517,11 @@ function tranCity(data,flag,type,off) {
       } else {
         for (let i = 0; i < data.length; i++) {
           // midData[i] = CITY[data[i].province][data[i].city];
-          data[i].city = CITY[data[i].province][data[i].city];
+          if (CITY[data[i].province] && [data[i].city]) {
+            data[i].city = CITY[data[i].province][data[i].city];
+          } else {
+            data[i].city = '未知'
+          }
         }
       }
     }else if (type == 1) {
@@ -522,8 +530,11 @@ function tranCity(data,flag,type,off) {
     } else if (type == 3) {
       return CITY[data.province][data.city]
     } else {
-      // midData = CITY[data.province];
-      data.city = CITY[data.province][data.city];
+      if (CITY[data.province] && CITY[data.province][data.city]) {
+        data.city = CITY[data.province][data.city];
+      } else {
+        data.city = '未知'
+      }
     }
   }
 }
@@ -4173,7 +4184,11 @@ function tranArea(data,flag,type) {
       return AREA[data.city]
     }
     else {
-      data.area = AREA[data.city][data.area];
+      if (AREA[data.city] && AREA[data.city][data.area]) {
+        data.area = AREA[data.city][data.area];
+      } else {
+        data.area = '未知'
+      }
     }
   }
 }
