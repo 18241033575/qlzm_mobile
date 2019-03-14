@@ -62,8 +62,8 @@
                   企业风采
                 </div>
                 <div class="company_mien">
-                  <div class="mien_cell fl" >
-                    <img src="" alt="">
+                  <div class="mien_cell fl" v-for="(item,index) in this.companyMien" :key="index">
+                    <img :src="item" alt="">
                     <p></p>
                   </div>
                 </div>
@@ -167,7 +167,7 @@
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,transComNature,transComScale,splicPic,company_adv} from '../../../static/js/common.js'
+  import {transSalary,transNature,transEducation,transWorkexp,transComNature,transComScale,splicPic,company_adv} from '../../../static/js/common.js'
     export default {
         name: "company_det",
       components: {
@@ -182,6 +182,7 @@
             companyMsg: {},
             contactData: {},
             hotPosData: {},
+            companyMien: {},
             companyDetSign: true,
             hotPosNum: 0,
             tags_sign: true,
@@ -236,6 +237,10 @@
                 this.styleSign = false;
               } else {
                 this.styleSign = true;
+              }
+              this.companyMien = res.data.style;
+              for (let i = 0,len = this.companyMien.length;i < len;i++) {
+                this.companyMien[i] = splicPic(this.companyMien[i],true);
               }
               res.data.logo = splicPic(res.data.logo,true);
               this.contactData = res.data.contact;
@@ -495,7 +500,7 @@
   /*风采*/
   .company_mien{
     width: 300%;
-
+    height: 104px;
   }
   .mien_cell{
     width: 28%;
