@@ -10,7 +10,9 @@ import VueQuillEditor from 'vue-quill-editor'
 import Axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'mint-ui/lib/style.css'
-
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 Vue.use(elementUI);
 Vue.use(mintUI);
