@@ -180,7 +180,7 @@ function transWorkexp1(data,type,classify) {
     }
   }
 }
-function transGender(data,flag) {
+function transGender(data,flag,type) {
   // gender：
   const gender = [
     "不限",
@@ -188,7 +188,11 @@ function transGender(data,flag) {
     "女"
   ];
   if (flag) {
-    data.gender = gender[data.gender]
+    if (type == 5) {
+      return gender
+    } else {
+      data.gender = gender[data.gender]
+    }
   }
 }
 function transJobs(data,type) {
@@ -373,7 +377,12 @@ function company_adv(data, flag) {
   'file_upload'           => '//file.wiiwork.com/v1/upload',
 */
 const file_server = '//file.wiiwork.com/';
-const file_upload = '//file.wiiwork.com/v1/upload';
+// const file_upload = '//file.wiiwork.com/v1/upload';
+
+function file_upload() {
+  return '//file.wiiwork.com/v1/upload'
+}
+
 
 //拼接图片地址
 function splicPic(data, add) {
@@ -589,5 +598,6 @@ export {
   transJobs,
   getTrueAge,
   companyNature,
-  companyScale
+  companyScale,
+  file_upload
 }

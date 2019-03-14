@@ -13,14 +13,14 @@
         <div class="filter_box">
           <div class="content">
             <div class="filter_box_det">
-              <div class="only_fam" :class="{active: this.famFlag}" @click="only_fam">
-                只看名企
+              <div class="only_fam" :class="{active: this.order == 0}" @click="def">
+                默认排序
               </div>
-              <div class="only_fam" :class="{active: this.famFlag}" @click="only_fam">
-                只看名企
+              <div class="only_fam" :class="{active: this.order == 1}" @click="val">
+                价值指数
               </div>
-              <div class="only_ugent" :class="{active: this.ugentFlag}" @click="only_ugent">
-                只看急聘
+              <div class="only_ugent" :class="{active: this.order == 2}" @click="upTime">
+                更新时间
               </div>
               <div class="filter_all" @click="job_filter">
                 筛选<img src="/static/images/filter.png" alt="filter" >
@@ -150,8 +150,7 @@
           showMsg: '',
           sortNum: 0,
           search_job: '',
-          famFlag: false,
-          ugentFlag: false,
+          order: 0,
           keyword: '',
           find_jobData: {},
           top_title: '',
@@ -240,15 +239,16 @@
             })
         },
         // 名企 急聘
-        only_fam() {
-          this.famFlag = !this.famFlag;
-          this.find_jobParam.has_m = this.famFlag == true?1:0;
-          this.getjobData(this.find_jobParam)
+        def() {
+          this.find_jobParam.order = this.order = 0;
+          // this.getjobData(this.find_jobParam)
         },
-        only_ugent() {
-          this.ugentFlag = !this.ugentFlag;
-          this.find_jobParam.is_urgent = this.ugentFlag == true?1:0;
-          this.getjobData(this.find_jobParam)
+        val() {
+          this.find_jobParam.order = this.order = 1;
+          // this.getjobData(this.find_jobParam)
+        },
+        upTime() {
+          this.find_jobParam.order = this.order = 2;
         },
         //搜索
         search_job_click() {

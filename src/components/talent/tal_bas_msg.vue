@@ -11,7 +11,7 @@
         <div class="content">
           <div class="top_pic">
             <img :src="this.headPic" alt="">
-            <p class="tal_name">{{userInfoMsg.name}}</p>
+            <p class="tal_name">{{userMsg.name}}</p>
             <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education}}</span>|<span>{{userMsg.work_exp}}</span></p>
           </div>
           <div class="bottom_msg">
@@ -46,8 +46,10 @@
               <div class="top_msg">
                 <el-upload
                   class="avatar-uploader upload_btn"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :action="this.loadAddr"
                   list-type="none"
+                  :data="{type: 'image'}"
+                  :show-file-list="false"
                   :on-success="upHeadPic">
                   <el-button size="small" type="primary">点击上传</el-button>
                   <div slot="tip" class="el-upload__tip">支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</div>
@@ -123,7 +125,7 @@
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {splicPic,transGender,transEducation,transWorkexp} from '../../../static/js/common.js'
+  import {splicPic,transGender,transEducation,transWorkexp,file_upload} from '../../../static/js/common.js'
     export default {
         name: "tal_bas_msg",
       components: {
@@ -138,13 +140,11 @@
             userMsg: {},
             secondBox: false,
             top_title: '',
-            cityCode: {
-
-            },
+            cityCode: {},
             showMsg: 'pro',
             beginData: {},
             editHeadPic: '/static/images/user-01@2x.png',
-            headPic: '/static/images/banner03@2x.png',
+            headPic: '/static/images/user-01@2x.png',
             edit: true,
             form: {
                 tal_name: '',
@@ -154,27 +154,23 @@
                 tal_addr: '',
                 tal_state: 1
               },
-            guiyangData: {
-
-            },
-            cityData: {
-
-            },
-
+            guiyangData: {},
+            cityData: {},
+            loadAddr: ''
           }
       },
       created() {
         let userInfo = JSON.parse(localStorage.getItem('USER'));
-
-        //头像
-        if (userInfo.photo != '') {
-         this.editHeadPic = this.headPic = splicPic(userInfo.photo, true);
-        }
-        userInfo.name = userInfo.name == ''?userInfo.phone:userInfo.name;
+        this.loadAddr = file_upload();
         this.userInfoMsg = userInfo;
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
+                //头像
+                if (res.data.base_info.photo != '') {
+                  this.editHeadPic = this.headPic = splicPic(res.data.base_info.photo, true);
+                }
+
                 this.beginData = res.data.base_info;
                 this.cityCode.province = res.data.base_info.province;
                 this.cityCode.city = res.data.base_info.city;
@@ -186,6 +182,7 @@
                 transEducation(res.data.base_info,1);
                 transWorkexp(res.data.base_info,1,'tal');
                 this.userMsg = res.data.base_info;
+                this.userMsg.name = this.userMsg.name == ''?this.userMsg.phone:this.userMsg.name;
                 this.form.tal_name = this.userMsg.name;
                 this.form.tal_idcard = this.userMsg.id_card;
                 this.form.tal_qq = this.userMsg.qq;
@@ -251,7 +248,11 @@
           this.form.tal_state = 0
         },
         upHeadPic(res) {
-          console.log(res);
+          if (res.code == 200) {
+            let url = res.data.success[0].url;
+            this.editHeadPic = splicPic(url, true);
+            this.userMsg.photo = url;
+          }
         },
         choose_province() {
           this.guiyangData = tranProvince(this.beginData,true,'pro');

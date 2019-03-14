@@ -20,10 +20,10 @@ Vue.use(require('vue-wechat-title'));
 
 // 数据请求
 // 正式服
-// Axios.defaults.baseURL = 'http://qlzm.com.cn';
+// Axios.defaults.baseURL = 'https://www.qlzm.com.cn';
 // 测试服
-Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
-// Axios.defaults.baseURL = 'http://qlzm.com';
+// Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
+Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
 // Axios.defaults.baseURL= '/api';
 
@@ -33,7 +33,7 @@ Axios.interceptors.request.use(config => {
   return config
 }, error => {
   /*return Promise.reject(error)*/
-})
+});
 
 
 
