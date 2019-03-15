@@ -17,6 +17,13 @@
             <p>{{rtime}}</p>
           </div>
         </div>
+        <!--开票信息-->
+        <div class="inv_msg">
+          <div class="part_title">
+            选择开票信息
+          </div>
+
+        </div>
       </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
