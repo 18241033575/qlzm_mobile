@@ -53,7 +53,13 @@
       },
       created() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.nowPhone = userInfo.phone;
+          if (userInfo) {
+            this.nowPhone = userInfo.phone;
+          }
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        if (companyInfo) {
+          this.nowPhone = companyInfo.phone;
+        }
       },
       methods: {
         /*总菜单操作s*/
@@ -67,6 +73,24 @@
         getCode() {
           if (this.getSmsState) {
             this.getSmsState = false;
+            let t = 60;
+            let smsTime = localStorage.getItem('SMSTIME');
+            if (smsTime != '' && smsTime != 0 && smsTime != undefined) {
+              t = smsTime;
+            }
+            this.getSmsCode = t + 's后再次获取';
+            let timer = setInterval(()=>{
+              t--;
+              this.getSmsCode = t + 's后再次获取';
+              if (t < 2) {
+                clearInterval(timer);
+                this.getSmsCode = '再次获取';
+                this.getSmsState = true;
+                t = 60;
+              }
+              localStorage.setItem('SMSTIME',t);
+            },1000);
+
             let userInfo = JSON.parse(localStorage.getItem('USER'));
             let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
             if (userInfo) {
@@ -78,6 +102,8 @@
             this.$ajax.get('/sms',{params: this.param})
               .then((res)=>{
                 if (res.data.state == 200) {
+                  t = 60;
+                  localStorage.setItem('SMSTIME',t);
                   this.$notify.success({
                     title: '提示',
                     message: res.data.msg,

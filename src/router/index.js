@@ -66,6 +66,8 @@ import enterp_mien from '@/components/company/enterp_mien'
 import enterp_ident from '@/components/company/enterp_ident'
 import pos_highlights from '@/components/company/pos_highlights'
 import my_integral from '@/components/company/my_integral'
+import records from '@/components/company/records'
+import demand_inv from '@/components/company/demand_inv'
 
 //个人中心组件
 import main_menu from '@/components/common/main_menu'
@@ -383,6 +385,16 @@ export default new Router({
       path: '/my_integral',
       name: 'my_integral',
       component: my_integral
+    },
+    {
+      path: '/records',
+      name: 'records',
+      component: records
+    },
+    {
+      path: '/demand_inv',
+      name: 'demand_inv',
+      component: demand_inv
     }
   ]
 })

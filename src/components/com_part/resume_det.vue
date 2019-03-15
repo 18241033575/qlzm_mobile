@@ -200,7 +200,7 @@
         },
         /*总菜单操作e*/
         interview() {
-          this.$router.push({name: 'resume_invite'})
+          this.$router.push({name: 'resume_invite',query: {uid: this.uid}})
         },
         report() {
           this.$router.push({name: 'report',query: {uid: this.uid}})
@@ -295,7 +295,8 @@
                    } else {
                      item.tranreg_status = '转注'
                    }
-                   for(let i = 0,len = certData.length;i < len;i++) {
+
+                  for(let i = 0,len = certData.length;i < len;i++) {
                      if (item.type == certData[i].id ) {
                        item.trantype = certData[i].category;
                        for(let j = 0,mlen = certData[i].majors.length; j < mlen; j++) {

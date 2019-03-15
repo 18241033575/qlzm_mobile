@@ -24,7 +24,7 @@
             <img src="/static/images/ic_cm_integral@2x.png" alt="">
             <p>我的积分</p>
           </router-link>
-          <router-link :to="{name: 'index'}" class="mem_opera_cell">
+          <router-link :to="{name: 'records'}" class="mem_opera_cell">
             <img src="/static/images/ic_cm_record@2x.png" alt="">
             <p>消费记录</p>
           </router-link>

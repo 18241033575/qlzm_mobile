@@ -128,7 +128,7 @@
       title="提示"
       :visible.sync="dialogVisible"
       width="80%">
-      <span>确定前往个人登录页面？</span>
+      <span>非个人用户无法进行此操作，确定前往个人登录页面？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="tal_login">确 定</el-button>
@@ -246,7 +246,6 @@
 
         } else {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          console.log(companyInfo);
           if (companyInfo) {
             this.dialogVisible = true;
           }else {

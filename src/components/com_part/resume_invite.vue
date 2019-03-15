@@ -9,6 +9,9 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
+            <span class="edit_lab">应聘职位</span><input type="text" v-model="job"  placeholder="应聘职位">
+          </div>
+          <div class="edit_cell">
             <span class="edit_lab">联系人</span><input type="text" v-model="contractData.username"  placeholder="如: 张经理、王先生等(必填)">
           </div>
           <div class="edit_cell">
@@ -24,12 +27,12 @@
             <span class="edit_lab">邮箱地址</span><input type="text" v-model="contractData.email"  placeholder="邮箱地址">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">面试地点</span><input type="text" v-model="contractData.address"  placeholder="必填">
+            <span class="edit_lab">面试地点</span><input type="text" v-model="address"  placeholder="必填">
           </div>
           <div class="edit_cell">
             <span class="edit_lab">面试时间</span>
             <el-date-picker
-              v-model="inviteTime"
+              v-model="time"
               align="right"
               type="datetime"
               placeholder="选择日期"
@@ -37,32 +40,47 @@
             </el-date-picker>
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">邀请方式</span><input type="text" v-model="contractData.address"  placeholder="必填">
+            <span class="edit_lab">邀请方式</span><span :class="{int_way_active: this.int_way_sign}" class="int_way" @click="sms_way">短信邀请</span><span @click="email_way" :class="{int_way_active: !this.int_way_sign}" class="int_way">邮件邀请</span>
           </div>
         </div>
       </div>
       <div class="tip">
         <div class="content">
           <div class="eval_body_bottom">
-            <textarea  name="evaluation" placeholder="在这里填写用于提醒应聘者的相关事项"></textarea>
+            <textarea  name="evaluation" v-model="remind" placeholder="在这里填写用于提醒应聘者的相关事项"></textarea>
           </div>
         </div>
       </div>
       <div class="content">
-
-        <div class="bas_msg_btn" >
+        <div class="bas_msg_btn" @click="send_int">
           发送邀请
         </div>
       </div>
+      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
+  import main_menu from '../../components/common/main_menu'
+  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
         name: "resume_invite",
+      components: {
+        main_menu,
+        menu_list_pic,
+      },
       data() {
           return {
-            inviteTime: '',
+            /*总菜单状态*/
+            openState: false,
+            int_way_sign: true,
+            // 表单信息
+            job: '',
+            address: '',
+            invite_type: 1,
+            time: '',
+            remind: '',
             contractData: {
 
             },
@@ -72,6 +90,33 @@
               }
             },
           }
+      },
+      methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
+        email_way() {
+          this.invite_type = 1;
+          this.int_way_sign = false;
+        },
+        sms_way() {
+          this.invite_type = 2;
+          this.int_way_sign = true;
+        },
+        send_int() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          let uid = this.$route.query.uid;
+          this.$ajax.post('/company/send-interview',{ cid: companyInfo.id, uid: uid, job: this.job,username: this.contractData.username, tel: this.contractData.tel, phone: this.contractData.phone,qq: this.contractData.qq,
+            wx: this.contractData.wx,email: this.contractData.email,address: this.address,invite_type: this.invite_type,time: this.time,remind: this.remind})
+            .then((res)=>{
+              console.log(res);
+            })
+        }
       },
       created() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
@@ -168,5 +213,24 @@
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
+  }
+  .edit_cell .int_way{
+    display: inline-block;
+    margin-left: 20px;
+    width: 80px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #666666;
+    line-height: 32px;
+  }
+  .edit_cell .int_way_active{
+    background: rgba(80,130,230,.1);
+    color: #5082e6;
+    border: 1px solid #5082e6;
   }
 </style>

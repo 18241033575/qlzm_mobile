@@ -22,6 +22,10 @@
           </div>
         </div>
       </div>
+      <div class="empty" v-show="emptySign">
+        <img src="/static/images/ic_empty_data@2x.png" alt="">
+        <p>暂无数据</p>
+      </div>
       <div class="pos_opera_box" @click="closeState" v-show="this.boxState">
         <div class="opera_list" v-if="this.orign == 'app'">
           <div class="content">
@@ -95,6 +99,7 @@
           info_id: 0,
           uid: 0,
           orign: '',
+          emptySign: false,
           commonData: {
 
           },
@@ -144,6 +149,9 @@
                   if (this.commonData[i].id == this.info_id) {
                     // 删除相应数组
                     this.commonData.splice(i,1);
+                    if (this.commonData.length == 0 || this.commonData.length == '') {
+                      this.emptySign = true;
+                    }
                   }
                 }
               }
@@ -159,6 +167,9 @@
                   if (this.commonData[i].id == this.info_id) {
                     // 删除相应数组
                     this.commonData.splice(i,1);
+                    if (this.commonData.length == 0 || this.commonData.length == '') {
+                      this.emptySign = true;
+                    }
                   }
                 }
               }
@@ -183,7 +194,9 @@
                     res.data[i].user_info.work_exp = transWorkexp(res.data[i].user_info,1);
                   }
                   this.commonData = res.data;
-
+                  if (this.commonData.length == 0 || this.commonData.length == '') {
+                    this.emptySign = true;
+                  }
                 }
               })
           }else if (org == 'buy') {
@@ -197,6 +210,9 @@
                   transEducation(res.data,0);
                   transWorkexp(res.data,0);
                   this.commonData = res.data;
+                  if (this.commonData.length == 0 || this.commonData.length == '') {
+                    this.emptySign = true;
+                  }
                 }
               })
           }else if (org == 'collect') {
@@ -210,7 +226,9 @@
                   transEducation(res.data,0);
                   transWorkexp(res.data,0);
                   this.commonData = res.data;
-                  console.log(this.commonData);
+                  if (this.commonData.length == 0 || this.commonData.length == '') {
+                    this.emptySign = true;
+                  }
                 }
               })
           }else if (org == 'invite') {
@@ -223,7 +241,9 @@
                   getTrueAge(res.data,2);
                   transEducation(res.data,0);
                   transWorkexp(res.data,0);
-                  this.commonData = res.data;
+                  if (this.commonData.length == 0 || this.commonData.length == '') {
+                    this.emptySign = true;
+                  }
                 }
               })
           }else if (org == 'collected') {
@@ -236,7 +256,9 @@
                   getTrueAge(res.data,2);
                   transEducation(res.data,0);
                   transWorkexp(res.data,0);
-                  this.commonData = res.data;
+                  if (this.commonData.length == 0 || this.commonData.length == '') {
+                    this.emptySign = true;
+                  }
                 }
               })
           }

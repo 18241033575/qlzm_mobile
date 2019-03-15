@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-      <div class="enterp_button">
+      <div class="enterp_button" @click="save_set">
         保存设置
       </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -56,6 +56,22 @@
         /*总菜单操作e*/
         auto_set() {
           this.$router.push({name: 'auto_recruit'})
+        },
+        save_set() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          let sign =  this.isFamouse == true?1:0;
+          this.$ajax.post('/company/famous-set',{cid: companyInfo.id,has_m: sign})
+            .then((res)=>{
+              if (res.data.state == 200) {
+                let msg = sign == 1?'名企开启成功':'名企关闭成功';
+                this.$notify.success({
+                  title: '提示',
+                  message: msg,
+                  showClose: false,
+                  duration: 1500,
+                });
+              }
+            })
         }
       }
     }

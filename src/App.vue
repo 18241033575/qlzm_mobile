@@ -149,4 +149,27 @@
     background-color: #ffffff;
     text-align: left;
   }
+  .empty{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 145px;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    background-color: #ffffff;
+    z-index: -1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .empty img{
+    width: 160px;
+    height: 160px;
+  }
+  .empty p{
+    margin-top: 20px;
+    font-size: 14px;
+    color: #919199;
+  }
 </style>
