@@ -29,6 +29,35 @@
           </div>
         </div>
       </div>
+      <!--找人才-->
+      <div class="ugent">
+        <div class="content">
+          <div class="load">
+            <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
+              <!--<div class="ugent_cell" v-for="(item,index) in find_talData" :key="index" :cid="item.cid" :id="item.id" @click="to_pos_det">
+                <div class="ugent_top">
+                  <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.name}}</span><span class="salary fr">{{item.transalary}}</span>
+                </div>
+                <div class="ugent_bottom">
+                  <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
+                  class="tags">{{item.nature}}</span><span class="update_time fr">{{item.created_time}}</span>
+                  <p><img v-if="item.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company_name}}</p>
+                </div>
+              </div>-->
+              <div class="resume_list_cell" v-for="(item,index) in this.find_talData" :uid="item.uid" :key="index" @click="tal_det">
+                <div class="content">
+                  <p class="tal_name">{{item.name}}<img :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
+                  <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
+                  <p class="tal_det">期望薪资:<span class="hope_salary">{{item.transalary}}</span></p>
+                </div>
+              </div>
+              <div class="bottom_line" v-show="req_state">
+                我也是有底线的
+              </div>
+            </mt-loadmore>
+          </div>
+        </div>
+      </div>
       <!--筛选第一层-->
       <div class="filter_all_box" v-show="this.firstBox">
         <div class="filter_bg" @click="firstBoxBg">
@@ -143,6 +172,9 @@
         return {
           /*总菜单状态*/
           openState: false,
+          emptySign: false,
+          allLoaded: false,
+          req_state: false,
           sort_msg: '默认排序',
           outBox: false,
           firstBox: false,
@@ -152,7 +184,7 @@
           search_job: '',
           order: 0,
           keyword: '',
-          find_jobData: {},
+          find_talData: {},
           top_title: '',
           posTypeNum: 0,
           loading: false,
@@ -234,7 +266,7 @@
                 transEducation(res.data.data,0);
                 transNature1(res.data.data,2);
                 transSalary(res.data.data,2);
-                this.find_jobData = res.data.data
+                this.find_talData = res.data.data
               }
             })
         },
@@ -330,19 +362,30 @@
           this.getjobData(this.find_jobParam);
           this.firstBox = false;
         },
-        loadMore() {
-          //滚动触发事件
-          this.loading = true;
-          /* setTimeout(() => {
-             this.find_jobParam.page +=1;
-             let data = this.find_jobParam;
-             this.$ajax.get('/company_work',{params: data})
-               .then((res)=>{
-                 console.log(res);
-                 // this.find_jobData = this.find_jobData.assign(res.data.data)
-               });
-             this.loading = false;
-           }, 2500);*/
+        loadBottom() {
+          this.find_jobParam.page++;
+          this.$ajax.get('/talents',{params: this.find_jobParam})
+            .then((res)=>{
+              if (res.data.code == 200) {
+                if (res.data.data.length == 0) {
+                  this.req_state = true;
+                  this.allLoaded = true;
+                }else {
+                  this.req_state = false;
+                  this.allLoaded = false;
+                  tranCity(res.data.data,true,2);
+                  transWorkexp1(res.data.data,0);
+                  transEducation(res.data.data,0);
+                  transNature1(res.data.data,2);
+                  transSalary(res.data.data,2);
+                  for (let i = 0,len = res.data.data.length;i < len;i++) {
+                    res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
+                  }
+                  this.find_jobData.push.apply(this.find_jobData,res.data.data);
+                  this.$refs.loadmore.onBottomLoaded();
+                }
+              }
+            })
         },
         CityCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
@@ -358,6 +401,10 @@
           this.secondBox = false;
           // this.scrollSign = false;
         },
+        tal_det(e) {
+          let uid = e.currentTarget.getAttribute('uid');
+          this.$router.push({name: 'resume_det',query: {uid: uid}});
+        },
       },
       created() {
         if (this.$route.query.province) {
@@ -365,9 +412,9 @@
           this.find_jobParam.province = this.$route.query.province;
         }
         let data = this.find_jobParam;
-        this.$ajax.get('/company_work',{params: data})
+        this.$ajax.get('/talents',{params: data})
           .then((res)=>{
-            if (res.data.code == 200) {
+            if (res.data.state != 400) {
               tranCity(res.data.data,true,2);
               transWorkexp1(res.data.data,0);
               transEducation(res.data.data,0);
@@ -376,7 +423,8 @@
               for (let i = 0,len = res.data.data.length;i < len;i++) {
                 res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
               }
-              this.find_jobData = res.data.data
+              this.find_talData = res.data.data;
+              console.log(this.find_talData);
             }
           });
         this.tranCode = tranCity(this.cityCode,true,1)
@@ -506,67 +554,39 @@
     margin-top: 10px;
     background-color: #ffffff;
   }
-
-  .ugent_cell {
+  .resume_list_cell{
+    margin-top: 10px;
+    width: 100%;
+    height: 100px;
+    background-color: #ffffff;
+  }
+  .tal_name{
     padding: 15px 0;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border-bottom: 1px solid #ECEFF1;
-  }
-
-  .ugent_sign {
-    display: inline-block;
-    margin-right: 10px;
-    width: 30px;
-    line-height: 16px;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid #FF8236;
-    color: #ff8236;
-    font-size: 12px;
-  }
-
-  .pos_name {
     font-size: 14px;
     color: #666666;
+    font-weight: bold;
   }
-
-  .salary {
+  .tal_name img{
+    vertical-align: middle;
+    width: 22px;
+    height: 22px;
+  }
+  .tal_det{
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     font-size: 12px;
+    color: #919199;
+    line-height: 24px;
+  }
+  .tal_det span{
+    margin-right: 10px;
+  }
+  .hope_salary{
+    margin-left: 10px;
     color: #ff5959;
   }
-
-  .ugent_bottom {
-    margin-top: 10px;
-    color: #e1e4e6;
-  }
-  .ugent_bottom p {
-    margin-top: 10px;
-    font-size: 12px;
-    line-height: 12px;
-    color: #919199;
-  }
-
-  .ugent_bottom p img {
-    margin-right: 5px;
-    width: 12px;
-    height: 12px;
-    vertical-align: middle;
-  }
-
-  .tags {
-    font-size: 12px;
-    color: #666666;
-  }
-
-  .update_time {
-    font-size: 12px;
-    color: #919199;
-  }
-
   /*筛选弹层*/
   .filter_all_box{
     position: absolute;

@@ -362,10 +362,26 @@
       // 重置
       reset() {
         this.workExpAct = this.educationAct = this.natureAct = this.salaryAct = this.offDayAct = 0;
-        this.cityCode[1] = '0';
         this.tranPosType = '全部';
         this.posTypeNum = 0;
         this.$route.query.job_id = '';
+        // 两次才能删除掉city
+        for(let key in this.find_jobParam){
+          console.log(this.find_jobParam[key]);
+          delete this.find_jobParam[key];
+        }
+        for(let key in this.find_jobParam){
+          console.log(2);
+          delete this.find_jobParam[key];
+        }
+        console.log(this.find_jobParam);
+       /* delete this.find_jobParam[city];
+        delete this.find_jobParam[work_exp];
+        delete this.find_jobParam[education];
+        delete this.find_jobParam[nature];
+        delete this.find_jobParam[salary];
+        delete this.find_jobParam[time];
+        delete this.find_jobParam[job_id];*/
       },
       filter_submit() {
         this.find_jobParam.page = 1;
@@ -387,8 +403,7 @@
         if (this.posTypeNum != 0) {
           this.find_jobParam.job_id = this.posTypeNum;
         }
-
-        if (this.cityCode[1] != 0) {
+        if (this.cityCode[1] != 0 && this.cityCode[1] != undefined) {
           this.find_jobParam.city = this.cityCode[1];
         }
         this.getjobData(this.find_jobParam);
