@@ -43,12 +43,9 @@
     <!--找工作-->
     <div class="ugent">
       <div class="content">
-        <div class="ugent_body">
-          <ul
-            v-infinite-scroll="loadMore"
-            infinite-scroll-disabled="loading"
-            infinite-scroll-distance="8">
-            <div class="ugent_cell" v-for="(item,index) in find_jobData" :key="index">
+        <div class="load">
+          <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
+            <div class="ugent_cell" v-for="(item,index) in find_jobData" :key="index" :cid="item.cid" :id="item.id" @click="to_pos_det">
               <div class="ugent_top">
                 <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
               </div>
@@ -58,7 +55,10 @@
                 <p><img v-if="item.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company_name}}</p>
               </div>
             </div>
-          </ul>
+            <div class="bottom_line" v-show="req_state">
+              我也是有底线的
+            </div>
+          </mt-loadmore>
         </div>
       </div>
     </div>
@@ -74,7 +74,7 @@
               省份<span class="fr">贵州省<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
             <div class="filter_part1_cell" data-sign="city" @click="all_choose">
-              城市<span class="fr">{{tranCode}}<img src="/static/images/icon_goright.png" alt=""></span>
+              城市<span class="fr">{{tranCode || '请选择'}}<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
             <div class="filter_part1_cell" data-sign="pos_type" @click="all_choose">
               职位类别<span class="fr">{{tranPosType || '请选择'}}<img src="/static/images/icon_goright.png" alt=""></span>
@@ -133,6 +133,10 @@
         </div>
       </div>
     </div>
+    <div class="empty" v-show="emptySign">
+      <img src="/static/images/ic_empty_data@2x.png" alt="">
+      <p>暂无数据</p>
+    </div>
     <!--筛选第二层-->
     <div class="filter_all_box" v-show="this.secondBox">
       <div class="filter_bg" @click="secondBoxBg">
@@ -175,6 +179,9 @@
       return {
         /*总菜单状态*/
         openState: false,
+        emptySign: false,
+        allLoaded: false,
+        req_state: false,
         sort_msg: '默认排序',
         outBox: false,
         firstBox: false,
@@ -192,7 +199,6 @@
         loading: false,
         cityCode: {
           0:'520000',
-          1:'520100'
         },
         tranCode: '',
         tranPosType: '全部',
@@ -203,28 +209,19 @@
         },
         find_jobParam: {
           page: 1,
-          row: 8
+          row: 8,
+          province: '520000'
         },
         workExpAct: 0,
         educationAct: 0,
         natureAct: 0,
         salaryAct: 0,
         offDayAct: 0,
-        workexpData: {
-
-        },
-        educationData: {
-
-        },
-        natureData: {
-
-        },
-        salaryData: {
-
-        },
-        offDayData: {
-
-        },
+        workexpData: {},
+        educationData: {},
+        natureData: {},
+        salaryData: {},
+        offDayData: {},
         guiyangData: {
           520100: '贵阳市',
           520200: '六盘水市',
@@ -236,9 +233,7 @@
           522600: '黔东南苗族侗族自治州',
           522700: '黔南布依族苗族自治州'
         },
-        jobClassify: {
-
-        },
+        jobClassify: {},
       }
     },
     methods: {
@@ -253,7 +248,6 @@
 
         } else {
           this.sortNum = sort_index;
-          console.log('请求数据');
           this.find_jobParam.order = sort_index;
           this.getjobData(this.find_jobParam)
         }
@@ -274,17 +268,28 @@
               transEducation(res.data.data,0);
               transNature1(res.data.data,2);
               transSalary(res.data.data,2);
-              this.find_jobData = res.data.data
+              for (let i = 0,len = res.data.data.length;i < len;i++) {
+                res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
+              }
+              this.find_jobData = res.data.data;
+              if (this.find_jobData.length == 0 || this.find_jobData.length == '' || this.find_jobData == undefined) {
+                this.emptySign = true;
+                this.req_state = false;
+              }else {
+                this.emptySign = false;
+              }
             }
           })
       },
       // 名企 急聘
       only_fam() {
+        this.find_jobParam.page = 1;
         this.famFlag = !this.famFlag;
         this.find_jobParam.has_m = this.famFlag == true?1:0;
         this.getjobData(this.find_jobParam)
       },
       only_ugent() {
+        this.find_jobParam.page = 1;
         this.ugentFlag = !this.ugentFlag;
         this.find_jobParam.is_urgent = this.ugentFlag == true?1:0;
         this.getjobData(this.find_jobParam)
@@ -357,34 +362,62 @@
       // 重置
       reset() {
         this.workExpAct = this.educationAct = this.natureAct = this.salaryAct = this.offDayAct = 0;
-        this.cityCode[1] = '520100';
+        this.cityCode[1] = '0';
         this.tranPosType = '全部';
-        this.posTypeNum = 0
+        this.posTypeNum = 0;
+        this.$route.query.job_id = '';
       },
       filter_submit() {
-        this.find_jobParam.work_exp = this.workExpAct;
-        this.find_jobParam.education = this.educationAct;
-        this.find_jobParam.nature = this.natureAct;
-        this.find_jobParam.salary = this.salaryAct;
+        this.find_jobParam.page = 1;
+        if (this.workExpAct != 0) {
+          this.find_jobParam.work_exp = this.workExpAct;
+        }
+        if (this.educationAct != 0) {
+          this.find_jobParam.education = this.educationAct;
+        }
+        if (this.natureAct != 0) {
+          this.find_jobParam.nature = this.natureAct;
+        }
+        if (this.salaryAct != 0) {
+          this.find_jobParam.salary = this.salaryAct;
+        }
         if (this.offDayAct != 0) {
           this.find_jobParam.time = this.offDayAct;
+        }
+        if (this.posTypeNum != 0) {
+          this.find_jobParam.job_id = this.posTypeNum;
+        }
+
+        if (this.cityCode[1] != 0) {
+          this.find_jobParam.city = this.cityCode[1];
         }
         this.getjobData(this.find_jobParam);
         this.firstBox = false;
       },
-      loadMore() {
-        //滚动触发事件
-        this.loading = true;
-       /* setTimeout(() => {
-          this.find_jobParam.page +=1;
-          let data = this.find_jobParam;
-          this.$ajax.get('/company_work',{params: data})
-            .then((res)=>{
-              console.log(res);
-              // this.find_jobData = this.find_jobData.assign(res.data.data)
-            });
-          this.loading = false;
-        }, 2500);*/
+      loadBottom() {
+        this.find_jobParam.page++;
+        this.$ajax.get('/company_work',{params: this.find_jobParam})
+          .then((res)=>{
+            if (res.data.code == 200) {
+              if (res.data.data.length == 0) {
+                this.req_state = true;
+                this.allLoaded = true;
+              }else {
+                this.req_state = false;
+                this.allLoaded = false;
+                tranCity(res.data.data,true,2);
+                transWorkexp1(res.data.data,0);
+                transEducation(res.data.data,0);
+                transNature1(res.data.data,2);
+                transSalary(res.data.data,2);
+                for (let i = 0,len = res.data.data.length;i < len;i++) {
+                  res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
+                }
+                this.find_jobData.push.apply(this.find_jobData,res.data.data);
+                this.$refs.loadmore.onBottomLoaded();
+              }
+            }
+          })
       },
       CityCode(e) {
         let cCode = e.currentTarget.getAttribute('city-id');
@@ -400,11 +433,20 @@
         this.secondBox = false;
         // this.scrollSign = false;
       },
+      to_pos_det(e) {
+        let id = e.currentTarget.getAttribute('id');
+        let cid = e.currentTarget.getAttribute('cid');
+        this.$router.push({name: 'pos_det',query: {id: id,cid: cid}});
+      }
     },
     created() {
       if (this.$route.query.province) {
         this.keyword = this.find_jobParam.office_name = this.$route.query.office_name;
         this.find_jobParam.province = this.$route.query.province;
+      }
+      if (this.$route.query.job_id) {
+        this.posTypeNum = this.find_jobParam.job_id = this.$route.query.job_id;
+        this.tranPosType = transJobs(this.posTypeNum,1);
       }
       let data = this.find_jobParam;
       this.$ajax.get('/company_work',{params: data})
@@ -418,7 +460,12 @@
             for (let i = 0,len = res.data.data.length;i < len;i++) {
               res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
             }
-            this.find_jobData = res.data.data
+            this.find_jobData = res.data.data;
+            if (this.find_jobData.length == 0 || this.find_jobData.length == '' || this.find_jobData == undefined) {
+              this.emptySign = true;
+            }else {
+              this.emptySign = false;
+            }
           }
         });
       this.tranCode = tranCity(this.cityCode,true,1)
@@ -506,7 +553,7 @@
     box-sizing: border-box;
     border-bottom: 1px solid #E1E4E6;
     line-height: 44px;
-
+    background-color: #ffffff;
     font-size: 12px;
     color: #919199;
   }
@@ -578,7 +625,9 @@
     margin-top: 10px;
     background-color: #ffffff;
   }
-
+  .ugent .mint-loadmore-content{
+    margin-right: 50px!important;
+  }
   .ugent_cell {
     padding: 15px 0;
     -webkit-box-sizing: border-box;

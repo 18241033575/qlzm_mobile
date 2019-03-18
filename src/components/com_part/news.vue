@@ -8,20 +8,22 @@
     </div>
     <div class="news_total_list">
       <div class="content">
-        <ul
-          v-infinite-scroll="loadMore"
-          infinite-scroll-disabled="loading"
-          infinite-scroll-distance="8">
-          <div class="news_total_cell" :news-id="item.id" v-for="(item,index) in newsData" :key="index" @click="news_total_det">
-            <div class="news_total_cell_title">
-                                                    <!--暂时没有判断没有图片的情况-->
-              <span>{{item.title}}</span><img v-show="true" :src="item.frontcover" alt="">
+        <div class="load">
+          <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
+            <div class="news_total_cell" :news-id="item.id" v-for="(item,index) in newsData" :key="index" @click="news_total_det">
+              <div class="news_total_cell_title">
+                <!--暂时没有判断没有图片的情况-->
+                <span>{{item.title}}</span><img v-show="true" :src="item.frontcover" alt="">
+              </div>
+              <div class="news_total_cell_tip">
+                <span>刚刚刚刚刚刚</span>阅读<span>({{item.visit}})</span>
+              </div>
             </div>
-            <div class="news_total_cell_tip">
-              <span>刚刚刚刚刚刚</span>阅读<span>({{item.visit}})</span>
+            <div class="bottom_line" v-show="req_state">
+              我也是有底线的
             </div>
-          </div>
-        </ul>
+          </mt-loadmore>
+        </div>
       </div>
     </div>
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -44,7 +46,9 @@
             /*总菜单状态*/
             openState: false,
             newsData: {},
-            pages: 1
+            pages: 1,
+            allLoaded: false,
+            req_state: false
           }
       },
       methods: {
@@ -60,33 +64,32 @@
           let id = e.currentTarget.getAttribute('news-id');
           this.$router.push({name: 'news_info',query:{id:id}})
         },
-        loadMore() {
-          //滚动触发事件
-          this.loading = true;
-          setTimeout(() => {
-            this.pages += 1;
-            this.$ajax.post('/news',{page: this.pages,operate: 'news'})
-              .then((res)=>{
-                console.log(res);
-                if (res.data.code == 200) {
-                  splicFrontcover(res.data.data,2);
-                  this.newsData = res.data.data
-                }
-                console.log(this.newsData);
-              })
-            this.loading = false;
-          }, 2500);
-        }
+        loadBottom() {
+          this.pages += 1;
+          this.$ajax.post('/news',{page: this.pages,operate: 'news',limit: 10})
+            .then((res)=>{
+              if (res.data.code == 200) {
+                this.req_state = false;
+                this.allLoaded = false;
+                splicFrontcover(res.data.data,2);
+                this.newsData = res.data.data;
+                // this.bottomStatus = '';
+                // this.$refs.loadmore.onBottomLoaded();
+              }else {
+                this.req_state = true;
+                this.allLoaded = true;
+              }
+            });
+
+        },
       },
       created() {
-          this.$ajax.post('/news',{page: 1,operate: 'news'})
+          this.$ajax.post('/news',{page: 1,operate: 'news',limit: 10})
             .then((res)=>{
-              console.log(res);
               if (res.data.code == 200) {
                 splicFrontcover(res.data.data,2);
                 this.newsData = res.data.data
               }
-              console.log(this.newsData);
             })
       }
     }
@@ -129,4 +132,5 @@
   .news_total_cell_tip span{
     margin-right: 20px;
   }
+
 </style>

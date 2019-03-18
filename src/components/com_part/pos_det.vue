@@ -84,7 +84,7 @@
                 职位描述
               </div>
               <div class="company_info" :class="{shade_info: this.shadeSign}">
-                <quill-editor v-model="posDetData.duty"
+                <quill-editor id="pos" v-model="posDetData.duty"
                               :options ="editorOption">
                 </quill-editor>
                 <div class="shade" v-if="shadeSign"></div>
@@ -689,4 +689,8 @@
     flex-grow: 1;
     color: #666666;
   }
+  #pos .ql-toolbar{
+    display: none!important;
+  }
+
 </style>

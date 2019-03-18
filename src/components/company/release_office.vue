@@ -452,7 +452,6 @@
         }
       },
       created() {
-          this.id = this.$route.query.id;
           let certData = JSON.parse(localStorage.getItem('CERT'));
           if (!certData) {
             this.$ajax.get('/allcerts')
@@ -466,6 +465,7 @@
               })
           }
           if (this.id != 0) {
+            this.id = this.$route.query.id;
             let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
             this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
               .then((res)=>{

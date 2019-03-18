@@ -4,6 +4,7 @@ import Vue from 'vue'
 import elementUI from 'element-ui'
 import mintUI from 'mint-ui'
 import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification, MessageBox} from 'element-ui';
+import { Popup,Loadmore } from 'mint-ui';
 import App from './App'
 import router from './router'
 import VueQuillEditor from 'vue-quill-editor'
@@ -18,6 +19,7 @@ Vue.use(elementUI);
 Vue.use(mintUI);
 Vue.use(VueQuillEditor);
 
+// 更改 title
 Vue.use(require('vue-wechat-title'));
 
 // 数据请求
@@ -39,7 +41,7 @@ Axios.interceptors.request.use(config => {
 
 
 
-//element组件调用
+//element-ui组件调用
 Vue.use(Carousel);
 Vue.use(Button);
 Vue.use(Select);
@@ -52,8 +54,9 @@ Vue.component(Notification.name, Notification);
 Vue.component(Message.name, Message);//用以解决刷新自动弹出message
 // Vue.use(Message);
 
-
-
+// mint-ui组件调用
+Vue.component(Popup.name, Popup);
+Vue.component(Loadmore.name, Loadmore);
 
 Vue.config.productionTip = false;
 

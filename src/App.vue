@@ -172,4 +172,16 @@
     font-size: 14px;
     color: #919199;
   }
+  /* 底线 */
+  .load{
+    /*height: auto;*/
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+  .bottom_line{
+    line-height: 32px;
+    text-align: center;
+    font-size: 12px;
+    color: #919199;
+  }
 </style>

@@ -151,6 +151,8 @@
                     this.commonData.splice(i,1);
                     if (this.commonData.length == 0 || this.commonData.length == '') {
                       this.emptySign = true;
+                    }else {
+                      this.emptySign = false;
                     }
                   }
                 }
@@ -169,6 +171,8 @@
                     this.commonData.splice(i,1);
                     if (this.commonData.length == 0 || this.commonData.length == '') {
                       this.emptySign = true;
+                    }else {
+                      this.emptySign = false;
                     }
                   }
                 }
@@ -196,6 +200,8 @@
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
+                  }else {
+                    this.emptySign = false;
                   }
                 }
               })
@@ -212,6 +218,8 @@
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
+                  }else {
+                    this.emptySign = false;
                   }
                 }
               })
@@ -228,6 +236,8 @@
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
+                  }else {
+                    this.emptySign = false;
                   }
                 }
               })
@@ -243,6 +253,8 @@
                   transWorkexp(res.data,0);
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
+                  }else {
+                    this.emptySign = false;
                   }
                 }
               })
@@ -258,6 +270,8 @@
                   transWorkexp(res.data,0);
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
+                  }else {
+                    this.emptySign = false;
                   }
                 }
               })

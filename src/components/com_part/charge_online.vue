@@ -10,7 +10,7 @@
       <div class="edit_bottom">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">充值金额</span><span class="int_job_det fr" ><input type="text" v-model="money" maxlength="10" placeholder="请输入金额">.00</span>
+            <span class="edit_lab">充值金额</span><span class="int_job_det fr" ><input type="number" v-model="money" maxlength="10" placeholder="请输入金额">.00</span>
           </div>
           <div class="edit_cell">
             <span class="edit_lab">支付方式</span><span class="int_job_det fr" ><img src="/static/images/ic_right@2x.png" alt=""></span>
