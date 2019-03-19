@@ -77,6 +77,16 @@
           this.reportType = 3;
         },
         sub_report() {
+          this.content = this.content.replace(/^\s*|\s*$/g,"");
+          if (this.content == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入举报原因',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           let uid = this.$route.query.uid;
           let cid = this.$route.query.cid;
           if (uid) {

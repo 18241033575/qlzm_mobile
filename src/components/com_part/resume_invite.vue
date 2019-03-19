@@ -15,7 +15,7 @@
             <span class="edit_lab">联系人</span><input type="text" v-model="contractData.username"  placeholder="如: 张经理、王先生等(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">手机</span><input type="text" v-model="contractData.phone" placeholder="手机号码(必填)">
+            <span class="edit_lab">手机</span><input type="text" maxlength="11" v-model="contractData.phone" placeholder="手机号码(必填)">
           </div>
           <div class="edit_cell">
             <span class="edit_lab">座机</span><input type="text" v-model="contractData.tel" placeholder="座机号码">
@@ -81,9 +81,7 @@
             invite_type: 1,
             time: '',
             remind: '',
-            contractData: {
-
-            },
+            contractData: {},
             pickerOptions1: {
               disabledDate(time) {
                 return time.getTime() < Date.now();
@@ -109,12 +107,75 @@
           this.int_way_sign = true;
         },
         send_int() {
+          if (this.job == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入应聘职位',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.contractData.username == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入联系人',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.contractData.phone.length < 11) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的手机号',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.address == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入面试地址',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.time == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入面试时间',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           let uid = this.$route.query.uid;
           this.$ajax.post('/company/send-interview',{ cid: companyInfo.id, uid: uid, job: this.job,username: this.contractData.username, tel: this.contractData.tel, phone: this.contractData.phone,qq: this.contractData.qq,
             wx: this.contractData.wx,email: this.contractData.email,address: this.address,invite_type: this.invite_type,time: this.time,remind: this.remind})
             .then((res)=>{
               console.log(res);
+              if(res.data.state == 200) {
+                this.$notify.success({
+                  title: '提示',
+                  message: '发送面试成功',
+                  showClose: false,
+                  duration: 800
+                });
+                setTimeout(()=>{
+                  this.$router.push({name: 'resume_det',query:{uid: uid}})
+                },1000)
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
+              }
             })
         }
       },

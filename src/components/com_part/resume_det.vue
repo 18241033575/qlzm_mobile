@@ -14,7 +14,7 @@
             <p class="tal_name">{{userMsg.name}}</p>
             <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education}}</span>|<span>{{userMsg.work_exp}}</span></p>
           </div>
-          <div class="bottom_msg">
+          <div class="bottom_msg" v-show="isBuy">
             <p><span class="left_lab">手机</span> <span class="right_msg">{{userMsg.phone}}</span></p>
             <p><span class="left_lab">QQ</span> <span class="right_msg">{{userMsg.qq}}</span></p>
             <p><span class="left_lab">邮箱</span> <span class="right_msg">{{userMsg.email}}</span></p>
@@ -27,6 +27,9 @@
       <!--求职意向-->
       <div class="int_bottom">
         <div class="content">
+          <div class="rem_title">
+            求职意向
+          </div>
           <div class="bottom_msg">
             <p><span class="left_lab">求职类型</span> <span class="right_msg">{{intJobData.nature}}</span></p>
             <p><span class="left_lab">意向岗位</span> <span class="right_msg">{{intJobData.job_id}}</span></p>
@@ -38,7 +41,12 @@
         </div>
       </div>
       <!--工作经历-->
-      <div class="exp_list">
+      <div class="exp_list" v-show="isBuy">
+        <div class="content">
+          <div class="rem_title">
+            工作经历
+          </div>
+        </div>
         <div class="exp_cell" v-for="(item,index) in this.workData" :key="index">
           <div class="content">
             <div class="exp_cell_box">
@@ -58,7 +66,12 @@
         </div>
       </div>
       <!--教育经历-->
-      <div class="exp_list">
+      <div class="exp_list" v-show="isBuy">
+        <div class="content">
+          <div class="rem_title">
+            教育经历
+          </div>
+        </div>
         <div class="exp_cell" v-for="(item,index) in this.eduData" :key="index">
           <div class="content">
             <div class="exp_cell_box">
@@ -74,8 +87,13 @@
           </div>
         </div>
       </div>
-      <!--证书-->
-      <div class="exp_list">
+      <!--行业证书-->
+      <div class="exp_list" v-show="isBuy">
+        <div class="content">
+          <div class="rem_title">
+            行业证书
+          </div>
+        </div>
         <div class="exp_cell" v-for="(item,index) in this.certsData" :key="index">
           <div class="content">
             <div class="exp_cell_box">
@@ -92,8 +110,11 @@
         </div>
       </div>
       <!--自我评价-->
-      <div class="eval_body">
+      <div class="eval_body" v-show="isBuy">
         <div class="content">
+          <div class="rem_title">
+            自我评价
+          </div>
           <div class="eval_body_top">
             <div class="adv_cell" v-for="(item,index) in this.selfEvalData.tags" :key="index">
               {{item}}
@@ -105,7 +126,7 @@
         </div>
       </div>
       <!--操作-->
-      <div class="resume_btn" v-show="true">
+      <div class="resume_btn" v-show="isBuy">
         <div class="resume_invite resume_btn_cell" @click="interview">
           面试邀请
         </div>
@@ -116,7 +137,7 @@
           举报
         </div>
       </div>
-      <div class="resume_buy_btn" v-show="false">
+      <div class="resume_buy_btn" v-show="!isBuy">
         购买简历，查看完整信息
       </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
@@ -140,6 +161,7 @@
           /*总菜单状态*/
           openState: false,
           uid: '',
+          isBuy: false,
           userMsg: {},
           intJobData: {},
           workData: {},
@@ -223,100 +245,104 @@
         if (companyInfo) {
           this.$ajax.get('/resume/view/' + this.uid,{params: {cid: companyInfo.id}})
             .then((res)=>{
-              // 基本信息
-              if (res.data.base_info.area == 0) {
-                res.data.base_info.area = '';
-              } else {
-                tranArea(res.data.base_info,true,0);
-              }
-              if (res.data.base_info.city == 0) {
-                res.data.base_info.city = '';
-              } else {
-                tranCity(res.data.base_info,true,0);
-              }
-              if (res.data.base_info.province == 0) {
-                res.data.base_info.province = '未知';
-              } else {
-                tranProvince(res.data.base_info,true);
-              }
-              // transGender(res.data.base_info,true);
-              // transEducation(res.data.base_info,1);
-              transWorkexp(res.data.base_info,1,'tal');
-              res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
-              this.userMsg = res.data.base_info;
+              // 已购买
+              if (res.data.is_buy == 1) {
+                  this.isBuy = true;
+                   // 基本信息
+                 if (res.data.base_info.area == 0) {
+                   res.data.base_info.area = '';
+                 } else {
+                   tranArea(res.data.base_info,true,0);
+                 }
+                 if (res.data.base_info.city == 0) {
+                   res.data.base_info.city = '';
+                 } else {
+                   tranCity(res.data.base_info,true,0);
+                 }
+                 if (res.data.base_info.province == 0) {
+                   res.data.base_info.province = '未知';
+                 } else {
+                   tranProvince(res.data.base_info,true);
+                 }
 
-              // 求职意向
-              res.data.career.province = res.data.career.work_province;
-              res.data.career.city = res.data.career.work_city;
-              if (res.data.career.city == 0) {
-                res.data.career.city = '';
-              } else {
-                tranCity(res.data.career,true,0);
-              }
-              if (res.data.career.province == 0) {
-                res.data.career.province = '未知';
-              } else {
-                tranProvince(res.data.career,true);
-              }
-              // transArrive(res.data.career,true,0);
-              // transNature(res.data.career,1);
-              // transSalary(res.data.career,1);
-              this.intJobData = res.data.career;
-              this.remark = this.intJobData.remark;
-
-              // 工作经历
-              this.workData = res.data.work_exp;
-              for (let i = 0,len = this.workData.length; i < len; i++) {
-                if (this.workData[i].industry == 0) {
-                  this.workData[i].tranJobNature = '非建筑行业'
-                } else {
-                  this.workData[i].tranJobNature = '建筑行业'
-                }
-                if (this.workData[i].nature == 1) {
-                  this.workData[i].workNature = '管理岗'
-                } else if (this.workData[i].nature == 2) {
-                  this.workData[i].workNature = '技术岗'
-                } else {
-                  this.workData[i].workNature = '其他'
-                }
-              }
-
-              // 项目经验
-              transEducation(res.data.edu_exp);
-              this.eduData = res.data.edu_exp;
-
-              // 证书
-              let certs = JSON.parse(res.data.user_certs);
-                certs.forEach(function (item,ids) {
-                   if (item.reg_status == 0) {
-                     item.tranreg_status = '不限'
-                   } else if (item.reg_status == 1) {
-                     item.tranreg_status = '初始'
+                 // 工作经历
+                 this.workData = res.data.work_exp;
+                 for (let i = 0,len = this.workData.length; i < len; i++) {
+                   if (this.workData[i].industry == 0) {
+                     this.workData[i].tranJobNature = '非建筑行业'
                    } else {
-                     item.tranreg_status = '转注'
+                     this.workData[i].tranJobNature = '建筑行业'
                    }
-
-                  for(let i = 0,len = certData.length;i < len;i++) {
-                     if (item.type == certData[i].id ) {
-                       item.trantype = certData[i].category;
-                       for(let j = 0,mlen = certData[i].majors.length; j < mlen; j++) {
-                         if (item.major == certData[i].majors[j].id) {
-                           item.tranmajor = certData[i].majors[j].major
-                         }
-
-                         /* if (item.addition == certData[i].majors[j].id) {
-                            item.tranaddition = certData[i].majors[j].major
-                          }*/
-                       }
-                     }
+                   if (this.workData[i].nature == 1) {
+                     this.workData[i].workNature = '管理岗'
+                   } else if (this.workData[i].nature == 2) {
+                     this.workData[i].workNature = '技术岗'
+                   } else {
+                     this.workData[i].workNature = '其他'
                    }
-                 });
-              this.certsData = certs;
+                 }
 
-              // 自我评价
-              // res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,true);
-              this.selfEvalData = res.data.evaluation;
-              this.evaluation = this.selfEvalData.evaluation;
+                 // 项目经验
+                 transEducation(res.data.edu_exp);
+                 this.eduData = res.data.edu_exp;
+
+                 // 证书
+                 let certs = JSON.parse(res.data.user_certs);
+                   certs.forEach(function (item,ids) {
+                      if (item.reg_status == 0) {
+                        item.tranreg_status = '不限'
+                      } else if (item.reg_status == 1) {
+                        item.tranreg_status = '初始'
+                      } else {
+                        item.tranreg_status = '转注'
+                      }
+
+                     for(let i = 0,len = certData.length;i < len;i++) {
+                        if (item.type == certData[i].id ) {
+                          item.trantype = certData[i].category;
+                          for(let j = 0,mlen = certData[i].majors.length; j < mlen; j++) {
+                            if (item.major == certData[i].majors[j].id) {
+                              item.tranmajor = certData[i].majors[j].major
+                            }
+
+                            /* if (item.addition == certData[i].majors[j].id) {
+                               item.tranaddition = certData[i].majors[j].major
+                             }*/
+                          }
+                        }
+                      }
+                    });
+                 this.certsData = certs;
+
+                 // 自我评价
+                 // res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,true);
+                 this.selfEvalData = res.data.evaluation;
+                 this.evaluation = this.selfEvalData.evaluation;
+                }else {
+                  this.isBuy = false;
+                }
+                // 公共部分
+                transWorkexp(res.data.base_info,1,'tal');
+                res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
+                this.userMsg = res.data.base_info;
+                // 求职意向
+                res.data.career.province = res.data.career.work_province;
+                res.data.career.city = res.data.career.work_city;
+                if (res.data.career.city == 0) {
+                  res.data.career.city = '';
+                } else {
+                  tranCity(res.data.career,true,0);
+                }
+                if (res.data.career.province == 0) {
+                  res.data.career.province = '未知';
+                } else {
+                  tranProvince(res.data.career,true);
+                }
+                // transArrive(res.data.career,true,0);
+                // transNature(res.data.career,1);
+                // transSalary(res.data.career,1);
+                this.intJobData = res.data.career;
+                this.remark = this.intJobData.remark;
             });
         } else {
           this.$ajax.get('/resume/view/' + this.uid)
@@ -337,6 +363,23 @@
 
 <style scoped>
   @import "../../../static/css/tal_resume.css";
+  .exp_list .exp_cell{
+    margin-bottom: 0;
+  }
+  .rem_title{
+    line-height: 44px;
+    font-size: 14px;
+    color: #353535;
+    font-weight: bold;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
+    background-color: #ffffff;
+    text-align: left;
+  }
+  .exp_list{
+    background-color: #ffffff;
+  }
   .tal_msg_det{
     background-color: #ffffff;
   }
@@ -351,6 +394,10 @@
   .top_pic img{
     width: 75px;
     height: 90px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
   }
   .top_pic .tal_name{
     padding-bottom: 0;
