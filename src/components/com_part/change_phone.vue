@@ -13,9 +13,9 @@
       </div>
     </div>
     <div class="phone_cell">
-      <el-input class="common_input" v-model="param.phone" placeholder="请输入新的手机号码"></el-input>
+      <el-input class="common_input" v-model="param.phone" maxlength="11" minlength="11"  :validate-event="true" @keyup.native="test" placeholder="请输入新的手机号码"></el-input>
       <div class="sms_group">
-        <el-input class="common_input_sms fl" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
+        <el-input class="common_input_sms fl" maxlength="6" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
       </div>
     </div>
     <div class="content">
@@ -71,6 +71,15 @@
         },
         /*总菜单操作e*/
         getCode() {
+          if (this.param.phone.length < 11) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的手机号码',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           if (this.getSmsState) {
             this.getSmsState = false;
             let t = 60;
@@ -150,6 +159,10 @@
                 }
               })
           }
+        },
+        test() {
+          this.param.phone = this.param.phone.replace(/[^\.\d]/g,'');
+          this.param.phone = this.param.phone.replace('.','');
         }
       }
     }

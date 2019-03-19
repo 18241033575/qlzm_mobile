@@ -9,22 +9,22 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">联系人</span><input type="text" v-model="contractData.username"  placeholder="如: 张经理、王先生等(必填)">
+            <span class="edit_lab">联系人</span><input type="text" maxlength="15" v-model="contractData.username"  placeholder="如: 张经理、王先生等(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">手机号码</span><input type="text" v-model="contractData.phone" placeholder="手机号码(必填)">
+            <span class="edit_lab">手机号码</span><input type="text" maxlength="11" :onkeypress="onlyNum1()" v-model="contractData.phone" placeholder="手机号码(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">座机号码</span><input type="text" v-model="contractData.tel" placeholder="座机号码">
+            <span class="edit_lab">座机号码</span><input type="text" maxlength="20" :onkeypress="onlyNum2()" v-model="contractData.tel" placeholder="座机号码">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">微信</span><input type="text" v-model="contractData.wx" placeholder="微信">
+            <span class="edit_lab">微信</span><input type="text" maxlength="20" v-model="contractData.wx" placeholder="微信">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">QQ</span><input type="text" v-model="contractData.qq" placeholder="QQ">
+            <span class="edit_lab">QQ</span><input type="text" maxlength="20" :onkeypress="onlyNum3()" v-model="contractData.qq" placeholder="QQ">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">电子邮箱</span><input type="text" v-model="contractData.email"  placeholder="电子邮箱">
+            <span class="edit_lab">电子邮箱</span><input type="text" maxlength="20" v-model="contractData.email"  placeholder="电子邮箱">
           </div>
         </div>
       </div>
@@ -49,9 +49,7 @@
         return {
           /*总菜单状态*/
           openState: false,
-          contractData: {
-
-          }
+          contractData: {}
         }
       },
       methods: {
@@ -66,6 +64,24 @@
         save_contract() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.contractData.cid = companyInfo.id;
+          if (this.contractData.username == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '联系人不能为空',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.contractData.phone.length < 11) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的手机号码',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           this.$ajax.post('/company/contact-set', this.contractData)
             .then((res)=>{
               if (res.data.state == 200) {
@@ -78,9 +94,28 @@
                 setTimeout(()=>{
                   this.$router.push({name: 'enterp_info_set'})
                 },1000)
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
             })
-        }
+        },
+        onlyNum1() {
+          this.contractData.phone = this.contractData.phone.replace(/[^\.\d]/g,'');
+          this.contractData.phone = this.contractData.phone.replace('.','');
+        },
+        onlyNum2() {
+          this.contractData.tel = this.contractData.tel.replace(/[^\.\d]/g,'');
+          this.contractData.tel = this.contractData.tel.replace('.','');
+        },
+        onlyNum3() {
+          this.contractData.qq = this.contractData.qq.replace(/[^\.\d]/g,'');
+          this.contractData.qq = this.contractData.qq.replace('.','');
+        },
       },
       created() {
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));

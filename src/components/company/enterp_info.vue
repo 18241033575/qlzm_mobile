@@ -235,6 +235,60 @@
         // 保存
         infoSave() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if (this.infoData.name == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请填写企业名称',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.tranPro == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择省份',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.tranCity == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择城市',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.tranArea == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择地区',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.infoData.address == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请填写详细地址',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.this.editIntro == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请填写企业简介',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           this.$ajax.post('/company/info-set',{cid: companyInfo.id,logo: this.infoData.logo,name: this.infoData.name,nature: this.infoData.nature,scale: this.infoData.scale,province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.infoData.address,introduction: this.editIntro})
             .then((res)=>{
               if (res.data.state == 200) {
@@ -247,6 +301,13 @@
                 setTimeout(()=>{
                     this.$router.push({name: 'enterp_info_set'})
                 },1000)
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
             })
         },
