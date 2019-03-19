@@ -10,22 +10,22 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">单位名称</span><input type="text" v-model="invTax.title"  placeholder="单位名称(必填)">
+            <span class="edit_lab">单位名称</span><input type="text" v-model="invTax.title" maxlength="20" placeholder="单位名称(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">纳税人识别号</span><input type="text" v-model="invTax.number" maxlength="20" placeholder="纳税人识别号(必填)">
+            <span class="edit_lab">纳税人识别号</span><input type="text" :validate-event="true"  :onkeypress="onlyNum1()" v-model="invTax.number" minlength="15" maxlength="20" placeholder="纳税人识别号(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">企业注册地址</span><input type="text" v-model="invTax.reg_address"  placeholder="企业注册地址(必填)">
+            <span class="edit_lab">企业注册地址</span><input type="text" maxlength="20" v-model="invTax.reg_address"  placeholder="企业注册地址(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">企业注册电话</span><input maxlength="15" type="text" v-model="invTax.reg_tel" placeholder="企业注册电话(必填)">
+            <span class="edit_lab">企业注册电话</span><input maxlength="20" minlength="10" type="text" :onkeypress="onlyNum2()" v-model="invTax.reg_tel" placeholder="企业注册电话(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">开户银行</span><input type="text" v-model="invTax.bank" placeholder="开户银行(必填)">
+            <span class="edit_lab">开户银行</span><input type="text" maxlength="15" v-model="invTax.bank" placeholder="开户银行(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">银行账户</span><input type="text" maxlength="19" v-model="invTax.bank_account" placeholder="银行账户(必填)">
+            <span class="edit_lab">银行账户</span><input type="text" minlength="16" maxlength="20" :onkeypress="onlyNum3()" v-model="invTax.bank_account" placeholder="银行账户(必填)">
           </div>
         </div>
       </div>
@@ -40,10 +40,10 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">发票抬头</span><input type="text" v-model="invTotal.title" placeholder="发票抬头(必填)">
+            <span class="edit_lab">发票抬头</span><input type="text" maxlength="20" v-model="invTotal.title" placeholder="发票抬头(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">纳税人识别号</span><input type="text" maxlength="20" v-model="invTotal.number"  placeholder="纳税人识别号(必填)">
+            <span class="edit_lab">纳税人识别号</span><input type="text" maxlength="20" :onkeypress="onlyNum4()" v-model="invTotal.number"  placeholder="纳税人识别号(必填)">
           </div>
         </div>
       </div>
@@ -58,13 +58,13 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">收件人姓名</span><input type="text" v-model="invMsg.name" placeholder="收件人姓名(必填)">
+            <span class="edit_lab">收件人姓名</span><input type="text" maxlength="10" v-model="invMsg.name" placeholder="收件人姓名(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">收件人手机</span><input type="text" v-model="invMsg.phone" placeholder="收件人手机(必填)">
+            <span class="edit_lab">收件人手机</span><input type="text" :onkeypress="onlyNum5()" maxlength="11" v-model="invMsg.phone" placeholder="收件人手机(必填)">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">E-mail</span><input type="text" v-model="invMsg.email" placeholder="用于接收电子发票(必填)">
+            <span class="edit_lab">E-mail</span><input type="text" maxlength="20" v-model="invMsg.email" placeholder="用于接收电子发票(必填)">
           </div>
           <div class="edit_cell special_cell ">
             <span class="edit_lab">收件地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place_msg">{{transPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place_msg">{{transCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place_msg">{{transArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
@@ -218,6 +218,60 @@
         inv_save() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (this.org == 'tax') {
+            if (this.invTax.title == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '单位名称不能为空',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invTax.number.length < 15) {
+              this.$notify.warning({
+                title: '提示',
+                message: '纳税人识别号不能少于15位',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invTax.address == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '注册地址不能为空',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invTax.reg_tel.length < 10) {
+              this.$notify.warning({
+                title: '提示',
+                message: '注册电话不能少于10位',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invTax.bank == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '开户银行不能为空',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invTax.bank_account.length < 16) {
+              this.$notify.warning({
+                title: '提示',
+                message: '银行账户不能少于16位',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
             if (!this.backData) {
               this.$ajax.post('/company/add-vat-invoice',{cid: companyInfo.id,title: this.invTax.title,taxpayer_identification_number: this.invTax.number,reg_address:  this.invTax.reg_address,
                 reg_tel: this.invTax.reg_tel,bank: this.invTax.bank,bank_account: this.invTax.bank_account})
@@ -232,6 +286,13 @@
                     setTimeout(()=>{
                       this.$router.push({name: 'invoice_msg'})
                     },1000)
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500
+                    });
                   }
                 })
             } else {
@@ -248,11 +309,36 @@
                     setTimeout(()=>{
                       this.$router.push({name: 'invoice_msg'})
                     },1000)
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500
+                    });
                   }
                 })
             }
           }
           if (this.org == 'total') {
+            if (this.invTotal.title == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '发票抬头不能为空',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invTotal.number.length < 15) {
+              this.$notify.warning({
+                title: '提示',
+                message: '纳税人识别号不能少于15位',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
             if (!this.backData) {
               this.$ajax.post('/company/add-general-invoice',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: this.invTotal.number})
                 .then((res)=>{
@@ -266,6 +352,13 @@
                     setTimeout(()=>{
                       this.$router.push({name: 'invoice_msg'})
                     },1000)
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500
+                    });
                   }
                 })
             } else {
@@ -281,12 +374,82 @@
                     setTimeout(()=>{
                       this.$router.push({name: 'invoice_msg'})
                     },1000)
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500
+                    });
                   }
                 })
             }
 
           }
           if (this.org == 'msg') {
+            if (this.invMsg.name == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '收件人姓名不能为空',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invMsg.phone.length < 11) {
+              this.$notify.warning({
+                title: '提示',
+                message: '请填写正确的手机号',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invMsg.email.length < 4) {
+              this.$notify.warning({
+                title: '提示',
+                message: '请填写正确的邮箱地址',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.transPro == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '请选择省份',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.transCity == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '请选择城市',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.transArea == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '请选择地区',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
+            if (this.invMsg.address == '') {
+              this.$notify.warning({
+                title: '提示',
+                message: '请填写详细地址',
+                showClose: false,
+                duration: 1500
+              });
+              return
+            }
             if (!this.backData) {
               this.$ajax.post('/company/add-addressee',{cid: companyInfo.id,name: this.invMsg.name,phone : this.invMsg.phone,email : this.invMsg.email,province : this.invMsg.province,city : this.invMsg.city,area : this.invMsg.area,address : this.invMsg.address})
                 .then((res)=>{
@@ -300,6 +463,13 @@
                     setTimeout(()=>{
                       this.$router.push({name: 'invoice_msg'})
                     },1000)
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500
+                    });
                   }
                 })
             } else {
@@ -315,15 +485,43 @@
                     setTimeout(()=>{
                       this.$router.push({name: 'invoice_msg'})
                     },1000)
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500
+                    });
                   }
                 })
             }
 
           }
+        },
+        // 数字限制
+        onlyNum1() {
+          this.invTax.number = this.invTax.number.replace(/[^\.\d]/g,'');
+          this.invTax.number = this.invTax.number.replace('.','');
+        },
+        onlyNum2() {
+          this.invTax.reg_tel = this.invTax.reg_tel.replace(/[^\.\d]/g,'');
+          this.invTax.reg_tel = this.invTax.reg_tel.replace('.','');
+        },
+        onlyNum3() {
+          this.invTax.bank_account = this.invTax.bank_account.replace(/[^\.\d]/g,'');
+          this.invTax.bank_account = this.invTax.bank_account.replace('.','');
+        },
+        onlyNum4() {
+          this.invTotal.number = this.invTotal.number.replace(/[^\.\d]/g,'');
+          this.invTotal.number = this.invTotal.number.replace('.','');
+        },
+        onlyNum5() {
+          this.invMsg.phone = this.invMsg.phone.replace(/[^\.\d]/g,'');
+          this.invMsg.phone = this.invMsg.phone.replace('.','');
         }
       },
       created() {
-          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.org = this.$route.query.org;
         if (this.org == 'tax') {
           this.$ajax.get('/company/vat-invoice',{params: {cid: companyInfo.id}})
