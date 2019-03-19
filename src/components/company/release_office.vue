@@ -205,6 +205,13 @@
         },
         /*总菜单操作e*/
         release() {
+          // 输入限制判断
+
+
+
+
+
+
           if (this.form.hire_num == '' || this.form.hire_num == '若干') {
             this.form.hire_num = 0;
           }
