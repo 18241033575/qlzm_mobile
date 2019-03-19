@@ -152,6 +152,18 @@
           </div>
         </div>
       </div>
+      <!--简历操作-->
+      <div class="pos_opera_box" @click="closeState" v-show="this.boxState">
+
+        <div class="opera_list">
+          <div class="content">
+            <div class="opera_cell" @click.stop="collect_resume">
+              加入收藏
+            </div>
+          </div>
+        </div>
+
+      </div>
       <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     </div>
@@ -203,21 +215,11 @@
           natureAct: 0,
           salaryAct: 0,
           offDayAct: 0,
-          workexpData: {
-
-          },
-          educationData: {
-
-          },
-          natureData: {
-
-          },
-          salaryData: {
-
-          },
-          offDayData: {
-
-          },
+          workexpData: {},
+          educationData: {},
+          natureData: {},
+          salaryData: {},
+          offDayData: {},
           guiyangData: {
             520100: '贵阳市',
             520200: '六盘水市',
@@ -229,9 +231,9 @@
             522600: '黔东南苗族侗族自治州',
             522700: '黔南布依族苗族自治州'
           },
-          jobClassify: {
-
-          },
+          jobClassify: {},
+          boxState: false,
+          info_id: 0,
         }
       },
       methods: {
@@ -405,6 +407,14 @@
           let uid = e.currentTarget.getAttribute('uid');
           this.$router.push({name: 'resume_det',query: {uid: uid}});
         },
+        moreOpera(e) {
+          this.info_id = e.currentTarget.getAttribute('id');
+          this.uid = e.currentTarget.getAttribute('uid');
+          this.boxState = true;
+        },
+        closeState() {
+          this.boxState = false;
+        },
       },
       created() {
         if (this.$route.query.province) {
@@ -559,6 +569,10 @@
     width: 100%;
     height: 100px;
     background-color: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
   }
   .tal_name{
     padding: 15px 0;
@@ -672,5 +686,40 @@
     border: 1px solid #5082E6;
     background-color: #ffffff;
     color: #5082e6;
+  }
+  /*职位管理操作弹层*/
+  .pos_opera_box{
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: rgba(0,0,0,.5);
+    z-index: 9999999;
+  }
+  .opera_list{
+    width: 100%;
+    margin: 50% auto;
+  }
+  .opera_cell{
+    background-color: #ffffff;
+    font-size: 14px;
+    color: #666666;
+    text-align: center;
+    line-height: 44px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E1E4E6;
+  }
+  .pos_del{
+    color: #ff5959;
+  }
+  .app_pos{
+    margin-left: 5px;
+    font-size: 12px;
+    color: #919199;
   }
 </style>

@@ -62,7 +62,7 @@
         /*总菜单操作e*/
         news_total_det(e) {
           let id = e.currentTarget.getAttribute('news-id');
-          this.$router.push({name: 'news_info',query:{id:id}})
+          this.$router.push({name: 'news_info',query:{id: id}});
         },
         loadBottom() {
           this.pages += 1;

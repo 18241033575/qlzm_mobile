@@ -73,9 +73,9 @@
         },
         /*总菜单操作e*/
         to_comDetail(e) {
-          //company-id
-          let id = e.currentTarget.getAttribute('cid');
-          this.$router.push({name: 'company_det',query:{id: id}})
+          let cid = e.currentTarget.getAttribute('cid');
+          let id = e.currentTarget.getAttribute('company-cid');
+          this.$router.push({name: 'company_det',query:{cid: cid,id: id}});
         },
         loadMore() {
           //滚动触发事件

@@ -78,7 +78,7 @@
             },
             2: {
               urlName: "找人才",
-              urlRoute: "find_job"
+              urlRoute: "find_talent"
             },
             3:{
               urlName: "名企招聘",

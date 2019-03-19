@@ -96,6 +96,10 @@
                     this.manageData[i].is_release = 0;
                   }
                 }
+                this.$message({
+                  message: '撤回成功',
+                  type: 'success'
+                });
               }
             })
         },
@@ -110,6 +114,10 @@
                     this.manageData[i].is_release = 1;
                   }
                 }
+                this.$message({
+                  message: '发布成功',
+                  type: 'success'
+                });
               }
             })
         },
@@ -125,6 +133,10 @@
                     this.manageData.splice(i,1);
                   }
                 }
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
               }
             })
         },

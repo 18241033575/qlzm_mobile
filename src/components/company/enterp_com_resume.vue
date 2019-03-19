@@ -67,7 +67,7 @@
         </div>
         <div class="opera_list" v-if="this.orign == 'collected'">
           <div class="content">
-            <div class="opera_cell" @click.stop="collect_resume">
+            <div class="opera_cell" @click="collect_resume">
               加入收藏
             </div>
           </div>
@@ -100,9 +100,7 @@
           uid: 0,
           orign: '',
           emptySign: false,
-          commonData: {
-
-          },
+          commonData: {},
         }
       },
       methods: {
@@ -131,6 +129,11 @@
                 this.$message({
                   message: '收藏成功',
                   type: 'success'
+                });
+              }else {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'warning'
                 });
               }
             })
@@ -251,6 +254,7 @@
                   getTrueAge(res.data,2);
                   transEducation(res.data,0);
                   transWorkexp(res.data,0);
+                  this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
                   }else {
@@ -268,6 +272,7 @@
                   getTrueAge(res.data,2);
                   transEducation(res.data,0);
                   transWorkexp(res.data,0);
+                  this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
                   }else {

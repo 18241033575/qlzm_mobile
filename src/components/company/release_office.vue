@@ -191,6 +191,8 @@
           CommonData: {},
           addrData: {},
           infoData: {},
+          // 名企标识
+          has_m: 0
         }
       },
       methods: {
@@ -209,7 +211,7 @@
           this.form.ugent = this.isUgent == true?1:0;
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (this.id == 0) {
-            this.$ajax.post('/office/first-release',{office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
+            this.$ajax.post('/office/first-release',{office_name: this.form.office_name,has_m: this.has_m, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
               province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: [0,1],is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
@@ -225,7 +227,7 @@
                 }
               })
           } else {
-            this.$ajax.post('/office/edit',{id: this.id,office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,is_release: 1,
+            this.$ajax.post('/office/edit',{id: this.id,has_m: this.has_m,office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,is_release: 1,
               province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: [0,1],is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
@@ -395,6 +397,7 @@
         },
         // 地址选择
         choose_pro() {
+          this.scrollSign = true;
           this.secondBox = true;
           this.showMsg = 'pro';
           this.top_title = '选择省份';
@@ -406,9 +409,11 @@
           this.tranPro = tranProvince(this.infoData.province,true,'',2);
           this.tranCity = '';
           this.tranArea = '';
-          this.secondBox = false
+          this.secondBox = false;
+          this.scrollSign = false;
         },
         choose_city() {
+          this.scrollSign = true;
           this.secondBox = true;
           this.showMsg = 'city';
           this.top_title = '选择城市/地区';
@@ -419,9 +424,11 @@
           this.infoData.city = cCode;
           this.tranCity = tranCity(this.infoData,true,3);
           this.tranArea = '';
-          this.secondBox = false
+          this.secondBox = false;
+          this.scrollSign = false;
         },
         choose_area() {
+          this.scrollSign = true;
           this.secondBox = true;
           this.showMsg = 'area';
           this.top_title = '选择区/县';
@@ -431,7 +438,8 @@
           let cCode = e.currentTarget.getAttribute('city-id');
           this.infoData.area = cCode;
           this.tranArea = tranArea(this.infoData,true,3);
-          this.secondBox = false
+          this.secondBox = false;
+          this.scrollSign = false;
         },
         intro_back() {
           this.introSign = false;
@@ -464,9 +472,15 @@
                 sessionStorage.setItem('CERT',params);
               })
           }
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        // 获取是否为名企
+        this.$ajax.get('/company/get-info',{params: {cid: companyInfo.id}})
+          .then((res)=>{
+              this.has_m = res.data.has_m;
+          });
           if (this.id != 0) {
             this.id = this.$route.query.id;
-            let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+            // 获取职位列表
             this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
               .then((res)=>{
                 console.log(res.data);

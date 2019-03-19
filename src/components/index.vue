@@ -99,7 +99,7 @@
           <img src="/static/images/ic_title_mq@2x.png" alt="">名企招聘
         </div>
         <div class="famous_body">
-          <div class="famous_cell" :company-cid="item.cid" v-for="(item,index) in famousData" :key="index" @click="to_comDetail">
+          <div class="famous_cell" :company-cid="item.cid" :id="item.id" v-for="(item,index) in famousData" :key="index" @click="to_comDetail">
             <div class="famous_head fl">
               <img :src="item.logo" alt="">
             </div>
@@ -141,8 +141,8 @@
     </div>
     <!--底部-->
     <div class="foot">
-      <p>版权所有©2018-2030</p>
-      <p>贵州骑驴找马科技有限公司 All Rights Reserved</p>
+      <p>{{webCopy.copy}}</p>
+      <p>{{webCopy.case}}</p>
     </div>
     <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
@@ -182,6 +182,7 @@
             newsData: {},
             baseData: {},
             webTitle: '',
+            webCopy: {},
           }
       },
       methods: {
@@ -194,20 +195,29 @@
         to_posDetail(e) {
           let id = e.currentTarget.getAttribute('data-id');
           let cid = e.currentTarget.getAttribute('cid');
-          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
+          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}});
         },
         to_comDetail(e) {
-          let id = e.currentTarget.getAttribute('company-cid');
-          this.$router.push({name: 'company_det',query:{cid: id}})
+          let id = e.currentTarget.getAttribute('id');
+          let cid = e.currentTarget.getAttribute('company-cid');
+          this.$router.push({name: 'company_det',query:{cid: cid,id: id}});
         },
         news_det(e) {
           let id = e.currentTarget.getAttribute('news-id');
-          this.$router.push({name: 'news_info',query:{id: id}})
+          this.$router.push({name: 'news_info',query:{id: id}});
         },
+        // 搜索按钮
         search_all() {
-          if (this.search_text != '') {
-            this.$router.push({name: 'find_job',query:{office_name: this.search_text,province: '520000'}})
+          if (this.value == 1) {
+            if (this.search_text != '') {
+              this.$router.push({name: 'find_job',query:{office_name: this.search_text,province: '520000'}})
+            }
+          } else {
+            if (this.search_text != '') {
+              this.$router.push({name: 'find_talent',query:{office_name: this.search_text,province: '520000'}})
+            }
           }
+
         }
       },
       watch: {
@@ -216,6 +226,7 @@
         deep:true
       },
       created() {
+          // 急聘数据
           this.$ajax.get('/office/urgent')
             .then((res)=>{
               if(res.data.state != 400){
@@ -230,6 +241,7 @@
                 }
               }
             });
+          // 名企数据
         this.$ajax.get('/company/famous',{page: 1, rows: 6})
           .then((res)=>{
             if(res.data.state != 400){
@@ -237,13 +249,15 @@
               this.famousData = res.data
             }
           });
+        // 新闻资讯
         this.$ajax.post('/news',{page: 1, operate: 'index'})
           .then((res)=>{
             if(res.data.code == 200){
               splicFrontcover(res.data.data);
               this.newsData = res.data.data
             }
-          })
+          });
+        // 基础系统设置
         this.$ajax.get('/get-system-configs')
           .then((res)=>{
             if (res.data.state != 400) {
@@ -251,8 +265,17 @@
               let param = JSON.stringify(res.data);
               localStorage.setItem('BASSET',param);
               res.data.forEach((item,ids)=> {
+                // 网站title
                 if (item.id == 13) {
                   this.webTitle = item.value;
+                }
+                // 版权
+                if (item.id == 20) {
+                  this.webCopy.copy = item.value;
+                }
+                // 备案
+                if (item.id == 21) {
+                  this.webCopy.case = item.value;
                 }
               })
             }
