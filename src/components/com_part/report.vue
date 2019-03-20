@@ -112,7 +112,22 @@
                 }
               })
           }
-
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          if (userInfo) {
+              this.$ajax.post('/personal/complaint',{uid: userInfo.id,cid: cid,type: this.reportType,content: this.content})
+                .then((res)=>{
+                  if (res.data.state == 200) {
+                    this.$notify.success({
+                      title: '提示',
+                      message: '举报成功',
+                      showClose: false,
+                      duration: 1500
+                    });
+                    this.reportType = 1;
+                    this.content = '';
+                  }
+                })
+          }
         }
       }
     }

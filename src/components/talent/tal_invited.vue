@@ -14,6 +14,10 @@
           </div>
         </div>
       </div>
+      <div class="empty" v-show="emptySign">
+        <img src="/static/images/ic_empty_data@2x.png" alt="">
+        <p>暂无数据</p>
+      </div>
       <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
@@ -31,21 +35,17 @@
           return {
             /*总菜单状态*/
             openState: false,
-            invitedData: {
-
-            },
-            inviteData: {
-
-            }
+            emptySign: false,
+            invitedData: {},
+            inviteData: {}
           }
       },
       created() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
             .then((res)=>{
-              console.log(res);
               let rdata = {};
-              if (res.data.state != 400) {
+              if (!res.data) {
                 this.inviteData = res.data;
                 for (let i = 0,len = res.data.length; i < len;i++) {
                   rdata[i] = res.data[i].company;
@@ -53,6 +53,9 @@
                   rdata[i].isRead = res.data[i].user_is_read
                 }
                 this.invitedData = rdata;
+                this.emptySign = false;
+              }else {
+                this.emptySign = true;
               }
             })
       },

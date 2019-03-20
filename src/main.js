@@ -4,7 +4,7 @@ import Vue from 'vue'
 import elementUI from 'element-ui'
 import mintUI from 'mint-ui'
 import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification, MessageBox} from 'element-ui';
-import { Popup,Loadmore } from 'mint-ui';
+import { Popup,Loadmore,Indicator } from 'mint-ui';
 import App from './App'
 import router from './router'
 import VueQuillEditor from 'vue-quill-editor'

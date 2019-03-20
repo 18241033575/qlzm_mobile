@@ -286,7 +286,7 @@
               // 自己举报自己
             }
           }else if (userInfo) {
-            this.$router.push({name: 'report',query: {uid:this.cid}})
+            this.$router.push({name: 'report',query: {cid:this.cid}})
           }else {
             this.dialogVisible = true;
           }

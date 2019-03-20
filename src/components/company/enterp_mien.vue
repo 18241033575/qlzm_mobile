@@ -98,6 +98,10 @@
             })
         },
         upMienPic(res) {
+          Indicator.open({
+            text: 'Loading...',
+            spinnerType: 'fading-circle'
+          });
           if (res.code == 200) {
             let url = res.data.success[0].url;
             this.infoData.push(splicPic(url,true));
@@ -105,6 +109,7 @@
             if (this.mienData.length > 7) {
               this.limits = true;
             }
+            Indicator.close();
           }
         },
 

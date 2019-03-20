@@ -165,6 +165,8 @@
         tags_sign: true,
         pos_categoty: '',
         pos_major: '',
+        id: 0,
+        cid: 0,
         isCol: false,
         isApply: false,
         shadeSign: true,
@@ -196,24 +198,36 @@
         let id = e.currentTarget.getAttribute('data-id');
         let cid = e.currentTarget.getAttribute('cid');
         this.$router.push({name: 'pos_det',query:{id: id,cid: cid}});
-        location.reload()
+        location.reload();
       },
       //收藏职位
       can_col_pos() {
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         if (userInfo) {
           if (!this.isCol) {
-            this.$ajax.get('/company_collect_position',{params: {id: 111,cid: 36, uid: userInfo.id}})
+            this.$ajax.get('/company_collect_position',{params: {id: this.id,cid: this.cid, uid: userInfo.id}})
               .then((res)=>{
                 if (res.data.state != 400) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '收藏成功',
+                    showClose: false,
+                    duration: 1500
+                  });
                   this.collect_btn = '取消收藏';
                   this.isCol = true;
                 }
               })
           } else {
-            this.$ajax.post('/office/cancel/collection',{params:{office_id: 111, uid: userInfo.id}})
+            this.$ajax.post('/office/cancel/collection',{office_id: this.id, uid: userInfo.id})
               .then((res)=>{
                 if (res.data.state != 400) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '取消收藏成功',
+                    showClose: false,
+                    duration: 1500
+                  });
                   this.collect_btn = '收藏简历';
                   this.isCol = false;
                 }
@@ -234,7 +248,7 @@
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         if (userInfo) {
           if (!this.isApply) {
-            this.$ajax.post('/personal/applyoffice', {office_id: 111, cid: 36, uid: userInfo.id})
+            this.$ajax.post('/personal/applyoffice', {office_id: this.id, cid: this.cid, uid: userInfo.id})
               .then((res) => {
                 if (res.data.state != 400) {
                   this.apply_btn = '已申请';
@@ -266,10 +280,9 @@
       }
     },
     created() {
-
-      let id = this.$route.query.id;
-      let cid = this.$route.query.cid;
-      this.$ajax.get('/office/detail', {params:{id: id}})
+      this.id = this.$route.query.id;
+      this.cid = this.$route.query.cid;
+      this.$ajax.get('/office/detail', {params:{id: this.id}})
         .then((res) => {
           if (res.data.state != 400) {
             if (res.data.tags == '') {
@@ -295,11 +308,11 @@
         });
 
 
-      this.$ajax.get('/office/company', {params:{cid: cid}})
+      this.$ajax.get('/office/company', {params:{cid: this.cid}})
         .then((res) => {
           if (res.data.state != 400) {
             for (let i = 0,len = res.data.data.length;i < len;i++) {
-              if (res.data.data[i].id == id) {
+              if (res.data.data[i].id == this.id) {
                 this.indexPos = i;
               }
             }
@@ -316,7 +329,7 @@
       let userInfo = JSON.parse(localStorage.getItem('USER'));
       //  是否收藏、申请
       if (userInfo) {
-        this.$ajax.post('/personal/isapply',{uid: userInfo.id,id: id})
+        this.$ajax.post('/personal/isapply',{uid: userInfo.id,id: this.id})
           .then((res)=>{
             if (res.data) {
               this.apply_btn = '已申请';
@@ -325,7 +338,7 @@
 
             }
           });
-        this.$ajax.post('/personal/iscollect',{uid: userInfo.id,id: id})
+        this.$ajax.post('/personal/iscollect',{uid: userInfo.id,id: this.id})
           .then((res)=>{
             if (res.data) {
               this.collect_btn = '取消收藏';
