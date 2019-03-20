@@ -34,6 +34,10 @@
           </div>
         </div>
       </div>
+      <div class="empty" v-show="emptySign">
+        <img src="/static/images/ic_empty_data@2x.png" alt="">
+        <p>暂无数据</p>
+      </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
@@ -55,6 +59,7 @@
           /*总菜单状态*/
           openState: false,
           opera_state: false,
+          emptySign: false,
           isrelease: true,
           id: 0,
           cid: 0,
@@ -149,7 +154,7 @@
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
             .then((res)=>{
-              if (res.data.state != 400) {
+              if (!res.data) {
                 tranCity(res.data,true,2);
                 transWorkexp(res.data,0);
                 transEducation(res.data,0);
@@ -158,6 +163,9 @@
                   res.data[i].up_time = getDistanceTime(res.data[i],2)
                 }
                 this.manageData = res.data;
+                this.emptySign = false;
+              }else {
+                this.emptySign = true;
               }
             })
       }

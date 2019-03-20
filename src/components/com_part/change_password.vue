@@ -58,7 +58,15 @@
             this.$ajax.post('/company/changepasswd',this.param)
               .then((res)=>{
                 if (res.data.state == 200) {
-                  this.$router.push({name: 'success_page',query: {orig: 'password'}})
+                  this.$notify.success({
+                    title: '提示',
+                    message: '保存成功',
+                    showClose: false,
+                    duration: 800
+                  });
+                  setTimeout(()=>{
+                    this.$router.push({name: 'success_page',query: {orig: 'password'}})
+                  },1000)
                 }else {
                   this.$notify.error({
                     title: '提示',

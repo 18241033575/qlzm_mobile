@@ -236,7 +236,8 @@
               });
               return
             }
-            if (this.invTax.address == '') {
+            this.invTax.reg_address = this.invTax.reg_address.replace(/^\s*|\s*$/g,"");
+            if (this.invTax.reg_address == '') {
               this.$notify.warning({
                 title: '提示',
                 message: '注册地址不能为空',

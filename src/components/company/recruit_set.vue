@@ -68,8 +68,11 @@
                   title: '提示',
                   message: msg,
                   showClose: false,
-                  duration: 1500,
+                  duration: 800,
                 });
+                setTimeout(()=>{
+                  this.$router.push({name: 'recruit_manage'})
+                },1000)
               }
             })
         }

@@ -14,6 +14,10 @@
         </div>
       </div>
     </div>
+    <div class="empty" v-show="emptySign">
+      <img src="/static/images/ic_empty_data@2x.png" alt="">
+      <p>暂无数据</p>
+    </div>
     <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
@@ -31,12 +35,9 @@
         return {
           /*总菜单状态*/
           openState: false,
-          msgData: {
-
-          },
-          inviteData: {
-
-          }
+          emptySign: false,
+          msgData: {},
+          inviteData: {}
         }
       },
       methods: {
@@ -75,8 +76,11 @@
         if (userInfo) {
           this.$ajax.get('/personal/sysmsg',{params: {uid: userInfo.id}})
             .then((res)=>{
-              if (res.data.state != 400) {
+              if (!res.data) {
                 this.msgData = res.data;
+                this.emptySign = false;
+              }else {
+                this.emptySign = true;
               }
             });
         }
@@ -84,8 +88,11 @@
         if (companyInfo) {
           this.$ajax.get('/company/get-messages',{params: {cid: companyInfo.id}})
             .then((res)=>{
-              if (res.data.state != 400) {
+              if (!res.data) {
                 this.msgData = res.data;
+                this.emptySign = false;
+              }else {
+                this.emptySign = true;
               }
             })
         }
