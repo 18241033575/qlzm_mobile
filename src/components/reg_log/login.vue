@@ -21,10 +21,10 @@
         :value="item.value">
       </el-option>
       </el-select>
-      <el-input class="common_input" v-model="account" placeholder="请输入手机号码"></el-input>
-      <el-input class="common_input" v-if="this.loginTypeSign" v-model="password" type="password" placeholder="请输入密码"></el-input>
+      <el-input class="common_input" maxlength="11" @keyup.native="onlNum1" v-model="account" placeholder="请输入手机号码"></el-input>
+      <el-input class="common_input" v-if="this.loginTypeSign" maxlength="16" v-model="password" type="password" placeholder="请输入密码"></el-input>
       <div class="sms_group" v-if="!this.loginTypeSign">
-        <el-input class="common_input_sms fl" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
+        <el-input class="common_input_sms fl" maxlength="6" @keyup.native="onlNum2" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
       </div>
       <el-button class="common_btn" @click="comLogin">登录</el-button>
       <p>没有账号?&nbsp;<router-link :to="{name:'reg_type_choose'}">立即注册</router-link></p>
@@ -58,10 +58,10 @@
           value: '普通登录',
           options: [{
             value: '1',
-            label: '普通登录'
+            label: '普通登录',
           }, {
             value: '2',
-            label: '短信登录'
+            label: '短信登录',
           }],
         }
       },
@@ -75,8 +75,26 @@
           this.account = '';
         },
         comLogin() {
+          if (this.account.length < 11) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的手机号码',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           if (!this.active) {
             if (this.value == 2) {
+              if (this.sms_code.length < 4) {
+                this.$notify.warning({
+                  title: '提示',
+                  message: '请输入正确的验证码',
+                  showClose: false,
+                  duration: 1500
+                });
+                return
+              }
               this.$ajax.post('/sms/login',{"phone": this.account,"type": 1,"member":1,"sms_code": this.sms_code})
                 .then((res)=>{
                   if (res.data.state == 400) {
@@ -85,16 +103,23 @@
                     this.showMsg = res.data.msg;
                   }else {
                     //  放入本地数据
-                    let params = {};
-                    params = res.data;
-                    localStorage.setItem('USER',params);
                     this.reqSuc = true;
                     this.dialogVisible = true;
                     this.showMsg = '登录成功';
                     localStorage.clear('COMPANY');
+                    localStorage.setItem('USER',JSON.stringify(res.data));
                   }
                 })
             }else {
+              if (this.password.length < 6) {
+                this.$notify.warning({
+                  title: '提示',
+                  message: '请输入正确的密码',
+                  showClose: false,
+                  duration: 1500
+                });
+                return
+              }
               this.$ajax.post('/member/login',{"phone": this.account,"account": this.account,"password": this.password,"type": 1})
                 .then((res)=>{
                   if (res.data.state == 400) {
@@ -107,15 +132,21 @@
                     this.showMsg = '登录成功';
                     localStorage.clear('COMPANY');
                     //  放入本地数据
-                    let params = {};
-                    params = JSON.stringify(res.data);
-                    localStorage.setItem('USER',params);
-                    sessionStorage.setItem('USER',params);
+                    localStorage.setItem('USER',JSON.stringify(res.data));
                   }
                 })
             }
           }else {
             if (this.value == 2) {
+              if (this.sms_code.length < 4) {
+                this.$notify.warning({
+                  title: '提示',
+                  message: '请输入正确的验证码',
+                  showClose: false,
+                  duration: 1500
+                });
+                return
+              }
               this.$ajax.post('/sms/login',{"phone": this.account,"type": 1,"member":1,"sms_code": this.sms_code})
                 .then((res)=>{
                   if (res.data.state == 400) {
@@ -124,16 +155,23 @@
                     this.showMsg = res.data.msg;
                   }else {
                     //  放入本地数据
-                    let params = {};
-                    params = res.data;
-                    localStorage.setItem('COMPANY',params);
                     this.reqSuc = true;
                     this.dialogVisible = true;
                     this.showMsg = '登录成功';
                     localStorage.clear('USER');
+                    localStorage.setItem('COMPANY',JSON.stringify(res.data));
                   }
                 })
             }else {
+              if (this.password.length < 6) {
+                this.$notify.warning({
+                  title: '提示',
+                  message: '请输入正确的密码',
+                  showClose: false,
+                  duration: 1500
+                });
+                return
+              }
               this.$ajax.post('/member/login',{"phone": this.account,"account": this.account,"password": this.password,"type": 2})
                 .then((res)=>{
                   if (res.data.state == 400) {
@@ -146,10 +184,7 @@
                     this.showMsg = '登录成功';
                     localStorage.clear('USER');
                     //  放入本地数据
-                    let params = {};
-                    params = JSON.stringify(res.data);
-                    localStorage.setItem('COMPANY',params);
-                    sessionStorage.setItem('COMPANY',params);
+                    localStorage.setItem('COMPANY',JSON.stringify(res.data));
                   }
                 })
             }
@@ -159,7 +194,7 @@
         handleClose() {
           this.dialogVisible = false;
           if (this.reqSuc == true){
-            this.$router.push({name: 'index'})
+            this.$router.push({name: 'index'});
           }
         },
         getCode() {
@@ -171,7 +206,7 @@
                   if (res.data.state == 200) {
                     this.$message({
                       message: '获取验证码成功',
-                      type: 'success'
+                      type: 'success',
                     })
                   }
                 })
@@ -181,16 +216,24 @@
                   if (res.data.state == 200) {
                     this.$message({
                       message: '获取验证码成功',
-                      type: 'success'
+                      type: 'success',
                     })
                   }
                 })
             }
           }
         },
+        onlNum1() {
+          this.account = this.account.replace(/[^\.\d]/g,'');
+          this.account = this.account.replace('.','');
+        },
+        onlNum2() {
+          this.sms_code = this.sms_code.replace(/[^\.\d]/g,'');
+          this.sms_code = this.sms_code.replace('.','');
+        }
       },
       updated() {
-        this.loginTypeSign = this.value == 2?false:true
+        this.loginTypeSign = this.value == 2?false:true;
       }
     }
 </script>

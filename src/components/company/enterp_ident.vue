@@ -9,15 +9,35 @@
       <div class="exp_edit_list">
         <div class="content">
           <div class="edit_cell">
-            <span class="edit_lab">企业名称</span><input type="text" :readonly="identData.state == 1"  v-model="entName" placeholder="企业名称">
+            <span class="edit_lab">企业名称</span><input type="text" :readonly="true"  v-model="entName" placeholder="企业名称">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state == 0 && !uploadSign">上传图片</span><span class="fr uppic_ident" v-show="identData.state == 0 && uploadSign">重新上传</span><span class="fr uppic_ident" v-show="identData.state == -2">验证中</span><span class="fr idented" v-show="identData.state == 1"><img src="/static/images/ic_cm_auth.png" alt="">已认证</span>
+            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state == 0 && !uploadSign">
+            <el-upload
+            class="avatar-uploader upload_btn"
+            :action="this.loadAddr"
+            list-type="none"
+            :data="{type: 'image'}"
+            :show-file-list="false"
+            :on-success="uploadLicense">
+              <el-button size="small" type="primary">上传图片</el-button>
+            </el-upload>
+          </span><span class="fr uppic_ident" v-show="identData.state == 0 && uploadSign">
+            <el-upload
+              class="avatar-uploader upload_btn"
+              :action="this.loadAddr"
+              list-type="none"
+              :data="{type: 'image'}"
+              :show-file-list="false"
+              :on-success="uploadLicense">
+              <el-button size="small" type="primary">重新上传</el-button>
+            </el-upload>
+          </span><span class="fr uppic_ident" v-show="identData.state == -2">认证中</span><span class="fr idented" v-show="identData.state == 1"><img src="/static/images/ic_cm_auth.png" alt="">已认证</span>
           </div>
           <div class="ident_img">
-            <img v-show="identData.state != 0" class="license" :src="identData.license" alt="">
-            <img v-show="identData.state == 0" src="/static/images/ic_cm_pic@2x.png" alt="">
-            <p v-show="identData.state == 0">支持JPG、PNG，大小不要超过2MB！</p>
+            <img v-show="identData.state != 0 || upSign" class="license" :src="identData.license" alt="">
+            <img v-show="identData.state == 0 && !upSign" src="/static/images/ic_cm_pic@2x.png" alt="">
+            <p v-show="identData.state == 0 && !upSign">支持JPG、PNG，大小不要超过2MB！</p>
           </div>
         </div>
       </div>
@@ -32,7 +52,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import {splicPic} from '../../../static/js/common.js'
+  import {splicPic,file_upload} from '../../../static/js/common.js'
     export default {
         name: "enterp_ident",
       components: {
@@ -44,14 +64,12 @@
           /*总菜单状态*/
           openState: false,
           uploadSign: false,
+          loadAddr: '',
+          upSign: false,
           licenseUrl: '',
           entName: '',
-          identData: {
-
-          },
-          companyInfo: {
-
-          }
+          identData: {},
+          companyInfo: {}
         }
       },
       methods: {
@@ -63,36 +81,51 @@
           this.openState = data;
         },
         /*总菜单操作e*/
-        uploadLicense() {
-          this.uploadSign = true;
+        uploadLicense(res) {
+          if (res.code == 200) {
+            let url = res.data.success[0].url;
+            this.licenseUrl = url;
+            this.identData.license = (splicPic(url,true));
+            this.uploadSign = true;
+            this.upSign = true;
+          }
         },
         submitLicense() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/company/auth-set',{cid: companyInfo.id,license: this.licenseUrl})
             .then((res)=>{
-              console.log(res);
               if (res.data.state == 200) {
-
+                this.$notify.success({
+                  title: '提示',
+                  message: '提交成功',
+                  showClose: false,
+                  duration: 1500
+                });
+                location.reload();
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
             })
         }
       },
       created() {
+        this.loadAddr = file_upload();
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
         this.companyInfo = companyInfo;
         this.$ajax.get('/company/get-auth',{params: {cid: companyInfo.id}})
           .then((res)=>{
-            if (res.data.state != 400) {
-              this.licenseUrl = res.data.license;
-              res.data.license = splicPic(res.data.license,true);
-              this.identData = res.data;
-            }
-          })
+            this.licenseUrl = res.data.license;
+            res.data.license = splicPic(res.data.license,true)=='//file.wiiwork.com/'?'':splicPic(res.data.license,true);
+            this.identData = res.data;
+          });
         this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
           .then((res)=>{
-            if (res.state != 400) {
-              this.entName = res.data.name;
-            }
+            this.entName = res.data.name;
           })
       }
     }

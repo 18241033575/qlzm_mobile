@@ -20,8 +20,6 @@
               <el-button size="small" type="primary">上传图片</el-button>
               <div slot="tip" class="el-upload__tip">支持JPG、PNG,大小不要超过2MB,最多可上传8张！</div>
             </el-upload>
-           <!-- <p class="upload_btn">上传图片</p>
-            <p class="upload_tips">支持JPG、PNG,大小不要超过2MB,最多可上传8张！</p>-->
           </div>
           <div class="mien_pic_cell" v-for="(item,index) in infoData" :key="index">
             <img class="mien_pic" :src="item" alt="">
@@ -139,10 +137,10 @@
     padding-top: 15px;
     height: 70px;
     text-align: center;
-    -webkit-box-sizing: border-box;
+    /*-webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    border-bottom: 1px solid #E1E4E6;
+    border-bottom: 1px solid #E1E4E6;*/
   }
   .upload_btn{
     font-size: 14px;

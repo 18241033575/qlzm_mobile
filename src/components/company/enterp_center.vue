@@ -14,7 +14,7 @@
           <div class="com_msg fl">
             <p class="com_name">{{enterp_centerData.name}}</p>
             <p class="com_msg_det">
-              <span>{{centerDetData.nature}}</span><span>|</span><span>{{centerDetData.scale}}</span><span>|</span><span>{{(centerDetData.province || '未知') + (centerDetData.city || '')}}</span>
+              <span>{{centerDetData.nature}}</span><span>|</span><span>{{centerDetData.scale}}</span><span>|</span><span>{{(centerDetData.province || '') + (centerDetData.city || '')}}</span>
             </p>
             <p v-if="enterp_centerData.state != 1" class="com_msg_iden"><img src="/static/images/ic_cm_authed@2x.png" alt="">未认证<span @click="go_ident" class="go_iden">[去认证]</span></p>
             <p v-if="enterp_centerData.state == 1" class="com_msg_idened"><img src="/static/images/ic_cm_auth.png" alt="">已认证</p>

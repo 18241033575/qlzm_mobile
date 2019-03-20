@@ -64,7 +64,7 @@
         save_contract() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.contractData.cid = companyInfo.id;
-          if (this.contractData.username == '') {
+          if (this.contractData.username == undefined || this.contractData.username == '') {
             this.$notify.warning({
               title: '提示',
               message: '联系人不能为空',
@@ -73,7 +73,7 @@
             });
             return
           }
-          if (this.contractData.phone.length < 11) {
+          if (this.contractData.phone == undefined || this.contractData.phone.length < 11) {
             this.$notify.warning({
               title: '提示',
               message: '请输入正确的手机号码',
@@ -105,23 +105,23 @@
             })
         },
         onlyNum1() {
-          this.contractData.phone = this.contractData.phone.replace(/[^\.\d]/g,'');
-          this.contractData.phone = this.contractData.phone.replace('.','');
+          /*this.contractData.phone = this.contractData.phone.replace(/[^\.\d]/g,'');
+          this.contractData.phone = this.contractData.phone.replace('.','');*/
         },
         onlyNum2() {
-          this.contractData.tel = this.contractData.tel.replace(/[^\.\d]/g,'');
-          this.contractData.tel = this.contractData.tel.replace('.','');
+         /* this.contractData.tel = this.contractData.tel.replace(/[^\.\d]/g,'');
+          this.contractData.tel = this.contractData.tel.replace('.','');*/
         },
         onlyNum3() {
-          this.contractData.qq = this.contractData.qq.replace(/[^\.\d]/g,'');
-          this.contractData.qq = this.contractData.qq.replace('.','');
+         /* this.contractData.qq = this.contractData.qq.replace(/[^\.\d]/g,'');
+          this.contractData.qq = this.contractData.qq.replace('.','');*/
         },
       },
       created() {
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/company/get-contact',{params:{cid: companyInfo.id}})
             .then((res)=>{
-              if (res.data.state != 400) {
+              if (res.data) {
                 this.contractData = res.data;
               }
             })

@@ -244,6 +244,15 @@
             });
             return
           }
+          if (this.infoData.nature == '' || this.infoData.nature == 0) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择企业性质',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           if (this.tranPro == '') {
             this.$notify.warning({
               title: '提示',
@@ -280,7 +289,7 @@
             });
             return
           }
-          if (this.this.editIntro == '') {
+          if (this.editIntro == '') {
             this.$notify.warning({
               title: '提示',
               message: '请填写企业简介',
