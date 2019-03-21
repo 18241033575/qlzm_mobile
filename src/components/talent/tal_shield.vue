@@ -46,7 +46,7 @@
           this.$ajax.get('/personal/shield',{params:{uid: userInfo.id}})
             .then((res)=>{
               if(res.data.state != 400) {
-                this.shieldData = res.data;
+                this.shdData = this.shieldData = res.data;
               }
             })
       },
@@ -90,6 +90,9 @@
               }
             })
         }
+      },
+      updated() {
+        // this.shieldData = this.shdData;
       }
     }
 </script>

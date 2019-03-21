@@ -124,6 +124,10 @@
         </div>
       </div>
     </div>
+    <div class="empty" v-show="emptySign && !this.tabSign">
+      <img src="/static/images/ic_empty_data@2x.png" alt="">
+      <p>暂无数据</p>
+    </div>
     <el-dialog
       title="提示"
       :visible.sync="dialogVisible"
@@ -153,6 +157,7 @@
       return {
         /*总菜单状态*/
         openState: false,
+        emptySign: false,
         posDetData: {},
         posOthData: {},
         has_mSign: false,
@@ -338,6 +343,11 @@
             transSalary(res.data.data,2);
             this.otherPosData = res.data.data;
             this.otherPosData.splice(this.indexPos,1);
+            if (this.otherPosData.length == 0 || this.otherPosData.length == '') {
+              this.emptySign = true;
+            }else {
+              this.emptySign = false;
+            }
           }
         });
       let userInfo = JSON.parse(localStorage.getItem('USER'));
@@ -699,5 +709,7 @@
   #pos .ql-toolbar{
     display: none!important;
   }
-
+  .empty{
+    padding-top: 285px;
+  }
 </style>

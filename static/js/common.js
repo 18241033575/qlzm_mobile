@@ -380,10 +380,12 @@ function company_adv(data, flag) {
   'file_upload'           => '//file.wiiwork.com/v1/upload',
 */
 const file_server = '//file.wiiwork.com/';
+// const file_server = '//https://file.qlzm.com.cn/';
 // const file_upload = '//file.wiiwork.com/v1/upload';
 
 function file_upload() {
-  return '//file.wiiwork.com/v1/upload'
+  return '//file.wiiwork.com/v1/upload';
+  // return 'https://file.qlzm.com.cn/v1/upload';
 }
 
 

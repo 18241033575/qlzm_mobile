@@ -206,11 +206,116 @@
         /*总菜单操作e*/
         release() {
           // 输入限制判断
-
-
-
-
-
+          this.form.office_name = this.form.office_name.replace(/^\s*|\s*$/g,"");
+          if (this.form.office_name == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '职位名称不能为空',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.posTypeNum == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择职位类别',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.certTypeNum == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择证书类型',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.certMajorNum == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择证书专业',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.tranPro == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择省份',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.tranCity == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择城市',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.tranArea == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择地区',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.form.tal_addr == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请填写详细地址',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.salaryNum == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择薪资待遇',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.educationNum == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择学历要求',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.workexpNum == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择工作年限',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          this.duty = this.duty.replace(/^\s*|\s*$/g,"");
+          if (this.duty == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请填写职位描述',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
 
           if (this.form.hire_num == '' || this.form.hire_num == '若干') {
             this.form.hire_num = 0;
@@ -250,7 +355,6 @@
                 }
               })
           }
-
         },
         secondBoxBg() {
           this.secondBox = false;
@@ -342,6 +446,7 @@
           this.top_title = '选择证书专业'
         },
         MajorCode(e) {
+          let certData = JSON.parse(localStorage.getItem('CERT'));
           let majorId = e.currentTarget.getAttribute('city-id');
           this.certMajorNum = majorId;
           this.secondBox = false;
