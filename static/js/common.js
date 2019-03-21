@@ -311,9 +311,9 @@ function transtime(t) {
   return JSON.stringify(T.getTime()).substring(0,10)
 }
 
-function tal_adv(data, flag) {
+function tal_adv(data, flag,type) {
   const userTags = [
-    "无",
+    "占位",
     "技术好",
     "经验丰富",
     "高学历",
@@ -325,11 +325,14 @@ function tal_adv(data, flag) {
   ];
   let transData = data;
   if (flag) {
-
-    for (let i = 0; i < transData.length; i++) {
-      transData[i] = userTags[transData[i]]
+    if (type == 5) {
+      return userTags
+    } else {
+      for (let i = 0; i < transData.length; i++) {
+        transData[i] = userTags[transData[i]]
+      }
+      return transData;
     }
-    return transData
   }
 }
 

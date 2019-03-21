@@ -25,6 +25,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
+  import {reverseOrder} from '../../../static/js/common.js'
     export default {
         name: "tal_shield",
       components: {
@@ -37,9 +38,7 @@
             openState: false,
             shieldSignState: true,
             company_name: '',
-            shieldData: {
-
-            }
+            shieldData: {},
           }
       },
       created() {
@@ -71,20 +70,24 @@
           this.$ajax.post('/personal/shield',{uid: userInfo.id,company: this.company_name})
             .then((res)=>{
               if (res.data) {
-
+                this.shieldData.unshift({company: this.company_name,id: res.data,uid: userInfo.id});
                 this.company_name = '';
-                window.location.reload()
               }
             })
         },
         shield_cancel(e) {
           let id = e.target.getAttribute('id');
           let uid = e.target.getAttribute('uid');
-          console.log(id);
           this.$ajax.post('personal/shield',{id: id,uid: uid})
             .then((res)=>{
-              console.log(res);
-              window.location.reload()
+              if (res.data.state == 200) {
+                for (let i = 0,len = this.shieldData.length; i < len;i++) {
+                  if (this.shieldData[i].id == id) {
+                    // 删除相应数组
+                    this.shieldData.splice(i,1);
+                  }
+                }
+              }
             })
         }
       }

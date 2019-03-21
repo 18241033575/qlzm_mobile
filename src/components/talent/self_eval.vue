@@ -37,7 +37,7 @@
       <div class="eval_body">
         <div class="content">
           <div class="eval_body_top">
-            <div class="adv_cell" :adv_sign="index+1" :class="{adv_sign_active: true}" v-for="(item,index) in this.selfEvalData.tags" :key="index" @click="choose_adv">
+            <div class="adv_cell" v-show="index != 0" :adv_sign="index" :class="{adv_sign_active: true}" v-for="(item,index) in userTags" :key="index" @click="choose_adv">
               {{item}}
             </div>
           </div>
@@ -72,6 +72,8 @@
             openState: false,
             selfEvalSign: true,
             selfEvalData: {},
+            tagsNum : {},
+            userTags: {},
             evaluation: ''
           }
       },
@@ -104,12 +106,15 @@
         }
       },
       created() {
+        this.userTags = tal_adv(this.userTags,true,5);
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
           .then((res)=>{
+
             if (res.data.state!= 400) {
-              res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,true);
+              this.tagsNum = res.data.evaluation.tags;
               this.selfEvalData = res.data.evaluation;
+              this.selfEvalData.tags = tal_adv(this.selfEvalData.tags,true);
               this.evaluation = this.selfEvalData.evaluation
             }
           });

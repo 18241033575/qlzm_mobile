@@ -66,7 +66,7 @@
               <span class="edit_lab">真实姓名</span><input type="text" maxlength="15" v-model="form.tal_name" placeholder="真实姓名">
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">身份证号码</span><input type="text" v-model="form.tal_idcard" maxlength="16" placeholder="身份证号码">
+              <span class="edit_lab">身份证号码</span><input type="text" v-model="form.tal_idcard" maxlength="18" placeholder="身份证号码">
             </div>
             <div class="edit_cell">
               <span class="edit_lab">QQ号码</span><input type="text" v-model="form.tal_qq" placeholder="QQ号码">
@@ -189,10 +189,8 @@
                 this.form.tal_email = this.userMsg.email;
                 this.form.tal_addr = this.userMsg.address;
                 this.form.tal_state = this.userMsg.work_status;
-
               }
             });
-
       },
       methods: {
         /*总菜单操作s*/
@@ -206,7 +204,38 @@
         to_edit() {
           this.edit = false;
         },
+        // 保存信息
         to_edited() {
+          if (this.form.tal_name == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '姓名不能为空',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          let reg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
+          if (!reg.test(this.form.tal_idcard)) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的身份证号',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          // 邮箱验证
+          let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+          if (!re.test(this.form.email)) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的邮箱地址',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": this.cityCode.province, "city": this.cityCode.city, "area": this.cityCode.area, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{

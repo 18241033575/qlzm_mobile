@@ -24,7 +24,7 @@
           <div class="pos_btn collect_btn" @click="can_col_pos">
             {{collect_btn}}
           </div>
-          <div class="pos_btn apply_btn" @click="apply_pos">
+          <div class="pos_btn apply_btn" :class="{is_apply: isApply}" @click="apply_pos">
             {{apply_btn}}
           </div>
         </div>
@@ -245,14 +245,28 @@
       },
       //申请职位
       apply_pos() {
+
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         if (userInfo) {
           if (!this.isApply) {
             this.$ajax.post('/personal/applyoffice', {office_id: this.id, cid: this.cid, uid: userInfo.id})
               .then((res) => {
                 if (res.data.state != 400) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '申请成功',
+                    showClose: false,
+                    duration: 1500
+                  });
                   this.apply_btn = '已申请';
                   this.isApply = true;
+                }else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500
+                  });
                 }
               })
           }
@@ -334,8 +348,6 @@
             if (res.data) {
               this.apply_btn = '已申请';
               this.isApply = true;
-            } else{
-
             }
           });
         this.$ajax.post('/personal/iscollect',{uid: userInfo.id,id: this.id})
@@ -657,12 +669,18 @@
     border: 1px solid #E1E4E6;
     color: #919199;
   }
-
   .apply_btn {
     background-color: #ff8236;
     color: #ffffff;
   }
-
+  .is_apply{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    background-color: #ffffff;
+    color: #919199;
+  }
   /*联系人*/
   .company_contract_cell{
     display: flex;

@@ -82,6 +82,17 @@
             });
             return
           }
+          // 邮箱验证
+          let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+          if (this.contractData.email != '' && !re.test(this.contractData.email)) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的邮箱地址',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           this.$ajax.post('/company/contact-set', this.contractData)
             .then((res)=>{
               if (res.data.state == 200) {

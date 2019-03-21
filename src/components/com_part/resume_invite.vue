@@ -134,10 +134,21 @@
             });
             return
           }
+          // 邮箱验证
+          let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+          if (this.contractData.email != '' && !re.test(this.contractData.email)) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的邮箱地址',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           if (this.address == '') {
             this.$notify.warning({
               title: '提示',
-              message: '请输入面试地址',
+              message: '请输入面试地点',
               showClose: false,
               duration: 1500
             });
@@ -152,6 +163,7 @@
             });
             return
           }
+
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           let uid = this.$route.query.uid;
           this.$ajax.post('/company/send-interview',{ cid: companyInfo.id, uid: uid, job: this.job,username: this.contractData.username, tel: this.contractData.tel, phone: this.contractData.phone,qq: this.contractData.qq,

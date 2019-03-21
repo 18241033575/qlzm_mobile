@@ -13,6 +13,7 @@
               :disabled="this.limits"
               class="avatar-uploader upload_btn"
               :action="this.loadAddr"
+              accept=".jpg,.jpeg,.png,.gif,.bmp"
               list-type="none"
               :data="{type: 'image'}"
               :show-file-list="false"
@@ -98,10 +99,6 @@
             })
         },
         upMienPic(res) {
-          Indicator.open({
-            text: 'Loading...',
-            spinnerType: 'fading-circle'
-          });
           if (res.code == 200) {
             let url = res.data.success[0].url;
             this.infoData.push(splicPic(url,true));
@@ -109,7 +106,6 @@
             if (this.mienData.length > 7) {
               this.limits = true;
             }
-            Indicator.close();
           }
         },
 
