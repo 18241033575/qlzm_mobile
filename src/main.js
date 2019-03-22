@@ -5,6 +5,7 @@ import elementUI from 'element-ui'
 import mintUI from 'mint-ui'
 import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification, MessageBox} from 'element-ui';
 import { Popup,Loadmore,Indicator } from 'mint-ui';
+import VueTouch from 'vue-touch'
 import App from './App'
 import router from './router'
 import VueQuillEditor from 'vue-quill-editor'
@@ -15,12 +16,18 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
+
+
+
 Vue.use(elementUI);
 Vue.use(mintUI);
 Vue.use(VueQuillEditor);
 
 // 更改 title
 Vue.use(require('vue-wechat-title'));
+
+// 滑动
+Vue.use(VueTouch, {name: 'v-touch'});
 
 // 数据请求
 // 正式服

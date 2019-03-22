@@ -43,15 +43,6 @@
                 class="tags">{{item.nature}}</span><span class="update_time fr">{{item.update_at}}</span>
               </div>
             </div>
-            <!--<div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in this.hotPosData" :key="index" @click="to_posDetail">
-              <div class="ugent_top">
-                <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
-              </div>
-              <div class="ugent_bottom">
-                <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
-                class="tags">{{item.nature}}</span><span class="update_time fr">{{item.update_at}}</span>
-              </div>
-            </div>-->
           </div>
         </div>
         <div class="company_msg" v-show="this.companyDetSign">
@@ -62,10 +53,12 @@
                   企业风采
                 </div>
                 <div class="company_mien">
-                  <div class="mien_cell fl" v-for="(item,index) in this.companyMien" :key="index">
-                    <img :src="item" alt="">
-                    <p></p>
-                  </div>
+                  <v-touch v-on:swipeleft="leftChangeImg" height="104px" v-on:swiperight="leftChangeImg">
+                    <div class="mien_cell fl" v-for="(item,index) in this.companyMien" :key="index">
+                      <img :src="item" alt="">
+                      <p></p>
+                    </div>
+                  </v-touch>
                 </div>
               </div>
             </div>
@@ -89,6 +82,7 @@
               </div>
             </div>
           </div>
+          <!--企业福利-->
           <div class="company_msg_cell">
             <div class="content">
               <div class="cell_box">
@@ -194,11 +188,59 @@
             editorOption: {
               modules:{
                 toolbar: false,
-              },
-              readOnly: true,
-              enabled: false,
+              }
             }
           }
+      },
+      methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
+        company_msg() {
+          this.companyDetSign = true;
+        },
+        hot_pos() {
+          this.companyDetSign = false;
+        },
+        to_posDetail(e) {
+          let id = e.currentTarget.getAttribute('data-id');
+          let cid = e.currentTarget.getAttribute('cid');
+          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
+        },
+        look_all() {
+          this.shadeSign = false;
+        },
+        report() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          if (companyInfo) {
+            if (companyInfo.id != this.cid) {
+              this.$router.push({name: 'report',query: {member_id: companyInfo.id,cid:this.cid}})
+            } else {
+              // 自己举报自己
+            }
+          }else if (userInfo) {
+            this.$router.push({name: 'report',query: {cid:this.cid}})
+          }else {
+            this.dialogVisible = true;
+          }
+        },
+        tal_login() {
+          this.dialogVisible = false;
+          this.$router.push({name: 'login'});
+        },
+        onEditorReady(val) {
+          val.enable(false);
+        },
+        leftChangeImg(e) {
+          e.preventDefault();
+          console.log(e);
+        }
       },
       created() {
         let cid = this.$route.query.cid;
@@ -254,53 +296,6 @@
             }
           })
       },
-      methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
-        company_msg() {
-          this.companyDetSign = true;
-        },
-        hot_pos() {
-          this.companyDetSign = false;
-        },
-        to_posDetail(e) {
-          let id = e.currentTarget.getAttribute('data-id');
-          let cid = e.currentTarget.getAttribute('cid');
-          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
-        },
-        look_all() {
-          this.shadeSign = false;
-        },
-        report() {
-          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          let userInfo = JSON.parse(localStorage.getItem('USER'));
-          if (companyInfo) {
-            if (companyInfo.id != this.cid) {
-              this.$router.push({name: 'report',query: {member_id: companyInfo.id,cid:this.cid}})
-            } else {
-              // 自己举报自己
-            }
-          }else if (userInfo) {
-            this.$router.push({name: 'report',query: {cid:this.cid}})
-          }else {
-            this.dialogVisible = true;
-          }
-        },
-        tal_login() {
-          this.dialogVisible = false;
-          this.$router.push({name: 'login'});
-        },
-        onEditorReady(val,editor) {
-         /* editor.enable(false);
-          console.log(val,editor);*/
-        }
-      }
     }
 </script>
 
@@ -474,11 +469,12 @@
   }
   /*风采*/
   .company_mien{
-    width: 300%;
+    width: 800%;
     height: 104px;
+    transition: 2s;
   }
   .mien_cell{
-    width: 28%;
+    width: 300px;
     margin-right: 15px;
     text-align: center;
   }
@@ -486,6 +482,10 @@
   .mien_cell img{
     width: 100%;
     height: 104px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
   }
   .mien_cell p{
     font-size: 12px;

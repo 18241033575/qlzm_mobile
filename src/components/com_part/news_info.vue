@@ -17,6 +17,7 @@
         </div>
         <div class="news_info_msg">
           <quill-editor id="pos" v-model="news_infoData.content"
+                        @ready="onEditorReady($event)"
                         :options ="editorOption">
           </quill-editor>
           <!--{{news_infoData.content}}-->
@@ -59,15 +60,9 @@
           this.openState = data;
         },
         /*总菜单操作e*/
-        onEditorBlur() {
-          console.log(1);
+        onEditorReady(val) {
+          val.enable(false);
         },
-        onEditorFocus() {
-          console.log(2);
-        },
-        onEditorChange() {
-          console.log(3);
-        }
       },
       created() {
         let id = this.$route.query.id;

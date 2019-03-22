@@ -85,6 +85,7 @@
               </div>
               <div class="company_info" :class="{shade_info: this.shadeSign}">
                 <quill-editor id="pos" v-model="posDetData.duty"
+                              @ready="onEditorReady($event)"
                               :options ="editorOption">
                 </quill-editor>
                 <div class="shade" v-if="shadeSign"></div>
@@ -296,7 +297,10 @@
         this.dialogVisible = false;
         localStorage.clear('COMPANY');
         this.$router.push({name: 'login'})
-      }
+      },
+      onEditorReady(val) {
+        val.enable(false);
+      },
     },
     created() {
       this.id = this.$route.query.id;
