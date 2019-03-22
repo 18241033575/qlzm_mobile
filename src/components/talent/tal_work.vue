@@ -58,6 +58,7 @@
                   align="right"
                   type="date"
                   placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
                   :picker-options="pickerOptions1">
                 </el-date-picker>
                 <el-date-picker
@@ -66,6 +67,7 @@
                   :disabled="checked"
                   type="date"
                   placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
                   :picker-options="pickerOptions1">
                 </el-date-picker>
                 <el-checkbox v-model="checked">至今</el-checkbox>
@@ -90,7 +92,7 @@
         <div class="edit_btn_group" v-if="!this.save_editSign">
           <div class="content">
             <div class="group_box">
-              <div class="edit_btn_cell del_btn">
+              <div class="edit_btn_cell del_btn" @click="workexp_del">
                 删除
               </div>
               <div class="edit_btn_cell save_btn" @click="workexp_save">
@@ -169,7 +171,7 @@
           this.workexpAllData.job = '';
           this.workexpAllData.salary = '';
           this.workexpAllData.duties = '';
-          // 时间初始化 、行业性质、工作性质初始化  ；删除功能 和 新增功能
+          // 时间初始化 、行业性质、工作性质初始化
 
         },
         is_jobNature() {
@@ -194,6 +196,7 @@
             this.workexpAllData.end_time = JSON.stringify(this.value2).substring(1,11);
           }
           this.workexpAllData.start_time = JSON.stringify(this.value1).substring(1,11);
+          console.log(this.workexpAllData.start_time);
           this.workexpAllData.nature = this.workNature;
           this.workexpAllData.industry = this.jobNature;
           this.workexpAllData.id = this.workexp_Id;
@@ -203,6 +206,45 @@
             .then((res)=>{
               if (res.data.state == 200) {
                 this.workExpSign = true;
+                this.$notify.success({
+                  title: '提示',
+                  message: '保存成功',
+                  showClose: false,
+                  duration: 1500
+                });
+              }
+            })
+        },
+        workexp_del() {
+          this.workexpAllData.state = -1;
+          if (this.checked) {
+            this.workexpAllData.end_time = 0;
+          }else {
+            this.workexpAllData.end_time = JSON.stringify(this.value2).substring(1,11);
+          }
+          this.workexpAllData.start_time = JSON.stringify(this.value1).substring(1,11);
+          this.workexpAllData.nature = this.workNature;
+          this.workexpAllData.industry = this.jobNature;
+          this.workexpAllData.id = this.workexp_Id;
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.workexpAllData.uid = userInfo.id;
+          this.$ajax.post('/resume/workexp',this.workexpAllData)
+            .then((res)=>{
+              if (res.data.state == 200) {
+                this.workExpSign = true;
+                this.$notify.success({
+                  title: '提示',
+                  message: '删除成功',
+                  showClose: false,
+                  duration: 1500
+                });
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
             })
         },
@@ -237,7 +279,6 @@
             .then((res)=>{
               if (res.data.state != 400) {
                 this.workData = res.data;
-                console.log(this.workData);
                 for (let i = 0,len = this.workData.length; i < len; i++) {
                   if (this.workData[i].industry == 0) {
                     this.workData[i].tranJobNature = '非建筑行业'

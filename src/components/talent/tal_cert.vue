@@ -62,7 +62,7 @@
         <div class="edit_btn_group" v-if="!this.save_editSign">
           <div class="content">
             <div class="group_box">
-              <div class="edit_btn_cell del_btn">
+              <div class="edit_btn_cell del_btn" @click="cert_del">
                 删除
               </div>
               <div class="edit_btn_cell save_btn" @click="certSave">
@@ -331,6 +331,34 @@
             .then((res)=>{
               if (res.data.state == 200) {
                 this.workExpSign = true;
+                this.$notify.success({
+                  title: '提示',
+                  message: '保存成功',
+                  showClose: false,
+                  duration: 1500
+                });
+              }
+            })
+        },
+        cert_del() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.post('/resume/certificate',{state: -1, type: this.certTypeId,major: this.certMajorId,reg_status: this.regState,remark: this.remark,id:this.certEdit_id,uid: userInfo.id})
+            .then((res)=>{
+              if (res.data.state == 200) {
+                this.workExpSign = true;
+                this.$notify.success({
+                  title: '提示',
+                  message: '删除成功',
+                  showClose: false,
+                  duration: 1500
+                });
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
             })
         }

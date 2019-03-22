@@ -318,6 +318,7 @@
             transSalary(res.data,1);
             res.data.created_at = getDistanceTime(res.data.created_at);
             this.posDetData = res.data;
+            this.shadeSign = this.posDetData.duty.length > 300?true:false;
             this.pos_categoty = this.posDetData.cert_type.category;
             this.pos_categoty = this.posDetData.cert_major.major;
             transWorkexp(res.data,1,'company');

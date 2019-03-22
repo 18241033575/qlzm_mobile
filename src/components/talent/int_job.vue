@@ -213,6 +213,15 @@
           this.int_job_edit = false
         },
         save_job() {
+          if (this.intJobData.job_id == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择意向岗位',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.post('/resume/userinfo',{job: this.intJobData.job_id,nature:this.form.work_nature,salary: this.intJobData.salary,duty_time: this.ArriveId,remark: this.remark,flag: 2,job_id: this.intJobData.job_id,work_province: this.cityCode.province,work_city: this.cityCode.city,uid: userInfo.id})
             .then((res)=>{

@@ -19,7 +19,7 @@
             <p><span class="left_lab">QQ</span> <span class="right_msg">{{userMsg.qq}}</span></p>
             <p><span class="left_lab">邮箱</span> <span class="right_msg">{{userMsg.email}}</span></p>
             <p><span class="left_lab">就业情况</span> <span class="right_msg">{{userMsg.work_status == 1?'已就业':'待就业'}}</span></p>
-            <p><span class="left_lab">通讯地址</span> <span class="right_msg">{{(userMsg.province || '未知') + (userMsg.city || '') + (userMsg.area || '')}}</span></p>
+            <p><span class="left_lab">通讯地址</span> <span class="right_msg">{{(tranPro || '未知') + (tranCity || '') + (tranArea || '')}}</span></p>
             <p><span class="left_lab">街道</span> <span class="right_msg">{{userMsg.address}}</span></p>
           </div>
         </div>
@@ -75,7 +75,7 @@
               <span class="edit_lab">电子邮箱</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
             </div>
             <div class="edit_cell special_cell">
-              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province">{{userMsg.province}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{userMsg.city}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{userMsg.area}}<img src="/static/images/font_down.png" alt=""></div></div>
+              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro">{{tranPro}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{tranCity}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{tranArea}}<img src="/static/images/font_down.png" alt=""></div></div>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">
@@ -146,6 +146,9 @@
             editHeadPic: '/static/images/user-01@2x.png',
             headPic: '/static/images/user-01@2x.png',
             edit: true,
+            tranPro: '',
+            tranCity: '',
+            tranArea: '',
             form: {
                 tal_name: '',
                 tal_idcard: '',
@@ -158,39 +161,6 @@
             cityData: {},
             loadAddr: ''
           }
-      },
-      created() {
-        let userInfo = JSON.parse(localStorage.getItem('USER'));
-        this.loadAddr = file_upload();
-        this.userInfoMsg = userInfo;
-        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
-            .then((res)=>{
-              if (res.data.state!= 400) {
-                //头像
-                if (res.data.base_info.photo != '') {
-                  this.editHeadPic = this.headPic = splicPic(res.data.base_info.photo, true);
-                }
-
-                this.beginData = res.data.base_info;
-                this.cityCode.province = res.data.base_info.province;
-                this.cityCode.city = res.data.base_info.city;
-                this.cityCode.area = res.data.base_info.area;
-                tranArea(res.data.base_info,true,0);
-                tranCity(res.data.base_info,true,0);
-                tranProvince(res.data.base_info,true);
-                transGender(res.data.base_info,true);
-                transEducation(res.data.base_info,1);
-                transWorkexp(res.data.base_info,1,'tal');
-                this.userMsg = res.data.base_info;
-                this.userMsg.name = this.userMsg.name == ''?this.userMsg.phone:this.userMsg.name;
-                this.form.tal_name = this.userMsg.name;
-                this.form.tal_idcard = this.userMsg.id_card;
-                this.form.tal_qq = this.userMsg.qq;
-                this.form.tal_email = this.userMsg.email;
-                this.form.tal_addr = this.userMsg.address;
-                this.form.tal_state = this.userMsg.work_status;
-              }
-            });
       },
       methods: {
         /*总菜单操作s*/
@@ -226,7 +196,8 @@
             return
           }
           // 邮箱验证
-          let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+         /* let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+          console.log(re.test(this.form.email));
           if (!re.test(this.form.email)) {
             this.$notify.warning({
               title: '提示',
@@ -235,36 +206,93 @@
               duration: 1500
             });
             return
+          }*/
+          if (this.tranPro == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择省份',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.tranCity == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择城市',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.tranArea == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择地区',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.form.tal_addr == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请填写详细地址',
+              showClose: false,
+              duration: 1500
+            });
+            return
           }
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/resume/userinfo',{"flag":1, "name": this.form.tal_name, "province": this.cityCode.province, "city": this.cityCode.city, "area": this.cityCode.area, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
+          this.$ajax.post('/resume/userinfo',{"flag": 1,photo: this.userMsg.photo,"name": this.form.tal_name, "province": this.cityCode.province, "city": this.cityCode.city, "area": this.cityCode.area, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
                 // 提交但是没有生效
                 // 重新给userMsg赋值并处理数据
-                console.log(this.userMsg);
-
+                this.headPic = this.editHeadPic;
                 this.edit = true;
               }
             })
 
         },
+        // 地址选择
+        choose_pro() {
+          this.secondBox = true;
+          this.showMsg = 'pro';
+          this.top_title = '选择省份';
+          this.guiyangData = tranProvince(this.userMsg,true,'pro');
+        },
         ProCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode.province = cCode;
-        /*  this.cityCode[1] = '';
-          this.cityCode[2] = '';
-          // 替换相应位置0*/
+          this.userMsg.province = cCode;
+          this.tranPro = tranProvince(this.userMsg.province,true,'',2);
+          this.tranCity = '';
+          this.tranArea = '';
           this.secondBox = false
+        },
+        choose_city() {
+          this.secondBox = true;
+          this.showMsg = 'city';
+          this.top_title = '选择城市/地区';
+          this.guiyangData = tranCity(this.userMsg,true,2,'city');
         },
         CityCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode.city = cCode;
+          this.userMsg.city = cCode;
+          this.tranCity = tranCity(this.userMsg,true,3);
+          this.tranArea = '';
           this.secondBox = false
+        },
+        choose_area() {
+          this.secondBox = true;
+          this.showMsg = 'area';
+          this.top_title = '选择区/县';
+          this.guiyangData = tranArea(this.userMsg,true,5);
         },
         AreaCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
-          this.cityCode.area = cCode;
+          this.userMsg.area = cCode;
+          this.tranArea = tranArea(this.userMsg,true,3);
           this.secondBox = false
         },
         secondBoxBg() {
@@ -283,27 +311,43 @@
             this.userMsg.photo = url;
           }
         },
-        choose_province() {
-          this.guiyangData = tranProvince(this.beginData,true,'pro');
-          this.showMsg = 'pro';
-          this.secondBox = true;
-        },
-        choose_city() {
-          this.guiyangData = tranCity(this.cityCode,true,2,'city');
-          this.showMsg = 'city';
-          this.secondBox = true;
-        },
-        choose_area() {
-          this.guiyangData = tranArea(this.cityCode,true,5);
-          this.showMsg = 'area';
-          this.secondBox = true;
-        },
       },
-      updated() {
-        this.userMsg.province = tranProvince(this.cityCode.province,true,'',2);
-        this.userMsg.city = tranCity(this.cityCode,true,3);
-        this.userMsg.area = tranArea(this.cityCode,true,3);
-      }
+      created() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.loadAddr = file_upload();
+        this.userInfoMsg = userInfo;
+        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
+          .then((res)=>{
+            if (res.data.state!= 400) {
+              //头像
+              if (res.data.base_info.photo != '') {
+                this.editHeadPic = this.headPic = splicPic(res.data.base_info.photo, true);
+              }
+              this.beginData = res.data.base_info;
+              this.cityCode.province = res.data.base_info.province;
+              this.cityCode.city = res.data.base_info.city;
+              this.cityCode.area = res.data.base_info.area;
+              /*    tranArea(res.data.base_info,true,0);
+                  tranCity(res.data.base_info,true,0);
+                  tranProvince(res.data.base_info,true);*/
+
+              transGender(res.data.base_info,true);
+              transEducation(res.data.base_info,1);
+              transWorkexp(res.data.base_info,1,'tal');
+              this.userMsg = res.data.base_info;
+              this.tranPro = tranProvince(this.userMsg.province,true,'',2);
+              this.tranCity = tranCity(this.userMsg,true,3);
+              this.tranArea = tranArea(this.userMsg,true,3);
+              this.userMsg.name = this.userMsg.name == ''?this.userMsg.phone:this.userMsg.name;
+              this.form.tal_name = this.userMsg.name;
+              this.form.tal_idcard = this.userMsg.id_card;
+              this.form.tal_qq = this.userMsg.qq;
+              this.form.tal_email = this.userMsg.email;
+              this.form.tal_addr = this.userMsg.address;
+              this.form.tal_state = this.userMsg.work_status;
+            }
+          });
+      },
     }
 </script>
 

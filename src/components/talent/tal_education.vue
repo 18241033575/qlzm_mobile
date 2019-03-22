@@ -49,12 +49,12 @@
           <div class="edit_cell special_cell">
             <span class="edit_lab">在校时间</span>
             <div class="block">
-              <!--<span class="demonstration">带快捷选项</span>-->
               <el-date-picker
                 v-model="value1"
                 align="right"
                 type="date"
                 placeholder="选择日期"
+                value-format="yyyy-MM-dd"
                 :picker-options="pickerOptions1">
               </el-date-picker>
               <el-date-picker
@@ -62,9 +62,9 @@
                 align="right"
                 type="date"
                 placeholder="选择日期"
+                value-format="yyyy-MM-dd"
                 :picker-options="pickerOptions1">
               </el-date-picker>
-              <!--<el-checkbox v-model="checked">至今</el-checkbox>-->
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
       <div class="edit_btn_group" v-if="!this.save_editSign">
         <div class="content">
           <div class="group_box">
-            <div class="edit_btn_cell del_btn">
+            <div class="edit_btn_cell del_btn" @click="edu_del">
               删除
             </div>
             <div class="edit_btn_cell save_btn" @click="saveEdu">
@@ -197,6 +197,39 @@
           .then((res)=>{
             if (res.data.state == 200) {
               this.workExpSign = true;
+              this.$notify.success({
+                title: '提示',
+                message: '保存成功',
+                showClose: false,
+                duration: 1500
+              });
+            }
+          })
+      },
+      edu_del() {
+        this.operaData.state = -1;
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.operaData.uid = userInfo.id;
+        this.operaData.id = this.edit_Id;
+        this.operaData.start_time = JSON.stringify(this.value1).substring(1,11);
+        this.operaData.end_time = JSON.stringify(this.value2).substring(1,11);
+        this.$ajax.post('/resume/eduexp',this.operaData)
+          .then((res)=>{
+            if (res.data.state == 200) {
+              this.workExpSign = true;
+              this.$notify.success({
+                title: '提示',
+                message: '删除成功',
+                showClose: false,
+                duration: 1500
+              });
+            }else {
+              this.$notify.error({
+                title: '提示',
+                message: res.data.msg,
+                showClose: false,
+                duration: 1500
+              });
             }
           })
       },

@@ -229,6 +229,7 @@
               transComScale(res.data,true,1);
               transComNature(res.data,true,1);
               this.companyMsg = res.data;
+              this.shadeSign = this.companyMsg.introduction.length > 300?true:false;
             }
           });
         this.$ajax.get('/office/company', {params: {cid: cid}})

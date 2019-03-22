@@ -58,6 +58,7 @@
                 align="right"
                 type="date"
                 placeholder="选择日期"
+                value-format="yyyy-MM-dd"
                 :picker-options="pickerOptions1">
               </el-date-picker>
               <el-date-picker
@@ -66,6 +67,7 @@
                 align="right"
                 type="date"
                 placeholder="选择日期"
+                value-format="yyyy-MM-dd"
                 :picker-options="pickerOptions1">
               </el-date-picker>
               <el-checkbox v-model="checked">至今</el-checkbox>
@@ -95,7 +97,7 @@
       <div class="edit_btn_group" v-if="!this.save_editSign">
         <div class="content">
           <div class="group_box">
-            <div class="edit_btn_cell del_btn">
+            <div class="edit_btn_cell del_btn" @click="pro_del">
               删除
             </div>
             <div class="edit_btn_cell save_btn" @click="pro_save">
@@ -201,6 +203,43 @@
           .then((res)=>{
             if (res.data.state == 200) {
               this.workExpSign = true;
+              this.$notify.success({
+                title: '提示',
+                message: '保存成功',
+                showClose: false,
+                duration: 1500
+              });
+            }
+          })
+      },
+      pro_del() {
+        this.proAllData.state = -1;
+        if (this.checked) {
+          this.proAllData.end_time = 0;
+        }else {
+          this.proAllData.end_time = JSON.stringify(this.value2).substring(1,11);
+        }
+        this.proAllData.start_time = JSON.stringify(this.value1).substring(1,11);
+        this.proAllData.id = this.pro_Id;
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.proAllData.uid = userInfo.id;
+        this.$ajax.post('/resume/projectexp',this.proAllData)
+          .then((res)=>{
+            if (res.data.state == 200) {
+              this.workExpSign = true;
+              this.$notify.success({
+                title: '提示',
+                message: '删除成功',
+                showClose: false,
+                duration: 1500
+              });
+            }else {
+              this.$notify.error({
+                title: '提示',
+                message: res.data.msg,
+                showClose: false,
+                duration: 1500
+              });
             }
           })
       },
