@@ -25,7 +25,6 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import {reverseOrder} from '../../../static/js/common.js'
     export default {
         name: "tal_shield",
       components: {
@@ -46,7 +45,7 @@
           this.$ajax.get('/personal/shield',{params:{uid: userInfo.id}})
             .then((res)=>{
               if(res.data.state != 400) {
-                this.shdData = this.shieldData = res.data;
+                this.shieldData = res.data;
               }
             })
       },
@@ -66,10 +65,29 @@
           this.shieldSignState = true
         },
         shield_save() {
+          this.company_name = this.company_name.replace(/^\s*|\s*$/g,"");
+          if (this.company_name == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '公司名称不能为空',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.post('/personal/shield',{uid: userInfo.id,company: this.company_name})
             .then((res)=>{
               if (res.data) {
+                if (this.company_name == '') {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '保存成功',
+                    showClose: false,
+                    duration: 1500
+                  });
+                  return
+                }
                 this.shieldData.unshift({company: this.company_name,id: res.data,uid: userInfo.id});
                 this.company_name = '';
               }
@@ -81,6 +99,12 @@
           this.$ajax.post('personal/shield',{id: id,uid: uid})
             .then((res)=>{
               if (res.data.state == 200) {
+                this.$notify.success({
+                  title: '提示',
+                  message: '取消成功',
+                  showClose: false,
+                  duration: 1500
+                });
                 for (let i = 0,len = this.shieldData.length; i < len;i++) {
                   if (this.shieldData[i].id == id) {
                     // 删除相应数组
