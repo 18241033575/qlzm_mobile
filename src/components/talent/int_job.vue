@@ -301,15 +301,6 @@
         },
       },
       created() {
-        /*navigator.geolocation.getCurrentPosition(function (position) {
-          console.log(position.coords);
-          showMap(position.coords.latitude,position.coords.longitude)
-        });
-        //navigator.geolocation.getCurrentPosition(success,error,{
-        // enableHeighAccuracy: boolean --是否更精确 更费电
-        // timeout: 2000,
-        // maximumAge: 0 最近缓存数据
-        // })*/
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
           .then((res)=>{
@@ -331,7 +322,7 @@
                   this.intJobData.tranJob_id = this.jobClassify[i].name;
                 }
               }
-              this.remark = this.intJobData.remark
+              this.remark = this.intJobData.remark;
             }
           });
       }
