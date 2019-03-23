@@ -50,6 +50,7 @@
                   list-type="none"
                   :data="{type: 'image'}"
                   :show-file-list="false"
+                  accept=".jpg,.jpeg,.png,.gif,.bmp"
                   :on-success="upHeadPic">
                   <el-button size="small" type="primary">点击上传</el-button>
                   <div slot="tip" class="el-upload__tip">支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</div>

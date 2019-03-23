@@ -59,8 +59,12 @@
 }
 .bottom_msg .right_msg{
   flex-grow: 1;
+  width: 80%;
   color: #666666;
   word-break: break-all;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .exp_edit_list{
   margin-top: 10px;

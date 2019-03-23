@@ -29,6 +29,7 @@
               list-type="none"
               :data="{type: 'image'}"
               :show-file-list="false"
+              accept=".jpg,.jpeg,.png,.gif,.bmp"
               :on-success="uploadLicense">
               <el-button size="small" type="primary">重新上传</el-button>
             </el-upload>

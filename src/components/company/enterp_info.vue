@@ -8,9 +8,34 @@
       </div>
       <div class="tal_msg_edit">
         <div class="tal_edit_det">
+          <div class="edit_top">
+            <div class="content">
+              <p class="logo_tit">企业LOGO</p>
+              <div class="edit_top_box">
+                <div class="top_pic">
+                  <img :src="this.logoPic" alt="">
+                </div>
+                <div class="top_msg">
+                  <div slot="tip" class="el-upload__tip">支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</div>
+                  <el-upload
+                    class="avatar-uploader upload_btn"
+                    :action="this.loadAddr"
+                    list-type="none"
+                    :data="{type: 'image'}"
+                    :show-file-list="false"
+                    accept=".jpg,.jpeg,.png,.gif,.bmp"
+                    :on-success="upHeadPic">
+                    <el-button size="small" type="primary">上传LOGO</el-button>
+                  </el-upload>
+                  <!--<span class="upload_btn">上传图片</span>-->
+                  <!--<p>支持JPG、PNG，大小不要超过500k 建议使用一寸证件照70*100像素</p>-->
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="edit_bottom">
             <div class="content">
-              <div class="edit_cell border-none">
+              <div class="edit_cell">
                 <span class="edit_lab">企业名称</span><input type="text" v-model="infoData.name" maxlength="15" placeholder="请输入职位名称">
               </div>
               <div class="edit_cell">
@@ -79,8 +104,6 @@
                         placeholder="请填写职位描述"
                         :options="editorOption">
           </quill-editor>
-
-
         </div>
         <div class="bas_msg_btn" @click="intro_sub">
           确定
@@ -94,7 +117,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import {companyNature,companyScale} from '../../../static/js/common.js'
+  import {companyNature,companyScale,file_upload,splicPic} from '../../../static/js/common.js'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
     export default {
         name: "enterp_info",
@@ -113,6 +136,7 @@
           showMsg: '',
           introSign: false,
           editIntro: '',
+          logoPic: '/static/images/user-01@2x.png',
           // 转换文字
           tranNature: '',
           tranScale: '',
@@ -304,13 +328,22 @@
         intro_back() {
           this.introSign = false;
         },
+        upHeadPic(res) {
+          if (res.code == 200) {
+            let url = res.data.success[0].url;
+            this.logoPic = splicPic(url, true);
+            this.infoData.logo = url;
+          }
+        },
       },
       created() {
+        this.loadAddr = file_upload();
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
         this.$ajax.get('/company/get-info',{params: {cid: companyInfo.id}})
           .then((res)=>{
             if(res.data.state != 400) {
               this.infoData = res.data;
+              this.logoPic = splicPic(this.infoData.logo, true);
               this.tranNature = companyNature(this.infoData.nature,2);
               this.tranScale = companyScale(this.infoData.scale,2);
               this.tranPro = tranProvince(this.infoData.province,true,'',2);
@@ -339,7 +372,17 @@
   .edit_cell .edit_lab {
     display: inline-block;
     width: 80px;
-    color: #353535;
+    color: #666666;
+    font-weight: bold;
+  }
+  .logo_tit{
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #666666;
+    font-weight: bold;
+  }
+  .tal_msg_edit{
+    padding-bottom: 60px;
   }
   .edit_cell input{
     display: inline-block;
@@ -513,5 +556,41 @@
   }
   .ent_intro .quill-editor .ql-toolbar{
     display: none!important;
+  }
+  .edit_top {
+    padding: 15px 0;
+    font-size: 12px;
+  }
+  .edit_top_box{
+    display: flex;
+  }
+  .top_pic img {
+    width: 75px;
+    height: 75px;
+  }
+  .top_msg{
+    margin-left: 15px;
+    padding-top: 5px;
+    color: #919199;
+  }
+  .top_msg p{
+    margin-top: 15px;
+    line-height: 18px;
+  }
+  .top_msg .el-upload__tip{
+    margin-top: 0;
+    margin-bottom: 7px;
+  }
+  .upload_btn .el-button{
+    color: #ffffff;
+    background-color: #ff8236;
+    border-color: #ff8236;
+  }
+  .upload_btn .el-upload__tip{
+    color: #919199;
+    font-size: 12px;
+  }
+  .upload_btn .el-upload-list--none{
+    display: none;
   }
 </style>
