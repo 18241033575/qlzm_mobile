@@ -541,6 +541,9 @@
     overflow-y: scroll;
     background-color: #ffffff;
   }
+  .city_cell .filter_part1_cell{
+    padding: 0 10px;
+  }
   .filter_part1_cell{
     line-height: 44px;
     font-size: 14px;

@@ -179,6 +179,7 @@
   .menu_box{
     width: 60%;
     height: 100vh;
+    overflow-y: scroll;
     background-color: #fff;
   }
   .menu_top{

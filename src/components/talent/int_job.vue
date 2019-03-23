@@ -1,6 +1,6 @@
 <template>
   <!--求职意向-->
-  <div class="int_job_all" :class="{stop_scroll: this.openState}">
+  <div class="int_job_all" :class="{stop_scroll: this.openState || this.secondBox}">
     <!--信息列表-->
     <div class="int_job" v-show="this.int_job_edit">
       <div class="com_det_title">
