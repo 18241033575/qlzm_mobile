@@ -149,7 +149,7 @@
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {splicPic,transJobs,transEducation,transWorkexp,transArrive,transNature,transSalary,tal_adv} from '../../../static/js/common.js'
+  import {splicPic,transJobs,transEducation,transWorkexp} from '../../../static/js/common.js'
     export default {
         name: "resume_det",
       components: {

@@ -5,9 +5,11 @@
         人才注册
       </div>
     </div>
-    <el-input class="common_input" v-model="phone" @keyup.native="onlNum1" maxlength="11" placeholder="请输入手机号码"></el-input>
-    <el-input class="common_input" type="password" maxlength="16" v-model="password" placeholder="请输入密码"></el-input>
-    <el-input class="common_input" type="password" maxlength="16" v-model="password_confirm" placeholder="重复密码"></el-input>
+    <div class="content">
+      <el-input class="common_input" v-model="phone" @keyup.native="onlNum1" maxlength="11" placeholder="请输入手机号码"></el-input>
+      <el-input class="common_input" type="password" maxlength="16" v-model="password" placeholder="请输入密码"></el-input>
+      <el-input class="common_input" type="password" maxlength="16" v-model="password_confirm" placeholder="重复密码"></el-input>
+    </div>
     <div class="sms_group">
       <el-input class="common_input_sms fl" @keyup.native="onlNum2" maxlength="6" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button class="fl get_smsCode" @click="getSmsCode">获取验证码</el-button>
     </div>

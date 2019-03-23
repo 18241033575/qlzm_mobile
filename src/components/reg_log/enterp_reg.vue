@@ -6,10 +6,12 @@
           建筑企业注册
         </div>
       </div>
-      <el-input class="common_input" v-model="company" maxlength="20" placeholder="企业名称"></el-input>
-      <el-input class="common_input" v-model="phone" @keyup.native="onlNum1" maxlength="11" placeholder="手机号码"></el-input>
-      <el-input class="common_input" type="password" v-model="password" maxlength="16" placeholder="设置密码"></el-input>
-      <el-input class="common_input" type="password" v-model="password_confirm" maxlength="16" placeholder="重复密码"></el-input>
+      <div class="content">
+        <el-input class="common_input" v-model="company" maxlength="20" placeholder="企业名称"></el-input>
+        <el-input class="common_input" v-model="phone" @keyup.native="onlNum1" maxlength="11" placeholder="手机号码"></el-input>
+        <el-input class="common_input" type="password" v-model="password" maxlength="16" placeholder="设置密码"></el-input>
+        <el-input class="common_input" type="password" v-model="password_confirm" maxlength="16" placeholder="重复密码"></el-input>
+      </div>
       <div class="sms_group">
         <el-input class="common_input_sms fl" maxlength="6" @keyup.native="onlNum2" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button class="fl get_smsCode" @click="getSmsCode">获取验证码</el-button>
       </div>

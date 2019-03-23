@@ -67,7 +67,7 @@
             <span class="edit_lab">E-mail</span><input type="text" maxlength="20" v-model="invMsg.email" placeholder="用于接收电子发票(必填)">
           </div>
           <div class="edit_cell special_cell ">
-            <span class="edit_lab">收件地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place_msg">{{transPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place_msg">{{transCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place_msg">{{transArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
+            <span class="edit_lab">收件地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place">{{transPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place">{{transCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place">{{transArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
             <input type="text" maxlength="20" v-model="invMsg.address" placeholder="详细地址，如：街道、门牌号等">
           </div>
         </div>
@@ -604,13 +604,6 @@
     border: none;
     color: #666666;
   }
-  .edit_cell .place_msg{
-    display: inline-block;
-    width: 75%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
   .edit_cell input ::placeholder{
     color: #c2c2cc;
   }
@@ -626,30 +619,6 @@
     color: #ffffff;
     background-color: #5082e6;
     font-size: 14px;
-  }
-  .comm_addr{
-    display: flex;
-    width: 100%;
-    padding-bottom: 15px;
-  }
-  .comm_addr .comm_addr_cell{
-    justify-content: space-between;
-    margin-right: 10px;
-    width: 30%;
-    overflow: hidden;
-    line-height: 30px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid #E1E4E6;
-    text-align: center;
-    font-size: 14px;
-    color: #666666;
-  }
-  .comm_addr img{
-    width: 12px;
-    height: 10px;
-    vertical-align: middle;
   }
   .special_cell input{
     margin-bottom: 20px;

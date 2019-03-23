@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="edit_cell special_cell ">
-            <span class="edit_lab">工作地点</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province">{{userMsg.province || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{userMsg.city || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{userMsg.area || '请选择'}}<img src="/static/images/font_down.png" alt=""></div></div>
+            <span class="edit_lab">工作地点</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_province"><span class="place">{{userMsg.province || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place">{{userMsg.city || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place">{{userMsg.area || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
             <input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址，如：街道、门牌号等">
           </div>
           <div class="edit_cell">
@@ -466,30 +466,6 @@
   .choose_active{
     color: #5082e6;
     background:rgba(80,130,230,.2);
-  }
-  .comm_addr{
-    display: flex;
-    width: 100%;
-    padding-bottom: 15px;
-  }
-  .comm_addr .comm_addr_cell{
-    justify-content: space-between;
-    margin-right: 10px;
-    width: 30%;
-    line-height: 30px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid #E1E4E6;
-    text-align: center;
-    font-size: 14px;
-    color: #666666;
-  }
-  .comm_addr img{
-    margin-left: 20px;
-    width: 12px;
-    height: 10px;
-    vertical-align: middle;
   }
   .int_job_det{
     color: #919199;

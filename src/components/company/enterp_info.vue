@@ -45,7 +45,7 @@
                 <span class="edit_lab">企业规模</span><span class="int_job_det fr" @click="entScale">{{tranScale || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell special_cell">
-                <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro">{{tranPro || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{tranCity || '请选择'}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{tranArea || '请选择'}}<img src="/static/images/font_down.png" alt=""></div></div>
+                <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place">{{tranPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place">{{tranCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span>{{tranArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
                 <input type="text" v-model="infoData.address" maxlength="20" placeholder="详细地址，如：街道、门牌号等">
               </div>
               <div class="edit_cell" @click="edit_intro">
@@ -398,30 +398,6 @@
   .edit_cell input:focus{
     outline: none;
   }
-  .comm_addr{
-    display: flex;
-    width: 100%;
-    padding-bottom: 15px;
-  }
-  .comm_addr .comm_addr_cell{
-    justify-content: space-between;
-    margin-right: 10px;
-    width: 30%;
-    line-height: 30px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid #E1E4E6;
-    text-align: center;
-    font-size: 14px;
-    color: #666666;
-  }
-  .comm_addr img{
-    margin-left: 20px;
-    width: 12px;
-    height: 10px;
-    vertical-align: middle;
-  }
   .int_job_det{
     color: #919199;
   }
@@ -430,9 +406,6 @@
     width: 18px;
     height: 18px;
     vertical-align: middle;
-  }
-  .border-none{
-    border: none;
   }
   .special_cell input{
     width: 90%;

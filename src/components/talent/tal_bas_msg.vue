@@ -76,7 +76,7 @@
               <span class="edit_lab">电子邮箱</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
             </div>
             <div class="edit_cell special_cell">
-              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro">{{tranPro}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city">{{tranCity}}<img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area">{{tranArea}}<img src="/static/images/font_down.png" alt=""></div></div>
+              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place">{{tranPro}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place">{{tranCity}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place">{{tranArea}}</span><img src="/static/images/font_down.png" alt=""></div></div>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">
@@ -506,29 +506,4 @@
     color: #5082e6;
     background:rgba(80,130,230,.2);
   }
-  .comm_addr{
-    display: flex;
-    width: 100%;
-    padding-bottom: 15px;
-  }
-  .comm_addr .comm_addr_cell{
-    justify-content: space-between;
-    margin-right: 10px;
-    width: 30%;
-    line-height: 30px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid #E1E4E6;
-    text-align: center;
-    font-size: 14px;
-    color: #666666;
-  }
-  .comm_addr img{
-    margin-left: 20px;
-    width: 12px;
-    height: 10px;
-    vertical-align: middle;
-  }
-
 </style>

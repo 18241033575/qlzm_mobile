@@ -21,8 +21,10 @@
         :value="item.value">
       </el-option>
       </el-select>
-      <el-input class="common_input" maxlength="11" @keyup.native="onlNum1" v-model="account" placeholder="请输入手机号码"></el-input>
-      <el-input class="common_input" v-if="this.loginTypeSign" maxlength="16" v-model="password" type="password" placeholder="请输入密码"></el-input>
+      <div class="content">
+        <el-input class="common_input" maxlength="11" @keyup.native="onlNum1" v-model="account" placeholder="请输入手机号码"></el-input>
+        <el-input class="common_input" v-if="this.loginTypeSign" maxlength="16" v-model="password" type="password" placeholder="请输入密码"></el-input>
+      </div>
       <div class="sms_group" v-if="!this.loginTypeSign">
         <el-input class="common_input_sms fl" maxlength="6" @keyup.native="onlNum2" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
       </div>

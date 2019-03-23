@@ -2,17 +2,15 @@
   <!--修改密码-->
   <div class="account_password" :class="{stop_scroll: this.openState}">
     <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-    <div class="com_det_title">
-      <div class="content">
-        修改密码
-      </div>
-    </div>
-    <div class="phone_cell">
-      <el-input class="common_input" maxlength="16" minlength="6" v-model="param.old_password" placeholder="请输入旧密码"></el-input>
-      <el-input class="common_input" maxlength="16" minlength="6"  v-model="param.password" type="password" placeholder="设置新密码"></el-input>
-      <el-input class="common_input" maxlength="16" minlength="6"  v-model="param.password_confirm" type="password" placeholder="重复新密码"></el-input>
-    </div>
     <div class="content">
+      <div class="com_det_title">
+          修改密码
+      </div>
+      <div class="phone_cell">
+        <el-input class="common_input" maxlength="16" minlength="6" v-model="param.old_password" placeholder="请输入旧密码"></el-input>
+        <el-input class="common_input" maxlength="16" minlength="6"  v-model="param.password" type="password" placeholder="设置新密码"></el-input>
+        <el-input class="common_input" maxlength="16" minlength="6"  v-model="param.password_confirm" type="password" placeholder="重复新密码"></el-input>
+      </div>
       <div class="bas_msg_btn" @click="change_submit">
         确定修改
       </div>

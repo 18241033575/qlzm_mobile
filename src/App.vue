@@ -41,7 +41,7 @@
   html{
     background-color: #F0F1F5;
   }
-  .common_input_sms{
+  .sms_group .common_input_sms{
     width: 55%;
   }
   .get_smsCode{
@@ -183,5 +183,38 @@
     text-align: center;
     font-size: 12px;
     color: #919199;
+  }
+  /* 地区选择样式 */
+  .comm_addr{
+    display: flex;
+    width: 100%;
+    padding-bottom: 15px;
+  }
+  .comm_addr .comm_addr_cell{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 10px;
+    width: 30%;
+    line-height: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #E1E4E6;
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+  }
+  .comm_addr .place{
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .comm_addr img{
+    margin-right: 10px;
+    width: 12px;
+    height: 10px;
+    vertical-align: middle;
   }
 </style>

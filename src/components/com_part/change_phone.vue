@@ -13,7 +13,9 @@
       </div>
     </div>
     <div class="phone_cell">
-      <el-input class="common_input" v-model="param.phone" maxlength="11" minlength="11"  :validate-event="true" @keyup.native="test" placeholder="请输入新的手机号码"></el-input>
+      <div class="content">
+        <el-input class="common_input" v-model="param.phone" maxlength="11" minlength="11"  :validate-event="true" @keyup.native="test" placeholder="请输入新的手机号码"></el-input>
+      </div>
       <div class="sms_group">
         <el-input class="common_input_sms fl" maxlength="6" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button @click="getCode" class="fl get_smsCode">{{getSmsCode}}</el-button>
       </div>

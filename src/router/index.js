@@ -31,6 +31,9 @@ import sys_msg_det from '@/components/com_part/sys_msg_det'
 import recharge from '@/components/com_part/recharge'
 import transfer from '@/components/com_part/transfer'
 import charge_online from '@/components/com_part/charge_online'
+import about_us from '@/components/com_part/about_us'
+import labor_dispatch from '@/components/com_part/labor_dispatch'
+import donkey_horse from '@/components/com_part/donkey_horse'
 
 //个人中心页面
 import tal_center from '@/components/talent/tal_center'
@@ -84,9 +87,6 @@ export default new Router({
       path: '/',
       name: 'index',
       component: index,
-      meta: {
-        title: '骑驴找马一一建筑行业人力资源共享平台'
-      }
     },
     {
       path: '/user_reg',
@@ -132,22 +132,6 @@ export default new Router({
       path: '/account_manage',
       name: 'account_manage',
       component: account_manage,
-     /* children:[
-        {
-          path: '',
-          name: 'account_manage',
-          component: account_manage,
-        },
-        {
-          path: '/account_manage/change_phone',
-          name: 'change_phone',
-          component: change_phone,
-        },{
-          path: '/account_manage/change_password',
-          name: 'change_password',
-          component: change_password,
-        },
-      ]*/
     },
     {
       path: '/change_phone',
@@ -223,6 +207,21 @@ export default new Router({
       path: '/charge_online',
       name: 'charge_online',
       component: charge_online,
+    },
+    {
+      path: '/about_us',
+      name: 'about_us',
+      component: about_us,
+    },
+    {
+      path: '/labor_dispatch',
+      name: 'labor_dispatch',
+      component: labor_dispatch,
+    },
+    {
+      path: '/donkey_horse',
+      name: 'donkey_horse',
+      component: donkey_horse,
     },
     //个人中心
     {

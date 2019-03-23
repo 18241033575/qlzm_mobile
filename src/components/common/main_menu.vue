@@ -86,11 +86,11 @@
             },
             4:{
               urlName: "劳务派遣",
-              urlRoute: "famous_pos"
+              urlRoute: "labor_dispatch"
             },
             5:{
               urlName: "骑驴找马",
-              urlRoute: "famous_pos"
+              urlRoute: "donkey_horse"
             },
             6:{
               urlName: "就业指导",
@@ -102,7 +102,7 @@
             },
             8:{
               urlName: "关于我们",
-              urlRoute: "index"
+              urlRoute: "about_us"
             },
           },
           isOpen: true,
