@@ -9,7 +9,7 @@
     </div>
     <div class="del_col_body">
       <div class="content">
-        <div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in del_colData" :key="index" @click="to_posDetail">
+        <div class="ugent_cell" :data-id="item.office.id"  :cid="item.cid" v-for="(item,index) in del_colData" :key="index" @click="to_posDetail">
           <div class="ugent_top">
             <span v-if="item.office.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office.office_name}}</span><span class="salary fr">{{item.office.salary}}</span>
           </div>
@@ -47,6 +47,21 @@
             titleMsg: '简历投递记录',
             del_colData: {},
           }
+      },
+      methods: {
+        /*总菜单操作s*/
+        get_sign(data) {
+          this.openState = !data;
+        },
+        getIsopen(data) {
+          this.openState = data;
+        },
+        /*总菜单操作e*/
+        to_posDetail(e) {
+          let id = e.currentTarget.getAttribute('data-id');
+          let cid = e.currentTarget.getAttribute('cid');
+          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
+        },
       },
       created() {
         //判断路由显示不同内容    /personal/apply
@@ -94,21 +109,6 @@
             })
         }
       },
-      methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
-        to_posDetail(e) {
-          let id = e.currentTarget.getAttribute('data-id');
-          let cid = e.currentTarget.getAttribute('cid');
-          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}})
-        },
-      }
     }
 </script>
 

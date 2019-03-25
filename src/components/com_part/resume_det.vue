@@ -1,6 +1,6 @@
 <template>
   <!--简历详情-->
-    <div class="resume_det">
+    <div class="resume_det" :class="{stop_scroll: this.openState || this.resume_buy}">
       <div class="com_det_title">
         <div class="content">
           简历详情
@@ -137,8 +137,23 @@
           举报
         </div>
       </div>
-      <div class="resume_buy_btn" v-show="!isBuy">
+      <div class="resume_buy_btn" v-show="!isBuy" @click="buyResume">
         购买简历，查看完整信息
+      </div>
+      <!--购买简历-->
+      <div class="buy_box" v-show="resume_buy">
+        <div class="box">
+          <div class="box_title">
+            提示
+          </div>
+          <div class="box_msg">
+            当前积分:{{integral}}，本次花费积分:{{spend}},确定要购买么?
+          </div>
+          <div class="box_btn_group">
+            <span class="box_btn confirm" @click="resume_confirm">确定</span>
+            <span class="box_btn cancel" @click="resume_cancel">取消</span>
+          </div>
+        </div>
       </div>
       <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
       <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
@@ -162,6 +177,7 @@
           openState: false,
           uid: '',
           isBuy: false,
+          resume_buy: false,
           userMsg: {},
           intJobData: {},
           workData: {},
@@ -170,6 +186,8 @@
           selfEvalData: {},
           tranJob: [],
           evaluation: '',
+          integral: 0,
+          spend: 30,
           additionData: '暂无',
         }
       },
@@ -185,8 +203,61 @@
         interview() {
           this.$router.push({name: 'resume_invite',query: {uid: this.uid}})
         },
+        // 人才举报
         report() {
           this.$router.push({name: 'report',query: {uid: this.uid}})
+        },
+        // 购买简历
+        buyResume() {
+          this.resume_buy = true;
+        },
+        resume_cancel() {
+          this.resume_buy = false;
+        },
+        resume_confirm() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          if (companyInfo) {
+            if (this.integral >= this.spend) {
+              this.$ajax.get('/company_by_resume',{params: {cid: companyInfo.id,uid: this.uid,type: 'index'}})
+                .then((res)=>{
+                  console.log(res);
+                })
+            } else {
+
+
+
+
+
+              // 关闭弹层 ---去充值
+              this.$notify.warning({
+                title: '提示',
+                message: '积分不足',
+                showClose: false,
+                duration: 1500
+              });
+
+
+
+            }
+          }else if(userInfo){
+            this.$notify.warning({
+              title: '提示',
+              message: '个人无法购买简历',
+              showClose: false,
+              duration: 1500
+            });
+          }else {
+            this.$notify.warning({
+              title: '提示',
+              message: '请先登录',
+              showClose: false,
+              duration: 800
+            });
+            setTimeout(()=>{
+              this.$router.push({name: 'login'});
+            },1000);
+          }
         }
       },
       created() {
@@ -204,6 +275,14 @@
         }
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
         if (companyInfo) {
+
+          this.$ajax.get('/company/current-integral',{params:{cid: companyInfo.id}})
+            .then((res)=>{
+              if (res.data.state != 400) {
+                this.integral = res.data;
+              }
+            })
+
           this.$ajax.get('/resume/view/' + this.uid,{params: {cid: companyInfo.id}})
             .then((res)=>{
               // 已购买
@@ -249,7 +328,7 @@
 
                  // 证书
                  let certs = JSON.parse(res.data.user_certs);
-                   certs.forEach(function (item,ids) {
+                    certs.forEach(function (item,ids) {
                       if (item.reg_status == 0) {
                         item.tranreg_status = '不限'
                       } else if (item.reg_status == 1) {
@@ -257,8 +336,7 @@
                       } else {
                         item.tranreg_status = '转注'
                       }
-
-                     for(let i = 0,len = certData.length;i < len;i++) {
+                      for(let i = 0,len = certData.length;i < len;i++) {
                         if (item.type == certData[i].id ) {
                           item.trantype = certData[i].category;
                           for(let j = 0,mlen = certData[i].majors.length; j < mlen; j++) {
@@ -377,19 +455,6 @@
     font-size: 12px;
     color: #919199;
   }
- /* .bottom_msg{
-    padding: 20px 0;
-    line-height: 24px;
-    font-size: 12px;
-  }
-  .bottom_msg .left_lab{
-    display: inline-block;
-    width: 90px;
-    color: #919199;
-  }
-  .bottom_msg .right_msg{
-    color: #666666;
-  }*/
   .int_bottom{
     margin-top: 10px;
     background-color: #ffffff;
@@ -463,5 +528,54 @@
     font-size: 14px;
     font-weight: bold;
     color: #ff8236;
+  }
+  /*简历购买弹层*/
+  .buy_box{
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: rgba(0,0,0,.5);
+    z-index: 9999999;
+  }
+  .box{
+    margin: 50% auto;
+    width: 92%;
+    height: 155px;
+    background-color: #ffffff;
+  }
+  .box_title{
+    line-height: 44px;
+    font-size: 16px;
+    color: #353535;
+    text-align: center;
+    font-weight: bold;
+  }
+  .box_msg{
+    padding: 10px 20px 15px;
+    color: #919199;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .box_btn_group{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-top: 1px solid #E1E4E6;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .box_btn{
+    display: inline-block;
+    margin: 12px 0;
+    width: 48%;
+    text-align: center;
+  }
+  .confirm{
+    color: #5082e6;
+    border-right: 1px solid #E1E4E6;
   }
 </style>

@@ -233,6 +233,7 @@
           },
           jobClassify: {},
           boxState: false,
+          // 简历ID
           info_id: 0,
         }
       },
@@ -415,6 +416,40 @@
         closeState() {
           this.boxState = false;
         },
+        collect_resume() {
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if (companyInfo) {
+            this.$ajax.post('/resume/collect',{uid: this.uid,info_id: this.info_id,cid: companyInfo.id})
+              .then((res)=>{
+
+
+                // 层级处理
+
+                if (res.data.state ==200) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '收藏成功',
+                    showClose: false,
+                    duration: 1500
+                  });
+                }else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500
+                  });
+                }
+              })
+          }else {
+            this.$notify.warning({
+              title: '提示',
+              message: '只有企业才可以收藏简历',
+              showClose: false,
+              duration: 1500
+            });
+          }
+        }
       },
       created() {
         if (this.$route.query.province) {
@@ -434,7 +469,6 @@
                 res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
               }
               this.find_talData = res.data.data;
-              console.log(this.find_talData);
             }
           });
         this.tranCode = tranCity(this.cityCode,true,1)

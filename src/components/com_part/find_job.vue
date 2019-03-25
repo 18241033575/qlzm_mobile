@@ -43,7 +43,7 @@
     <!--找工作-->
     <div class="ugent">
       <div class="content">
-        <div class="load">
+        <div class="load" id="load">
           <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
             <div class="ugent_cell" v-for="(item,index) in find_jobData" :key="index" :cid="item.cid" :id="item.id" @click="to_pos_det">
               <div class="ugent_top">
@@ -180,7 +180,7 @@
         /*总菜单状态*/
         openState: false,
         emptySign: false,
-        allLoaded: false,
+        allLoaded: true,
         req_state: false,
         sort_msg: '默认排序',
         outBox: false,
@@ -424,10 +424,8 @@
             if (res.data.code == 200) {
               if (res.data.data.length == 0) {
                 this.req_state = true;
-                this.allLoaded = true;
               }else {
                 this.req_state = false;
-                this.allLoaded = false;
                 tranCity(res.data.data,true,2);
                 transWorkexp1(res.data.data,0);
                 transEducation(res.data.data,0);
@@ -439,6 +437,7 @@
                 this.find_jobData.push.apply(this.find_jobData,res.data.data);
                 this.$refs.loadmore.onBottomLoaded();
               }
+              this.allLoaded = true;
             }
           })
       },
@@ -460,7 +459,14 @@
         let id = e.currentTarget.getAttribute('id');
         let cid = e.currentTarget.getAttribute('cid');
         this.$router.push({name: 'pos_det',query: {id: id,cid: cid}});
-      }
+      },
+      handleScroll () {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        // let windowHeight = window.clientHeight;
+        let offsetBottom = document.querySelector('#load').clientHeight;
+        console.log(scrollTop,offsetBottom);
+        scrollTop > 240 ? this.allLoaded = false : this.allLoaded = true;
+      },
     },
     created() {
       if (this.$route.query.province) {
@@ -469,7 +475,6 @@
       }
       if (this.$route.query.job_id) {
         this.posTypeNum = this.find_jobParam.category = this.$route.query.job_id;
-        console.log(this.find_jobParam.job_id);
         this.tranPosType = transJobs(this.posTypeNum,1);
       }
       if (this.$route.query.ugent) {
@@ -509,9 +514,13 @@
       if (this.posTypeNum == '0') {
         this.tranPosType = '全部';
       }
-
-
-    }
+    },
+    mounted() {
+      document.addEventListener('scroll', this.handleScroll)
+    },
+    destroyed () {
+      window.removeEventListener('scroll', this.handleScroll)
+    },
   }
 </script>
 

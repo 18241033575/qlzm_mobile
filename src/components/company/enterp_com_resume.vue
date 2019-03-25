@@ -53,7 +53,6 @@
         </div>
         <div class="opera_list" v-if="this.orign == 'invite'">
           <div class="content">
-
             <div class="opera_cell">
               录用
             </div>
@@ -147,7 +146,18 @@
           this.$ajax.post('/resume/cancel-collect',{uid: this.uid,cid: companyInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
-                for (let i = 0,len = this.commonData.length; i < len;i++) {
+                this.commonData.forEach((item,index)=>{
+                  if (item.id == this.info_id) {
+                    // 删除相应数组
+                    this.commonData.splice(index,1);
+                    if (this.commonData.length == 0 || this.commonData.length == '') {
+                      this.emptySign = true;
+                    }else {
+                      this.emptySign = false;
+                    }
+                  }
+                });
+              /*  for (let i = 0,len = this.commonData.length; i < len;i++) {
                   // 报错 暂时没有找到原因，功能正常
                   if (this.commonData[i].id == this.info_id) {
                     // 删除相应数组
@@ -158,7 +168,7 @@
                       this.emptySign = false;
                     }
                   }
-                }
+                }*/
               }
             })
         },
