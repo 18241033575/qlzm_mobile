@@ -16,7 +16,7 @@
                 <span>{{item.title}}</span><img v-show="true" :src="item.frontcover" alt="">
               </div>
               <div class="news_total_cell_tip">
-                <span>刚刚刚刚刚刚</span>阅读<span>({{item.visit}})</span>
+                <span>{{item.publish_at}}</span>阅读<span>({{item.visit}})</span>
               </div>
             </div>
             <div class="bottom_line" v-show="req_state">
@@ -34,7 +34,7 @@
 <script>
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
-  import {splicFrontcover} from '../../../static/js/common.js'
+  import {splicFrontcover,getDistanceTime} from '../../../static/js/common.js'
     export default {
         name: "news",
       components: {
@@ -88,7 +88,10 @@
             .then((res)=>{
               if (res.data.code == 200) {
                 splicFrontcover(res.data.data,2);
-                this.newsData = res.data.data
+                for (let i = 0,len = res.data.data.length;i < len;i++) {
+                  res.data.data[i].publish_at = getDistanceTime(res.data.data[i].publish_at);
+                }
+                this.newsData = res.data.data;
               }
             })
       }

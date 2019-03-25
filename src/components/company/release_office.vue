@@ -44,7 +44,7 @@
                 <span class="edit_lab">学历要求</span><span class="int_job_det fr" @click="choose_edu">{{tranEdu || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">工作年限</span><span class="int_job_det fr" @click="choose_workexp">{{tranWorkexp || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+                <span class="edit_lab">工作年限</span><span class="int_job_det fr" @click="choose_workexp">{{tranWorkexp || '一年以下'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
                 <span class="edit_lab">性别限制</span><span class="fr choose_group la_choose_group"><span class="choose_cell" :class="{choose_active:this.genderNum == 0}" @click="all_sex">不限</span><span class="choose_cell" :class="{choose_active:this.genderNum == 1}" @click="man_sex">男</span><span class="choose_cell" :class="{choose_active:this.genderNum == 2}" @click="woman_sex">女</span></span>
@@ -292,15 +292,6 @@
             this.$notify.warning({
               title: '提示',
               message: '请选择学历要求',
-              showClose: false,
-              duration: 1500
-            });
-            return
-          }
-          if (this.workexpNum == '0') {
-            this.$notify.warning({
-              title: '提示',
-              message: '请选择工作年限',
               showClose: false,
               duration: 1500
             });

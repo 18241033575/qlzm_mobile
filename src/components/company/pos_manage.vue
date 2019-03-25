@@ -63,9 +63,7 @@
           isrelease: true,
           id: 0,
           cid: 0,
-          manageData: {
-
-          },
+          manageData: {},
         }
       },
       methods: {
@@ -154,7 +152,7 @@
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
             .then((res)=>{
-              if (!res.data) {
+              if (res.data) {
                 tranCity(res.data,true,2);
                 transWorkexp(res.data,0);
                 transEducation(res.data,0);

@@ -82,7 +82,7 @@
         <div class="content">
           <div class="filter_part1">
             <div v-if="showMsg =='init_job'" v-for="(item,index) in jobClassify" :city-id="item.value" :key="index" class="filter_part1_cell second" @click="JobCode">
-              {{item.name}}<img v-show="intJobData.job_id == item.value" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              {{item.name}}<img v-show="intJobData.job_id == item.value" class="fr" src="/static/images/checkbox.png" alt="">
             </div>
             <div v-if="showMsg == 'salary'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="SalaryCode">
               {{item}}<img v-show="intJobData.salary == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
@@ -145,6 +145,8 @@
             form: {
               work_nature: 1
             },
+            intJobCode: [],
+            tranIntJob: [],
             intJobData: {},
             remark: '',
             secondBox: false,
@@ -246,12 +248,25 @@
         JobCode(e) {
           let jobId = e.currentTarget.getAttribute('city-id');
           this.intJobData.job_id = jobId;
-          for (let i = 0,len = this.jobClassify.length; i < len;i++) {
-            if (this.jobClassify[i].value == this.intJobData.job_id) {
-              this.intJobData.tranJob_id = this.jobClassify[i].name;
+          if (this.intJobCode.length < 3){
+            this.intJobCode.push(jobId);
+          } else{
+            this.$notify.warning({
+              title: '提示',
+              message: '最多选择三个意向职位',
+              showClose: false,
+              duration: 1500
+            });
+          }
+          console.log(this.intJobCode);
+          // 层级太高
+          for (let i = 0,len = this.jobClassify.length;i < len;i++) {
+            for(let j = 0,len = this.intJobCode.length;j < len;j++) {
+              if (this.jobClassify[i].value == this.intJobCode[j]) {
+                this.tranIntJob.push(this.jobClassify[i].name);
+              }
             }
           }
-          this.secondBox = false;
         },
         SalaryCode(e) {
           let salaryId = e.currentTarget.getAttribute('city-id');
@@ -435,5 +450,15 @@
   }
   .city_cell{
     background-color: #f0f1f5;
+  }
+  /* 意向职位多选框 */
+  .check_box{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: #5082e6;
+  }
+  .check_box img{
+
   }
 </style>

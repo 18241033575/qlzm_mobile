@@ -285,14 +285,22 @@
       only_fam() {
         this.find_jobParam.page = 1;
         this.famFlag = !this.famFlag;
-        this.find_jobParam.has_m = this.famFlag == true?1:0;
-        this.getjobData(this.find_jobParam)
+        if (this.famFlag) {
+          this.find_jobParam.has_m = 1;
+        }else {
+          delete this.find_jobParam.has_m;
+        }
+        this.getjobData(this.find_jobParam);
       },
       only_ugent() {
         this.find_jobParam.page = 1;
         this.ugentFlag = !this.ugentFlag;
-        this.find_jobParam.is_urgent = this.ugentFlag == true?1:0;
-        this.getjobData(this.find_jobParam)
+        if (this.ugentFlag) {
+          this.find_jobParam.urgent = 1;
+        }else {
+          delete this.find_jobParam.urgent;
+        }
+        this.getjobData(this.find_jobParam);
       },
       rotate() {
         this.sort_sign = !this.sort_sign
@@ -460,8 +468,13 @@
         this.find_jobParam.province = this.$route.query.province;
       }
       if (this.$route.query.job_id) {
-        this.posTypeNum = this.find_jobParam.job_id = this.$route.query.job_id;
+        this.posTypeNum = this.find_jobParam.category = this.$route.query.job_id;
+        console.log(this.find_jobParam.job_id);
         this.tranPosType = transJobs(this.posTypeNum,1);
+      }
+      if (this.$route.query.ugent) {
+        this.ugentFlag = true;
+        this.find_jobParam.urgent = 1;
       }
       let data = this.find_jobParam;
       this.$ajax.get('/company_work',{params: data})
