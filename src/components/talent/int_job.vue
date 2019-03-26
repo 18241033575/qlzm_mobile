@@ -130,7 +130,7 @@
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {splicPic, transGender, transEducation, transWorkexp, transNature, transSalary, transArrive} from '../../../static/js/common.js'
+  import {transJobs, transNature, transSalary, transArrive} from '../../../static/js/common.js'
     export default {
         name: "int_job",
       components: {
@@ -157,49 +157,8 @@
             ProData: {},
             cityData: {},
             ArriveId: '',
-            cityCode: {
-
-            },
-            jobClassify: [
-              {"name": "意向职位选择", "value": 0, "type": "optgroup"},
-              {"name": "工程项目管理", "value": 16, "type":1, 'salary':15000},
-              {"name": "工程监理", "value": 17, "type":1, 'salary':10000},
-              {"name": "安全管理/安全员", "value": 18, "type":1, 'salary':7000},
-              {"name": "建筑工程验收", "value": 19, "type":1, 'salary':4500},
-              {"name": "建筑施工现场管理", "value": 20, "type":1, 'salary':6000},
-              {"name": "施工队长", "value": 21, "type":1, 'salary':10000},
-              {"name": "施工员", "value": 22, "type":1, 'salary':6000},
-              {"name": "工程设备管理", "value": 23, "type":1, 'salary':6000},
-              {"name": "建筑工程安全管理", "value": 24, "type":1, 'salary':7500},
-              {"name": "工程总监", "value": 25, "type":1, 'salary':15000},
-              {"name": "建筑工程师/总工", "value": 1, "type": 2, 'salary':20000},
-              {"name": "土木/土建工程师", "value": 2, "type": 2, 'salary':9000},
-              {"name": "造价师/预算师", "value": 3, "type": 2, 'salary':10000},
-              {"name": "幕墙工程师", "value": 4, "type": 2, 'salary':8000},
-              {"name": "安防工程师", "value": 5, "type": 2, 'salary':7000},
-              {"name": "道路桥梁技术", "value": 6, "type": 2, 'salary':8000},
-              {"name": "给排水/制冷/暖通", "value": 7, "type": 2, 'salary':6000},
-              {"name": "岩土工程师", "value": 8, "type": 2, 'salary':10000},
-              {"name": "水利/港口工程技术", "value": 9, "type": 2, 'salary':8000},
-              {"name": "市政工程师", "value": 10, "type": 2, 'salary':15000},
-              {"name": "综合布线/弱电", "value": 11, "type": 2, 'salary':11000},
-              {"name": "爆破工程师", "value": 12, "type": 2, 'salary':12000},
-              {"name": "楼宇自动化", "value": 13, "type": 2, 'salary':20000},
-              {"name": "架线和管道工程技术", "value": 14, "type": 2, 'salary':7000},
-              {"name": "土建勘察", "value": 15, "type": 2, 'salary':12000},
-              {"name": "测绘/测量", "value": 26,"type":3, 'salary':6000},
-              {"name": "园林/景观设计", "value": 27,"type":3, 'salary':8000},
-              {"name": "建筑设计师/制图师", "value": 28,"type":3, 'salary':6000},
-              {"name": "建筑制图", "value": 29,"type":3, 'salary':8500},
-              {"name": "室内装潢设计", "value": 30,"type":3, 'salary':7000},
-              {"name": "城市规划与设计", "value": 31,"type":3, 'salary':12500},
-              {"name": "软装设计师", "value": 32,"type":3, 'salary':10000},
-              {"name": "硬装设计师", "value": 33,"type":3, 'salary':9000},
-              {"name": "橱柜设计师", "value": 34,"type":3, 'salary':10500},
-              {"name": "资料员", "value": 35, "type":4, 'salary':6000},
-              {"name": "开发报建", "value": 36, "type":4, 'salary':6000},
-              {"name": "工程资料管理", "value": 37, "type":4, 'salary':5000}
-            ]
+            cityCode: {},
+            jobClassify: {}
           }
       },
       methods: {
@@ -229,6 +188,7 @@
             .then((res)=>{
               if (res.data.state == 200) {
                 this.int_job_edit = true;
+                this.getIntJob();
               }
             })
           // this.int_job_edit = true
@@ -284,7 +244,7 @@
           let areaCityCode = e.currentTarget.getAttribute('city-id');
           this.cityCode.city = areaCityCode;
           this.doubleBox = false;
-          this.intJobData.city = tranCity(this.cityCode,true,1)
+          this.intJobData.city = tranCity(this.cityCode,true,3)
         },
         TimeCode(e) {
           let arrId = e.currentTarget.getAttribute('city-id');
@@ -314,32 +274,36 @@
           this.showMsg = 'arr_time';
           this.CommonData = transArrive(this.CommonData,true,3);
         },
+        getIntJob() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
+            .then((res)=>{
+              if (res.data.state!= 400) {
+                this.cityCode.province = res.data.career_objective.work_province;
+                this.cityCode.city = res.data.career_objective.work_city;
+                this.ArriveId = res.data.career_objective.duty_time;
+                res.data.career_objective.province = res.data.career_objective.work_province;
+                res.data.career_objective.city = res.data.career_objective.work_city;
+                tranCity(res.data.career_objective,true,0);
+                tranProvince(res.data.career_objective,true);
+                transArrive(res.data.career_objective,true,0);
+                transNature(res.data.career_objective,1);
+                transSalary(res.data.career_objective,1);
+                this.intJobData = res.data.career_objective;
+
+                for (let i = 0,len = this.jobClassify.length; i < len;i++) {
+                  if (this.jobClassify[i].value == this.intJobData.job_id) {
+                    this.intJobData.tranJob_id = this.jobClassify[i].name;
+                  }
+                }
+                this.remark = this.intJobData.remark;
+              }
+            });
+        }
       },
       created() {
-        let userInfo = JSON.parse(localStorage.getItem('USER'));
-        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
-          .then((res)=>{
-            if (res.data.state!= 400) {
-              this.cityCode.province = res.data.career_objective.work_province;
-              this.cityCode.city = res.data.career_objective.work_city;
-              this.ArriveId = res.data.career_objective.duty_time;
-              res.data.career_objective.province = res.data.career_objective.work_province;
-              res.data.career_objective.city = res.data.career_objective.work_city;
-              tranCity(res.data.career_objective,true,0);
-              tranProvince(res.data.career_objective,true);
-              transArrive(res.data.career_objective,true,0);
-              transNature(res.data.career_objective,1);
-              transSalary(res.data.career_objective,1);
-              this.intJobData = res.data.career_objective;
-
-              for (let i = 0,len = this.jobClassify.length; i < len;i++) {
-                if (this.jobClassify[i].value == this.intJobData.job_id) {
-                  this.intJobData.tranJob_id = this.jobClassify[i].name;
-                }
-              }
-              this.remark = this.intJobData.remark;
-            }
-          });
+        this.jobClassify = transJobs(this.jobClassify,5);
+        this.getIntJob();
       }
     }
 </script>

@@ -193,10 +193,9 @@
           if (this.checked) {
             this.workexpAllData.end_time = 0;
           }else {
-            this.workexpAllData.end_time = JSON.stringify(this.value2).substring(1,11);
+            this.workexpAllData.end_time = this.value2.length == '10' ? this.value2 : JSON.stringify(this.value2).substring(1,11);
           }
-          this.workexpAllData.start_time = JSON.stringify(this.value1).substring(1,11);
-          console.log(this.workexpAllData.start_time);
+          this.workexpAllData.start_time = this.value1.length == '10' ? this.value1 : JSON.stringify(this.value1).substring(1,11);
           this.workexpAllData.nature = this.workNature;
           this.workexpAllData.industry = this.jobNature;
           this.workexpAllData.id = this.workexp_Id;
@@ -212,6 +211,7 @@
                   showClose: false,
                   duration: 1500
                 });
+                this.workExp();
               }
             })
         },
@@ -238,6 +238,7 @@
                   showClose: false,
                   duration: 1500
                 });
+                this.workExp();
               }else {
                 this.$notify.error({
                   title: '提示',
@@ -271,9 +272,8 @@
               this.jobNature = this.workData[i].industry;
             }
           }
-        }
-      },
-      created() {
+        },
+        workExp() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/resume/workexp',{params: {uid: userInfo.id}})
             .then((res)=>{
@@ -295,6 +295,10 @@
                 }
               }
             })
+        }
+      },
+      created() {
+          this.workExp();
       }
     }
 </script>

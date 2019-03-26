@@ -197,9 +197,8 @@
             return
           }
           // 邮箱验证
-         /* let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
-          console.log(re.test(this.form.email));
-          if (!re.test(this.form.email)) {
+          let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+          if (!re.test(this.form.tal_email)) {
             this.$notify.warning({
               title: '提示',
               message: '请输入正确的邮箱地址',
@@ -207,7 +206,7 @@
               duration: 1500
             });
             return
-          }*/
+          }
           if (this.tranPro == '') {
             this.$notify.warning({
               title: '提示',
@@ -245,13 +244,14 @@
             return
           }
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/resume/userinfo',{"flag": 1,photo: this.userMsg.photo,"name": this.form.tal_name, "province": this.cityCode.province, "city": this.cityCode.city, "area": this.cityCode.area, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
+          this.$ajax.post('/resume/userinfo',{"flag": 1,photo: this.userMsg.photo,"name": this.form.tal_name, "province": this.userMsg.province, "city": this.userMsg.city, "area": this.userMsg.area, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
                 // 提交但是没有生效
                 // 重新给userMsg赋值并处理数据
                 this.headPic = this.editHeadPic;
                 this.edit = true;
+                this.getInfo();
               }
             })
 
@@ -312,42 +312,45 @@
             this.userMsg.photo = url;
           }
         },
+        getInfo() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.userInfoMsg = userInfo;
+          this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
+            .then((res)=>{
+              if (res.data.state!= 400) {
+                //头像
+                if (res.data.base_info.photo != '') {
+                  this.editHeadPic = this.headPic = splicPic(res.data.base_info.photo, true);
+                }
+                this.beginData = res.data.base_info;
+                this.cityCode.province = res.data.base_info.province;
+                this.cityCode.city = res.data.base_info.city;
+                this.cityCode.area = res.data.base_info.area;
+                /*    tranArea(res.data.base_info,true,0);
+                    tranCity(res.data.base_info,true,0);
+                    tranProvince(res.data.base_info,true);*/
+
+                transGender(res.data.base_info,true);
+                transEducation(res.data.base_info,1);
+                transWorkexp(res.data.base_info,1,'tal');
+                this.userMsg = res.data.base_info;
+                this.tranPro = tranProvince(this.userMsg.province,true,'',2);
+                this.tranCity = tranCity(this.userMsg,true,3);
+                this.tranArea = tranArea(this.userMsg,true,3);
+                this.userMsg.name = this.userMsg.name == ''?this.userMsg.phone:this.userMsg.name;
+                this.form.tal_name = this.userMsg.name;
+                this.form.tal_idcard = this.userMsg.id_card;
+                this.form.tal_qq = this.userMsg.qq;
+                this.form.tal_email = this.userMsg.email;
+                this.form.tal_addr = this.userMsg.address;
+                this.form.tal_state = this.userMsg.work_status;
+              }
+            });
+        }
       },
       created() {
-        let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.loadAddr = file_upload();
-        this.userInfoMsg = userInfo;
-        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
-          .then((res)=>{
-            if (res.data.state!= 400) {
-              //头像
-              if (res.data.base_info.photo != '') {
-                this.editHeadPic = this.headPic = splicPic(res.data.base_info.photo, true);
-              }
-              this.beginData = res.data.base_info;
-              this.cityCode.province = res.data.base_info.province;
-              this.cityCode.city = res.data.base_info.city;
-              this.cityCode.area = res.data.base_info.area;
-              /*    tranArea(res.data.base_info,true,0);
-                  tranCity(res.data.base_info,true,0);
-                  tranProvince(res.data.base_info,true);*/
-
-              transGender(res.data.base_info,true);
-              transEducation(res.data.base_info,1);
-              transWorkexp(res.data.base_info,1,'tal');
-              this.userMsg = res.data.base_info;
-              this.tranPro = tranProvince(this.userMsg.province,true,'',2);
-              this.tranCity = tranCity(this.userMsg,true,3);
-              this.tranArea = tranArea(this.userMsg,true,3);
-              this.userMsg.name = this.userMsg.name == ''?this.userMsg.phone:this.userMsg.name;
-              this.form.tal_name = this.userMsg.name;
-              this.form.tal_idcard = this.userMsg.id_card;
-              this.form.tal_qq = this.userMsg.qq;
-              this.form.tal_email = this.userMsg.email;
-              this.form.tal_addr = this.userMsg.address;
-              this.form.tal_state = this.userMsg.work_status;
-            }
-          });
+        this.getInfo();
       },
     }
 </script>

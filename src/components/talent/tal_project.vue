@@ -47,7 +47,7 @@
             <span class="edit_lab">项目地点</span><input type="text" v-model="proAllData.address" placeholder="项目地点">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">项目规模(元)</span><input type="text" v-model="proAllData.scale" placeholder="项目规模">
+            <span class="edit_lab">项目规模(万)</span><input type="text" v-model="proAllData.scale" placeholder="项目规模">
           </div>
           <div class="edit_cell special_cell">
             <span class="edit_lab">在职时间</span>
@@ -193,9 +193,9 @@
         if (this.checked) {
           this.proAllData.end_time = 0;
         }else {
-          this.proAllData.end_time = JSON.stringify(this.value2).substring(1,11);
+          this.proAllData.end_time = this.value2.length == '10' ? this.value2 : JSON.stringify(this.value2).substring(1,11);
         }
-        this.proAllData.start_time = JSON.stringify(this.value1).substring(1,11);
+        this.proAllData.start_time = this.value1.length == '10' ? this.value1 : JSON.stringify(this.value1).substring(1,11);
         this.proAllData.id = this.pro_Id;
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.proAllData.uid = userInfo.id;
@@ -206,6 +206,14 @@
               this.$notify.success({
                 title: '提示',
                 message: '保存成功',
+                showClose: false,
+                duration: 1500
+              });
+              this.getPro();
+            }else {
+              this.$notify.error({
+                title: '提示',
+                message: res.data.msg,
                 showClose: false,
                 duration: 1500
               });
@@ -233,6 +241,7 @@
                 showClose: false,
                 duration: 1500
               });
+              this.getPro();
             }else {
               this.$notify.error({
                 title: '提示',
@@ -266,17 +275,20 @@
             this.proAllData.duties = this.projcetData[i].duties;
           }
         }
+      },
+      getPro() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.$ajax.get('/resume/projectexp',{params: {uid: userInfo.id}})
+          .then((res)=>{
+            console.log(res);
+            if (res.data.state != 400) {
+              this.projcetData = res.data;
+            }
+          })
       }
     },
     created() {
-      let userInfo = JSON.parse(localStorage.getItem('USER'));
-      this.$ajax.get('/resume/projectexp',{params: {uid: userInfo.id}})
-        .then((res)=>{
-          console.log(res);
-          if (res.data.state != 400) {
-            this.projcetData = res.data
-          }
-        })
+      this.getPro();
     }
   }
 </script>
