@@ -281,7 +281,7 @@
               if (res.data.state != 400) {
                 this.integral = res.data;
               }
-            })
+            });
 
           this.$ajax.get('/resume/view/' + this.uid,{params: {cid: companyInfo.id}})
             .then((res)=>{
@@ -394,9 +394,40 @@
                 });
             });
         } else {
-          this.$ajax.get('/resume/view/' + this.uid)
+          this.$ajax.get('/resume/view/' + this.uid,{params: {cid: 0}})
             .then((res)=>{
-              console.log(res);
+              // 公共部分
+              transWorkexp(res.data.base_info,1,'tal');
+              res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
+              this.userMsg = res.data.base_info;
+              // 求职意向
+              res.data.career.province = res.data.career.work_province;
+              res.data.career.city = res.data.career.work_city;
+              if (res.data.career.city == 0) {
+                res.data.career.city = '';
+              } else {
+                tranCity(res.data.career,true,0);
+              }
+              if (res.data.career.province == 0) {
+                res.data.career.province = '未知';
+              } else {
+                tranProvince(res.data.career,true);
+              }
+              // transArrive(res.data.career,true,0);
+              // transNature(res.data.career,1);
+              // transSalary(res.data.career,1);
+              this.intJobData = res.data.career;
+              this.remark = this.intJobData.remark;
+
+              let job = transJobs('',5);
+              this.intJobData.job_id = this.intJobData.job_id.split(',');
+              job.forEach((item)=>{
+                for (let i = 0,len = this.intJobData.job_id.length;i < len;i++) {
+                  if (item.value == this.intJobData.job_id[i]) {
+                    this.tranJob.push(item.name);
+                  }
+                }
+              });
             });
         }
       }

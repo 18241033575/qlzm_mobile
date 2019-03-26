@@ -180,20 +180,18 @@ function transWorkexp1(data,type,classify) {
     }
   }
 }
-function transGender(data,flag,type) {
+function transGender(data,type) {
   // gender：
   const gender = [
     "不限",
     "男",
     "女"
   ];
-  if (flag) {
     if (type == 5) {
       return gender
     } else {
       data.gender = gender[data.gender]
     }
-  }
 }
 function transJobs(data,type) {
   const jobs = [
@@ -419,7 +417,33 @@ function splicLogo(data,type) {
     }
   }
 }
-
+// 更新时间
+function updateTime(data,type) {
+    const Time = [
+      "不限",
+      "1天内",
+      "3天内",
+      "1周内",
+      "15天内",
+      "1个月内",
+    ];
+  if (type == 3) {
+      return Time
+  }
+}
+// 年龄要求
+function reqAge(data,type) {
+  const Age = [
+    "不限",
+    "18-25岁",
+    "25-30岁",
+    "30-35岁",
+    "35岁以上",
+  ];
+  if (type == 3) {
+    return Age
+  }
+}
 function splicFrontcover(data,num) {
   for (let i = 0; i < data.length; i++) {
     if (data[i].frontcover == '') {
@@ -604,5 +628,7 @@ export {
   getTrueAge,
   companyNature,
   companyScale,
-  file_upload
+  file_upload,
+  updateTime,
+  reqAge
 }

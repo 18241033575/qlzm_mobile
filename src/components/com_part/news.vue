@@ -8,7 +8,7 @@
     </div>
     <div class="news_total_list">
       <div class="content">
-        <div class="load">
+        <div class="load" id="news">
           <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
             <div class="news_total_cell" :news-id="item.id" v-for="(item,index) in newsData" :key="index" @click="news_total_det">
               <div class="news_total_cell_title">
@@ -47,8 +47,10 @@
             openState: false,
             newsData: {},
             pages: 1,
-            allLoaded: false,
-            req_state: false
+            allLoaded: true,
+            req_state: false,
+            pullSign: 0,
+            screenH: 0,
           }
       },
       methods: {
@@ -70,17 +72,27 @@
             .then((res)=>{
               if (res.data.code == 200) {
                 this.req_state = false;
-                this.allLoaded = false;
                 splicFrontcover(res.data.data,2);
                 this.newsData = res.data.data;
-                // this.bottomStatus = '';
-                // this.$refs.loadmore.onBottomLoaded();
+                this.$refs.loadmore.onBottomLoaded();
               }else {
                 this.req_state = true;
-                this.allLoaded = true;
               }
+              this.allLoaded = true;
             });
 
+        },
+        handleScroll () {
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+          let ch = document.querySelector('#news').clientHeight;
+          if (this.allLoaded && !this.req_state) {
+            if (scrollTop > ((ch/(this.pullSign + 1)) - this.screenH + ch * this.pullSign/(this.pullSign + 1))) {
+              this.allLoaded = false;
+              this.pullSign++;
+            }else{
+              this.allLoaded = true;
+            }
+          }
         },
       },
       created() {
@@ -94,7 +106,19 @@
                 this.newsData = res.data.data;
               }
             })
-      }
+      },
+      //获取屏幕高度
+      beforeMount() {
+        let h = document.documentElement.clientHeight || document.body.clientHeight;
+        // 90搜索栏高度
+        this.screenH = h - 45;
+      },
+      mounted() {
+        document.addEventListener('scroll', this.handleScroll)
+      },
+      destroyed () {
+        window.removeEventListener('scroll', this.handleScroll)
+      },
     }
 </script>
 

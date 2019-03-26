@@ -41,9 +41,9 @@
       </div>
     </div>
     <!--找工作-->
-    <div class="ugent">
+    <div class="ugent" id="findJob">
       <div class="content">
-        <div class="load" id="load">
+        <div class="load">
           <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
             <div class="ugent_cell" v-for="(item,index) in find_jobData" :key="index" :cid="item.cid" :id="item.id" @click="to_pos_det">
               <div class="ugent_top">
@@ -212,6 +212,7 @@
           row: 8,
           province: '520000'
         },
+        // 筛选条件状态
         workExpAct: 0,
         educationAct: 0,
         natureAct: 0,
@@ -222,6 +223,9 @@
         natureData: {},
         salaryData: {},
         offDayData: {},
+        // 上拉次数标识
+        pullSign: 0,
+        screenH: 0,
         guiyangData: {
           520100: '贵阳市',
           520200: '六盘水市',
@@ -327,7 +331,8 @@
       },
       secondBoxBg() {
         this.firstBox = false;
-        this.secondBox = false
+        this.secondBox = false;
+        this.outBox = false;
       },
       all_choose(e) {
         let partSign = e.currentTarget.getAttribute('data-sign');
@@ -373,26 +378,15 @@
         this.tranPosType = '全部';
         this.posTypeNum = 0;
         this.$route.query.job_id = '';
-        // 两次才能删除掉city
-        for(let key in this.find_jobParam){
-          console.log(this.find_jobParam[key]);
-          delete this.find_jobParam[key];
-        }
-        for(let key in this.find_jobParam){
-          console.log(2);
-          delete this.find_jobParam[key];
-        }
-        console.log(this.find_jobParam);
-       /* delete this.find_jobParam[city];
-        delete this.find_jobParam[work_exp];
-        delete this.find_jobParam[education];
-        delete this.find_jobParam[nature];
-        delete this.find_jobParam[salary];
-        delete this.find_jobParam[time];
-        delete this.find_jobParam[job_id];*/
+        this.find_jobParam = {};
+        this.find_jobParam.page = 1;
+        this.find_jobParam.row = 8;
+        this.find_jobParam.province = '520000';
       },
       filter_submit() {
+        this.outBox = false;
         this.find_jobParam.page = 1;
+        this.allLoaded = true;
         if (this.workExpAct != 0) {
           this.find_jobParam.work_exp = this.workExpAct;
         }
@@ -462,10 +456,15 @@
       },
       handleScroll () {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        // let windowHeight = window.clientHeight;
-        let offsetBottom = document.querySelector('#load').clientHeight;
-        console.log(scrollTop,offsetBottom);
-        scrollTop > 240 ? this.allLoaded = false : this.allLoaded = true;
+        let ch = document.querySelector('#findJob').clientHeight;
+        if (this.allLoaded && !this.req_state) {
+          if (scrollTop > ((ch/(this.pullSign + 1)) - this.screenH + ch * this.pullSign/(this.pullSign + 1))) {
+            this.allLoaded = false;
+            this.pullSign++;
+          }else{
+            this.allLoaded = true;
+          }
+        }
       },
     },
     created() {
@@ -514,6 +513,12 @@
       if (this.posTypeNum == '0') {
         this.tranPosType = '全部';
       }
+    },
+    //获取屏幕高度
+    beforeMount() {
+      let h = document.documentElement.clientHeight || document.body.clientHeight;
+      // 90搜索栏高度
+      this.screenH = h - 90;
     },
     mounted() {
       document.addEventListener('scroll', this.handleScroll)

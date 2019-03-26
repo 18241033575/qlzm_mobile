@@ -217,4 +217,73 @@
     height: 10px;
     vertical-align: middle;
   }
+  /*筛选弹层*/
+  .filter_all_box{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    /*overflow-y: scroll;*/
+    z-index: 9999999;
+  }
+  .filter_bg{
+    width: 10%;
+    height: 100vh;
+    background: rgba(0,0,0,.5);
+  }
+  .filter_det{
+    width: 90%;
+    height: 100vh;
+    overflow-y: scroll;
+    background-color: #ffffff;
+  }
+  .city_cell .filter_part1_cell{
+    padding: 0 10px;
+  }
+  .filter_part1_cell{
+    line-height: 44px;
+    font-size: 14px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #EAEAEA;
+    color: #353535;
+  }
+  .filter_part1_cell span{
+    color: #919199;
+  }
+  .filter_part1_cell img{
+    margin-left: 5px;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+  }
+  /*第二层*/
+  .filter_s_title{
+    line-height: 44px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #353535;
+    border-bottom: 1px solid #E1E4E6;
+  }
+  .filter_s_title img{
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
+  .second{
+    color: #919199;
+  }
+  .second img{
+    padding-top: 14px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+  }
 </style>
