@@ -29,7 +29,7 @@
               </div>
             </div>
           </div>
-          <div class="btn_group" v-if="!isLogin">
+          <div class="btn_group" v-if="!isLogin" @click="close_menu">
             <router-link :to="{name: 'login'}">
               <div class="sub_btn btn_size">
                 登录
@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-      <div class="menu_list">
+      <div class="menu_list" @click="close_menu">
         <div class="content">
           <router-link :to="{name: item.urlRoute}" v-for="(item,index) in menuList" :key="index">
             <div class="menu_list_cell" >
@@ -64,7 +64,7 @@
           default: true
         }
       },
-        name: "main_menu",
+      name: "main_menu",
       data() {
         return {
           menuList: {
@@ -126,14 +126,19 @@
           }else {
             this.$router.push({name: 'enterp_center'})
           }
+          this.nav_close();
         },
         exit() {
           this.$router.push({name: 'login'});
           localStorage.clear('COMPANY');
           localStorage.clear('USER');
+          this.nav_close();
+        },
+        close_menu() {
+          this.nav_close();
         }
       },
-      created() {
+      updated() {
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         if (userInfo) {
           this.center = '个人中心';

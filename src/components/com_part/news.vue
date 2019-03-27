@@ -26,25 +26,15 @@
         </div>
       </div>
     </div>
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {splicFrontcover,getDistanceTime} from '../../../static/js/common.js'
     export default {
-        name: "news",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "news",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             newsData: {},
             pages: 1,
             allLoaded: true,
@@ -54,14 +44,6 @@
           }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         news_total_det(e) {
           let id = e.currentTarget.getAttribute('news-id');
           this.$router.push({name: 'news_info',query:{id: id}});
@@ -70,17 +52,16 @@
           this.pages += 1;
           this.$ajax.post('/news',{page: this.pages,operate: 'news',limit: 10})
             .then((res)=>{
-              if (res.data.code == 200) {
+              if (res.data.code != 400) {
                 this.req_state = false;
                 splicFrontcover(res.data.data,2);
-                this.newsData = res.data.data;
+                this.newsData.push.apply(this.newsData,res.data.data);
                 this.$refs.loadmore.onBottomLoaded();
               }else {
                 this.req_state = true;
               }
               this.allLoaded = true;
             });
-
         },
         handleScroll () {
           let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;

@@ -72,25 +72,15 @@
           </div>
         </div>
       </div>
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {getTrueAge,transSalary,transEducation,transWorkexp} from '../../../static/js/common.js'
     export default {
-        name: "enterp_com_resume",
-      components: {
-        main_menu,
-        menu_list_pic,
-      },
+      name: "enterp_com_resume",
       data() {
         return {
-          /*总菜单状态*/
-          openState: false,
           opera_state: true,
           comTitle: '',
           boxState: false,
@@ -103,14 +93,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         // 简历操作事件
         moreOpera(e) {
           this.info_id = e.currentTarget.getAttribute('id');
@@ -157,18 +139,6 @@
                     }
                   }
                 });
-              /*  for (let i = 0,len = this.commonData.length; i < len;i++) {
-                  // 报错 暂时没有找到原因，功能正常
-                  if (this.commonData[i].id == this.info_id) {
-                    // 删除相应数组
-                    this.commonData.splice(i,1);
-                    if (this.commonData.length == 0 || this.commonData.length == '') {
-                      this.emptySign = true;
-                    }else {
-                      this.emptySign = false;
-                    }
-                  }
-                }*/
               }
             })
         },

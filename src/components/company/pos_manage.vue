@@ -38,26 +38,16 @@
         <img src="/static/images/ic_empty_data@2x.png" alt="">
         <p>暂无数据</p>
       </div>
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranCity} from  '../../../static/js/distpicker'
   import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../../static/js/common.js'
     export default {
-        name: "pos_manage",
-      components: {
-        main_menu,
-        menu_list_pic,
-      },
+      name: "pos_manage",
       data() {
         return {
-          /*总菜单状态*/
-          openState: false,
           opera_state: false,
           emptySign: false,
           isrelease: true,
@@ -67,14 +57,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         pos_opera(e) {
           this.id = e.currentTarget.getAttribute('id');
           this.cid = e.currentTarget.getAttribute('cid');

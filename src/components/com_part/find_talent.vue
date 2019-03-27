@@ -1,5 +1,5 @@
 <template>
-    <div class="find_talent" :class="{stop_scroll: this.openState || this.outBox}">
+    <div class="find_talent" :class="{stop_scroll: this.outBox}">
       <!--职位搜索-->
       <div class="search_job">
         <div class="content">
@@ -175,26 +175,16 @@
         <img src="/static/images/ic_empty_data@2x.png" alt="">
         <p>暂无数据</p>
       </div>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     </div>
 </template>
 
 <script>
-    import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {transSalary,getDistanceTime,transNature1,transEducation,transWorkexp1,transJobs,transGender,updateTime,reqAge} from '../../../static/js/common.js'
     export default {
         name: "find_talent",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
       data() {
         return {
-          /*总菜单状态*/
-          openState: false,
           emptySign: false,
           allLoaded: true,
           req_state: false,
@@ -256,14 +246,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         getTalData(param) {
           this.req_state = false;
           this.find_talParam.page = 1;

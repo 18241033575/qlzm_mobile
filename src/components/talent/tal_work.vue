@@ -1,6 +1,5 @@
 <template>
-    <div class="tal_work" :class="{stop_scroll: this.openState}">
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+    <div class="tal_work">
       <!--工作经历列表-->
       <div class="tal_work_msg" v-show="this.workExpSign">
         <div class="com_det_title">
@@ -77,7 +76,7 @@
               <span class="edit_lab">行业性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.jobNature==1}" @click="is_jobNature">建筑行业</span><span class="choose_cell" :class="{choose_active:this.jobNature==0}" @click="isn_jobNature">非建筑行业</span></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.workNature==1}" @click="man_workNature">管理岗</span><span class="choose_cell" :class="{choose_active:this.workNature==2}" @click="ski_workNature">技术岗</span><span class="choose_cell" :class="{choose_active:this.workNature==3}" @click="oth_workNature">其他</span></span>
+              <span class="edit_lab specail_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.workNature==1}" @click="man_workNature">管理岗</span><span class="choose_cell" :class="{choose_active:this.workNature==2}" @click="ski_workNature">技术岗</span><span class="choose_cell" :class="{choose_active:this.workNature==3}" @click="oth_workNature">其他</span></span>
             </div>
           </div>
         </div>
@@ -111,23 +110,14 @@
           </div>
         </div>
       </div>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "tal_work",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "tal_work",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             save_editSign: true,
             workData: {},
             workEditData: {},
@@ -155,14 +145,6 @@
           }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         add_work_exp() {
           this.save_editSign = true;
           this.workExpSign = false;
@@ -190,6 +172,54 @@
           this.workNature = 3
         },
         workexp_save() {
+          this.workexpAllData.company = this.workexpAllData.company.replace(/^\s*|\s*$/g,"");
+          if (this.workexpAllData.company == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '公司名称不能为空',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          this.workexpAllData.job = this.workexpAllData.job.replace(/^\s*|\s*$/g,"");
+          if (this.workexpAllData.job == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '职位名称不能为空',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          let reg = /^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;
+          if (!reg.test(this.workexpAllData.salary)) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入正确的税前月薪',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.value1 == '' || this.value1 == 0) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择开始时间',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.value2 == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择结束时间',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           if (this.checked) {
             this.workexpAllData.end_time = 0;
           }else {
@@ -295,7 +325,7 @@
                 }
               }
             })
-        }
+        },
       },
       created() {
           this.workExp();
@@ -305,4 +335,7 @@
 
 <style scoped>
   @import "../../../static/css/tal_resume.css";
+  .tal_work .edit_cell .specail_lab{
+    width: 65px;
+  }
 </style>

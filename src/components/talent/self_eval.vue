@@ -1,7 +1,6 @@
 <template>
     <!--自我评价-->
-  <div class="self_eval_all" :class="{stop_scroll: this.openState}">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+  <div class="self_eval_all">
     <!--自我评价信息-->
     <div class="self_eval_msg" v-show="this.selfEvalSign">
       <div class="com_det_title">
@@ -52,24 +51,15 @@
         </div>
       </div>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tal_adv} from '../../../static/js/common.js'
     export default {
-        name: "self_eval",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "self_eval",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             selfEvalSign: true,
             selfEvalData: {},
             tagsNum : {},
@@ -78,46 +68,57 @@
           }
       },
       methods: {
-          /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         selfEdit() {
           this.selfEvalSign = false;
         },
         selfSave() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.selfEvalData.flag = 3;
+          this.selfEvalData.uid = userInfo.id;
           this.selfEvalData.evaluation = this.evaluation;
+          this.selfEvalData.tags = [1,3,5];
           this.$ajax.post('/resume/userinfo',this.selfEvalData)
             .then((res)=>{
-              console.log(res);
               if (res.data.state == 200){
+                this.$notify.success({
+                  title: '提示',
+                  message: '保存成功',
+                  showClose: false,
+                  duration: 1500
+                });
                 this.selfEvalSign = true;
+                this.getEval();
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
             })
         },
         choose_adv(e) {
           let adv_sign = e.currentTarget.getAttribute('adv_sign');
           console.log(adv_sign);
+        },
+        getEval() {
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
+            .then((res)=>{
+
+              if (res.data.state!= 400) {
+                this.tagsNum = res.data.evaluation.tags;
+                this.selfEvalData = res.data.evaluation;
+                this.selfEvalData.tags = tal_adv(this.selfEvalData.tags,true);
+                this.evaluation = this.selfEvalData.evaluation
+              }
+            });
         }
       },
       created() {
         this.userTags = tal_adv(this.userTags,true,5);
-        let userInfo = JSON.parse(localStorage.getItem('USER'));
-        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
-          .then((res)=>{
-
-            if (res.data.state!= 400) {
-              this.tagsNum = res.data.evaluation.tags;
-              this.selfEvalData = res.data.evaluation;
-              this.selfEvalData.tags = tal_adv(this.selfEvalData.tags,true);
-              this.evaluation = this.selfEvalData.evaluation
-            }
-          });
+        this.getEval();
       }
     }
 </script>

@@ -34,24 +34,14 @@
           <p>骑驴找马是一个垂直于建筑行业的人才供需免费平台,平台依托建筑行业人力资源大数据,旨在解决建筑行业解决人才稀缺、人力资源信息不对称、中介泛滥导致人才成本居高不下、纠纷不断等问题为了保障诚信就业及诚信招聘的一方净土、 维护广大用户利益,我们提供了举报机制,欢迎广大用户举报中介及不诚信的企业或求职者。</p>
         </div>
       </div>
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "report",
-      components: {
-        main_menu,
-        menu_list_pic,
-      },
+      name: "report",
       data () {
         return {
-          /*总菜单状态*/
-          openState: false,
           reportType: 1,
           content: '',
           member_id: 0,
@@ -59,14 +49,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         honest_rep() {
           this.reportType = 1;
         },

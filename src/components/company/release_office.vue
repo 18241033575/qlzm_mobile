@@ -1,6 +1,5 @@
 <template>
-    <div class="release_office" :class="{stop_scroll: this.openState || scrollSign}">
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+    <div class="release_office" :class="{stop_scroll: scrollSign}">
       <div class="tal_msg_edit">
         <div class="com_det_title">
           <div class="content">
@@ -128,25 +127,16 @@
           </div>
         </div>
       </div>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {transWorkexp,transEducation,transSalary,transJobs} from '../../../static/js/common.js'
     export default {
-        name: "release_office",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "release_office",
       data() {
         return {
-          /*总菜单状态*/
-          openState: false,
           userMsg: {},
           secondBox: false,
           top_title: '',
@@ -196,14 +186,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         release() {
           // 输入限制判断
           this.form.office_name = this.form.office_name.replace(/^\s*|\s*$/g,"");

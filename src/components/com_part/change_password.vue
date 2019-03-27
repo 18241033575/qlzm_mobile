@@ -1,7 +1,6 @@
 <template>
   <!--修改密码-->
-  <div class="account_password" :class="{stop_scroll: this.openState}">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+  <div class="account_password">
     <div class="content">
       <div class="com_det_title">
           修改密码
@@ -15,23 +14,14 @@
         确定修改
       </div>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "change_password",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "change_password",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             param:　{
               old_password: '',
               password: '',
@@ -40,14 +30,6 @@
           }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         change_submit() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           let userInfo = JSON.parse(localStorage.getItem('USER'));
@@ -91,11 +73,6 @@
                 }
               })
           }
-          // this.$router.push({name: 'success_page',query:{orig: 'password'}})
-          /*this.$ajax.post('/perosnal/changepasswd',{old_password: this.old_password,password: this.password,config_password: this.config_password})
-            .then((res)=>{
-
-            })*/
         },
        }
     }

@@ -1,6 +1,5 @@
 <template>
-  <div class="tal_education" :class="{stop_scroll: this.openState}">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+  <div class="tal_education">
     <!--教育经历列表-->
     <div class="tal_work_msg" v-show="this.workExpSign">
       <div class="com_det_title">
@@ -111,24 +110,15 @@
         </div>
       </div>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {transEducation,transtime} from '../../../static/js/common.js'
   export default {
     name: "tal_education",
-    components: {
-      main_menu,
-      menu_list_pic
-    },
     data() {
       return {
-        /*总菜单状态*/
-        openState: false,
         save_editSign: true,
         eduData: {},
         operaData: {
@@ -149,23 +139,13 @@
         value2: '',
         checked: true,
         secondBox: false,
-        EduData: {
-
-        },
+        EduData: {},
         selectedVal: '0',
         transVal: '',
         edit_Id: ''
       }
     },
     methods: {
-      /*总菜单操作s*/
-      get_sign(data) {
-        this.openState = !data;
-      },
-      getIsopen(data) {
-        this.openState = data;
-      },
-      /*总菜单操作e*/
       add_work_exp() {
         this.save_editSign = true;
         this.workExpSign = false;
@@ -188,6 +168,53 @@
         this.workNature = 3
       },
       saveEdu() {
+        this.operaData.school = this.operaData.school.replace(/^\s*|\s*$/g,"");
+        if (this.operaData.school == '') {
+          this.$notify.warning({
+            title: '提示',
+            message: '毕业院校不能为空',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        this.operaData.major = this.operaData.major.replace(/^\s*|\s*$/g,"");
+        if (this.operaData.major == '') {
+          this.$notify.warning({
+            title: '提示',
+            message: '专业不能为空',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        if (this.operaData.education == '' || this.operaData.education == 0) {
+          this.$notify.warning({
+            title: '提示',
+            message: '请选择学历',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        if (this.value1 == '' || this.value1 == 0) {
+          this.$notify.warning({
+            title: '提示',
+            message: '请选择开始时间',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        if (this.value2 == '') {
+          this.$notify.warning({
+            title: '提示',
+            message: '请选择结束时间',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.operaData.uid = userInfo.id;
         this.operaData.id = this.edit_Id;
@@ -200,6 +227,14 @@
               this.$notify.success({
                 title: '提示',
                 message: '保存成功',
+                showClose: false,
+                duration: 1500
+              });
+              this.getEdu();
+            }else {
+              this.$notify.error({
+                title: '提示',
+                message: res.data.msg,
                 showClose: false,
                 duration: 1500
               });
@@ -223,6 +258,7 @@
                 showClose: false,
                 duration: 1500
               });
+              this.getEdu();
             }else {
               this.$notify.error({
                 title: '提示',
@@ -272,19 +308,22 @@
             this.editMsg = '编辑教育经历'
           }
         }
+      },
+      getEdu() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.$ajax.get('/resume/eduexp',{params: {uid: userInfo.id}})
+          .then((res)=>{
+            if (res.data.state != 400) {
+              transEducation(res.data);
+              this.eduData = res.data;
+              // this.certData = res.data;
+            }
+          });
+        this.EduData = transEducation(this.EduData,3);
       }
     },
     created() {
-      let userInfo = JSON.parse(localStorage.getItem('USER'));
-      this.$ajax.get('/resume/eduexp',{params: {uid: userInfo.id}})
-        .then((res)=>{
-          if (res.data.state != 400) {
-            transEducation(res.data);
-            this.eduData = res.data;
-            // this.certData = res.data;
-          }
-        });
-      this.EduData = transEducation(this.EduData,3);
+      this.getEdu();
     }
   }
 </script>

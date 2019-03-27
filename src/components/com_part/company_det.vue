@@ -1,5 +1,5 @@
 <template>
-    <div class="company_det" :class="{stop_scroll: this.openState}">
+    <div class="company_det">
       <div class="company_det_top">
         <div class="com_det_title">
           <div class="content">
@@ -153,26 +153,16 @@
           <el-button type="primary" @click="tal_login">确 定</el-button>
         </span>
       </el-dialog>
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {transSalary,transNature,transEducation,transWorkexp,transComNature,transComScale,splicPic,company_adv} from '../../../static/js/common.js'
     export default {
-        name: "company_det",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "company_det",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             msg: "企业详情",
             companyMsg: {},
             contactData: {},
@@ -193,14 +183,6 @@
           }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         company_msg() {
           this.companyDetSign = true;
         },

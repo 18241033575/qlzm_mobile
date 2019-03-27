@@ -1,6 +1,6 @@
 <template>
   <!--简历详情-->
-    <div class="resume_det" :class="{stop_scroll: this.openState || this.resume_buy}">
+    <div class="resume_det" :class="{stop_scroll: this.resume_buy}">
       <div class="com_det_title">
         <div class="content">
           简历详情
@@ -155,26 +155,16 @@
           </div>
         </div>
       </div>
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {splicPic,transJobs,transEducation,transWorkexp} from '../../../static/js/common.js'
     export default {
-        name: "resume_det",
-      components: {
-        main_menu,
-        menu_list_pic,
-      },
+      name: "resume_det",
       data() {
         return {
-          /*总菜单状态*/
-          openState: false,
           uid: '',
           isBuy: false,
           resume_buy: false,
@@ -192,14 +182,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         interview() {
           this.$router.push({name: 'resume_invite',query: {uid: this.uid}})
         },
@@ -209,14 +191,34 @@
         },
         // 购买简历
         buyResume() {
-          this.resume_buy = true;
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if(userInfo){
+              this.$notify.warning({
+                title: '提示',
+                message: '个人无法购买简历',
+                showClose: false,
+                duration: 1500
+              });
+            }else if (!companyInfo) {
+              this.$notify.warning({
+                title: '提示',
+                message: '请先登录',
+                showClose: false,
+                duration: 800
+              });
+              setTimeout(()=>{
+                this.$router.push({name: 'login'});
+              },1000);
+            }else {
+            this.resume_buy = true;
+          }
         },
         resume_cancel() {
           this.resume_buy = false;
         },
         resume_confirm() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          let userInfo = JSON.parse(localStorage.getItem('USER'));
           if (companyInfo) {
             if (this.integral >= this.spend) {
               this.$ajax.get('/company_by_resume',{params: {cid: companyInfo.id,uid: this.uid,type: 'index'}})
@@ -240,23 +242,6 @@
 
 
             }
-          }else if(userInfo){
-            this.$notify.warning({
-              title: '提示',
-              message: '个人无法购买简历',
-              showClose: false,
-              duration: 1500
-            });
-          }else {
-            this.$notify.warning({
-              title: '提示',
-              message: '请先登录',
-              showClose: false,
-              duration: 800
-            });
-            setTimeout(()=>{
-              this.$router.push({name: 'login'});
-            },1000);
           }
         }
       },

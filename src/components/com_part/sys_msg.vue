@@ -1,7 +1,6 @@
 <template>
     <!--消息-->
-  <div class="sys_msg" :class="{stop_scroll: this.openState}">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+  <div class="sys_msg">
     <div class="com_det_title">
       <div class="content">
         消息
@@ -18,37 +17,20 @@
       <img src="/static/images/ic_empty_data@2x.png" alt="">
       <p>暂无数据</p>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "sys_msg",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "sys_msg",
       data() {
         return {
-          /*总菜单状态*/
-          openState: false,
           emptySign: false,
           msgData: {},
           inviteData: {}
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         msg_det(e) {
           let id = e.currentTarget.getAttribute('int-id');
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));

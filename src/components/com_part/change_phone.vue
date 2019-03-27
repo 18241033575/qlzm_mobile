@@ -1,6 +1,6 @@
 <template>
   <!--修改手机-->
-  <div class="account_phone" :class="{stop_scroll: this.openState}">
+  <div class="account_phone">
     <div class="com_det_title">
       <div class="content">
         修改手机号码
@@ -25,24 +25,14 @@
         确定修改
       </div>
     </div>
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "change_phone",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "change_phone",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             nowPhone: '',
             param: {
               phone: '',
@@ -64,14 +54,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         getCode() {
           if (this.param.phone.length < 11) {
             this.$notify.warning({

@@ -25,23 +25,13 @@
         <p>3、索取发票请前往“消费记录”页面，点击对应消费记录的“索取发票”按钮，工作人员将在收到申请后3个工作日内寄出发票。</p>
       </div>
     </div>
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "invoice_msg",
-      components: {
-        main_menu,
-        menu_list_pic,
-      },
+      name: "invoice_msg",
       data () {
         return {
-          /*总菜单状态*/
-          openState: false,
           menuList: {
             0: {
               urlName: "增值税发票信息设置",
@@ -61,16 +51,6 @@
           },
         }
       },
-      methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
-      }
     }
 </script>
 

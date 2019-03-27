@@ -1,6 +1,5 @@
 <template>
-    <div class="tal_cert" :class="{stop_scroll: this.openState}">
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+    <div class="tal_cert">
       <!--证书列表-->
       <div class="tal_work_msg" v-show="this.workExpSign">
         <div class="com_det_title">
@@ -47,7 +46,7 @@
               <span class="edit_lab">建造师增项</span><span class="int_job_det fr" @click="certAddition">{{this.certData.addition || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">注册情况</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.regState==0}" @click="man_workNature">不限</span><span class="choose_cell" :class="{choose_active:this.regState==1}" @click="ski_workNature">初始</span><span class="choose_cell" :class="{choose_active:this.regState==2}" @click="oth_workNature">转注</span></span>
+              <span class="edit_lab specail_lab">注册情况</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.regState==0}" @click="man_workNature">不限</span><span class="choose_cell" :class="{choose_active:this.regState==1}" @click="ski_workNature">初始</span><span class="choose_cell" :class="{choose_active:this.regState==2}" @click="oth_workNature">转注</span></span>
             </div>
           </div>
         </div>
@@ -107,23 +106,14 @@
           </div>
         </div>
       </div>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "tal_cert",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "tal_cert",
       data() {
         return {
-          /*总菜单状态*/
-          openState: false,
           save_editSign: true,
           workExpSign: true,
           certData: {},
@@ -150,14 +140,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         add_work_exp() {
           this.save_editSign = true;
           this.workExpSign = false;
@@ -326,6 +308,24 @@
           }
         },
         certSave() {
+          if (this.certTypeId == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择证书类型',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.certMajorId == '0') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择证书专业',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.post('/resume/certificate',{type: this.certTypeId,major: this.certMajorId,reg_status: this.regState,remark: this.remark,id:this.certEdit_id,uid: userInfo.id})
             .then((res)=>{
@@ -334,6 +334,14 @@
                 this.$notify.success({
                   title: '提示',
                   message: '保存成功',
+                  showClose: false,
+                  duration: 1500
+                });
+                this.getCert();
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
                   showClose: false,
                   duration: 1500
                 });
@@ -352,6 +360,7 @@
                   showClose: false,
                   duration: 1500
                 });
+                this.getCert();
               }else {
                 this.$notify.error({
                   title: '提示',
@@ -361,23 +370,22 @@
                 });
               }
             })
-        }
-      },
-      created() {
+        },
+        getCert() {
           // 证书数据添加到缓存中
-        let certData = JSON.parse(localStorage.getItem('CERT'));
-        if (!certData) {
-          this.$ajax.get('/allcerts')
-            .then((res)=>{
-              //  放入本地数据
-              let params = {};
-              params = JSON.stringify(res.data);
-              localStorage.setItem('CERT',params);
-              sessionStorage.setItem('CERT',params);
-            })
-        }
-        let userInfo = JSON.parse(localStorage.getItem('USER'));
-        this.$ajax.get('/resume/certificate',{params: {uid: userInfo.id}})
+          let certData = JSON.parse(localStorage.getItem('CERT'));
+          if (!certData) {
+            this.$ajax.get('/allcerts')
+              .then((res)=>{
+                //  放入本地数据
+                let params = {};
+                params = JSON.stringify(res.data);
+                localStorage.setItem('CERT',params);
+                sessionStorage.setItem('CERT',params);
+              })
+          }
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$ajax.get('/resume/certificate',{params: {uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state != 400) {
                 this.certAllData = res.data;
@@ -406,11 +414,17 @@
                 this.certData = res.data;
               }
             });
-
+        }
+      },
+      created() {
+        this.getCert();
       }
     }
 </script>
 
 <style scoped>
   @import "../../../static/css/tal_resume.css";
+  .tal_cert .edit_cell .specail_lab{
+    width: 65px;
+  }
 </style>

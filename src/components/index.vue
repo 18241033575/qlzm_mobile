@@ -1,6 +1,5 @@
 <template>
-  <div class="main" :class="{stop_scroll: this.openState}" v-wechat-title="$route.meta.title = webTitle">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+  <div class="main" v-wechat-title="$route.meta.title = webTitle">
     <!--头部-->
     <div class="head">
       <div class="content">
@@ -144,22 +143,15 @@
       <p>{{webCopy.copy}}</p>
       <p>{{webCopy.case}}</p>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 
 </template>
 
 <script>
-  import main_menu from '../components/common/main_menu'
-  import menu_list_pic from '../components/common/menu_list_pic'
   import {tranCity} from  '../../static/js/distpicker'
   import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../static/js/common.js'
     export default {
-        name: "index",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "index",
       data() {
           return{
             bannerList: {
@@ -186,12 +178,6 @@
           }
       },
       methods: {
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
         to_posDetail(e) {
           let id = e.currentTarget.getAttribute('data-id');
           let cid = e.currentTarget.getAttribute('cid');
@@ -219,11 +205,6 @@
           }
 
         }
-      },
-      watch: {
-        openState(curVal,oldVal){
-        },
-        deep:true
       },
       created() {
           // 急聘数据

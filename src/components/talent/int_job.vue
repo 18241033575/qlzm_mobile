@@ -1,6 +1,6 @@
 <template>
   <!--求职意向-->
-  <div class="int_job_all" :class="{stop_scroll: this.openState || this.secondBox}">
+  <div class="int_job_all" :class="{stop_scroll: this.secondBox}">
     <!--信息列表-->
     <div class="int_job" v-show="this.int_job_edit">
       <div class="com_det_title">
@@ -121,26 +121,16 @@
         </div>
       </div>
     </div>
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {transJobs, transNature, transSalary, transArrive} from '../../../static/js/common.js'
     export default {
-        name: "int_job",
-      components: {
-        main_menu,
-        menu_list_pic,
-      },
+      name: "int_job",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             int_job_edit: true,
             form: {
               work_nature: 1
@@ -162,14 +152,6 @@
           }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         edit_job() {
           this.int_job_edit = false
         },
@@ -178,6 +160,33 @@
             this.$notify.warning({
               title: '提示',
               message: '请选择意向岗位',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.intJobData.salary == '0' || this.intJobData.salary == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择期望薪资',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.cityCode == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择工作地区',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (this.ArriveId == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择到岗时间',
               showClose: false,
               duration: 1500
             });

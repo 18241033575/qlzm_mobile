@@ -1,7 +1,6 @@
 <template>
   <!--面试邀请记录-->
-    <div class="invited" :class="{stop_scroll: this.openState}">
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+    <div class="invited">
       <div class="com_det_title">
         <div class="content">
           面试邀请
@@ -18,56 +17,20 @@
         <img src="/static/images/ic_empty_data@2x.png" alt="">
         <p>暂无数据</p>
       </div>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "tal_invited",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "tal_invited",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             emptySign: false,
             invitedData: {},
             inviteData: {}
           }
       },
-      created() {
-          let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
-            .then((res)=>{
-              let rdata = {};
-              if (!res.data) {
-                this.inviteData = res.data;
-                for (let i = 0,len = res.data.length; i < len;i++) {
-                  rdata[i] = res.data[i].company;
-                  rdata[i].id = res.data[i].id;
-                  rdata[i].isRead = res.data[i].user_is_read
-                }
-                this.invitedData = rdata;
-                this.emptySign = false;
-              }else {
-                this.emptySign = true;
-              }
-            })
-      },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         invited_det(e) {
           let id = e.currentTarget.getAttribute('int-id');
           let userInfo = JSON.parse(localStorage.getItem('USER'));
@@ -77,7 +40,26 @@
             });
           this.$router.push({name: 'tal_invited_det',query: {id: id}})
         }
-      }
+      },
+      created() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
+          .then((res)=>{
+            let rdata = {};
+            if (res.data != '') {
+              this.inviteData = res.data;
+              for (let i = 0,len = res.data.length; i < len;i++) {
+                rdata[i] = res.data[i].company;
+                rdata[i].id = res.data[i].id;
+                rdata[i].isRead = res.data[i].user_is_read
+              }
+              this.invitedData = rdata;
+              this.emptySign = false;
+            }else {
+              this.emptySign = true;
+            }
+          })
+      },
     }
 </script>
 

@@ -97,33 +97,21 @@
         </div>
       </div>
     </div>
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "auto_recruit",
-      components: {
-        main_menu,
-        menu_list_pic,
-      },
+      name: "auto_recruit",
       data() {
         return {
-          /*总菜单状态*/
-          openState: false,
           isAuto: true,
           userMsg: {},
           secondBox: false,
           top_title: '',
           isUgent: true,
           scrollSign: false,
-          cityCode: {
-
-          },
+          cityCode: {},
           showMsg: '',
           beginData: {},
           //弹层数据标识、转换数据
@@ -160,14 +148,6 @@
         }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         ProCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
           this.cityCode[0] = cCode;

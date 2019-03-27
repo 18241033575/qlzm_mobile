@@ -1,6 +1,6 @@
 <template>
       <!--名企招聘-->
-    <div class="famous_pos" :class="{stop_scroll: this.openState}">
+    <div class="famous_pos">
       <div class="famous">
         <div class="famous_pos_title">
           <div class="content">
@@ -8,92 +8,102 @@
           </div>
         </div>
         <!--可以提取出来公共部分-->
-        <div class="famous_body">
+        <div class="famous_body" >
           <div class="content">
-            <ul
-              v-infinite-scroll="loadMore"
-              infinite-scroll-disabled="loading"
-              infinite-scroll-distance="8">
-            <li class="famous_cell" :cid="item.cid" :company-id="item.id" v-for="(item,index) in famData" :key="index" @click="to_comDetail">
-              <div class="famous_head fl">
-                <img :src="item.logo" alt="">
-              </div>
-              <div class="famous_msg fl">
-                <div class="famous_name">
-                  {{item.name}}
+            <div class="load" id="famouse">
+              <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
+                <div class="famous_cell" :cid="item.cid" :company-id="item.id" v-for="(item,index) in famData" :key="index" @click="to_comDetail">
+                  <div class="famous_head fl">
+                    <img :src="item.logo" alt="">
+                  </div>
+                  <div class="famous_msg fl">
+                    <div class="famous_name">
+                      {{item.name}}
+                    </div>
+                    <p>招聘职位<span>&nbsp;&nbsp;{{item.offices.length}}个</span></p>
+                  </div>
                 </div>
-                <p>招聘职位<span>&nbsp;&nbsp;{{item.offices.length}}个</span></p>
-              </div>
-            </li>
-            </ul>
+                <div class="bottom_line" v-show="req_state">
+                  我也是有底线的
+                </div>
+              </mt-loadmore>
+            </div>
           </div>
         </div>
       </div>
-      <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
-      <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
     </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {splicLogo} from '../../../static/js/common.js'
     export default {
         name: "famous_pos",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             famData: {},
             pages: 1,
             rows: 6,
-            loading: false
+            allLoaded: true,
+            req_state: false,
+            pullSign: 0,
+            screenH: 0,
           }
       },
-      created() {
-          this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
-            .then((res)=>{
-              if(res.data.state != 400) {
-                splicLogo(res.data);
-                this.famData = res.data
-              }
-            })
-      },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         to_comDetail(e) {
           let cid = e.currentTarget.getAttribute('cid');
           let id = e.currentTarget.getAttribute('company-cid');
           this.$router.push({name: 'company_det',query:{cid: cid,id: id}});
         },
-        loadMore() {
-          //滚动触发事件
-          this.loading = true;
-          setTimeout(() => {
-            this.rows +=6;
-            console.log(this.rows);
-            this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
-              .then((res)=>{
-                if(res.data.state != 400) {
-                  splicLogo(res.data);
-                  this.famData = res.data
-                }
-              })
-            this.loading = false;
-          }, 2500);
-        }
-      }
+        loadBottom() {
+          this.pages += 1;
+          this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
+            .then((res)=>{
+              if (res.data != '') {
+                this.req_state = false;
+                splicLogo(res.data);
+                this.famData.push.apply(this.famData,res.data);
+                this.$refs.loadmore.onBottomLoaded();
+              }else {
+                this.req_state = true;
+              }
+              this.allLoaded = true;
+            })
+        },
+        handleScroll () {
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+          let ch = document.querySelector('#famouse').clientHeight;
+          if (this.allLoaded && !this.req_state) {
+            if (scrollTop > ((ch/(this.pullSign + 1)) - this.screenH + ch * this.pullSign/(this.pullSign + 1))) {
+              this.allLoaded = false;
+              this.pullSign++;
+            }else{
+              this.allLoaded = true;
+            }
+          }
+        },
+      },
+      created() {
+        this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
+          .then((res)=>{
+            if(res.data.state != 400) {
+              splicLogo(res.data);
+              this.famData = res.data;
+            }
+          })
+      },
+      //获取屏幕高度
+      beforeMount() {
+        let h = document.documentElement.clientHeight || document.body.clientHeight;
+        // 90搜索栏高度
+        this.screenH = h - 45;
+      },
+      mounted() {
+        document.addEventListener('scroll', this.handleScroll)
+      },
+      destroyed () {
+        window.removeEventListener('scroll', this.handleScroll)
+      },
     }
 </script>
 

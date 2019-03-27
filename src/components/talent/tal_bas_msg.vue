@@ -1,6 +1,5 @@
 <template>
   <div class="tal_bas_msg_all" :class="{stop_scroll: this.openState || this.secondBox}">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
     <div class="tal_bas_msg" v-show="this.edit">
       <div class="com_det_title">
         <div class="content">
@@ -119,12 +118,9 @@
         </div>
       </div>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {splicPic,transGender,transEducation,transWorkexp,file_upload} from '../../../static/js/common.js'
     export default {
@@ -135,8 +131,6 @@
       },
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             userInfoMsg: {},
             userMsg: {},
             secondBox: false,
@@ -164,14 +158,6 @@
           }
       },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         to_edit() {
           this.edit = false;
         },

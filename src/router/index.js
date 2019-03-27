@@ -8,7 +8,10 @@ import enterp_reg from '@/components/reg_log/enterp_reg'
 import reg_type_choose from '@/components/reg_log/reg_type_choose'
 import login from '@/components/reg_log/login'
 
+// 全局组件
+import m_menu from '@/components/com_part/m_menu'
 
+Vue.use(m_menu);
 
 //公共组件
 import find_job from '@/components/com_part/find_job'

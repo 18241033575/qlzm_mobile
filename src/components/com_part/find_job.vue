@@ -1,6 +1,5 @@
 <template>
-  <div class="find_job" :class="{stop_scroll: this.openState || this.outBox}">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+  <div class="find_job" :class="{stop_scroll: this.outBox}">
     <!--职位搜索-->
     <div class="search_job">
       <div class="content">
@@ -160,7 +159,6 @@
         </div>
       </div>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
@@ -171,14 +169,8 @@
   import {transSalary,getDistanceTime,transNature1,transEducation,transWorkexp1,transArrive,transJobs} from '../../../static/js/common.js'
   export default {
     name: "find_job",
-    components: {
-      main_menu,
-      menu_list_pic
-    },
     data() {
       return {
-        /*总菜单状态*/
-        openState: false,
         emptySign: false,
         allLoaded: true,
         req_state: false,
@@ -241,10 +233,6 @@
       }
     },
     methods: {
-      /*总菜单操作s*/
-      get_sign(data) {
-        this.openState = !data;
-      },
       //排序
       sort_opera(e) {
         let sort_index = e.currentTarget.getAttribute('sort-num');
@@ -258,10 +246,6 @@
         this.sort_msg = this.sortList[sort_index];
         this.sort_sign = false
       },
-      getIsopen(data) {
-        this.openState = data;
-      },
-      /*总菜单操作e*/
       getjobData(param) {
         let data = param;
         this.$ajax.get('/company_work',{params: data})

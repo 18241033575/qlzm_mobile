@@ -101,14 +101,12 @@
 .choose_group{
   display: inline-block;
   margin-top: 10px;
-  width: 70%;
-  text-align: right;
   line-height: 24px;
 }
 .choose_cell{
   display: inline-block;
   margin-left: 10px;
-  width: 70px;
+  width: 65px;
   /*padding: 6px 12px;*/
   text-align: center;
   -webkit-box-sizing: border-box;

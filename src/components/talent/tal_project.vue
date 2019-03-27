@@ -1,6 +1,5 @@
 <template>
-  <div class="tal_project_all" :class="{stop_scroll: this.openState}">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+  <div class="tal_project_all">
     <!--项目经验列表-->
     <div class="tal_work_msg" v-show="this.workExpSign">
       <div class="com_det_title">
@@ -116,24 +115,14 @@
         </div>
       </div>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
-
   export default {
     name: "tal_project",
-    components: {
-      main_menu,
-      menu_list_pic
-    },
     data() {
       return {
-        /*总菜单状态*/
-        openState: false,
         save_editSign: true,
         projcetData: {},
         workExpSign: true,
@@ -160,14 +149,6 @@
       }
     },
     methods: {
-      /*总菜单操作s*/
-      get_sign(data) {
-        this.openState = !data;
-      },
-      getIsopen(data) {
-        this.openState = data;
-      },
-      /*总菜单操作e*/
       add_work_exp() {
         this.save_editSign = true;
         this.workExpSign = false;
@@ -190,6 +171,64 @@
         this.workNature = 3
       },
       pro_save() {
+        this.proAllData.project = this.proAllData.project.replace(/^\s*|\s*$/g,"");
+        if (this.proAllData.project == '') {
+          this.$notify.warning({
+            title: '提示',
+            message: '项目名称不能为空',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        this.proAllData.address = this.proAllData.address.replace(/^\s*|\s*$/g,"");
+        if (this.proAllData.address == '') {
+          this.$notify.warning({
+            title: '提示',
+            message: '项目地点不能为空',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        let reg = /^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;
+        if (!reg.test(this.proAllData.scale)) {
+          this.$notify.warning({
+            title: '提示',
+            message: '请输入正确的项目规模',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        this.proAllData.job = this.proAllData.job.replace(/^\s*|\s*$/g,"");
+        if (this.proAllData.job == '') {
+          this.$notify.warning({
+            title: '提示',
+            message: '个人职位不能为空',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        if (this.value1 == '' || this.value1 == 0) {
+          this.$notify.warning({
+            title: '提示',
+            message: '请选择开始时间',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        if (this.value2 == '') {
+          this.$notify.warning({
+            title: '提示',
+            message: '请选择结束时间',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
         if (this.checked) {
           this.proAllData.end_time = 0;
         }else {
@@ -280,7 +319,6 @@
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.$ajax.get('/resume/projectexp',{params: {uid: userInfo.id}})
           .then((res)=>{
-            console.log(res);
             if (res.data.state != 400) {
               this.projcetData = res.data;
             }

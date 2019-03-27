@@ -1,7 +1,6 @@
 <template>
     <!--屏蔽企业-->
-  <div class="tal_shield" :class="{stop_scroll: this.openState}">
-    <menu_list_pic ref="menu_list_pic" :give_pic="this.openState" v-show="!this.openState" v-on:sendIsopen="getIsopen"/>
+  <div class="tal_shield">
     <div class="com_det_title">
       <div class="content">
         屏蔽企业
@@ -18,46 +17,20 @@
         </ul>
       </div>
     </div>
-    <main_menu ref="main_menu" :give_shade="this.openState" v-on:give_sign="get_sign"/>
   </div>
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
-        name: "tal_shield",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "tal_shield",
       data() {
           return {
-            /*总菜单状态*/
-            openState: false,
             shieldSignState: true,
             company_name: '',
             shieldData: {},
           }
       },
-      created() {
-          let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.get('/personal/shield',{params:{uid: userInfo.id}})
-            .then((res)=>{
-              if(res.data.state != 400) {
-                this.shieldData = res.data;
-              }
-            })
-      },
       methods: {
-        /*总菜单操作s*/
-        get_sign(data) {
-          this.openState = !data;
-        },
-        getIsopen(data) {
-          this.openState = data;
-        },
-        /*总菜单操作e*/
         addShield() {
           this.shieldSignState = false
         },
@@ -115,8 +88,14 @@
             })
         }
       },
-      updated() {
-        // this.shieldData = this.shdData;
+      created() {
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        this.$ajax.get('/personal/shield',{params:{uid: userInfo.id}})
+          .then((res)=>{
+            if(res.data.state != 400) {
+              this.shieldData = res.data;
+            }
+          })
       }
     }
 </script>

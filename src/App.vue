@@ -1,12 +1,27 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{stop_scroll: this.openState}">
     <router-view/>
+    <m_menu ref="m_menu" :give_pic="this.openState" v-on:menu_state="getMenuState"/>
   </div>
 </template>
 
 <script>
+  import m_menu from './components/com_part/m_menu'
   export default {
-    name: 'App'
+    name: 'App',
+    components: {
+      m_menu,
+    },
+    data() {
+      return {
+        openState: false,
+      }
+    },
+    methods: {
+      getMenuState (data) {
+        this.openState = data;
+      }
+    }
   }
 </script>
 
