@@ -1,5 +1,5 @@
 <template>
-  <div class="tal_bas_msg_all" :class="{stop_scroll: this.openState || this.secondBox}">
+  <div class="tal_bas_msg_all" :class="{stop_scroll: this.secondBox}">
     <div class="tal_bas_msg" v-show="this.edit">
       <div class="com_det_title">
         <div class="content">
@@ -11,7 +11,7 @@
           <div class="top_pic">
             <img :src="this.headPic" alt="">
             <p class="tal_name">{{userMsg.name}}</p>
-            <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education}}</span>|<span>{{userMsg.work_exp}}</span></p>
+            <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education}}</span>|<span>{{userMsg.work_exp == 0?'一年以下':(userMsg.work_exp + '年')}}</span></p>
           </div>
           <div class="bottom_msg">
             <p><span class="left_lab">手机</span> <span class="right_msg">{{userInfoMsg.phone}}</span></p>
@@ -81,7 +81,7 @@
               <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">就业状态</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">已就业</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">待就业</span></span>
+              <span class="edit_lab">就业状态</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">在职</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">离职</span></span>
             </div>
           </div>
         </div>
@@ -124,11 +124,7 @@
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {splicPic,transGender,transEducation,transWorkexp,file_upload} from '../../../static/js/common.js'
     export default {
-        name: "tal_bas_msg",
-      components: {
-        main_menu,
-        menu_list_pic
-      },
+      name: "tal_bas_msg",
       data() {
           return {
             userInfoMsg: {},
@@ -304,6 +300,7 @@
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
+                console.log(res.data);
                 //头像
                 if (res.data.base_info.photo != '') {
                   this.editHeadPic = this.headPic = splicPic(res.data.base_info.photo, true);
@@ -318,7 +315,7 @@
 
                 transGender(res.data.base_info,true);
                 transEducation(res.data.base_info,1);
-                transWorkexp(res.data.base_info,1,'tal');
+                // transWorkexp(res.data.base_info,1,'tal');
                 this.userMsg = res.data.base_info;
                 this.tranPro = tranProvince(this.userMsg.province,true,'',2);
                 this.tranCity = tranCity(this.userMsg,true,3);

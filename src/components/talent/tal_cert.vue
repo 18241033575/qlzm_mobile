@@ -15,7 +15,7 @@
             <div class="content">
               <div class="exp_cell_box">
                 <div class="exp_head">
-                  {{item.trantype + '-' + item.tranmajor}}<span :cert-id="item.id" class="fr" @click="certEdit"><img src="/static/images/ic_edit.png" alt="">编辑</span>
+                  {{item.trantype}}-{{item.tranmajor || ''}}<span :cert-id="item.id" class="fr" @click="certEdit"><img src="/static/images/ic_edit.png" alt="">编辑</span>
                 </div>
                 <div class="bottom_msg">
                   <p><span class="left_lab">注册情况</span> <span class="right_msg">{{item.tranreg_status}}</span></p>
@@ -42,7 +42,7 @@
             <div class="edit_cell">
               <span class="edit_lab">证书专业</span><span class="int_job_det fr" @click="certMajor">{{this.certData.major || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
-            <div class="edit_cell">
+            <div class="edit_cell" v-show="certTypeId == 1 || certTypeId == 2">
               <span class="edit_lab">建造师增项</span><span class="int_job_det fr" @click="certAddition">{{this.certData.addition || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
@@ -161,16 +161,6 @@
         certType() {
           this.secondBox = true;
           let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           this.showMsg = 'cert_type';
           this.CommonData = certData;
           this.top_title = '选择证书类型'
@@ -178,16 +168,6 @@
         certMajor() {
           this.secondBox = true;
           let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           this.showMsg = 'cert_major';
           for (let i = 0,len = certData.length; i < len; i++) {
             if (certData[i].id == this.certTypeId) {
@@ -201,23 +181,14 @@
           this.showMsg = 'cert_add';
           this.top_title = '选择增项';
           let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           for (let i = 0,len = certData.length; i < len; i++) {
             if (certData[i].id == this.certTypeId) {
-              for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
-                if (certData[i].majors[j].id != this.certMajorId) {
-                  // this.CommonData.majors[j] = certData[i].majors[j];
+              certData[i].majors.forEach((item,index)=>{
+                if (item.id == this.certMajorId) {
+                  certData[i].majors.splice(index,1);
+                  this.CommonData =  certData[i].majors;
                 }
-              }
+              });
             }
           }
         },
@@ -226,16 +197,6 @@
           this.certTypeId = certId;
           this.secondBox = false;
           let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           for (let i = 0,len = certData.length; i < len; i++) {
             if (certData[i].id == certId) {
               this.certData.category = certData[i].category;
@@ -247,16 +208,6 @@
           this.certMajorId = majorId;
           this.secondBox = false;
           let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           for (let i = 0,len = certData.length; i < len; i++) {
             if (certData[i].id == this.certTypeId) {
               for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
@@ -268,7 +219,19 @@
           }
         },
         AddCode(e) {
-
+          let addId = e.currentTarget.getAttribute('city-id');
+          this.certAddId = addId;
+          this.secondBox = false;
+          let certData = JSON.parse(localStorage.getItem('CERT'));
+          for (let i = 0,len = certData.length; i < len; i++) {
+            if (certData[i].id == this.certTypeId) {
+              for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
+                if (certData[i].majors[j].id == addId) {
+                  this.certData.addition = certData[i].majors[j].major
+                }
+              }
+            }
+          }
         },
         certEdit(e) {
           let certEditId = e.currentTarget.getAttribute('cert-id');
@@ -286,16 +249,6 @@
             }
           }
           let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
           for (let i = 0,len = certData.length; i < len; i++) {
             if (certData[i].id == this.certTypeId) {
               this.certData.category = certData[i].category;
@@ -326,8 +279,9 @@
             });
             return
           }
+
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/resume/certificate',{type: this.certTypeId,major: this.certMajorId,reg_status: this.regState,remark: this.remark,id:this.certEdit_id,uid: userInfo.id})
+          this.$ajax.post('/resume/certificate',{type: this.certTypeId,major: this.certMajorId,reg_status: this.regState,remark: this.remark,id:this.certEdit_id,uid: userInfo.id,addition: this.certAddId})
             .then((res)=>{
               if (res.data.state == 200) {
                 this.workExpSign = true;

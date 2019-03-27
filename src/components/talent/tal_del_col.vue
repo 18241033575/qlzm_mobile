@@ -14,7 +14,7 @@
           </div>
           <div class="ugent_bottom">
             <span class="tags">{{item.office.city}}</span> | <span class="tags">{{item.office.work_exp}}</span> | <span class="tags">{{item.office.education}}</span> | <span
-            class="tags">{{item.office.nature}}</span><span class="update_time fr">{{item.office.up_time}}</span>
+            class="tags">{{item.office.nature}}</span><span class="update_time fr">{{item.up_time}}</span>
             <p><img v-if="item.office.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company.name}}</p>
           </div>
         </div>
@@ -62,7 +62,7 @@
                 transEducation(res.data,2);
                 transSalary(res.data,2,'office');
                 for (let i = 0,len = res.data.length;i < len;i++) {
-                  res.data[i].office.up_time = getDistanceTime(res.data[i],2,'office')
+                  res.data[i].up_time = getDistanceTime(res.data[i],3,'create');
                 }
                 this.del_colData = res.data;
                 this.emptySign = false;
@@ -82,7 +82,7 @@
                 getDistanceTime(res.data);
                 transSalary(res.data,2,'office');
                 for (let i = 0,len = res.data.length;i < len;i++) {
-                  res.data[i].office.up_time = getDistanceTime(res.data[i],2,'office')
+                  res.data[i].up_time = getDistanceTime(res.data[i],3,'create')
                 }
                 this.del_colData = res.data;
                 this.emptySign = false;

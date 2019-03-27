@@ -253,6 +253,13 @@ function getDistanceTime(time,type,off) {
     }else {
       return getDTime(time.updated_at)
     }
+  }else if (type == 3) {
+    if (off == 'create') {
+      return getDTime( time.created_at);
+    }else {
+      time.updated_at = time.updated_at == 0?time.created_at:time.updated_at;
+      return getDTime(time.updated_at);
+    }
   } else {
     return getDTime(time)
   }

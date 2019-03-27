@@ -1,6 +1,6 @@
 <template>
   <!--职位管理-->
-    <div class="pos_manage">
+    <div class="pos_manage" :class="{stop_scroll: this.opera_state}">
       <div class="com_det_title">
         <div class="content">
           职位管理
@@ -140,7 +140,7 @@
                 transEducation(res.data,0);
                 transSalary(res.data,2);
                 for (let i = 0,len = res.data.length;i < len;i++) {
-                  res.data[i].up_time = getDistanceTime(res.data[i],2)
+                  res.data[i].up_time = getDistanceTime(res.data[i],3)
                 }
                 this.manageData = res.data;
                 this.emptySign = false;
@@ -174,6 +174,9 @@
     font-size: 12px;
     color: #919199;
     line-height: 24px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .tal_det .s_sign{
     padding: 3px 4px;
