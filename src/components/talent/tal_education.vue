@@ -197,7 +197,9 @@
           });
           return
         }
-        if (this.value1 == '' || this.value1 == 0) {
+        this.operaData.start_time = transtime(this.value1);
+        this.operaData.end_time = transtime(this.value2);
+        if (this.value1 == '') {
           this.$notify.warning({
             title: '提示',
             message: '请选择开始时间',
@@ -206,7 +208,7 @@
           });
           return
         }
-        if (this.value2 == '') {
+        if (this.value2 == '' && this.value2 != 0) {
           this.$notify.warning({
             title: '提示',
             message: '请选择结束时间',
@@ -218,8 +220,7 @@
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.operaData.uid = userInfo.id;
         this.operaData.id = this.edit_Id;
-        this.operaData.start_time = JSON.stringify(this.value1).substring(1,11);
-        this.operaData.end_time = JSON.stringify(this.value2).substring(1,11);
+
         this.$ajax.post('/resume/eduexp',this.operaData)
           .then((res)=>{
             if (res.data.state == 200) {

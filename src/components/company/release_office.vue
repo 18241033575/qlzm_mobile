@@ -293,6 +293,10 @@
           if (this.form.hire_num == '' || this.form.hire_num == '若干') {
             this.form.hire_num = 0;
           }
+          this.$indicator.open({
+            text: 'Loading...',
+            spinnerType: 'fading-circle'
+          });
           this.form.ugent = this.isUgent == true?1:0;
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (this.id == 0) {
@@ -306,6 +310,7 @@
                     showClose: false,
                     duration: 800
                   });
+                  this.$indicator.close();
                   setTimeout(()=>{
                     this.$router.push({name: 'pos_manage'})
                   },1000)

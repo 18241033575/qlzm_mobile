@@ -114,6 +114,7 @@
 </template>
 
 <script>
+  import {transtime} from '../../../static/js/common.js'
     export default {
       name: "tal_work",
       data() {
@@ -202,7 +203,14 @@
             });
             return
           }
-          if (this.value1 == '' || this.value1 == 0) {
+
+          if (this.checked) {
+            this.workexpAllData.end_time = 0;
+          }else {
+            this.workexpAllData.end_time = transtime(this.value2);
+          }
+          this.workexpAllData.start_time = transtime(this.value1);
+          if (this.value1 == '') {
             this.$notify.warning({
               title: '提示',
               message: '请选择开始时间',
@@ -211,7 +219,7 @@
             });
             return
           }
-          if (this.value2 == '') {
+          if (this.value2 == '' && this.value2 != 0) {
             this.$notify.warning({
               title: '提示',
               message: '请选择结束时间',
@@ -220,12 +228,6 @@
             });
             return
           }
-          if (this.checked) {
-            this.workexpAllData.end_time = 0;
-          }else {
-            this.workexpAllData.end_time = this.value2.length == '10' ? this.value2 : JSON.stringify(this.value2).substring(1,11);
-          }
-          this.workexpAllData.start_time = this.value1.length == '10' ? this.value1 : JSON.stringify(this.value1).substring(1,11);
           this.workexpAllData.nature = this.workNature;
           this.workexpAllData.industry = this.jobNature;
           this.workexpAllData.id = this.workexp_Id;
