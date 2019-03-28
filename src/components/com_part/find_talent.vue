@@ -577,6 +577,7 @@
     position: sticky;
     top: 0;
     background-color: #ffffff;
+    z-index: 9999;
   }
 
   .filter_box {

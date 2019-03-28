@@ -294,7 +294,7 @@
             this.form.hire_num = 0;
           }
           this.$indicator.open({
-            text: 'Loading...',
+            text: '加载中...',
             spinnerType: 'fading-circle'
           });
           this.form.ugent = this.isUgent == true?1:0;

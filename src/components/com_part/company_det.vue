@@ -52,9 +52,9 @@
                 <div class="com_det_title msg_cell_fz">
                   企业风采
                 </div>
-                <div class="company_mien">
+                <div class="company_mien" :style="com_style" ref="mien">
                   <v-touch v-on:swipeleft="leftChangeImg" height="104px" v-on:swiperight="leftChangeImg">
-                    <div class="mien_cell fl" v-for="(item,index) in this.companyMien" :key="index">
+                    <div :style="com_mien" class="mien_cell fl" v-for="(item,index) in this.companyMien" :key="index">
                       <img :src="item" alt="">
                       <p></p>
                     </div>
@@ -174,12 +174,22 @@
             shadeSign: true,
             styleSign: true,
             dialogVisible: false,
+            com_style: {
+              marginLeft: 0,
+              width: '100%'
+            },
+            com_mien: {
+              width: 'auto'
+            },
             cid: 0,
             editorOption: {
               modules:{
                 toolbar: false,
               }
-            }
+            },
+            screenW: 0,
+            styleLength: 0,
+            indexMien: 0
           }
       },
       methods: {
@@ -221,7 +231,28 @@
         },
         leftChangeImg(e) {
           e.preventDefault();
-          console.log(e);
+          if (e.deltaX > 0 && this.indexMien > 0) {
+            // 向右滑
+            this.indexMien--;
+          }else if (e.deltaX < 0 && this.indexMien < this.styleLength - 1) {
+            // 向左滑
+            this.indexMien++;
+          }
+          this.com_style.marginLeft = -this.screenW * 0.8 * this.indexMien + 'px';
+       /*   if (typeof this.com_style.marginLeft == 'number') {
+            this.com_style.marginLeft = this.com_style.marginLeft + e.deltaX + 'px';
+            let ml2 = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)): 0;
+            this.com_style.marginLeft = ml2 + 50 > 0? 0 : ml2 + 'px';
+            let ml3 = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)) : 0;
+            this.com_style.marginLeft = ml3 - 50 < -(this.styleLength * this.screenW * 0.45 * 0.92)? -(this.styleLength * this.screenW * 0.45 * 0.92) + 'px' : ml3 + 'px';
+          }else {
+            let ml = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)) : 0;
+            this.com_style.marginLeft = ml + e.deltaX + 'px';
+            let ml2 = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)) : 0;
+            this.com_style.marginLeft = ml2 + 50 > 0? 0 : ml2 + 'px';
+            let ml3 = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)) : 0;
+            this.com_style.marginLeft = ml3 - 50 < -(this.styleLength * this.screenW * 0.45 * 0.92)? -(this.styleLength * this.screenW * 0.45 * 0.92) + 'px' : ml3 + 'px';
+          }*/
         }
       },
       created() {
@@ -239,6 +270,9 @@
               if (res.data.style.length == 0 || res.data.style == '') {
                 this.styleSign = false;
               } else {
+                this.styleLength = res.data.style.length;
+                this.com_style.width = res.data.style.length * 100 + '%';
+                this.com_mien.width = this.screenW * 0.8 + 'px';
                 this.styleSign = true;
               }
               this.companyMien = res.data.style;
@@ -277,6 +311,10 @@
               this.hotPosNum = res.data.data.length;*/
             }
           })
+      },
+      //获取屏幕高度
+      beforeMount() {
+        this.screenW = document.documentElement.clientWidth || document.body.clientWidth;
       },
     }
 </script>
@@ -451,12 +489,11 @@
   }
   /*风采*/
   .company_mien{
-    width: 800%;
     height: 104px;
-    transition: 2s;
+    transition: 1s;
   }
   .mien_cell{
-    width: 300px;
+    width: 33%;
     margin-right: 15px;
     text-align: center;
   }
