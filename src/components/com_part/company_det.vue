@@ -55,7 +55,7 @@
                 <div class="company_mien" :style="com_style" ref="mien">
                   <v-touch v-on:swipeleft="leftChangeImg" height="104px" v-on:swiperight="leftChangeImg">
                     <div :style="com_mien" class="mien_cell fl" v-for="(item,index) in this.companyMien" :key="index">
-                      <img :src="item" alt="">
+                      <img :src="item || '/static/images/article_def_img.png'" alt="">
                       <p></p>
                     </div>
                   </v-touch>
@@ -242,6 +242,8 @@
         }
       },
       created() {
+        //获取屏幕高度
+        this.screenW = document.documentElement.clientWidth || document.body.clientWidth;
         let cid = this.$route.query.cid;
         this.cid = cid;
         this.$ajax.get('/api/company/detail'+ '/' + cid)
@@ -286,21 +288,8 @@
               transNature(res.data.data,2);
               transSalary(res.data.data,2);
               this.hotPosData = res.data.data;
-              // 没有city字段
-              /*console.log(res.data.data);
-              tranCity(res.data.data,true,2);
-              transWorkexp(res.data.data,0,'com');
-              transEducation(res.data.data,0);
-              transNature(res.data.data,2);
-              transSalary(res.data.data,2);
-              this.hotPosData = res.data;
-              this.hotPosNum = res.data.data.length;*/
             }
           })
-      },
-      //获取屏幕高度
-      beforeMount() {
-        this.screenW = document.documentElement.clientWidth || document.body.clientWidth;
       },
     }
 </script>
