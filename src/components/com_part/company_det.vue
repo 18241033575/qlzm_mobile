@@ -120,22 +120,22 @@
                 </div>
                 <div class="company_contract">
                   <div class="company_contract_cell">
-                    <span class="label">联系人</span><span class="contract_msg">{{contactData.username}}</span>
+                    <span class="label">联系人</span><span class="contract_msg">{{ (contactData == null || contactData == undefined)?'':contactData.username }}</span>
                   </div>
                   <div class="company_contract_cell">
-                    <span class="label">手机</span><span class="contract_msg">{{contactData.phone}}</span>
+                    <span class="label">手机</span><span class="contract_msg">{{ (contactData == null || contactData == undefined)?'':contactData.phone}}</span>
                   </div>
                   <div class="company_contract_cell">
-                    <span class="label">座机</span><span class="contract_msg">{{contactData.tel}}</span>
+                    <span class="label">座机</span><span class="contract_msg">{{ (contactData == null || contactData == undefined)?'':contactData.tel}}</span>
                   </div>
                   <div class="company_contract_cell">
-                    <span class="label">微信</span><span class="contract_msg">{{contactData.wx}}</span>
+                    <span class="label">微信</span><span class="contract_msg">{{ (contactData == null || contactData == undefined)?'':contactData.wx}}</span>
                   </div>
                   <div class="company_contract_cell">
-                    <span class="label">QQ</span><span class="contract_msg">{{contactData.qq}}</span>
+                    <span class="label">QQ</span><span class="contract_msg">{{ (contactData == null || contactData == undefined)?'':contactData.qq}}</span>
                   </div>
                   <div class="company_contract_cell">
-                    <span class="label">邮箱</span><span class="contract_msg">{{contactData.email}}</span>
+                    <span class="label">邮箱</span><span class="contract_msg">{{ (contactData == null || contactData == undefined)?'':contactData.email}}</span>
                   </div>
                 </div>
               </div>
@@ -239,20 +239,6 @@
             this.indexMien++;
           }
           this.com_style.marginLeft = -this.screenW * 0.8 * this.indexMien + 'px';
-       /*   if (typeof this.com_style.marginLeft == 'number') {
-            this.com_style.marginLeft = this.com_style.marginLeft + e.deltaX + 'px';
-            let ml2 = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)): 0;
-            this.com_style.marginLeft = ml2 + 50 > 0? 0 : ml2 + 'px';
-            let ml3 = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)) : 0;
-            this.com_style.marginLeft = ml3 - 50 < -(this.styleLength * this.screenW * 0.45 * 0.92)? -(this.styleLength * this.screenW * 0.45 * 0.92) + 'px' : ml3 + 'px';
-          }else {
-            let ml = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)) : 0;
-            this.com_style.marginLeft = ml + e.deltaX + 'px';
-            let ml2 = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)) : 0;
-            this.com_style.marginLeft = ml2 + 50 > 0? 0 : ml2 + 'px';
-            let ml3 = this.com_style.marginLeft != 0 ? JSON.parse(this.com_style.marginLeft.substr(0, this.com_style.marginLeft.length- 2)) : 0;
-            this.com_style.marginLeft = ml3 - 50 < -(this.styleLength * this.screenW * 0.45 * 0.92)? -(this.styleLength * this.screenW * 0.45 * 0.92) + 'px' : ml3 + 'px';
-          }*/
         }
       },
       created() {
