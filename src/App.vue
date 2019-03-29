@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import m_menu from './components/com_part/m_menu'
+  import m_menu from './components/common/m_menu'
   export default {
     name: 'App',
     components: {

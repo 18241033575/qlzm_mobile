@@ -1,7 +1,11 @@
 <template>
     <!--骑驴找马-->
   <div class="donkey_horse">
-    骑驴找马
+    <div class="com_det_title">
+      <div class="content">
+        骑驴找马
+      </div>
+    </div>
   </div>
 </template>
 

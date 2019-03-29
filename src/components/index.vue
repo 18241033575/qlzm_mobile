@@ -139,19 +139,20 @@
       </div>
     </div>
     <!--底部-->
-    <div class="foot">
-      <p>{{webCopy.copy}}</p>
-      <p>{{webCopy.case}}</p>
-    </div>
+    <copyright></copyright>
   </div>
 
 </template>
 
 <script>
+  import copyright from '../components/common/copyright'
   import {tranCity} from  '../../static/js/distpicker'
   import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../static/js/common.js'
     export default {
       name: "index",
+      components:{
+        copyright
+      },
       data() {
           return{
             bannerList: {
@@ -172,9 +173,7 @@
             ugentData: {},
             famousData: {},
             newsData: {},
-            baseData: {},
             webTitle: '',
-            webCopy: {},
           }
       },
       methods: {
@@ -242,21 +241,12 @@
         this.$ajax.get('/get-system-configs')
           .then((res)=>{
             if (res.data.state != 400) {
-              this.baseData = res.data;
               let param = JSON.stringify(res.data);
               localStorage.setItem('BASSET',param);
               res.data.forEach((item,ids)=> {
                 // 网站title
                 if (item.id == 13) {
                   this.webTitle = item.value;
-                }
-                // 版权
-                if (item.id == 20) {
-                  this.webCopy.copy = item.value;
-                }
-                // 备案
-                if (item.id == 21) {
-                  this.webCopy.case = item.value;
                 }
               })
             }
@@ -489,15 +479,6 @@
     font-size: 14px;
     font-weight: bold;
   }
-  /*底部*/
-  .foot{
-    margin-top: 10px;
-    padding-top: 10px;
-    width: 100%;
-    height: 60px;
-    text-align: center;
-    color: #919199;
-    font-size: 12px;
-  }
+
 
 </style>

@@ -7,8 +7,8 @@
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
+  import main_menu from './main_menu'
+  import menu_list_pic from './menu_list_pic'
     export default {
         name: "m_menu",
       components: {

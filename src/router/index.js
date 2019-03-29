@@ -9,7 +9,7 @@ import reg_type_choose from '@/components/reg_log/reg_type_choose'
 import login from '@/components/reg_log/login'
 
 // 全局组件
-import m_menu from '@/components/com_part/m_menu'
+import m_menu from '@/components/common/m_menu'
 
 Vue.use(m_menu);
 
@@ -75,8 +75,9 @@ import my_integral from '@/components/company/my_integral'
 import records from '@/components/company/records'
 import demand_inv from '@/components/company/demand_inv'
 
-//个人中心组件
+//组件
 import main_menu from '@/components/common/main_menu'
+import copyright from '@/components/common/copyright'
 
 Vue.use(Router);
 
@@ -301,6 +302,11 @@ export default new Router({
       path: '/main_menu',
       name: 'main_menu',
       component: main_menu
+    },
+    {
+      path: '/copyright',
+      name: 'copyright',
+      component: copyright
     },
     //企业中心
     {

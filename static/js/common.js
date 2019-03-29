@@ -332,6 +332,8 @@ function tal_adv(data, flag,type) {
   if (flag) {
     if (type == 5) {
       return userTags
+    } else if(type == 3) {
+      return userTags[data];
     } else {
       for (let i = 0; i < transData.length; i++) {
         transData[i] = userTags[transData[i]]

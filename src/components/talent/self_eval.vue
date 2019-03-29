@@ -36,7 +36,10 @@
       <div class="eval_body">
         <div class="content">
           <div class="eval_body_top">
-            <div class="adv_cell" v-show="index != 0" :adv_sign="index" :class="{adv_sign_active: true}" v-for="(item,index) in userTags" :key="index" @click="choose_adv">
+            <div class="adv_cell" :adv_active="index" v-for="(item,index) in tagsNum"  @click="cancel_adv">
+              {{item}}
+            </div>
+            <div class="adv_cell adv_sign_active" v-show="index != 0" :adv_sign="index" v-for="(item,index) in userTags" :key="index" @click="choose_adv">
               {{item}}
             </div>
           </div>
@@ -100,7 +103,18 @@
         },
         choose_adv(e) {
           let adv_sign = e.currentTarget.getAttribute('adv_sign');
+          this.userTags.splice(adv_sign,1);
+          console.log(tal_adv(adv_sign, true,3));
+          this.tagsNum.push(tal_adv(adv_sign,true,3));
           console.log(adv_sign);
+          console.log(this.userTags);
+          console.log(this.tagsNum);
+        },
+        cancel_adv(e) {
+          let adv_active = e.currentTarget.getAttribute('adv_active');
+          console.log(adv_active);
+          console.log(this.userTags);
+          console.log(this.tagsNum);
         },
         getEval() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
@@ -108,16 +122,23 @@
             .then((res)=>{
 
               if (res.data.state!= 400) {
+                this.userTags = tal_adv(this.userTags,true,5);
                 this.tagsNum = res.data.evaluation.tags;
+                // 倒序不改变前面数据的序列号
+                this.tagsNum.sort((a,b)=>{
+                  return b-a;
+                });
+                this.tagsNum.forEach((item)=>{
+                    this.userTags.splice(item,1);
+                });
                 this.selfEvalData = res.data.evaluation;
                 this.selfEvalData.tags = tal_adv(this.selfEvalData.tags,true);
-                this.evaluation = this.selfEvalData.evaluation
+                this.evaluation = this.selfEvalData.evaluation;
               }
             });
         }
       },
       created() {
-        this.userTags = tal_adv(this.userTags,true,5);
         this.getEval();
       }
     }
