@@ -58,7 +58,7 @@
         if (userInfo) {
           this.$ajax.get('/personal/sysmsg',{params: {uid: userInfo.id}})
             .then((res)=>{
-              if (!res.data) {
+              if (res.data) {
                 this.msgData = res.data;
                 this.emptySign = false;
               }else {

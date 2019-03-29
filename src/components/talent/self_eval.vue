@@ -105,7 +105,7 @@
           let adv_sign = e.currentTarget.getAttribute('adv_sign');
           this.userTags.splice(adv_sign,1);
           console.log(tal_adv(adv_sign, true,3));
-          this.tagsNum.push(tal_adv(adv_sign,true,3));
+          this.tagsNum.push(adv_sign);
           console.log(adv_sign);
           console.log(this.userTags);
           console.log(this.tagsNum);
@@ -124,6 +124,7 @@
               if (res.data.state!= 400) {
                 this.userTags = tal_adv(this.userTags,true,5);
                 this.tagsNum = res.data.evaluation.tags;
+                console.log(this.tagsNum);
                 // 倒序不改变前面数据的序列号
                 this.tagsNum.sort((a,b)=>{
                   return b-a;

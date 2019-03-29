@@ -60,8 +60,7 @@
             <img class="msg_pic" src="/static/images/ic_news_me@2x.png" alt="">
             <div class="msg_list">
               <ul>
-                <li>您有一份双11专属权益待查收<span>3小时前</span></li>
-                <li>您有一份双11专属权益待查收<span>3小时前</span></li>
+                <li v-for="(item,index) in msgData">{{item.title || '系统消息'}}<span>{{item.created_at}}</span></li>
               </ul>
             </div>
             <div class="msg_tip" v-show="this.newNews">
@@ -113,7 +112,8 @@
             dev: 0,
             col: 0,
             down: 0,
-            newNews: false
+            newNews: false,
+            msgData: {}
           }
       },
       methods: {
@@ -123,6 +123,15 @@
       },
       created() {
         let userInfo = JSON.parse(localStorage.getItem('USER'));
+        // 获取消息
+        if (userInfo) {
+          this.$ajax.get('/personal/sysmsg',{params: {uid: userInfo.id}})
+            .then((res)=>{
+              this.msgData = res.data;
+              this.msgData.length = this.msgData.length > 2 ? 2 : this.msgData.length;
+            });
+        }
+
         //  预估薪资水平
         this.estimate_salary = userInfo.estimate_salary/1000 +　'K';
 
@@ -136,7 +145,7 @@
         this.$ajax.get('/personal/hasnewmsg',{params:{uid: userInfo.id}})
           .then((res)=>{
             if (res.data.state != 400) {
-              this.newNews = res.data ==0?false:true
+              this.newNews = res.data ==0?false:true;
             }
           });
         // 简历完整度
