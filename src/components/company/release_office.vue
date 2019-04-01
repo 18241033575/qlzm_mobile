@@ -13,7 +13,7 @@
                 <span class="edit_lab">职位名称</span><input type="text" maxlength="15" v-model="form.office_name" placeholder="请输入职位名称">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">招聘人数</span><input type="number" @keyup.native="hire_num" v-model="form.hire_num" placeholder="招聘人数，默认为“若干”">
+                <span class="edit_lab">招聘人数</span><input type="number" v-model="form.hire_num" placeholder="招聘人数，默认为“若干”">
               </div>
               <div class="edit_cell">
                 <span class="edit_lab">职位类别</span><span class="int_job_det fr" @click="pos_type" >{{tranPosType || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -48,7 +48,7 @@
               <div class="edit_cell">
                 <span class="edit_lab">性别限制</span><span class="fr choose_group la_choose_group"><span class="choose_cell" :class="{choose_active:this.genderNum == 0}" @click="all_sex">不限</span><span class="choose_cell" :class="{choose_active:this.genderNum == 1}" @click="man_sex">男</span><span class="choose_cell" :class="{choose_active:this.genderNum == 2}" @click="woman_sex">女</span></span>
               </div>
-              <div class="edit_cell">
+              <div class="edit_cell" @click="pos_adv">
                 <span class="edit_lab">职位亮点</span><span class="int_job_det fr"><img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell" @click="pos_desc">
@@ -67,6 +67,21 @@
         </div>
       </div>
 
+      <!--职位亮点-->
+      <div class="ent_intro" v-show="tagsSign">
+        <div class="filter_s_title">
+          <div class="content">
+            <img @click="intro_back" src="/static/images/left.png" alt="left">职位亮点
+          </div>
+        </div>
+        <div class="content">
+          <p class="com_adv">选择职位亮点，提升职位吸引力，有效增加职位投递！ (最多可选择 8 个)</p>
+          <span class="adv_cell" @click="choose_adv" :class="{adv_sign_active: item.choose == 1}" v-for="(item,index) in advData" :adv-id="item.id" :key="index">{{item.value}}</span>
+        </div>
+        <div class="bas_msg_btn" @click="intro_sub">
+          确定
+        </div>
+      </div>
       <!--职位描述-->
       <div class="ent_intro" v-show="introSign">
         <div class="filter_s_title">
@@ -146,6 +161,7 @@
           showMsg: '',
           beginData: {},
           id: 0,
+          tagsSign: false,
           introSign: false,
           duty: '',
           //弹层数据标识、转换数据
@@ -160,7 +176,7 @@
             salary: 0
           },
           tranSalary: '',
-          educationNum: 0,
+          educationNum: '',
           tranEdu: '',
           workexpNum: 0,
           tranWorkexp: '',
@@ -178,9 +194,13 @@
             ugent: 0
           },
           //遍历数据
+          advData:　{},
           CommonData: {},
           addrData: {},
           infoData: {},
+          tagsNum: [],
+          // 提交的数据
+          subTags: [],
           // 名企标识
           has_m: 0
         }
@@ -261,7 +281,7 @@
             });
             return
           }
-          if (this.salaryNum == '0') {
+          if (this.salaryNum == '') {
             this.$notify.warning({
               title: '提示',
               message: '请选择薪资待遇',
@@ -270,7 +290,7 @@
             });
             return
           }
-          if (this.educationNum == '0') {
+          if (this.educationNum == '') {
             this.$notify.warning({
               title: '提示',
               message: '请选择学历要求',
@@ -279,11 +299,21 @@
             });
             return
           }
-          this.duty = this.duty.replace(/^\s*|\s*$/g,"");
           if (this.duty == '') {
             this.$notify.warning({
               title: '提示',
               message: '请填写职位描述',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+
+          this.duty = this.duty.replace(/^\s*|\s*$/g,"");
+          if (this.subTags == '') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请选择职位亮点',
               showClose: false,
               duration: 1500
             });
@@ -301,7 +331,7 @@
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (this.id == 0) {
             this.$ajax.post('/office/first-release',{office_name: this.form.office_name,has_m: this.has_m, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
-              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: [0,1],is_urgent: this.form.ugent})
+              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags,is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
                   this.$notify.success({
@@ -536,20 +566,53 @@
           this.scrollSign = false;
         },
         intro_sub() {
-          this.duty = this.infoData.duty;
+          if (this.introSign) {
+            this.duty = this.infoData.duty;
+            this.introSign = false;
+          }else {
+            this.subTags = this.tagsNum;
+            this.tagsSign = false;
+          }
           this.scrollSign = false;
-          this.introSign = false;
         },
         pos_desc() {
           this.scrollSign = true;
           this.introSign = true;
         },
-        hire_num() {
-          /*this.form.hire_num = this.form.hire_num.replace(/[^\.\d]/g,'');
-          this.form.hire_num = this.form.hire_num.replace('.','');*/
-        }
+        pos_adv(){
+          this.scrollSign = true;
+          this.tagsSign = true;
+        },
+        choose_adv(e) {
+          let adv_sign = e.currentTarget.getAttribute('adv-id');
+          for (let i = 0,len = this.advData.length;i < len;i++){
+            if (this.advData[i].id == adv_sign) {
+              if (this.advData[i].choose == 1) {
+                this.advData[i].choose = 0;
+                for (let j = 0,nlen = this.tagsNum.length;j < nlen;j++){
+                  if (this.tagsNum[j] == adv_sign){
+                    this.tagsNum.splice(j,1);
+                  }
+                }
+              } else{
+                if (this.tagsNum.length > 7){
+                  this.$notify.warning({
+                    title: '提示',
+                    message: '最多可以选择8个优势',
+                    showClose: false,
+                    duration: 1500
+                  });
+                } else {
+                  this.advData[i].choose = 1;
+                  this.tagsNum.push(adv_sign);
+                }
+              }
+            }
+          }
+        },
       },
       created() {
+          this.advData = JSON.parse(localStorage.getItem('COMPANYTAGS'));
           let certData = JSON.parse(localStorage.getItem('CERT'));
           if (!certData) {
             this.$ajax.get('/allcerts')
@@ -873,7 +936,6 @@
     height: 100vh;
     overflow: hidden;
     background-color: #ffffff;
-    z-index: 999999999;
   }
   .ent_intro .filter_s_title{
     -webkit-box-sizing: border-box;
@@ -896,5 +958,33 @@
   }
   .ent_intro textarea:focus{
     outline: none;
+  }
+  /* 职位亮点样式 */
+  .com_adv{
+    padding: 15px 0;
+    line-height: 18px;
+    font-size: 12px;
+    color: #ff8236;
+  }
+  .adv_cell{
+    display: inline-block;
+    padding: 9px 13px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: #dce6fa;
+    color: #5082e6;
+    font-size: 12px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .adv_sign_active{
+    background-color: #ffffff;
+    color: #919199;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #919199;
   }
 </style>

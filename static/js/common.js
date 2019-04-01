@@ -316,31 +316,22 @@ function transtime(t) {
   return JSON.stringify(T.getTime()).substring(0,10)
 }
 
-function tal_adv(data, flag,type) {
-  const userTags = [
-    "占位",
-    "技术好",
-    "经验丰富",
-    "高学历",
-    "形象好",
-    "善于沟通",
-    "能加班",
-    "能出差",
-    "有责任心"
-  ];
-  let transData = data;
-  if (flag) {
-    if (type == 5) {
-      return userTags
-    } else if(type == 3) {
-      return userTags[data];
-    } else {
-      for (let i = 0; i < transData.length; i++) {
-        transData[i] = userTags[transData[i]]
+function tal_adv(data,type) {
+  const userTags = JSON.parse(localStorage.getItem('USERTAGS'));
+  userTags.forEach((item)=>{
+    if (type == 1){
+
+    } else if(type == 2){
+      for (let i = 0,len = data.length;i < len;i++){
+        if (data[i] == item.id) {
+          data[i] = item.value;
+        }
       }
-      return transData;
+    }else {
+
     }
-  }
+  });
+  return data;
 }
 
 function company_adv(data, flag) {

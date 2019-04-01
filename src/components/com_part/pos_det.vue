@@ -306,7 +306,7 @@
             this.posDetData = res.data;
             this.shadeSign = this.posDetData.duty.length > 300?true:false;
             this.pos_categoty = this.posDetData.cert_type.category;
-            this.pos_categoty = this.posDetData.cert_major.major;
+            this.pos_major = this.posDetData.cert_major.major;
             transWorkexp(res.data,1,'company');
             this.has_mSign = this.posDetData.company_info.has_m == 1?true:false;
             this.companyName = this.posDetData.company_info.name

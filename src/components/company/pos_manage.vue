@@ -7,11 +7,11 @@
         </div>
       </div>
       <div class="resume_list">
-        <div class="resume_list_cell" v-for="(item,index) in this.manageData" :key="index">
+        <div class="resume_list_cell" :id="item.id" :cid="item.cid" @click="to_pos" v-for="(item,index) in this.manageData" :key="index">
           <div class="content">
-            <p class="tal_name"><span>{{item.office_name}}</span><img :id="item.id" :cid="item.cid" @click="pos_opera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
+            <p class="tal_name"><span>{{item.office_name}}</span><img :id="item.id" :cid="item.cid" @click.stop="pos_opera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
             <p class="tal_det"><span v-if="item.is_urgent == 1" class="s_sign ugent">急聘</span><span v-show="item.is_release == 0" class="s_sign unrelease">未发布</span><span v-show="item.is_release == 1" class="s_sign releaseing">发布中</span><span v-if="item.is_auto == 1" class="s_sign auto">自动</span><span>{{item.up_time}}</span><span>|</span><span>{{item.user_apply.length}}人投递</span></p>
-            <p class="tal_det"><span class="hope_salary">{{item.transalary}}</span><span>{{item.city}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.nature==1?'项目':'全职'}}</span></p>
+            <p class="tal_det"><span class="hope_salary">{{item.transalary}}</span><span>{{item.sex}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.hire_num == 0?'若干':item.hire_num + '人'}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.nature==1?'项目':'全职'}}</span></p>
           </div>
         </div>
       </div>
@@ -42,8 +42,7 @@
 </template>
 
 <script>
-  import {tranCity} from  '../../../static/js/distpicker'
-  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,splicLogo,splicFrontcover} from '../../../static/js/common.js'
+  import {transSalary,getDistanceTime,transEducation,transWorkexp} from '../../../static/js/common.js'
     export default {
       name: "pos_manage",
       data() {
@@ -66,6 +65,11 @@
             }
           }
           this.opera_state = true;
+        },
+        to_pos(e){
+          let id = e.currentTarget.getAttribute('id');
+          let cid = e.currentTarget.getAttribute('cid');
+          this.$router.push({name: 'pos_det',query:{id: id,cid: cid}});
         },
         cancel_opera() {
           this.opera_state = false;
@@ -135,14 +139,21 @@
           this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
             .then((res)=>{
               if (res.data) {
-                tranCity(res.data,true,2);
                 transWorkexp(res.data,0);
                 transEducation(res.data,0);
                 transSalary(res.data,2);
                 for (let i = 0,len = res.data.length;i < len;i++) {
-                  res.data[i].up_time = getDistanceTime(res.data[i],3)
+                  res.data[i].up_time = getDistanceTime(res.data[i],3);
+                  if (res.data[i].sex == 0){
+                    res.data[i].sex = '不限'
+                  } else if (res.data[i].sex == 1) {
+                    res.data[i].sex = '男'
+                  }else{
+                    res.data[i].sex = '女'
+                  }
                 }
                 this.manageData = res.data;
+                console.log(this.manageData);
                 this.emptySign = false;
               }else {
                 this.emptySign = true;

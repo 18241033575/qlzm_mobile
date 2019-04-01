@@ -91,6 +91,13 @@
                 }
               })
           }
+      },
+      created() {
+        // 获取个人优势字典
+        this.$ajax.get('/personal/get-advantages')
+          .then((res)=>{
+            localStorage.setItem('USERTAGS',JSON.stringify(res.data));
+          });
       }
     }
 </script>

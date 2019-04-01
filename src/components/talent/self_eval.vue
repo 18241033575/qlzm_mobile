@@ -11,7 +11,7 @@
       <div class="eval_body">
         <div class="content">
           <div class="eval_body_top">
-            <div class="adv_cell" v-for="(item,index) in this.selfEvalData.tags" :key="index">
+            <div class="adv_cell" v-for="(item,index) in selfEvalData.tags" :key="index">
               {{item}}
             </div>
           </div>
@@ -36,11 +36,8 @@
       <div class="eval_body">
         <div class="content">
           <div class="eval_body_top">
-            <div class="adv_cell" :adv_active="index" v-for="(item,index) in tagsNum"  @click="cancel_adv">
-              {{item}}
-            </div>
-            <div class="adv_cell adv_sign_active" v-show="index != 0" :adv_sign="index" v-for="(item,index) in userTags" :key="index" @click="choose_adv">
-              {{item}}
+            <div class="adv_cell" :class="{adv_sign_active: item.choose == 1}" :adv_sign="item.id" v-for="(item,index) in userTags" :key="index" @click="choose_adv">
+              {{item.value}}
             </div>
           </div>
           <div class="eval_body_bottom">
@@ -79,7 +76,7 @@
           this.selfEvalData.flag = 3;
           this.selfEvalData.uid = userInfo.id;
           this.selfEvalData.evaluation = this.evaluation;
-          this.selfEvalData.tags = [1,3,5];
+          this.selfEvalData.tags = this.tagsNum;
           this.$ajax.post('/resume/userinfo',this.selfEvalData)
             .then((res)=>{
               if (res.data.state == 200){
@@ -103,37 +100,41 @@
         },
         choose_adv(e) {
           let adv_sign = e.currentTarget.getAttribute('adv_sign');
-          this.userTags.splice(adv_sign,1);
-          console.log(tal_adv(adv_sign, true,3));
-          this.tagsNum.push(adv_sign);
           console.log(adv_sign);
-          console.log(this.userTags);
-          console.log(this.tagsNum);
-        },
-        cancel_adv(e) {
-          let adv_active = e.currentTarget.getAttribute('adv_active');
-          console.log(adv_active);
-          console.log(this.userTags);
-          console.log(this.tagsNum);
+          for (let i = 0,len = this.userTags.length;i < len;i++){
+            if (this.userTags[i].id == adv_sign) {
+              if (this.userTags[i].choose == 1) {
+                this.userTags[i].choose = 0;
+                for (let j = 0,nlen = this.tagsNum.length;j < nlen;j++){
+                  if (this.tagsNum[j] == adv_sign){
+                    this.tagsNum.splice(j,1);
+                  }
+                }
+              } else{
+                this.userTags[i].choose = 1;
+                this.tagsNum.push(adv_sign);
+              }
+            }
+          }
         },
         getEval() {
+          this.userTags = JSON.parse(localStorage.getItem('USERTAGS'));
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
-
               if (res.data.state!= 400) {
-                this.userTags = tal_adv(this.userTags,true,5);
                 this.tagsNum = res.data.evaluation.tags;
-                console.log(this.tagsNum);
-                // 倒序不改变前面数据的序列号
-                this.tagsNum.sort((a,b)=>{
-                  return b-a;
-                });
-                this.tagsNum.forEach((item)=>{
-                    this.userTags.splice(item,1);
-                });
+                if (this.tagsNum != ''){
+                  this.tagsNum.forEach((item)=>{
+                    for (let i = 0,len = this.userTags.length;i < len;i++){
+                      if (this.userTags[i].id == item) {
+                        this.userTags[i].choose = 1;
+                      }
+                    }
+                  });
+                }
                 this.selfEvalData = res.data.evaluation;
-                this.selfEvalData.tags = tal_adv(this.selfEvalData.tags,true);
+                this.selfEvalData.tags = tal_adv(this.selfEvalData.tags,2);
                 this.evaluation = this.selfEvalData.evaluation;
               }
             });
@@ -158,6 +159,7 @@
   .adv_cell{
     width: 75px;
     line-height: 30px;
+    height: 30px;
     margin-right: 10px;
     margin-bottom: 10px;
     text-align: center;
