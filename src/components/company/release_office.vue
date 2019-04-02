@@ -76,7 +76,7 @@
         </div>
         <div class="content">
           <p class="com_adv">选择职位亮点，提升职位吸引力，有效增加职位投递！ (最多可选择 8 个)</p>
-          <span class="adv_cell" @click="choose_adv" :class="{adv_sign_active: item.choose == 1}" v-for="(item,index) in advData" :adv-id="item.id" :key="index">{{item.value}}</span>
+          <span class="adv_cell" @click="choose_adv" :class="{adv_sign_active: item.choose != 1}" v-for="(item,index) in advData" :adv-id="item.id" :key="index">{{item.value}}</span>
         </div>
         <div class="bas_msg_btn" @click="intro_sub">
           确定
@@ -348,7 +348,7 @@
               })
           } else {
             this.$ajax.post('/office/edit',{id: this.id,has_m: this.has_m,office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,is_release: 1,
-              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: [0,1],is_urgent: this.form.ugent})
+              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags,is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
                   this.$notify.success({
@@ -562,7 +562,11 @@
           this.scrollSign = false;
         },
         intro_back() {
-          this.introSign = false;
+          if (this.introSign) {
+            this.introSign = false;
+          }else {
+            this.tagsSign = false;
+          }
           this.scrollSign = false;
         },
         intro_sub() {
@@ -631,16 +635,14 @@
           .then((res)=>{
               this.has_m = res.data.has_m;
           });
-          if (this.id != 0) {
-            this.id = this.$route.query.id;
+        this.id = this.$route.query.id;
+        if (this.id != 0 || this.id != undefined) {
             // 获取职位列表
             this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
               .then((res)=>{
-                console.log(res.data);
                 if (res.data.state != 400) {
                   for (let i = 0,len = res.data.length;i < len;i++) {
                     if (res.data[i].id == this.id) {
-                      console.log(res.data[i]);
                       this.infoData.province = res.data[i].province;
                       this.tranPro = tranProvince(this.infoData.province,true,'',2);
                       this.infoData.city = res.data[i].city;
@@ -654,6 +656,13 @@
                       this.posTypeNum = res.data[i].job_id;
                       this.tranPosType = transJobs(this.posTypeNum,1);
                       this.certTypeNum = res.data[i].cert_categories_id;
+                      this.advData.forEach((item)=>{
+                        for (let k = 0,len = res.data[i].tags.length;k < len;k++) {
+                          if (res.data[i].tags[k] == item.id) {
+                              item.choose = 1;
+                          }
+                        }
+                      });
                       for (let i = 0,len = certData.length; i < len; i++) {
                         if (certData[i].id == this.certTypeNum) {
                           this.tranCertType = certData[i].category;

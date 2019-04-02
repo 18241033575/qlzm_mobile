@@ -70,7 +70,7 @@
         if (companyInfo) {
           this.$ajax.get('/company/get-messages',{params: {cid: companyInfo.id}})
             .then((res)=>{
-              if (!res.data) {
+              if (res.data) {
                 this.msgData = res.data;
                 this.emptySign = false;
               }else {

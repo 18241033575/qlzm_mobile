@@ -149,6 +149,10 @@
         }
       },
       methods: {
+        secondBoxBg() {
+          this.secondBox = false;
+          this.scrollSign = false;
+        },
         // 地址选择
         choose_pro() {
           this.secondBox = true;

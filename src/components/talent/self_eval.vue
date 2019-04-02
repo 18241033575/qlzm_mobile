@@ -36,7 +36,7 @@
       <div class="eval_body">
         <div class="content">
           <div class="eval_body_top">
-            <div class="adv_cell" :class="{adv_sign_active: item.choose == 1}" :adv_sign="item.id" v-for="(item,index) in userTags" :key="index" @click="choose_adv">
+            <div class="adv_cell" :class="{adv_sign_active: item.choose != 1}" :adv_sign="item.id" v-for="(item,index) in userTags" :key="index" @click="choose_adv">
               {{item.value}}
             </div>
           </div>
@@ -100,7 +100,6 @@
         },
         choose_adv(e) {
           let adv_sign = e.currentTarget.getAttribute('adv_sign');
-          console.log(adv_sign);
           for (let i = 0,len = this.userTags.length;i < len;i++){
             if (this.userTags[i].id == adv_sign) {
               if (this.userTags[i].choose == 1) {
@@ -123,7 +122,7 @@
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
-                this.tagsNum = res.data.evaluation.tags;
+                this.tagsNum = res.data.evaluation.tags.concat();
                 if (this.tagsNum != ''){
                   this.tagsNum.forEach((item)=>{
                     for (let i = 0,len = this.userTags.length;i < len;i++){

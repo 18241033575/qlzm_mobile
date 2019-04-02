@@ -12,7 +12,7 @@
     <div class="search">
       <div class="content">
         <div class="search_box">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="value"  @change="changed" placeholder="请选择">
           <el-option
           v-for="item in options"
           :key="item.value"
@@ -20,7 +20,7 @@
           :value="item.value">
           </el-option>
           </el-select>
-          <el-input class="search_text" v-model="search_text" placeholder="请输入关键词进行搜索！"></el-input>
+          <el-input class="search_text" v-model="search_text" :placeholder="placeholder_text"></el-input>
           <div class="search_btn" @click="search_all">
 
           </div>
@@ -169,6 +169,7 @@
             }],
             value: '1',
             search_text: "",
+            placeholder_text: '请输入名称、类型进行搜索',
             openState: false,
             ugentData: {},
             famousData: {},
@@ -202,7 +203,9 @@
               this.$router.push({name: 'find_talent',query:{office_name: this.search_text,province: '520000'}})
             }
           }
-
+        },
+        changed() {
+          this.placeholder_text = this.placeholder_text == '请输入名称、类型进行搜索'? '请输入类型进行搜索' : '请输入名称、类型进行搜索';
         }
       },
       created() {
@@ -250,7 +253,50 @@
                 }
               })
             }
-          })
+          });
+
+        //  字典
+        // 获取招聘优势字典
+        this.$ajax.get('/company/zhaopin-advantages')
+          .then((res)=>{
+            localStorage.setItem('COMPANYTAGS',JSON.stringify(res.data));
+          });
+        // 获取个人优势字典
+        this.$ajax.get('/personal/get-advantages')
+          .then((res)=>{
+            localStorage.setItem('USERTAGS',JSON.stringify(res.data));
+          });
+        // 获取到岗时间
+        this.$ajax.get('/tags/duty-time')
+          .then((res)=>{
+            localStorage.setItem('ARRIVETIME',JSON.stringify(res.data));
+          });
+        // 获取职位类别
+        this.$ajax.get('/base/get-jobs')
+          .then((res)=>{
+            localStorage.setItem('JOBTYPE',JSON.stringify(res.data));
+          });
+        // 获取月薪
+        this.$ajax.get('/tags/salary')
+          .then((res)=>{
+            localStorage.setItem('SALARY',JSON.stringify(res.data));
+          });
+        // 获取学历
+        this.$ajax.get('/tags/education')
+          .then((res)=>{
+            localStorage.setItem('EDUCATION',JSON.stringify(res.data));
+          });
+
+        // 获取企业性质
+        this.$ajax.get('/company/get-natures')
+          .then((res)=>{
+            localStorage.setItem('COMNATURE',JSON.stringify(res.data));
+          });
+        // 获取企业规模
+        this.$ajax.get('/company/get-scales')
+          .then((res)=>{
+            localStorage.setItem('COMSCALE',JSON.stringify(res.data));
+          });
       }
     }
 </script>

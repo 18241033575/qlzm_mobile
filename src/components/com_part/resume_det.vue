@@ -146,8 +146,11 @@
           <div class="box_title">
             提示
           </div>
-          <div class="box_msg">
+          <div class="box_msg" v-show="!this.isFree.is_free">
             当前积分:{{integral}}，本次花费积分:{{spend}},确定要购买么?
+          </div>
+          <div class="box_msg" v-show="this.isFree.is_free">
+            本次免费，剩余免费次数:{{isFree.free}}确定要购买么?
           </div>
           <div class="box_btn_group">
             <span class="box_btn confirm" @click="resume_confirm">确定</span>
@@ -167,6 +170,7 @@
         return {
           uid: '',
           isBuy: false,
+          isFree: false,
           resume_buy: false,
           userMsg: {},
           intJobData: {},
@@ -211,7 +215,12 @@
                 this.$router.push({name: 'login'});
               },1000);
             }else {
-            this.resume_buy = true;
+            // 本次是否免费
+            this.$ajax.get('/resume/buy/is-free',{params:{cid: companyInfo.id}})
+              .then((res)=>{
+                this.isFree = res.data;
+                this.resume_buy = true;
+              });
           }
         },
         resume_cancel() {
@@ -220,32 +229,53 @@
         resume_confirm() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (companyInfo) {
-            if (this.integral >= this.spend) {
-              this.$ajax.get('/company_by_resume',{params: {cid: companyInfo.id,uid: this.uid,type: 'index'}})
+            if (!this.isFree.is_free) {
+              if (this.integral >= this.spend) {
+                this.$ajax.get('/company_by_resume',{params: {cid: companyInfo.id,uid: this.uid,type: 'index'}})
+                  .then((res)=>{
+                    if (res.data.state == 200){
+                      this.$notify.success({
+                        title: '提示',
+                        message: '购买成功',
+                        showClose: false,
+                        duration: 1500
+                      });
+                      this.resume_buy = false;
+                    }
+                  })
+              } else {
+                // 关闭弹层 ---去充值
+                this.$notify.warning({
+                  title: '提示',
+                  message: '积分不足',
+                  showClose: false,
+                  duration: 800
+                });
+                setTimeout(()=>{
+                  this.$router.push({name: 'recharge'});
+                },1000);
+              }
+            }else {
+              this.$ajax.post('/resume/buy',{uid: this.uid, cid: companyInfo.id})
                 .then((res)=>{
-                  console.log(res);
+                  if (res.data.state == 200){
+                    this.$notify.success({
+                      title: '提示',
+                      message: '购买成功',
+                      showClose: false,
+                      duration: 1500
+                    });
+                    this.resume_buy = false;
+                  }
                 })
-            } else {
-
-
-
-
-
-              // 关闭弹层 ---去充值
-              this.$notify.warning({
-                title: '提示',
-                message: '积分不足',
-                showClose: false,
-                duration: 1500
-              });
-
-
-
             }
           }
         }
       },
       created() {
+
+
+
         this.uid = this.$route.query.uid;
         let certData = JSON.parse(localStorage.getItem('CERT'));
         if (!certData) {
@@ -555,7 +585,7 @@
     height: 100vh;
     overflow: hidden;
     background: rgba(0,0,0,.5);
-    z-index: 9999999;
+    /*z-index: 9999999;*/
   }
   .box{
     margin: 50% auto;

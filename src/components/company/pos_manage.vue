@@ -153,7 +153,6 @@
                   }
                 }
                 this.manageData = res.data;
-                console.log(this.manageData);
                 this.emptySign = false;
               }else {
                 this.emptySign = true;

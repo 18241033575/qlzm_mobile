@@ -12,7 +12,7 @@
             <span class="edit_lab">企业名称</span><input type="text" :readonly="true"  v-model="entName" placeholder="企业名称">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state == 0 && !uploadSign">
+            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state == -1 && !uploadSign">
             <el-upload
             class="avatar-uploader upload_btn"
             :action="this.loadAddr"
@@ -42,7 +42,7 @@
           </div>
         </div>
       </div>
-      <div class="enterp_button" v-show="identData.state == 0" @click="submitLicense">
+      <div class="enterp_button" v-show="identData.state == -1" @click="submitLicense">
         提交认证
       </div>
     </div>
@@ -84,7 +84,7 @@
                   showClose: false,
                   duration: 1500
                 });
-                location.reload();
+                this.identData = -2;
               }else {
                 this.$notify.error({
                   title: '提示',

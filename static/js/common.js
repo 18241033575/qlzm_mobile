@@ -316,6 +316,7 @@ function transtime(t) {
   return JSON.stringify(T.getTime()).substring(0,10)
 }
 
+// 人才优势
 function tal_adv(data,type) {
   const userTags = JSON.parse(localStorage.getItem('USERTAGS'));
   userTags.forEach((item)=>{

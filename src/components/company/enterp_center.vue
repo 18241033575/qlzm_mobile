@@ -100,13 +100,6 @@
         }
       },
       created() {
-        // 获取招聘优势字典
-        this.$ajax.get('/company/zhaopin-advantages')
-          .then((res)=>{
-            localStorage.setItem('COMPANYTAGS',JSON.stringify(res.data));
-          });
-
-
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
             .then((res)=>{
