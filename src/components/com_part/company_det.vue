@@ -258,6 +258,7 @@
         this.$ajax.get('/api/company/detail'+ '/' + cid)
           .then((res) => {
             if (res.data.state != 400) {
+              console.log(res.data);
               if (res.data.tags == '') {
                 this.tags_sign = false;
               } else {
@@ -281,7 +282,7 @@
               tranArea(res.data,true,1);
               tranCity(res.data,true,4);
               tranProvince(res.data,true);
-              console.log(res.data);
+              // console.log(res.data);
               transComScale(res.data,1);
               transComNature(res.data,1);
               this.companyMsg = res.data;
@@ -295,9 +296,9 @@
               this.hotPosNum = res.data.count;
               tranCity(res.data.data,true,2);
               transWorkexp(res.data.data,0);
-              transEducation(res.data.data,0);
+              transEducation(res.data.data,2);
               transNature(res.data.data,2);
-              transSalary(res.data.data,2);
+              transSalary(res.data.data,1);
               this.hotPosData = res.data.data;
             }
           })

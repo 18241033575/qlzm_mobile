@@ -113,7 +113,7 @@
 </template>
 
 <script>
-  import {companyNature,companyScale,file_upload,splicPic} from '../../../static/js/common.js'
+  import {file_upload,splicPic} from '../../../static/js/common.js'/*companyNature,companyScale*/
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
     export default {
       name: "enterp_info",
@@ -153,11 +153,11 @@
           this.secondBox = true;
           this.top_title = '企业性质';
           this.showMsg = 'entNature';
-          this.addrData = companyNature(this.addrData,3);
+          // this.addrData = companyNature(this.addrData,3);
         },
         ent_nature(e) {
           this.infoData.nature = e.currentTarget.getAttribute('posType-id');
-          this.tranNature = companyNature(this.infoData.nature,2);
+          // this.tranNature = companyNature(this.infoData.nature,2);
           this.secondBox = false;
         },
         // 企业规模
@@ -165,11 +165,11 @@
           this.secondBox = true;
           this.top_title = '企业规模';
           this.showMsg = 'entScale';
-          this.addrData = companyScale(this.addrData,3);
+          // this.addrData = companyScale(this.addrData,3);
         },
         ent_scale(e) {
           this.infoData.scale = e.currentTarget.getAttribute('city-id');
-          this.tranScale = companyScale(this.infoData.scale,2);
+          // this.tranScale = companyScale(this.infoData.scale,2);
           this.secondBox = false;
         },
         // 地址选择
@@ -326,8 +326,8 @@
             if(res.data.state != 400) {
               this.infoData = res.data;
               this.logoPic = splicPic(this.infoData.logo, true);
-              this.tranNature = companyNature(this.infoData.nature,2);
-              this.tranScale = companyScale(this.infoData.scale,2);
+            /*  this.tranNature = companyNature(this.infoData.nature,2);
+              this.tranScale = companyScale(this.infoData.scale,2);*/
               this.tranPro = tranProvince(this.infoData.province,true,'',2);
               this.tranCity = tranCity(this.infoData,true,3);
               this.tranArea = tranArea(this.infoData,true,3);

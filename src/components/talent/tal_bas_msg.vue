@@ -229,14 +229,24 @@
           this.$ajax.post('/resume/userinfo',{"flag": 1,photo: this.userMsg.photo,"name": this.form.tal_name, "province": this.userMsg.province, "city": this.userMsg.city, "area": this.userMsg.area, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
-                // 提交但是没有生效
-                // 重新给userMsg赋值并处理数据
+                this.$notify.success({
+                  title: '提示',
+                  message: '保存成功',
+                  showClose: false,
+                  duration: 1500
+                });
                 this.headPic = this.editHeadPic;
                 this.edit = true;
                 this.getInfo();
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
             })
-
         },
         // 地址选择
         choose_pro() {
@@ -300,7 +310,6 @@
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
-                console.log(res.data);
                 //头像
                 if (res.data.base_info.photo != '') {
                   this.editHeadPic = this.headPic = splicPic(res.data.base_info.photo, true);
@@ -309,13 +318,8 @@
                 this.cityCode.province = res.data.base_info.province;
                 this.cityCode.city = res.data.base_info.city;
                 this.cityCode.area = res.data.base_info.area;
-                /*    tranArea(res.data.base_info,true,0);
-                    tranCity(res.data.base_info,true,0);
-                    tranProvince(res.data.base_info,true);*/
-
                 transGender(res.data.base_info,true);
                 transEducation(res.data.base_info,1);
-                // transWorkexp(res.data.base_info,1,'tal');
                 this.userMsg = res.data.base_info;
                 this.tranPro = tranProvince(this.userMsg.province,true,'',2);
                 this.tranCity = tranCity(this.userMsg,true,3);

@@ -103,8 +103,8 @@
         </div>
         <div class="content">
           <div class="filter_part1">
-            <div v-for="(item,index) in EduData" :edu-id="index" :key="index" class="filter_part1_cell second" @click="EduCode">
-              {{item}}<img v-show="selectedVal == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            <div v-for="(item,index) in EduData" :edu-id="item.id" :key="index" class="filter_part1_cell second" @click="EduCode">
+              {{item.name}}<img v-show="selectedVal == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
           </div>
         </div>
@@ -274,7 +274,7 @@
         let eduVal = e.currentTarget.getAttribute('edu-id');
         this.selectedVal = eduVal;
         this.operaData.education = this.selectedVal;
-        this.transVal = transEducation(eduVal,4);
+        this.transVal = transEducation(eduVal,1);
         this.secondBox = false
       },
       secondBoxBg() {

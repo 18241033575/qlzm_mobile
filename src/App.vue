@@ -145,7 +145,7 @@
     top: 11px;
     width: 22px;
     height: 22px;
-    z-index: 88888;
+    z-index: 2;
   }
   .stop_scroll{
     width: 100%;
@@ -242,7 +242,7 @@
     height: 100vh;
     overflow: hidden;
     /*overflow-y: scroll;*/
-    z-index: 9999999;
+    z-index: 3;
   }
   .filter_bg{
     width: 10%;

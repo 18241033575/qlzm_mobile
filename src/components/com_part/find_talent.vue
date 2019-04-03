@@ -38,7 +38,7 @@
                 <div class="content">
                   <p class="tal_name">{{item.name}}<img :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
                   <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
-                  <p class="tal_det">期望薪资:<span class="hope_salary">{{item.transalary}}</span></p>
+                  <p class="tal_det">期望薪资:<span class="hope_salary">{{item.salary}}</span></p>
                 </div>
               </div>
               <div class="bottom_line" v-show="req_state">
@@ -180,7 +180,7 @@
 
 <script>
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {transSalary,getDistanceTime,transNature1,transEducation,transWorkexp1,transJobs,transGender,updateTime,reqAge} from '../../../static/js/common.js'
+  import {transSalary,getDistanceTime,transNature1,transEducation,transWorkexp,transJobs,transGender,updateTime,reqAge,getTrueAge} from '../../../static/js/common.js'
     export default {
         name: "find_talent",
       data() {
@@ -255,10 +255,11 @@
                 this.emptySign = true;
               } else {
                   tranCity(res.data.data,true,2);
-                  transWorkexp1(res.data.data,0);
-                  transEducation(res.data.data,0);
+                  transWorkexp(res.data.data,2);
+                  transEducation(res.data.data,2);
                   transNature1(res.data.data,2);
                   transSalary(res.data.data,2);
+                  getTrueAge(res.data.data,2);
                   for (let i = 0,len = res.data.data.length;i < len;i++) {
                     res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
                   }
@@ -400,10 +401,11 @@
                 }else {
                   this.req_state = false;
                   tranCity(res.data.data,true,2);
-                  transWorkexp1(res.data.data,0);
-                  transEducation(res.data.data,0);
+                  transWorkexp(res.data.data,2);
+                  transEducation(res.data.data,2);
                   transNature1(res.data.data,2);
                   transSalary(res.data.data,2);
+                  getTrueAge(res.data.data,2);
                   for (let i = 0,len = res.data.data.length;i < len;i++) {
                     res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
                   }
@@ -498,10 +500,11 @@
           .then((res)=>{
             if (res.data.state != 400) {
               tranCity(res.data.data,true,2);
-              transWorkexp1(res.data.data,0);
-              transEducation(res.data.data,0);
+              transWorkexp(res.data.data,2);
+              transEducation(res.data.data,2);
               transNature1(res.data.data,2);
               transSalary(res.data.data,2);
+              getTrueAge(res.data.data,2);
               for (let i = 0,len = res.data.data.length;i < len;i++) {
                 res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
               }
@@ -577,7 +580,7 @@
     position: sticky;
     top: 0;
     background-color: #ffffff;
-    z-index: 9999;
+    z-index: 3;
   }
 
   .filter_box {
@@ -648,29 +651,7 @@
     margin-left: 10px;
     color: #ff5959;
   }
-  /*筛选弹层*/
-  .filter_all_box{
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    /*overflow-y: scroll;*/
-    z-index: 9999999;
-  }
-  .filter_bg{
-    width: 10%;
-    height: 100vh;
-    background: rgba(0,0,0,.5);
-  }
-  .filter_det{
-    width: 90%;
-    height: 100vh;
-    overflow-y: scroll;
-    background-color: #ffffff;
-  }
+
   .filter_btn_group{
     position: fixed;
     bottom: 0;
@@ -744,7 +725,7 @@
     height: 100vh;
     overflow: hidden;
     background: rgba(0,0,0,.5);
-    z-index: 9999999;
+    z-index: 5;
   }
   .opera_list{
     width: 100%;

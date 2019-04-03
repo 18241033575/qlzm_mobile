@@ -271,6 +271,11 @@
           .then((res)=>{
             localStorage.setItem('ARRIVETIME',JSON.stringify(res.data));
           });
+        // 获取发布时间
+        this.$ajax.get('/base/get-time-limit')
+          .then((res)=>{
+            localStorage.setItem('RELEASETIME',JSON.stringify(res.data));
+          });
         // 获取职位类别
         this.$ajax.get('/base/get-jobs')
           .then((res)=>{

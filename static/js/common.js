@@ -211,6 +211,23 @@
     if (type == 3){
       return arrive_time;
     }else {
+      arrive_time.forEach((item)=>{
+        if(type == 0){
+          if (item.id == data){
+            return item.name;
+          }
+        } else if(type == 1){
+          if (item.id == data.duty_time){
+            data.duty_time = item.name;
+          }
+        }else if (type == 2){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].duty_time == item.id){
+              data[i].duty_time = item.name;
+            }
+          }
+        }
+      });
     /*  salary.forEach((item)=>{
         if(type == 0){
           if (item.id == data){
@@ -231,6 +248,13 @@
     }
   }
 
+  // 发布时间
+  function tranOffice_time() {
+    const office_time = JSON.parse(localStorage.getItem('RELEASETIME'));
+    if (type == 3){
+      return office_time;
+    }
+  }
   // 职位类别
   function transJobs(data,type) {
     const jobs = JSON.parse(localStorage.getItem('JOBTYPE'));
@@ -265,29 +289,98 @@
     }*/
   }
 
-
-
-/*字典部分*/
-function transNature(data,type,off) {
-  const nature = [
-    "全职",
-    "项目"
-  ];
-  let transData = data;
-  if (type == 2) {
-    if (off == 'office') {
-      for (let i = 0; i < transData.length; i++) {
-        transData[i].office.nature = nature[transData[i].office.nature]
+  // 工作性质
+  function transNature(data,type,off) {
+    const nature = [
+      {name: "不限",id: 0},
+      {name: "全职",id: 1},
+      {name: "项目",id: 2},
+    ];
+    if(type == 3){
+      return nature
+    }
+    nature.forEach((item)=>{
+      if(type == 0){
+        if (item.id == data){
+          return item.name;
+        }
+      } else if(type == 1){
+        if (item.id == data.nature){
+          data.nature = item.name;
+        }
+      }else if (type == 2){
+        for (let i = 0,len = data.length;i < len;i++){
+          if (data[i].nature == item.id){
+            data[i].nature = item.name;
+          }
+        }
       }
+    });
+   /* let transData = data;
+    if (type == 2) {
+      if (off == 'office') {
+        for (let i = 0; i < transData.length; i++) {
+          transData[i].office.nature = nature[transData[i].office.nature]
+        }
+      }else {
+        for (let i = 0; i < transData.length; i++) {
+          transData[i].nature = nature[transData[i].nature]
+        }
+      }
+    } else {
+      transData.nature = nature[transData.nature]
+    }*/
+  }
+  //工作经验
+  function transWorkexp(data,type,classify) {
+    const workexp = [
+      {name: "不限",id: 0 },
+      {name: "1年以下",id: 1 },
+      {name: "1-3年",id: 2 },
+      {name: "3-5年",id: 3 },
+      {name: "5-10年",id: 4 },
+      {name: "10年以上",id: 5 },
+    ];
+    if(type == 3){
+      return workexp
+    }
+    workexp.forEach((item)=>{
+      if(type == 0){
+        if (item.id == data){
+          return item.name;
+        }
+      } else if(type == 1){
+        if (item.id == data.work_exp){
+          data.work_exp = item.name;
+        }
+      }else if (type == 2){
+        for (let i = 0,len = data.length;i < len;i++){
+          if (data[i].work_exp == item.id){
+            data[i].work_exp = item.name;
+          }
+        }
+      }
+    });
+/*    let transData = data;
+    if (type == 5) {
+      return workexp
+    } else if(type == 4) {
+      return workexp[data]
+    }else if (type == 2) {
+      for (let i = 0; i < transData.length; i++) {
+        transData[i].office.work_exp = workexp[transData[i].office.work_exp]
+      }
+    }else if(type == 1) {
+      return transData.work_exp = workexp[transData.work_exp]
     }else {
       for (let i = 0; i < transData.length; i++) {
-        transData[i].nature = nature[transData[i].nature]
+        transData[i].work_exp = workexp[transData[i].work_exp]
       }
-    }
-  } else {
-      transData.nature = nature[transData.nature]
+    }*/
   }
-}
+
+/*字典部分*/
+
 function transNature1(data,type,off) {
   const nature = [
     "不限",
@@ -313,32 +406,7 @@ function transNature1(data,type,off) {
 }
 
 
-function transWorkexp(data,type,classify) {
-  //工作经验
-  let workexp = [
-    "1年以下",
-    "1-3年",
-    "3-5年",
-    "5-10年",
-    "10年以上"
-  ];
-  let transData = data;
-  if (type == 5) {
-    return workexp
-  } else if(type == 4) {
-    return workexp[data]
-  }else if (type == 2) {
-    for (let i = 0; i < transData.length; i++) {
-        transData[i].office.work_exp = workexp[transData[i].office.work_exp]
-    }
-  }else if(type == 1) {
-    return transData.work_exp = workexp[transData.work_exp]
-  }else {
-    for (let i = 0; i < transData.length; i++) {
-      transData[i].work_exp = workexp[transData[i].work_exp]
-    }
-  }
-}
+
 function transWorkexp1(data,type,classify) {
   //工作经验
   let workexp = [
@@ -580,6 +648,7 @@ function getTrueAge(data,type) {
 
 
 export {
+  tranOffice_time,
   transSalary,
   transGender,
   transEducation,

@@ -12,8 +12,8 @@
         <div class="content">
           <div class="bottom_msg">
             <p><span class="left_lab">求职类型</span> <span class="right_msg">{{intJobData.nature}}</span></p>
-            <p><span class="left_lab">意向岗位</span> <span class="right_msg">{{intJobData.tranJob_id}}</span></p>
-            <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.transalary}}</span></p>
+            <p><span class="left_lab">意向岗位</span> <span v-for="(item,index) in this.tranIntJob" :key="index" class="right_msg">{{item}}</span></p>
+            <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary}}</span></p>
             <p><span class="left_lab">工作地区</span> <span class="right_msg">{{(intJobData.province || '未知') + (intJobData.city || '')}}</span></p>
             <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time}}</span></p>
             <p><span class="left_lab">备注</span> <span class="right_msg">{{intJobData.remark}}</span></p>
@@ -40,10 +40,10 @@
               <span class="edit_lab">求职类型</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.work_nature==1}" @click="have_job">全职</span><span class="choose_cell" :class="{choose_active:this.form.work_nature==2}" @click="wait_job">项目</span></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">意向岗位</span><span class="int_job_det fr" @click="init_job">{{intJobData.tranJob_id || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">意向岗位</span><span class="int_job_det fr" @click="init_job"><span v-for="(item,index) in this.tranIntJob" :key="index">{{item || '请选择'}}</span><img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">期望薪资</span><span class="int_job_det fr" @click="salary">{{intJobData.transalary || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">期望薪资</span><span class="int_job_det fr" @click="salary">{{intJobData.salary || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">工作地区</span><span class="int_job_det fr" @click="pro_city">{{(intJobData.province + intJobData.city || '') || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -82,13 +82,13 @@
         <div class="content">
           <div class="filter_part1">
             <div v-if="showMsg =='init_job'" v-for="(item,index) in jobClassify" :city-id="item.value" :key="index" class="filter_part1_cell second" @click="JobCode">
-              {{item.name}}<img v-show="intJobData.job_id == item.value" class="fr" src="/static/images/checkbox.png" alt="">
+              {{item.name}}<img v-show="item.choose == 1" class="fr" src="/static/images/checkbox.png" alt="">
             </div>
-            <div v-if="showMsg == 'salary'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="SalaryCode">
-              {{item}}<img v-show="intJobData.salary == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            <div v-if="showMsg == 'salary'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="SalaryCode">
+              {{item.name}}<img v-show="intJobData.salary == item.name" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
-            <div v-if="showMsg == 'arr_time'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="TimeCode">
-              {{item}}<img v-show="ArriveId == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+            <div v-if="showMsg == 'arr_time'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="TimeCode">
+              {{item.name}}<img v-show="ArriveId == item.name" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
           </div>
         </div>
@@ -217,6 +217,7 @@
         JobCode(e) {
           let jobId = e.currentTarget.getAttribute('city-id');
           this.intJobData.job_id = jobId;
+          // 如果存在则删除，如果不存在则添加
           if (this.intJobCode.length < 3){
             this.intJobCode.push(jobId);
           } else{
@@ -227,8 +228,6 @@
               duration: 1500
             });
           }
-          console.log(this.intJobCode);
-          // 层级太高
           for (let i = 0,len = this.jobClassify.length;i < len;i++) {
             for(let j = 0,len = this.intJobCode.length;j < len;j++) {
               if (this.jobClassify[i].value == this.intJobCode[j]) {
@@ -247,7 +246,10 @@
           let areaCode = e.currentTarget.getAttribute('city-id');
           this.cityCode.province = areaCode;
           this.cityData = tranCity(this.cityCode,true,2,'city');
-          this.intJobData.province = tranProvince(this.cityCode.province,true,'',2)
+          this.intJobData.province = tranProvince(this.cityCode.province,true,'',2);
+
+          // 滑动到上面
+
         },
         WorkCityCode(e) {
           let areaCityCode = e.currentTarget.getAttribute('city-id');
@@ -259,7 +261,7 @@
           let arrId = e.currentTarget.getAttribute('city-id');
           this.ArriveId = arrId;
           this.secondBox = false;
-          this.intJobData.duty_time = transArrive(arrId,true,1);
+          this.intJobData.duty_time = transArrive(arrId,1);
         },
         init_job() {
           this.secondBox = true;
@@ -281,13 +283,14 @@
           this.secondBox = true;
           this.top_title = '预计到岗时间';
           this.showMsg = 'arr_time';
-          this.CommonData = transArrive(this.CommonData,true,3);
+          this.CommonData = transArrive(this.CommonData,3);
         },
         getIntJob() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
+                console.log(res.data);
                 this.cityCode.province = res.data.career_objective.work_province;
                 this.cityCode.city = res.data.career_objective.work_city;
                 this.ArriveId = res.data.career_objective.duty_time;
@@ -299,6 +302,16 @@
                 transNature(res.data.career_objective,1);
                 transSalary(res.data.career_objective,1);
                 this.intJobData = res.data.career_objective;
+                // 意向职位处理
+                let job_id = res.data.career_objective.job_id.split(',');
+                this.jobClassify.forEach((item)=>{
+                    for(let i = 0,len = job_id.length;i <len;i++){
+                      if (item.id == job_id[i]){
+                        this.tranIntJob.push(item.name);
+                        item.choose = 1;
+                      }
+                    }
+                });
 
                 for (let i = 0,len = this.jobClassify.length; i < len;i++) {
                   if (this.jobClassify[i].value == this.intJobData.job_id) {
@@ -311,7 +324,7 @@
         }
       },
       created() {
-        this.jobClassify = transJobs(this.jobClassify,5);
+        this.jobClassify = transJobs(this.jobClassify,3);
         this.getIntJob();
       }
     }
@@ -326,6 +339,11 @@
     padding: 20px 0;
     line-height: 24px;
     font-size: 14px;
+  }
+  .bottom_msg p{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .bottom_msg .left_lab{
     display: inline-block;

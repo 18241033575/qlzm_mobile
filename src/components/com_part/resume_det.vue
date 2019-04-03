@@ -36,7 +36,7 @@
             <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary}}</span></p>
             <p><span class="left_lab">工作地区</span> <span class="right_msg">{{(intJobData.province || '未知') + (intJobData.city || '')}}</span></p>
             <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time}}</span></p>
-            <p><span class="left_lab">备注</span> <span class="right_msg">{{intJobData.remark}}</span></p>
+            <p><span class="left_lab">备注</span> <span class="right_msg remark_msg">{{intJobData.remark}}</span></p>
           </div>
         </div>
       </div>
@@ -376,7 +376,7 @@
                   this.isBuy = false;
                 }
                 // 公共部分
-                transWorkexp(res.data.base_info,1,'tal');
+                transWorkexp(res.data.base_info,1);
                 res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
                 this.userMsg = res.data.base_info;
                 // 求职意向
@@ -412,9 +412,10 @@
           this.$ajax.get('/resume/view/' + this.uid,{params: {cid: 0}})
             .then((res)=>{
               // 公共部分
-              transWorkexp(res.data.base_info,1,'tal');
+              transWorkexp(res.data.base_info,1);
               res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
               this.userMsg = res.data.base_info;
+              console.log(this.userMsg);
               // 求职意向
               res.data.career.province = res.data.career.work_province;
               res.data.career.city = res.data.career.work_city;
@@ -434,7 +435,7 @@
               this.intJobData = res.data.career;
               this.remark = this.intJobData.remark;
 
-              let job = transJobs('',5);
+              let job = transJobs('',3);
               this.intJobData.job_id = this.intJobData.job_id.split(',');
               job.forEach((item)=>{
                 for (let i = 0,len = this.intJobData.job_id.length;i < len;i++) {

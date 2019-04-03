@@ -191,8 +191,8 @@
           });
           return
         }
-        let reg = /^0\.\d+$|^[1-9]+(\.\d+)?$/;
-        if (!reg.test(this.proAllData.scale)) {
+        let reg = /^((0{1}\.\d+)|([1-9]\d*\.{1}\d+)|([1-9]+\d*))$/;
+        if (!reg.test(JSON.parse(this.proAllData.scale))) {
           this.$notify.warning({
             title: '提示',
             message: '请输入正确的项目规模',
