@@ -46,7 +46,7 @@
           <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
             <div class="ugent_cell" v-for="(item,index) in find_jobData" :key="index" :cid="item.cid" :id="item.id" @click="to_pos_det">
               <div class="ugent_top">
-                <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
+                <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
               </div>
               <div class="ugent_bottom">
                 <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
@@ -93,7 +93,7 @@
                 学历要求
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == educationAct}" :education-id="index" @click="education_opera" v-for="(item,index) in educationData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:index == educationAct}" :education-id="item.id" @click="education_opera" v-for="(item,index) in educationData" :key="index">{{item.name}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -109,7 +109,7 @@
                 薪资要求
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == salaryAct}" :salary-id="index" @click="salary_opera" v-for="(item,index) in salaryData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:index == salaryAct}" :salary-id="item.id" @click="salary_opera" v-for="(item,index) in salaryData" :key="index">{{item.name}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -117,7 +117,7 @@
                 发布时间
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == offDayAct}" :offDay-id="index" @click="offDay_opera" v-for="(item,index) in offDayData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:index == offDayAct}" :offDay-id="item.id" @click="offDay_opera" v-for="(item,index) in offDayData" :key="index">{{item.name}}</span>
               </div>
             </div>
           </div>
@@ -132,6 +132,7 @@
         </div>
       </div>
     </div>
+    <!-- 空 -->
     <div class="empty" v-show="emptySign">
       <img src="/static/images/ic_empty_data@2x.png" alt="">
       <p>暂无数据</p>
@@ -253,7 +254,7 @@
             if (res.data.code == 200) {
               tranCity(res.data.data,true,2);
               transWorkexp1(res.data.data,0);
-              transEducation(res.data.data,0);
+              transEducation(res.data.data,2);
               transNature1(res.data.data,2);
               transSalary(res.data.data,2);
               for (let i = 0,len = res.data.data.length;i < len;i++) {
@@ -307,7 +308,7 @@
         this.educationData = transEducation(this.educationData,3);
         this.natureData = transNature1(this.natureData,3);
         this.salaryData = transSalary(this.salaryData,3);
-        this.offDayData = transArrive(this.offDayData,true,3);
+        this.offDayData = transArrive(this.offDayData,3);
       },
       firstBoxBg() {
         this.outBox = false;
@@ -452,6 +453,7 @@
       },
     },
     created() {
+
       if (this.$route.query.province) {
         this.keyword = this.find_jobParam.office_name = this.$route.query.office_name;
         this.find_jobParam.province = this.$route.query.province;
@@ -470,7 +472,7 @@
           if (res.data.code == 200) {
             tranCity(res.data.data,true,2);
             transWorkexp1(res.data.data,0);
-            transEducation(res.data.data,0);
+            transEducation(res.data.data,2);
             transNature1(res.data.data,2);
             transSalary(res.data.data,2);
             for (let i = 0,len = res.data.data.length;i < len;i++) {
@@ -484,7 +486,9 @@
             }
           }
         });
-      this.tranCode = tranCity(this.cityCode,true,1)
+      this.tranCode = tranCity(this.cityCode,true,1);
+     /* this.jobClassify = JSON.parse(localStorage.getItem('JOBTYPE'));
+      console.log(this.jobClassify);*/
     },
     updated() {
       this.tranCode = tranCity(this.cityCode,true,1);

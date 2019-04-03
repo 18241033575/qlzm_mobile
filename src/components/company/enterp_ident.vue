@@ -22,7 +22,7 @@
             :on-success="uploadLicense">
               <el-button size="small" type="primary">上传图片</el-button>
             </el-upload>
-          </span><span class="fr uppic_ident" v-show="identData.state == 0 && uploadSign">
+          </span><span class="fr uppic_ident" v-show="identData.state == -1 && uploadSign">
             <el-upload
               class="avatar-uploader upload_btn"
               :action="this.loadAddr"
@@ -36,9 +36,9 @@
           </span><span class="fr uppic_ident" v-show="identData.state == -2">认证中</span><span class="fr idented" v-show="identData.state == 1"><img src="/static/images/ic_cm_auth.png" alt="">已认证</span>
           </div>
           <div class="ident_img">
-            <img v-show="identData.state != 0 || upSign" class="license" :src="identData.license" alt="">
-            <img v-show="identData.state == 0 && !upSign" src="/static/images/ic_cm_pic@2x.png" alt="">
-            <p v-show="identData.state == 0 && !upSign">支持JPG、PNG，大小不要超过2MB！</p>
+            <img v-show="identData.state != -1 || identData.state != 0 || uploadSign" class="license" :src="identData.license" alt="">
+            <img v-show="identData.state == 0 && !uploadSign" src="/static/images/ic_cm_pic@2x.png" alt="">
+            <p v-show="identData.state == 0 && !uploadSign">支持JPG、PNG，大小不要超过2MB！</p>
           </div>
         </div>
       </div>
@@ -70,7 +70,6 @@
             this.licenseUrl = url;
             this.identData.license = (splicPic(url,true));
             this.uploadSign = true;
-            this.upSign = true;
           }
         },
         submitLicense() {
@@ -84,7 +83,7 @@
                   showClose: false,
                   duration: 1500
                 });
-                this.identData = -2;
+                this.identData.state = -2;
               }else {
                 this.$notify.error({
                   title: '提示',
@@ -105,6 +104,7 @@
             this.licenseUrl = res.data.license;
             res.data.license = splicPic(res.data.license,true)=='//file.wiiwork.com/'?'':splicPic(res.data.license,true);
             this.identData = res.data;
+            console.log(this.identData);
           });
         this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
           .then((res)=>{

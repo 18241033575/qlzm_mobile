@@ -1,9 +1,9 @@
 <template>
-    <!--新闻资讯-->
+    <!--政策资讯-->
   <div class="news_total">
     <div class="com_det_title">
       <div class="content">
-        新闻资讯
+        政策资讯
       </div>
     </div>
     <div class="news_total_list">

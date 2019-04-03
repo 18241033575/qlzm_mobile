@@ -105,6 +105,7 @@
             .then((res)=>{
               if (res.state != 400) {
                 this.enterp_centerData = res.data;
+                console.log(res.data);
                 transComScale(res.data.info,true);
                 transComNature(res.data.info,true,1);
                 splicLogo(res.data.info,1);

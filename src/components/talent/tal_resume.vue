@@ -57,7 +57,7 @@
                 urlRoute: "int_job"
               },
               2:{
-                urlName: "工作经验",
+                urlName: "工作经历",
                 urlRoute: "tal_work"
               },
               3:{

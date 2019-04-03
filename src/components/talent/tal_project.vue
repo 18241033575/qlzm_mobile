@@ -23,7 +23,7 @@
                 <p><span class="left_lab">项目地点</span> <span class="right_msg">{{item.address}}</span></p>
                 <p><span class="left_lab">个人任职</span> <span class="right_msg">{{item.job}}</span></p>
                 <p><span class="left_lab">项目介绍</span> <span class="right_msg">{{item.introduction}}</span></p>
-                <p><span class="left_lab">个人业绩</span> <span class="right_msg">{{item.duties}}</span></p>
+                <p><span class="left_lab">个人业绩</span> <span class="right_msg pro_msg">{{item.duties}}</span></p>
               </div>
             </div>
           </div>
@@ -191,7 +191,7 @@
           });
           return
         }
-        let reg = /^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;
+        let reg = /^0\.\d+$|^[1-9]+(\.\d+)?$/;
         if (!reg.test(this.proAllData.scale)) {
           this.$notify.warning({
             title: '提示',
@@ -333,4 +333,8 @@
 
 <style scoped>
   @import "../../../static/css/tal_resume.css";
+  .bottom_msg .pro_msg{
+    word-break: break-all;
+    overflow: auto;
+  }
 </style>

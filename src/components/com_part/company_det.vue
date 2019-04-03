@@ -43,6 +43,10 @@
                 class="tags">{{item.nature}}</span><span class="update_time fr">{{item.update_at}}</span>
               </div>
             </div>
+            <div class="loadmore">
+              <p v-show="!moreDataSign" class="more" @click="loadData">加载更多</p>
+              <p v-show="moreDataSign">我也是有底线的</p>
+            </div>
           </div>
         </div>
         <div class="company_msg" v-show="this.companyDetSign">
@@ -170,6 +174,7 @@
             companyMien: {},
             companyDetSign: true,
             hotPosNum: 0,
+            moreDataSign: false,
             tags_sign: true,
             shadeSign: true,
             styleSign: true,
@@ -239,6 +244,10 @@
             this.indexMien++;
           }
           this.com_style.marginLeft = -this.screenW * 0.8 * this.indexMien + 'px';
+        },
+        // 加载更多职位
+        loadData(){
+
         }
       },
       created() {
@@ -272,8 +281,9 @@
               tranArea(res.data,true,1);
               tranCity(res.data,true,4);
               tranProvince(res.data,true);
-              transComScale(res.data,true,1);
-              transComNature(res.data,true,1);
+              console.log(res.data);
+              transComScale(res.data,1);
+              transComNature(res.data,1);
               this.companyMsg = res.data;
               this.shadeSign = this.companyMsg.introduction.length > 300?true:false;
             }
@@ -281,7 +291,8 @@
         this.$ajax.get('/office/company', {params: {cid: cid}})
           .then((res) => {
             if (res.data.state != 400) {
-              this.hotPosNum = res.data.data.length;
+              console.log(res.data);
+              this.hotPosNum = res.data.count;
               tranCity(res.data.data,true,2);
               transWorkexp(res.data.data,0);
               transEducation(res.data.data,0);
@@ -564,6 +575,7 @@
     flex-grow: 1;
     color: #666666;
   }
+  /* 举报 */
   .report{
     margin-right: 10px;
     font-size: 12px;
@@ -572,5 +584,15 @@
   .report img{
     margin-right: 0;
     vertical-align: top;
+  }
+  /* 加载更多 */
+  .loadmore{
+    text-align: center;
+    line-height: 44px;
+    font-size: 12px;
+    color: #919191;
+  }
+  .more{
+    color: #ff8236;
   }
 </style>

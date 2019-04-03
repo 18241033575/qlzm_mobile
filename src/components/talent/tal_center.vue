@@ -107,13 +107,14 @@
           return {
             estimate_salary: '',
             ability_index: '',
+            // 简历完整度
             integrity: 0,
             look: 0,
             dev: 0,
             col: 0,
             down: 0,
             newNews: false,
-            msgData: {}
+            msgData: {},
           }
       },
       methods: {
@@ -148,21 +149,19 @@
               this.newNews = res.data ==0?false:true;
             }
           });
-        // 简历完整度
-        let ResumeCompletion = 0;
+
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
           .then((res)=>{
             if(res.data.state != 400) {
               if (res.data.base_info.id_card != '') {
-                ResumeCompletion += 15
+                this.integrity += 15
               }
               if (res.data.career_objective != '') {
-                ResumeCompletion += 25
+                this.integrity += 25
               }
               if (res.data.evaluation != '') {
-                ResumeCompletion += 5
+                this.integrity += 5
               }
-              this.integrity = ResumeCompletion;
               //  个人价值指数
               this.ability_index = res.data.base_info.ability_index || 0;
             }
@@ -171,8 +170,7 @@
           .then((res)=> {
             if(res.data.state != 400) {
               if (res.data != '') {
-                ResumeCompletion += 15;
-                this.integrity = ResumeCompletion
+                this.integrity += 15;
               }
             }
           });
@@ -180,8 +178,7 @@
           .then((res)=> {
             if(res.data.state != 400) {
               if (res.data != '') {
-                ResumeCompletion += 10;
-                this.integrity = ResumeCompletion
+                this.integrity += 10;
               }
             }
           });
@@ -189,8 +186,7 @@
           .then((res)=> {
             if(res.data.state != 400) {
               if (res.data != '') {
-                ResumeCompletion += 15;
-                this.integrity = ResumeCompletion
+                this.integrity += 15;
               }
             }
           })
@@ -198,8 +194,7 @@
           .then((res)=> {
             if(res.data.state != 400) {
               if (res.data != '') {
-                ResumeCompletion += 15;
-                this.integrity = ResumeCompletion
+                this.integrity += 15;
               }
             }
           })
@@ -304,7 +299,7 @@
   }
   .msg_list{
     flex-grow: 1;
-    margin-left: 30px;
+    margin-left: 15px;
     height: 34px;
   }
   .msg_list ul{
@@ -312,10 +307,14 @@
     height: 100%;
   }
   .msg_list li{
+    width: 90%;
     height: 17px;
     line-height: 17px;
     font-size: 12px;
     color: #666666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .msg_list li span{
     margin-left: 10px;

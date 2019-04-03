@@ -256,6 +256,9 @@
     background-color: #ffffff;
   }
   .city_cell .filter_part1_cell{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     padding: 0 10px;
   }
   .filter_part1_cell{

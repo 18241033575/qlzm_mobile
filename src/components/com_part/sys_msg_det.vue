@@ -17,7 +17,10 @@
           </div>
         </div>
         <div class="news_info_msg">
-          {{msgDetData.content}}
+          <quill-editor id="msg" v-model="msgDetData.content"
+                        @ready="onEditorReady($event)"
+                        :options ="editorOption">
+          </quill-editor>
         </div>
       </div>
     </div>
@@ -31,7 +34,17 @@
       data() {
         return {
           msgDetData: {},
+          editorOption: {
+            modules:{
+              toolbar: false,
+            },
+          }
         }
+      },
+      methods: {
+        onEditorReady(val) {
+          val.enable(false);
+        },
       },
       created() {
         let id = this.$route.query.id;

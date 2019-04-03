@@ -81,7 +81,7 @@
               <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">就业状态</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">在职</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">离职</span></span>
+              <span class="edit_lab">就业状态</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">已就业</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">待就业</span></span>
             </div>
           </div>
         </div>

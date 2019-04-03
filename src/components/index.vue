@@ -79,7 +79,7 @@
         <div class="ugent_body">
           <div class="ugent_cell" :data-id="item.id"  :cid="item.cid"  v-for="(item,index) in ugentData" :key="index" @click="to_posDetail">
             <div class="ugent_top">
-              <span class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
+              <span class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
             </div>
             <div class="ugent_bottom">
               <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span class="tags">{{item.nature}}</span><span class="update_time fr">{{item.created_at}}</span>
@@ -216,7 +216,7 @@
                 tranCity(res.data,true,2);
                 transSalary(res.data,2);
                 transNature(res.data,2);
-                transEducation(res.data);
+                transEducation(res.data,2);
                 transWorkexp(res.data);
                 this.ugentData = res.data;
                 for (let i = 0;i < this.ugentData.length; i++) {

@@ -49,7 +49,7 @@
               <span class="edit_lab">税前月薪(元)</span><input type="text" v-model="workexpAllData.salary" placeholder="税前月薪">
             </div>
             <div class="edit_cell special_cell">
-              <span class="edit_lab">工程周期</span>
+              <span class="edit_lab">在职时间</span>
               <div class="block">
                 <!--<span class="demonstration">带快捷选项</span>-->
                 <el-date-picker
