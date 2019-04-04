@@ -588,7 +588,7 @@
   .box{
     margin: 50% auto;
     width: 92%;
-    height: 140px;
+    height: 155px;
     background-color: #ffffff;
   }
   .box_title{

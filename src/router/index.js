@@ -53,6 +53,7 @@ import tal_cert from '@/components/talent/tal_cert'
 import self_eval from '@/components/talent/self_eval'
 import tal_privacy from '@/components/talent/tal_privacy'
 import tal_shield from '@/components/talent/tal_shield'
+import pre_resume from '@/components/talent/pre_resume'
 
 //企业中心页面
 import enterp_center from '@/components/company/enterp_center'
@@ -307,6 +308,11 @@ export default new Router({
       path: '/copyright',
       name: 'copyright',
       component: copyright
+    },
+    {
+      path: '/pre_resume',
+      name: 'pre_resume',
+      component: pre_resume
     },
     //企业中心
     {

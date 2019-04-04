@@ -13,14 +13,14 @@
               <img src="/static/images/ic_refresh@2x.png" alt="">
               <p>刷新简历</p>
             </div>
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+            <router-link :to="{name: 'pre_resume'}" class="opera_list_cell">
               <img src="/static/images/ic_preview@2x.png" alt="">
               <p>预览简历</p>
             </router-link>
-            <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
+           <!-- <router-link :to="{name: 'tal_resume'}" class="opera_list_cell">
               <img src="/static/images/ic_download@2x.png" alt="">
               <p>下载简历</p>
-            </router-link>
+            </router-link>-->
             <router-link :to="{name: 'tal_privacy'}" class="opera_list_cell">
               <img src="/static/images/ic_privacy@2x.png" alt="">
               <p>简历隐私</p>
@@ -108,7 +108,7 @@
   }
   .opera_list_box{
     display: flex;
-    justify-content: start;
+    justify-content: space-around;
     flex-wrap: wrap;
   }
   .opera_list_cell{
