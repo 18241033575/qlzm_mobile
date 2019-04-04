@@ -139,8 +139,8 @@
           this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
             .then((res)=>{
               if (res.data) {
-                transWorkexp(res.data,0);
-                transEducation(res.data,0);
+                transWorkexp(res.data,2);
+                transEducation(res.data,2);
                 transSalary(res.data,2);
                 for (let i = 0,len = res.data.length;i < len;i++) {
                   res.data[i].up_time = getDistanceTime(res.data[i],3);

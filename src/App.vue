@@ -304,4 +304,8 @@
     height: 16px;
     vertical-align: middle;
   }
+  /* 备注换行 */
+  .bottom_msg .remark_msg{
+    white-space: normal!important;
+  }
 </style>

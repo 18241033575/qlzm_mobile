@@ -101,10 +101,12 @@
 </template>
 
 <script>
+  import {transJobs} from '../../../static/js/common.js'
     export default {
       name: "tal_center",
       data () {
           return {
+            baseSalary: 0,
             estimate_salary: '',
             ability_index: '',
             // 简历完整度
@@ -115,6 +117,7 @@
             down: 0,
             newNews: false,
             msgData: {},
+            jobs: {}
           }
       },
       methods: {
@@ -133,9 +136,6 @@
             });
         }
 
-        //  预估薪资水平
-        this.estimate_salary = userInfo.estimate_salary/1000 +　'K';
-
         //看、投递、收藏、下载
         this.look = userInfo.views;
         this.dev = userInfo.apply;
@@ -152,18 +152,31 @@
 
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
           .then((res)=>{
+            console.log(res.data);
             if(res.data.state != 400) {
               if (res.data.base_info.id_card != '') {
                 this.integrity += 15
               }
-              if (res.data.career_objective != '') {
+              if (res.data.career_objective.job_id != '') {
                 this.integrity += 25
               }
-              if (res.data.evaluation != '') {
+              if (res.data.evaluation.evaluation != '' || res.data.evaluation.tags != '') {
                 this.integrity += 5
               }
               //  个人价值指数
               this.ability_index = res.data.base_info.ability_index || 0;
+              //  预估薪资水平
+
+              this.jobs = transJobs('',3);
+              this.jobs.forEach((item)=>{
+                let job_id = res.data.career_objective.job_id.split(',');
+                for (let i = 0,len = job_id.length;i < len;i++){
+                  if (item.id == job_id[i]){
+                    this.baseSalary = item.salary > this.baseSalary?item.salary:this.baseSalary;
+                  }
+                }
+              });
+              this.estimate_salary = this.baseSalary/1000 +　'K';
             }
           });
          this.$ajax.get('/resume/certificate',{params:{uid: userInfo.id}})

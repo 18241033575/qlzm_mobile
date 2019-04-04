@@ -14,7 +14,7 @@
           <div class="com_msg fl">
             <p class="com_name">{{enterp_centerData.name}}</p>
             <p class="com_msg_det">
-              <span>{{centerDetData.nature}}</span><span>|</span><span>{{centerDetData.scale}}</span><span>|</span><span>{{(centerDetData.province || '') + (centerDetData.city || '')}}</span>
+              <span>{{centerDetData.nature}}</span><span>|</span><span>{{centerDetData.scale}}</span><span>|</span><span>{{(centerDetData.province) + (centerDetData.city)}}</span>
             </p>
             <p v-if="enterp_centerData.state != 1" class="com_msg_iden"><img src="/static/images/ic_cm_authed@2x.png" alt="">未认证<span @click="go_ident" class="go_iden">[去认证]</span></p>
             <p v-if="enterp_centerData.state == 1" class="com_msg_idened"><img src="/static/images/ic_cm_auth.png" alt="">已认证</p>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-  import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
+  import {tranProvince, tranCity} from  '../../../static/js/distpicker'
   import {transComNature,transComScale,splicLogo} from '../../../static/js/common.js'
     export default {
       name: "enterp_center",
@@ -86,12 +86,8 @@
                 urlRoute: "sys_msg"
               }
             },
-            enterp_centerData: {
-
-            },
-            centerDetData: {
-
-            },
+            enterp_centerData: {},
+            centerDetData: {},
           }
       },
       methods: {
@@ -105,12 +101,14 @@
             .then((res)=>{
               if (res.state != 400) {
                 this.enterp_centerData = res.data;
-                console.log(res.data);
                 transComScale(res.data.info,true);
                 transComNature(res.data.info,true,1);
                 splicLogo(res.data.info,1);
                 tranCity(res.data.info,true,0);
                 tranProvince(res.data.info,true);
+                if (this.centerDetData.province == '未知'){
+                  this.centerDetData.city = '';
+                }
                 this.centerDetData = res.data.info;
               }
             })

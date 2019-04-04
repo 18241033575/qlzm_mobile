@@ -11,7 +11,7 @@
           <div class="top_pic">
             <img :src="this.headPic" alt="">
             <p class="tal_name">{{userMsg.name}}</p>
-            <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education}}</span>|<span>{{userMsg.work_exp == 0?'一年以下':(userMsg.work_exp + '年')}}</span></p>
+            <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age==0?'未知':userMsg.age + '岁'}}</span>|<span>{{userMsg.education == 0?'未知':userMsg.education}}</span>|<span>{{userMsg.work_exp == 0?'一年以下':(userMsg.work_exp + '年')}}</span></p>
           </div>
           <div class="bottom_msg">
             <p><span class="left_lab">手机</span> <span class="right_msg">{{userInfoMsg.phone}}</span></p>
@@ -75,7 +75,7 @@
               <span class="edit_lab">电子邮箱</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
             </div>
             <div class="edit_cell special_cell">
-              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place">{{tranPro}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place">{{tranCity}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place">{{tranArea}}</span><img src="/static/images/font_down.png" alt=""></div></div>
+              <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place">{{tranPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place">{{tranCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place">{{tranArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">

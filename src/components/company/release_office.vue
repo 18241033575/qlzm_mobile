@@ -90,7 +90,9 @@
           </div>
         </div>
         <div class="content">
-          <textarea v-model="infoData.duty" placeholder="请填写职位描述" name="evaluation"></textarea>
+          <quill-editor id="desc" v-model="infoData.duty"
+                        :options ="editorOption">
+          </quill-editor>
         </div>
         <div class="bas_msg_btn" @click="intro_sub">
           确定
@@ -202,7 +204,12 @@
           // 提交的数据
           subTags: [],
           // 名企标识
-          has_m: 0
+          has_m: 0,
+          editorOption: {
+            modules:{
+              toolbar: false
+            },
+          }
         }
       },
       methods: {
@@ -357,6 +364,7 @@
                     showClose: false,
                     duration: 800
                   });
+                  this.$indicator.close();
                   setTimeout(()=>{
                     this.$router.push({name: 'pos_manage'})
                   },1000)
@@ -995,5 +1003,8 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #919199;
+  }
+  #desc{
+    margin-top: 15px;
   }
 </style>

@@ -110,7 +110,7 @@
   }
 
   // 教育经历
-  function transEducation(data,type) {
+  function transEducation(data,type,off) {
     const education = JSON.parse(localStorage.getItem('EDUCATION'));
     if (type == 3){
       return education;
@@ -125,9 +125,17 @@
           data.education = item.name;
         }
       }else if (type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].education == item.id){
-            data[i].education = item.name;
+        if (off == 'office'){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].office.education == item.id){
+              data[i].office.education = item.name;
+            }
+          }
+        }else {
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].education == item.id){
+              data[i].education = item.name;
+            }
           }
         }
       }
@@ -166,9 +174,17 @@
             data.salary = item.name;
           }
         }else if (type == 2){
-          for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].salary == item.id){
-              data[i].salary = item.name;
+          if (off == 'office'){
+            for (let i = 0,len = data.length;i < len;i++){
+              if (data[i].office.salary == item.id){
+                data[i].office.salary = item.name;
+              }
+            }
+          } else {
+            for (let i = 0,len = data.length;i < len;i++){
+              if (data[i].salary == item.id){
+                data[i].salary = item.name;
+              }
             }
           }
         }
@@ -309,9 +325,17 @@
           data.nature = item.name;
         }
       }else if (type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].nature == item.id){
-            data[i].nature = item.name;
+        if (off == 'office'){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].office.nature == item.id){
+              data[i].office.nature = item.name;
+            }
+          }
+        }else {
+          for (let i = 0, len = data.length; i < len; i++) {
+            if (data[i].nature == item.id) {
+              data[i].nature = item.name;
+            }
           }
         }
       }
@@ -332,7 +356,7 @@
     }*/
   }
   //工作经验
-  function transWorkexp(data,type,classify) {
+  function transWorkexp(data,type,off) {
     const workexp = [
       {name: "不限",id: 0 },
       {name: "1年以下",id: 1 },
@@ -354,9 +378,17 @@
           data.work_exp = item.name;
         }
       }else if (type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].work_exp == item.id){
-            data[i].work_exp = item.name;
+        if (off == 'office'){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].office.work_exp == item.id){
+              data[i].office.work_exp = item.name;
+            }
+          }
+        }else {
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].work_exp == item.id){
+              data[i].work_exp = item.name;
+            }
           }
         }
       }

@@ -96,7 +96,7 @@
       beforeMount() {
         let h = document.documentElement.clientHeight || document.body.clientHeight;
         // 90搜索栏高度
-        this.screenH = h - 45;
+        this.screenH = h - 55;
       },
       mounted() {
         document.addEventListener('scroll', this.handleScroll)

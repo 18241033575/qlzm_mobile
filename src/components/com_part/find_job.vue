@@ -49,7 +49,7 @@
                 <span v-if="item.is_urgent" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
               </div>
               <div class="ugent_bottom">
-                <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
+                <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span>| <span class="tags">{{item.hire_num == 0?'若干人':item.hire_num + '人'}}</span> | <span class="tags">{{item.education}}</span> | <span
                 class="tags">{{item.nature}}</span><span class="update_time fr">{{item.created_time}}</span>
                 <p><img v-if="item.has_m" src="/static/images/ic_fam_comp@2x.png" alt="">{{item.company_name}}</p>
               </div>
@@ -407,7 +407,7 @@
                 this.req_state = false;
                 tranCity(res.data.data,true,2);
                 transWorkexp1(res.data.data,0);
-                transEducation(res.data.data,0);
+                transEducation(res.data.data,2);
                 transNature1(res.data.data,2);
                 transSalary(res.data.data,2);
                 for (let i = 0,len = res.data.data.length;i < len;i++) {

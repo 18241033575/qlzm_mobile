@@ -138,7 +138,7 @@
         </div>
       </div>
       <div class="resume_buy_btn" v-show="!isBuy" @click="buyResume">
-        购买简历，查看完整信息
+        索要简历，查看完整信息
       </div>
       <!--购买简历-->
       <div class="buy_box" v-show="resume_buy">
@@ -150,7 +150,7 @@
             当前积分:{{integral}}，本次花费积分:{{spend}},确定要购买么?
           </div>
           <div class="box_msg" v-show="this.isFree.is_free">
-            本次免费，剩余免费次数:{{isFree.free}}确定要购买么?
+            本次免费，剩余免费次数:{{isFree.free}}确定索要么?
           </div>
           <div class="box_btn_group">
             <span class="box_btn confirm" @click="resume_confirm">确定</span>
@@ -163,7 +163,7 @@
 
 <script>
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {splicPic,transJobs,transEducation,transWorkexp} from '../../../static/js/common.js'
+  import {splicPic,transJobs,transEducation,transWorkexp,transSalary} from '../../../static/js/common.js'
     export default {
       name: "resume_det",
       data() {
@@ -241,6 +241,7 @@
                         duration: 1500
                       });
                       this.resume_buy = false;
+                      this.isBuy = true;
                     }
                   })
               } else {
@@ -266,6 +267,7 @@
                       duration: 1500
                     });
                     this.resume_buy = false;
+                    this.isBuy = true;
                   }
                 })
             }
@@ -320,9 +322,10 @@
                    tranProvince(res.data.base_info,true);
                  }
 
-                 // 工作经历
-                 this.workData = res.data.work_exp;
-                 for (let i = 0,len = this.workData.length; i < len; i++) {
+                // 工作经历
+                this.workData = res.data.work_exp;
+                transSalary(this.workData,2);
+                for (let i = 0,len = this.workData.length; i < len; i++) {
                    if (this.workData[i].industry == 0) {
                      this.workData[i].tranJobNature = '非建筑行业'
                    } else {
@@ -337,8 +340,8 @@
                    }
                  }
 
-                 // 项目经验
-                 transEducation(res.data.edu_exp);
+                 // 教育经历
+                 transEducation(res.data.edu_exp,2);
                  this.eduData = res.data.edu_exp;
 
                  // 证书
@@ -392,13 +395,10 @@
                 } else {
                   tranProvince(res.data.career,true);
                 }
-                // transArrive(res.data.career,true,0);
-                // transNature(res.data.career,1);
-                // transSalary(res.data.career,1);
                 this.intJobData = res.data.career;
                 this.remark = this.intJobData.remark;
 
-                let job = transJobs('',5);
+                let job = transJobs('',3);
                 this.intJobData.job_id = this.intJobData.job_id.split(',');
                 job.forEach((item)=>{
                   for (let i = 0,len = this.intJobData.job_id.length;i < len;i++) {
@@ -429,9 +429,6 @@
               } else {
                 tranProvince(res.data.career,true);
               }
-              // transArrive(res.data.career,true,0);
-              // transNature(res.data.career,1);
-              // transSalary(res.data.career,1);
               this.intJobData = res.data.career;
               this.remark = this.intJobData.remark;
 
@@ -591,7 +588,7 @@
   .box{
     margin: 50% auto;
     width: 92%;
-    height: 155px;
+    height: 140px;
     background-color: #ffffff;
   }
   .box_title{

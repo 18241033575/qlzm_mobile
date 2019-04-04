@@ -36,7 +36,7 @@
           <div class="content">
             <div class="ugent_cell" :data-id="item.id"  :cid="item.cid" v-for="(item,index) in this.hotPosData" :key="index" @click="to_posDetail">
               <div class="ugent_top">
-                <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.transalary}}</span>
+                <span v-show="item.is_urgent==1" class="ugent_sign">急聘</span><span class="pos_name">{{item.office_name}}</span><span class="salary fr">{{item.salary}}</span>
               </div>
               <div class="ugent_bottom">
                 <span class="tags">{{item.city}}</span> | <span class="tags">{{item.work_exp}}</span> | <span class="tags">{{item.education}}</span> | <span
@@ -44,8 +44,8 @@
               </div>
             </div>
             <div class="loadmore">
-              <p v-show="!moreDataSign" class="more" @click="loadData">加载更多</p>
-              <p v-show="moreDataSign">我也是有底线的</p>
+              <p v-show="!moreDataSign && firstSign" class="more" @click="loadData">加载更多</p>
+              <p v-show="moreDataSign && firstSign">我也是有底线的</p>
             </div>
           </div>
         </div>
@@ -175,6 +175,7 @@
             companyDetSign: true,
             hotPosNum: 0,
             moreDataSign: false,
+            firstSign: false,
             tags_sign: true,
             shadeSign: true,
             styleSign: true,
@@ -187,6 +188,7 @@
               width: 'auto'
             },
             cid: 0,
+            page: 1,
             editorOption: {
               modules:{
                 toolbar: false,
@@ -247,7 +249,22 @@
         },
         // 加载更多职位
         loadData(){
+          this.page++;
+          this.$ajax.get('/office/company', {params: {cid: this.cid,page: this.page}})
+            .then((res) => {
+              if (res.data.state != 400) {
+                tranCity(res.data.data,true,2);
+                transWorkexp(res.data.data,2);
+                transEducation(res.data.data,2);
+                transNature(res.data.data,2);
+                transSalary(res.data.data,2);
+                this.hotPosData.push.apply(this.hotPosData,res.data.data);
+                if (this.hotPosData.length == this.hotPosNum) {
+                  this.moreDataSign = true;
+                }
 
+              }
+            })
         }
       },
       created() {
@@ -293,12 +310,13 @@
           .then((res) => {
             if (res.data.state != 400) {
               console.log(res.data);
+              this.firstSign = res.data.count > 6?true:false;
               this.hotPosNum = res.data.count;
               tranCity(res.data.data,true,2);
-              transWorkexp(res.data.data,0);
+              transWorkexp(res.data.data,2);
               transEducation(res.data.data,2);
               transNature(res.data.data,2);
-              transSalary(res.data.data,1);
+              transSalary(res.data.data,2);
               this.hotPosData = res.data.data;
             }
           })

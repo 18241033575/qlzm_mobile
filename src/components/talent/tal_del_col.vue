@@ -57,9 +57,9 @@
             .then((res)=>{
               if (res.data.length) {
                 tranCity(res.data,true,2,'office');
-                transWorkexp(res.data,2);
+                transWorkexp(res.data,2,'office');
                 transNature(res.data,2,'office');
-                transEducation(res.data,2);
+                transEducation(res.data,2,'office');
                 transSalary(res.data,2,'office');
                 for (let i = 0,len = res.data.length;i < len;i++) {
                   res.data[i].up_time = getDistanceTime(res.data[i],3,'create');
@@ -76,11 +76,11 @@
             .then((res)=>{
               if (res.data.length) {
                 tranCity(res.data,true,2,'office');
-                transWorkexp(res.data,2);
+                transWorkexp(res.data,2,'office');
                 transNature(res.data,2,'office');
-                transEducation(res.data,2);
-                getDistanceTime(res.data);
+                transEducation(res.data,2,'office');
                 transSalary(res.data,2,'office');
+                getDistanceTime(res.data);
                 for (let i = 0,len = res.data.length;i < len;i++) {
                   res.data[i].up_time = getDistanceTime(res.data[i],3,'create')
                 }

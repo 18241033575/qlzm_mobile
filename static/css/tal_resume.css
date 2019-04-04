@@ -66,9 +66,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.bottom_msg .remark_msg{
-  white-space: normal;
-}
+
 .exp_edit_list{
   margin-top: 10px;
   background-color: #ffffff;

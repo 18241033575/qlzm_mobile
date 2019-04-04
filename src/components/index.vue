@@ -217,7 +217,7 @@
                 transSalary(res.data,2);
                 transNature(res.data,2);
                 transEducation(res.data,2);
-                transWorkexp(res.data);
+                transWorkexp(res.data,2);
                 this.ugentData = res.data;
                 for (let i = 0;i < this.ugentData.length; i++) {
                   this.ugentData[i].created_at = getDistanceTime(this.ugentData[i].created_at)

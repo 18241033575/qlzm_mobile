@@ -129,6 +129,7 @@
           this.nav_close();
         },
         exit() {
+          this.isLogin =false;
           this.$router.push({name: 'login'});
           localStorage.clear('COMPANY');
           localStorage.clear('USER');
@@ -145,6 +146,8 @@
           this.isLogin = true;
           if (userInfo.photo != '') {
             this.default_headPic = splicPic(userInfo.photo, true);
+          }else {
+            this.default_headPic = '/static/images/ic_user_def@2x.png';
           }
           this.userName = userInfo.name || userInfo.phone;
         }
@@ -154,6 +157,8 @@
           this.isLogin = true;
           if (companyInfo.logo != '') {
             this.default_headPic = splicPic(companyInfo.logo, true);
+          }else {
+            this.default_headPic = '/static/images/company_def_logo.png';
           }
           this.userName = companyInfo.name || companyInfo.logo;
         }

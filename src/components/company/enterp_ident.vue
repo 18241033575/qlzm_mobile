@@ -42,7 +42,7 @@
           </div>
         </div>
       </div>
-      <div class="enterp_button" v-show="identData.state == -1" @click="submitLicense">
+      <div class="enterp_button" v-show="identData.state == -1 || identData.state == 0" @click="submitLicense">
         提交认证
       </div>
     </div>

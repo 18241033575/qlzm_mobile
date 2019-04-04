@@ -11,14 +11,14 @@
           <div class="content">
             <p class="tal_name">{{item.name}}<img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
             <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
-            <p class="tal_det">期望薪资:<span class="hope_salary">{{item.transalary}}</span></p>
+            <p class="tal_det">期望薪资:<span class="hope_salary">{{item.salary}}</span></p>
           </div>
         </div>
         <div class="resume_list_cell" v-if="orignState" v-for="(item,index) in this.commonData" :uid="item.user_info.uid" :key="index" @click="tal_det">
           <div class="content">
             <p class="tal_name">{{item.user_info.name}}<span class="app_pos" >(应聘职位: {{item.office.office_name}})</span><img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
             <p class="tal_det"><span>{{item.user_info.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.user_info.work_exp}}</span><span>|</span><span>{{item.user_info.education}}</span><span>|</span><span>{{item.user_info.major==''?'无专业':item.user_info.major}}</span></p>
-            <p class="tal_det">期望薪资:<span class="hope_salary">{{item.user_info.transalary}}</span></p>
+            <p class="tal_det">期望薪资:<span class="hope_salary">{{item.user_info.salary}}</span></p>
           </div>
         </div>
       </div>
@@ -102,6 +102,7 @@
         closeState() {
           this.boxState = false;
         },
+        // 收藏简历
         collect_resume() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/resume/collect',{uid: this.uid,info_id: this.info_id,cid: companyInfo.id})
@@ -119,10 +120,12 @@
               }
             })
         },
+        // 简历详情
         tal_det(e) {
           let uid = e.currentTarget.getAttribute('uid');
           this.$router.push({name: 'resume_det',query: {uid: uid}});
         },
+        // 取消收藏
         cancel_col() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/resume/cancel-collect',{uid: this.uid,cid: companyInfo.id})
@@ -142,6 +145,7 @@
               }
             })
         },
+        // 删除简历
         del_resume() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/resume/delete-already-buy',{cid: companyInfo.id,uid: this.uid})
@@ -174,11 +178,12 @@
             this.$ajax.get('/resume/get-apply',{params:{cid: companyInfo.id}})
               .then((res)=>{
                 if (res.data.state != 400) {
+                  console.log(res.data);
                   for (let i = 0,len = res.data.length;i < len;i++) {
                     res.data[i].age = getTrueAge(res.data[i].user_info.birthday,1);
-                    res.data[i].user_info.salary = transSalary(res.data[i].user_info,1);
-                    res.data[i].user_info.education = transEducation(res.data[i].user_info,1);
-                    res.data[i].user_info.work_exp = transWorkexp(res.data[i].user_info,1);
+                    transSalary(res.data[i].user_info,1);
+                    transEducation(res.data[i].user_info,1);
+                    transWorkexp(res.data[i].user_info,1);
                   }
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
@@ -196,8 +201,8 @@
                 if (res.data.state != 400) {
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
-                  transEducation(res.data,0);
-                  transWorkexp(res.data,0);
+                  transEducation(res.data,2);
+                  transWorkexp(res.data,2);
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
@@ -214,8 +219,8 @@
                 if (res.data.state != 400) {
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
-                  transEducation(res.data,0);
-                  transWorkexp(res.data,0);
+                  transEducation(res.data,2);
+                  transWorkexp(res.data,2);
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
@@ -232,8 +237,8 @@
                 if (res.data.state != 400) {
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
-                  transEducation(res.data,0);
-                  transWorkexp(res.data,0);
+                  transEducation(res.data,2);
+                  transWorkexp(res.data,2);
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
@@ -250,8 +255,8 @@
                 if (res.data.state != 400) {
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
-                  transEducation(res.data,0);
-                  transWorkexp(res.data,0);
+                  transEducation(res.data,2);
+                  transWorkexp(res.data,2);
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;

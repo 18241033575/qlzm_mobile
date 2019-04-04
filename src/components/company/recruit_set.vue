@@ -61,7 +61,11 @@
       },
       created() {
         // 获取开启/关闭状态
-
+        let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+        this.$ajax.get('/company/get-info',{params: {cid: companyInfo.id}})
+          .then((res)=>{
+            this.isFamouse = res.data.has_m == 1? true: false;
+          })
       }
     }
 </script>

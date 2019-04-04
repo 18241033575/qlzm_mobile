@@ -210,7 +210,7 @@
           find_talParam: {
             page: 1,
             row: 8,
-            province: '520000'
+            work_province: '520000'
           },
           workExpAct: 0,
           educationAct: 0,
@@ -360,7 +360,7 @@
           this.find_talParam = {};
           this.find_talParam.page = 1;
           this.find_talParam.row = 8;
-          this.find_talParam.province = '520000';
+          this.find_talParam.work_province = '520000';
         },
         filter_submit() {
           this.outBox = false;
