@@ -35,6 +35,7 @@ import recharge from '@/components/com_part/recharge'
 import transfer from '@/components/com_part/transfer'
 import charge_online from '@/components/com_part/charge_online'
 import about_us from '@/components/com_part/about_us'
+import guidance from '@/components/com_part/guidance'
 import labor_dispatch from '@/components/com_part/labor_dispatch'
 import donkey_horse from '@/components/com_part/donkey_horse'
 
@@ -217,6 +218,11 @@ export default new Router({
       path: '/about_us',
       name: 'about_us',
       component: about_us,
+    },
+    {
+      path: '/guidance',
+      name: 'guidance',
+      component: guidance,
     },
     {
       path: '/labor_dispatch',

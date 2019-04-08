@@ -65,24 +65,6 @@
             return
           }
           if (this.getSmsState) {
-            this.getSmsState = false;
-            let t = 60;
-            let smsTime = localStorage.getItem('SMSTIME');
-            if (smsTime != '' && smsTime != 0 && smsTime != undefined) {
-              t = smsTime;
-            }
-            this.getSmsCode = t + 's后再次获取';
-            let timer = setInterval(()=>{
-              t--;
-              this.getSmsCode = t + 's后再次获取';
-              if (t < 2) {
-                clearInterval(timer);
-                this.getSmsCode = '再次获取';
-                this.getSmsState = true;
-                t = 60;
-              }
-              localStorage.setItem('SMSTIME',t);
-            },1000);
 
             let userInfo = JSON.parse(localStorage.getItem('USER'));
             let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
@@ -98,6 +80,32 @@
                   t = 60;
                   localStorage.setItem('SMSTIME',t);
                   this.$notify.success({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500,
+                  });
+                  // 验证倒计时
+                  this.getSmsState = false;
+                  let t = 60;
+                  let smsTime = localStorage.getItem('SMSTIME');
+                  if (smsTime != '' && smsTime != 0 && smsTime != undefined) {
+                    t = smsTime;
+                  }
+                  this.getSmsCode = t + 's后再次获取';
+                  let timer = setInterval(()=>{
+                    t--;
+                    this.getSmsCode = t + 's后再次获取';
+                    if (t < 1) {
+                      clearInterval(timer);
+                      this.getSmsCode = '再次获取';
+                      this.getSmsState = true;
+                      t = 60;
+                    }
+                    localStorage.setItem('SMSTIME',t);
+                  },1000);
+                }else {
+                  this.$notify.error({
                     title: '提示',
                     message: res.data.msg,
                     showClose: false,

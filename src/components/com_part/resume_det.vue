@@ -32,11 +32,11 @@
           </div>
           <div class="bottom_msg">
             <p><span class="left_lab">求职类型</span> <span class="right_msg">{{intJobData.nature}}</span></p>
-            <p><span class="left_lab">意向岗位</span> <span v-for="(item,index) in tranJob" class="right_msg">{{item}}</span></p>
+            <p><span class="left_lab">意向岗位</span> <span style="width: auto" v-for="(item,index) in tranJob" class="right_msg">{{item}}</span></p>
             <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary}}</span></p>
             <p><span class="left_lab">工作地区</span> <span class="right_msg">{{(intJobData.province || '未知') + (intJobData.city || '')}}</span></p>
             <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time}}</span></p>
-            <p><span class="left_lab">备注</span> <span class="right_msg remark_msg">{{intJobData.remark}}</span></p>
+            <p><span class="left_lab remark_msg">备注</span> <span class="right_msg remark_msg">{{intJobData.remark}}</span></p>
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
                 <p><span class="left_lab">工作性质</span> <span class="right_msg">{{item.workNature}}</span></p>
                 <p><span class="left_lab">税前月薪(元)</span> <span class="right_msg">{{item.salary}}</span></p>
                 <p><span class="left_lab">在职时间</span> <span class="right_msg">{{item.start_time + '-' + (item.end_time == 0?'至今':item.end_time)}}</span></p>
-                <p><span class="left_lab">工作职责</span> <span class="right_msg">{{item.duties}}</span></p>
+                <p><span class="left_lab">工作职责</span> <span class="right_msg remark_msg">{{item.duties}}</span></p>
               </div>
             </div>
           </div>
@@ -103,7 +103,7 @@
               <div class="bottom_msg">
                 <p><span class="left_lab">注册情况</span> <span class="right_msg">{{item.tranreg_status}}</span></p>
                 <p><span class="left_lab">增项</span> <span class="right_msg">{{additionData}}</span></p>
-                <p><span class="left_lab">备注</span> <span class="right_msg">{{item.remark}}</span></p>
+                <p><span class="left_lab">备注</span> <span class="right_msg remark_msg">{{item.remark}}</span></p>
               </div>
             </div>
           </div>
@@ -130,13 +130,14 @@
         <div class="resume_invite resume_btn_cell" @click="interview">
           面试邀请
         </div>
-        <div class="resume_btn_cell">
+        <!--<div class="resume_btn_cell">
           下载简历
-        </div>
+        </div>-->
         <div class="resume_btn_cell" @click="report">
           举报
         </div>
       </div>
+      <!--索要简历-->
       <div class="resume_buy_btn" v-show="!isBuy" @click="buyResume">
         索要简历，查看完整信息
       </div>
@@ -380,7 +381,7 @@
                 }
                 // 公共部分
                 transWorkexp(res.data.base_info,1);
-                res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
+                res.data.base_info.photo = splicPic(res.data.base_info.photo,true) == 'http://file.wiiwork.com/'?splicPic(res.data.base_info.photo,true) : '/static/images/user_avator.png';
                 this.userMsg = res.data.base_info;
                 // 求职意向
                 res.data.career.province = res.data.career.work_province;
@@ -402,7 +403,7 @@
                 this.intJobData.job_id = this.intJobData.job_id.split(',');
                 job.forEach((item)=>{
                   for (let i = 0,len = this.intJobData.job_id.length;i < len;i++) {
-                    if (item.value == this.intJobData.job_id[i]) {
+                    if (item.id == this.intJobData.job_id[i]) {
                       this.tranJob.push(item.name);
                     }
                   }
@@ -415,7 +416,6 @@
               transWorkexp(res.data.base_info,1);
               res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
               this.userMsg = res.data.base_info;
-              console.log(this.userMsg);
               // 求职意向
               res.data.career.province = res.data.career.work_province;
               res.data.career.city = res.data.career.work_city;
@@ -436,7 +436,7 @@
               this.intJobData.job_id = this.intJobData.job_id.split(',');
               job.forEach((item)=>{
                 for (let i = 0,len = this.intJobData.job_id.length;i < len;i++) {
-                  if (item.value == this.intJobData.job_id[i]) {
+                  if (item.id == this.intJobData.job_id[i]) {
                     this.tranJob.push(item.name);
                   }
                 }
@@ -551,6 +551,10 @@
     justify-content: space-between;
     background-color: #ffffff;
     text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-top: 1px solid #E1E4E6;
   }
   .resume_btn_cell{
     width: 33%;

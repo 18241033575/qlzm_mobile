@@ -36,9 +36,9 @@
         </div>
         <div class="opera_list" v-if="this.orign == 'buy'">
           <div class="content">
-            <div class="opera_cell">
+      <!--      <div class="opera_cell">
               下载简历
-            </div>
+            </div>-->
             <div class="opera_cell pos_del" @click="del_resume">
               删除记录
             </div>
@@ -53,13 +53,13 @@
         </div>
         <div class="opera_list" v-if="this.orign == 'invite'">
           <div class="content">
-            <div class="opera_cell">
+            <div class="opera_cell" @click="hire">
               录用
             </div>
-            <div class="opera_cell pos_del">
+            <div class="opera_cell pos_del" @click="unhire">
               未录用
             </div>
-            <div class="opera_cell pos_del">
+            <div class="opera_cell pos_del" @click="del_resume">
               删除
             </div>
           </div>
@@ -120,6 +120,50 @@
               }
             })
         },
+        // 录用
+        hire(){
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/company/set-interviews',{uid: this.uid,cid: companyInfo.id,state: 1})
+            .then((res)=>{
+              if (res.data.state == 200){
+                this.$notify.success({
+                  title: '提示',
+                  message: '录用成功',
+                  showClose: false,
+                  duration: 1500,
+                });
+              } else {
+                this.$notify.error({
+                  title: '提示',
+                  message: '你已经录用过了',
+                  showClose: false,
+                  duration: 1500,
+                });
+              }
+            })
+        },
+        // 未录用
+        unhire(){
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          this.$ajax.post('/company/set-interviews',{uid: this.uid,cid: companyInfo.id,state: 2})
+            .then((res)=>{
+              if (res.data.state == 200){
+                this.$notify.success({
+                  title: '提示',
+                  message: '取消录用成功',
+                  showClose: false,
+                  duration: 1500,
+                });
+              } else {
+                this.$notify.error({
+                  title: '提示',
+                  message: '你已经取消录用过了',
+                  showClose: false,
+                  duration: 1500,
+                });
+              }
+            })
+        },
         // 简历详情
         tal_det(e) {
           let uid = e.currentTarget.getAttribute('uid');
@@ -152,7 +196,6 @@
             .then((res)=>{
               if (res.data.state == 200) {
                 for (let i = 0,len = this.commonData.length; i < len;i++) {
-                  // 报错 暂时没有找到原因，功能正常
                   if (this.commonData[i].id == this.info_id) {
                     // 删除相应数组
                     this.commonData.splice(i,1);
@@ -240,6 +283,7 @@
                   transEducation(res.data,2);
                   transWorkexp(res.data,2);
                   this.commonData = res.data;
+                  console.log(this.commonData);
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
                   }else {

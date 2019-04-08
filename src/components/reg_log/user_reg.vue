@@ -11,7 +11,7 @@
       <el-input class="common_input" type="password" maxlength="16" v-model="password_confirm" placeholder="重复密码"></el-input>
     </div>
     <div class="sms_group">
-      <el-input class="common_input_sms fl" @keyup.native="onlNum2" maxlength="6" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button class="fl get_smsCode" @click="getSmsCode">获取验证码</el-button>
+      <el-input class="common_input_sms fl" @keyup.native="onlNum2" maxlength="6" v-model="sms_code" placeholder="请输入验证码"></el-input><el-button class="fl get_smsCode" @click="getSmsCode">{{getCode}}</el-button>
     </div>
     <el-button class="common_btn" @click="tal_reg">注册</el-button>
     <p>已有账号?&nbsp;<router-link :to="{name:'login'}">立即登录</router-link></p>
@@ -28,6 +28,8 @@
           password: '',
           password_confirm: '',
           sms_code: '',
+          getCode: '获取短信验证码',
+          getSmsState: true
         }
       },
       methods: {
@@ -83,33 +85,57 @@
             })
         },
         getSmsCode() {
-          if (this.password != this.password_confirm) {
+          if (this.phone.length < 11) {
             this.$notify.warning({
               title: '提示',
-              message: '两次密码不一致',
+              message: '请输入正确的手机号码',
               showClose: false,
               duration: 1500
             });
             return
           }
-          this.$ajax.get('/sms',{params: {type : 2,phone: this.phone,member: 1}})
-            .then((res)=>{
-              if (res.data.state == 200) {
-                this.$notify.success({
-                  title: '提示',
-                  message: '获取验证码成功',
-                  showClose: false,
-                  duration: 1500
-                });
-              }else {
-                this.$notify.warning({
-                  title: '提示',
-                  message: res.data.msg,
-                  showClose: false,
-                  duration: 1500
-                });
-              }
-            })
+
+          if (this.getSmsState) {
+
+            this.$ajax.get('/sms',{params: {type : 2,phone: this.phone,member: 1}})
+              .then((res)=>{
+                if (res.data.state == 200) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '获取验证码成功',
+                    showClose: false,
+                    duration: 1500
+                  });
+                  // 验证倒计时
+                  this.getSmsState = false;
+                  let t = 60;
+                  let smsTime = localStorage.getItem('SMSTIME');
+                  if (smsTime != '' && smsTime != 0 && smsTime != undefined) {
+                    t = smsTime;
+                  }
+                  this.getCode = t + 's后再次获取';
+                  let timer = setInterval(()=>{
+                    t--;
+                    this.getCode = t + 's后再次获取';
+                    if (t < 1) {
+                      clearInterval(timer);
+                      this.getCode = '再次获取';
+                      this.getSmsState = true;
+                      t = 60;
+                    }
+                    localStorage.setItem('SMSTIME',t);
+                  },1000);
+
+                }else {
+                  this.$notify.warning({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500
+                  });
+                }
+              })
+          }
         },
         onlNum1() {
           this.phone = this.phone.replace(/[^\.\d]/g,'');

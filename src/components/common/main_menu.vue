@@ -94,7 +94,7 @@
             },
             6:{
               urlName: "就业指导",
-              urlRoute: "index"
+              urlRoute: "guidance"
             },
             7:{
               urlName: "新闻资讯",
