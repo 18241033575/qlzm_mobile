@@ -309,7 +309,6 @@
         this.$ajax.get('/office/company', {params: {cid: cid}})
           .then((res) => {
             if (res.data.state != 400) {
-              console.log(res.data);
               this.firstSign = res.data.count > 6?true:false;
               this.hotPosNum = res.data.count;
               tranCity(res.data.data,true,2);
