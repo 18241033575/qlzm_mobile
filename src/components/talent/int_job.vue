@@ -40,7 +40,7 @@
               <span class="edit_lab">求职类型</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.work_nature==1}" @click="have_job">全职</span><span class="choose_cell" :class="{choose_active:this.form.work_nature==2}" @click="wait_job">项目</span></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">意向岗位</span><span class="int_job_det fr" @click="init_job"><span v-for="(item,index) in this.tranIntJob" :key="index">{{item || '请选择'}}</span><img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">意向岗位</span><span class="int_job_det job_det fr" @click="init_job"><span v-for="(item,index) in this.tranIntJob" :key="index">{{item || '请选择'}}</span><img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">期望薪资</span><span class="int_job_det fr" @click="salary">{{intJobData.salary || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -81,7 +81,7 @@
         </div>
         <div class="content">
           <div class="filter_part1">
-            <div v-if="showMsg =='init_job'" v-for="(item,index) in jobClassify" :city-id="item.value" :key="index" class="filter_part1_cell second" @click="JobCode">
+            <div v-if="showMsg =='init_job'" v-for="(item,index) in jobClassify" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="JobCode">
               {{item.name}}<img v-show="item.choose == 1" class="fr" src="/static/images/checkbox.png" alt="">
             </div>
             <div v-if="showMsg == 'salary'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="SalaryCode">
@@ -148,7 +148,8 @@
             cityData: {},
             ArriveId: '',
             cityCode: {},
-            jobClassify: {}
+            jobClassify: {},
+            upSalary: 0
           }
       },
       methods: {
@@ -193,11 +194,24 @@
             return
           }
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/resume/userinfo',{job: this.intJobData.job_id,nature:this.form.work_nature,salary: this.intJobData.salary,duty_time: this.ArriveId,remark: this.remark,flag: 2,job_id: this.intJobData.job_id,work_province: this.cityCode.province,work_city: this.cityCode.city,uid: userInfo.id})
+          this.$ajax.post('/resume/userinfo',{nature:this.form.work_nature,salary: this.upSalary,duty_time: this.ArriveId,remark: this.remark,flag: 2,job_id: this.intJobCode.join(','),work_province: this.cityCode.province,work_city: this.cityCode.city,uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
                 this.int_job_edit = true;
                 this.getIntJob();
+                this.$notify.success({
+                  title: '提示',
+                  message: '保存成功',
+                  showClose: false,
+                  duration: 1500
+                });
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
             })
           // this.int_job_edit = true
@@ -216,29 +230,54 @@
         },
         JobCode(e) {
           let jobId = e.currentTarget.getAttribute('city-id');
-          this.intJobData.job_id = jobId;
+          // this.intJobData.job_id = jobId;
           // 如果存在则删除，如果不存在则添加
-          if (this.intJobCode.length < 3){
-            this.intJobCode.push(jobId);
-          } else{
-            this.$notify.warning({
-              title: '提示',
-              message: '最多选择三个意向职位',
-              showClose: false,
-              duration: 1500
-            });
-          }
-          for (let i = 0,len = this.jobClassify.length;i < len;i++) {
-            for(let j = 0,len = this.intJobCode.length;j < len;j++) {
-              if (this.jobClassify[i].value == this.intJobCode[j]) {
-                this.tranIntJob.push(this.jobClassify[i].name);
-              }
+          let h = true;
+          for (let k = 0,len = this.intJobCode.length;k < len;k++){
+            if (jobId == this.intJobCode[k]){
+              this.intJobCode.splice(k,1);
+              h = false;
             }
           }
+          if (h){
+            if (this.intJobCode.length < 3){
+              this.intJobCode.push(jobId);
+              for (let i = 0,len = this.jobClassify.length;i < len;i++) {
+                for(let j = 0,len = this.intJobCode.length;j < len;j++) {
+                  if (this.jobClassify[i].id == this.intJobCode[j]) {
+                    this.jobClassify[i].choose = 1;
+                    this.tranIntJob.push(this.jobClassify[i].name);
+                  }
+                }
+              }
+            } else{
+              this.$notify.warning({
+                title: '提示',
+                message: '最多选择三个意向职位',
+                showClose: false,
+                duration: 1500
+              });
+            }
+          }else{
+            // 相应choose = 0
+            for (let i = 0,len = this.jobClassify.length;i < len;i++) {
+                if (this.jobClassify[i].id == jobId) {
+                  // vue 对对象里的数组不会响应式的变化
+                  this.$set(this.jobClassify,i,{choose: 0,id: jobId,type: this.jobClassify[i].type,salary: this.jobClassify[i].salary,name: this.jobClassify[i].name});
+                }
+                for(let j = 0,len = this.tranIntJob.length;j < len;j++){
+                  if (this.jobClassify[i].name == this.tranIntJob[j]) {
+                    this.tranIntJob.splice(j,1);
+                  }
+                }
+            }
+          }
+
+
         },
         SalaryCode(e) {
           let salaryId = e.currentTarget.getAttribute('city-id');
-          this.intJobData.salary = salaryId;
+          this.upSalary = this.intJobData.salary = salaryId;
           this.secondBox = false;
           transSalary(this.intJobData,1);
         },
@@ -290,7 +329,7 @@
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state!= 400) {
-                console.log(res.data);
+                this.upSalary = res.data.career_objective.salary;
                 this.cityCode.province = res.data.career_objective.work_province;
                 this.cityCode.city = res.data.career_objective.work_city;
                 this.ArriveId = res.data.career_objective.duty_time;
@@ -303,10 +342,10 @@
                 transSalary(res.data.career_objective,1);
                 this.intJobData = res.data.career_objective;
                 // 意向职位处理
-                let job_id = res.data.career_objective.job_id.split(',');
+                this.intJobCode = res.data.career_objective.job_id.split(',');
                 this.jobClassify.forEach((item)=>{
-                    for(let i = 0,len = job_id.length;i <len;i++){
-                      if (item.id == job_id[i]){
+                    for(let i = 0,len = this.intJobCode.length;i <len;i++){
+                      if (item.id == this.intJobCode[i]){
                         this.tranIntJob.push(item.name);
                         item.choose = 1;
                       }
@@ -451,5 +490,12 @@
   }
   .check_box img{
 
+  }
+  .job_det{
+    width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
   }
 </style>

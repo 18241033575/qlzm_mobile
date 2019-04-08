@@ -381,7 +381,7 @@
                 }
                 // 公共部分
                 transWorkexp(res.data.base_info,1);
-                res.data.base_info.photo = splicPic(res.data.base_info.photo,true) == 'http://file.wiiwork.com/'?splicPic(res.data.base_info.photo,true) : '/static/images/user_avator.png';
+                res.data.base_info.photo = splicPic(res.data.base_info.photo,true) == 'http://file.wiiwork.com/'? '/static/images/user_avator.png' : splicPic(res.data.base_info.photo,true);
                 this.userMsg = res.data.base_info;
                 // 求职意向
                 res.data.career.province = res.data.career.work_province;

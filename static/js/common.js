@@ -27,8 +27,7 @@
     1: 单个对象数据
     2：数组
     3：返回全部数据
-    4：添加首个 不限 字段的全部数据
-    5: 待补充
+    4: 待补充
   }
   off: 数组内有office对象
  */
@@ -100,12 +99,6 @@
     const welfare = JSON.parse(localStorage.getItem('COMPANYTAGS'));
     if (data!='' && data!=undefined) {
       let transData = data.split(',');
-     /* if (flag) {
-        for (let i = 0; i < transData.length; i++) {
-          transData[i] = welfare[transData[i]]
-        }
-        return transData
-      }*/
     }
   }
 
@@ -140,22 +133,6 @@
         }
       }
     });
-   /* if (type == 4) {
-      return education[data]
-    }else if (type == 3) {
-      return education
-    }
-    else if (type == 2) {
-      for (let i = 0; i < transData.length; i++) {
-        transData[i].office.education = education[transData[i].office.education]
-      }
-    }else if(type == 1) {
-      return transData.education = education[transData.education]
-    }else {
-      for (let i = 0; i < transData.length; i++) {
-        transData[i].education = education[transData[i].education]
-      }
-    }*/
   }
 
   // 薪资待遇
@@ -190,35 +167,6 @@
         }
       });
     }
-
-
-  /*  if (type == 3) {
-      return salary
-    } else if (type == 2) {
-      if (off == 'office') {
-        for (let i = 0; i < transData.length; i++) {
-          if (transData[i].salary != 0) {
-            transData[i].office.salary = (salary[transData[i].office.salary] + '元/月')
-          } else {
-            transData[i].office.salary = salary[transData[i].office.salary]
-          }
-        }
-      } else {
-        for (let i = 0; i < transData.length; i++) {
-          if (transData[i].salary != 0) {
-            transData[i].transalary = (salary[transData[i].salary] + '元/月')
-          } else {
-            transData[i].transalary = salary[transData[i].salary]
-          }
-        }
-      }
-    } else {
-      if (transData.salary != 0) {
-        transData.transalary = (salary[transData.salary] + '元/月')
-      } else {
-        transData.transalary = salary[transData.salary]
-      }
-    }*/
   }
 
   // 到岗时间
@@ -244,23 +192,6 @@
           }
         }
       });
-    /*  salary.forEach((item)=>{
-        if(type == 0){
-          if (item.id == data){
-            return item.name;
-          }
-        } else if(type == 1){
-          if (item.id == data.salary){
-            data.salary = item.name;
-          }
-        }else if (type == 2){
-          for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].salary == item.id){
-              data[i].salary = item.name;
-            }
-          }
-        }
-      });*/
     }
   }
 
@@ -294,15 +225,6 @@
         }
       }
     });
-  /*  if (type == 5) {
-      return jobs
-    } else if(type == 1) {
-      for (let i = 0,len = jobs.length; i < len; i++) {
-        if (jobs[i].value == data) {
-          return jobs[i].name
-        }
-      }
-    }*/
   }
 
   // 工作性质
@@ -340,31 +262,10 @@
         }
       }
     });
-   /* let transData = data;
-    if (type == 2) {
-      if (off == 'office') {
-        for (let i = 0; i < transData.length; i++) {
-          transData[i].office.nature = nature[transData[i].office.nature]
-        }
-      }else {
-        for (let i = 0; i < transData.length; i++) {
-          transData[i].nature = nature[transData[i].nature]
-        }
-      }
-    } else {
-      transData.nature = nature[transData.nature]
-    }*/
   }
   //工作经验
   function transWorkexp(data,type,off) {
-    const workexp = [
-      {name: "不限",id: 0 },
-      {name: "1年以下",id: 1 },
-      {name: "1-3年",id: 2 },
-      {name: "3-5年",id: 3 },
-      {name: "5-10年",id: 4 },
-      {name: "10年以上",id: 5 },
-    ];
+    const workexp = JSON.parse(localStorage.getItem('WORKEXP'));
     if(type == 3){
       return workexp
     }
@@ -393,22 +294,6 @@
         }
       }
     });
-/*    let transData = data;
-    if (type == 5) {
-      return workexp
-    } else if(type == 4) {
-      return workexp[data]
-    }else if (type == 2) {
-      for (let i = 0; i < transData.length; i++) {
-        transData[i].office.work_exp = workexp[transData[i].office.work_exp]
-      }
-    }else if(type == 1) {
-      return transData.work_exp = workexp[transData.work_exp]
-    }else {
-      for (let i = 0; i < transData.length; i++) {
-        transData[i].work_exp = workexp[transData[i].work_exp]
-      }
-    }*/
   }
 
 /*字典部分*/
@@ -551,13 +436,6 @@ function transtime(t) {
   // console.log(T,T.getTime(),typeof T.getTime());
   return JSON.stringify(T.getTime()).substring(0,10)
 }
-
-
-
-
-
-
-
 
 
 //拼接图片地址

@@ -600,6 +600,7 @@
           for (let i = 0,len = this.advData.length;i < len;i++){
             if (this.advData[i].id == adv_sign) {
               if (this.advData[i].choose == 1) {
+                this.$set(this.advData,i,{choose: 0,id: adv_sign,type: this.advData[i].type,salary: this.advData[i].salary,value: this.advData[i].value});
                 this.advData[i].choose = 0;
                 for (let j = 0,nlen = this.tagsNum.length;j < nlen;j++){
                   if (this.tagsNum[j] == adv_sign){
@@ -615,7 +616,8 @@
                     duration: 1500
                   });
                 } else {
-                  this.advData[i].choose = 1;
+                  this.$set(this.advData,i,{choose: 1,id: adv_sign,type: this.advData[i].type,salary: this.advData[i].salary,value: this.advData[i].value});
+                  // this.advData[i].choose = 1;
                   this.tagsNum.push(adv_sign);
                 }
               }
@@ -985,20 +987,19 @@
   }
   .adv_cell{
     display: inline-block;
-    padding: 9px 13px;
+    padding: 0 13px;
+    line-height: 30px;
     margin-right: 10px;
     margin-bottom: 10px;
     text-align: center;
     background-color: #dce6fa;
     color: #5082e6;
     font-size: 12px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
   }
   .adv_sign_active{
     background-color: #ffffff;
     color: #919199;
+    line-height: 28px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;

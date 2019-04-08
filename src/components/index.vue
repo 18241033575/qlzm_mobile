@@ -302,6 +302,11 @@
           .then((res)=>{
             localStorage.setItem('COMSCALE',JSON.stringify(res.data));
           });
+        // 获取工作经验
+        this.$ajax.get('/base/get-workexp-range')
+          .then((res)=>{
+            localStorage.setItem('WORKEXP',JSON.stringify(res.data));
+          });
       }
     }
 </script>

@@ -103,14 +103,14 @@
           for (let i = 0,len = this.userTags.length;i < len;i++){
             if (this.userTags[i].id == adv_sign) {
               if (this.userTags[i].choose == 1) {
-                this.userTags[i].choose = 0;
+                this.$set(this.userTags,i,{choose: 0,id: adv_sign,type: this.userTags[i].type,salary: this.userTags[i].salary,value: this.userTags[i].value});
                 for (let j = 0,nlen = this.tagsNum.length;j < nlen;j++){
                   if (this.tagsNum[j] == adv_sign){
                     this.tagsNum.splice(j,1);
                   }
                 }
               } else{
-                this.userTags[i].choose = 1;
+                this.$set(this.userTags,i,{choose: 1,id: adv_sign,type: this.userTags[i].type,salary: this.userTags[i].salary,value: this.userTags[i].value});
                 this.tagsNum.push(adv_sign);
               }
             }
