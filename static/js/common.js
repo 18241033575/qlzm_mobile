@@ -34,45 +34,45 @@
   // 企业规模
   function transComScale(data,type) {
     const company_scale = JSON.parse(localStorage.getItem('COMSCALE'));
-    company_scale.forEach((item)=>{
+    for(let k = 0,len = company_scale.length;k < len;k++){
       if(type == 0){
-        if (item.id == data){
-          return item.name;
+        if (company_scale[k].id == data){
+          return company_scale[k].name;
         }
       } else if(type == 1){
-        if (item.id == data.scale){
-          data.scale = item.name;
+        if (company_scale[k].id == data.scale){
+          data.scale = company_scale[k].name;
         }
       }else if (type == 2){
         for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].scale == item.id){
-            data[i].scale = item.name;
+          if (data[i].scale == company_scale[k].id){
+            data[i].scale = company_scale[k].name;
           }
         }
       } else if (type == 3){
         return company_scale;
       }
-    });
+    }
   }
 
   // 企业性质
   function transComNature(data,type) {
     const company_nature = JSON.parse(localStorage.getItem('COMNATURE'));
-    company_nature.forEach((item)=>{
+    for(let k = 0,len = company_nature.length;k < len;k++){
       if(type == 1){
-        if (item.id == data.nature){
-          data.nature = item.name;
+        if (company_nature[k].id == data.nature){
+          data.nature = company_nature[k].name;
         }
       }else if (type == 2){
         for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].nature == item.id){
-            data[i].nature = item.name;
+          if (data[i].nature == company_nature[k].id){
+            data[i].nature = company_nature[k].name;
           }
         }
       } else if (type == 3){
         return company_nature;
       }
-    });
+    }
   }
 
   // 人才优势
@@ -97,8 +97,24 @@
   // 招聘优势
   function company_adv(data,type) {
     const welfare = JSON.parse(localStorage.getItem('COMPANYTAGS'));
-    if (data!='' && data!=undefined) {
-      let transData = data.split(',');
+    for(let k = 0,len = welfare.length;k < len;k++){
+      if(type == 0){
+        if (welfare[k].id == data){
+          return welfare[k].value;
+        }
+      } else if(type == 1){
+        if (welfare[k].id == data.scale){
+          data.scale = welfare[k].value;
+        }
+      }else if (type == 2){
+        for (let i = 0,len = data.length;i < len;i++){
+          if (data[i].scale == welfare[k].id){
+            data[i].scale = welfare[k].value;
+          }
+        }
+      } else if (type == 3){
+        return welfare;
+      }
     }
   }
 
@@ -108,31 +124,31 @@
     if (type == 3){
       return education;
     }
-    education.forEach((item)=>{
+    for(let k = 0,len = education.length;k < len;k++){
       if(type == 0){
-        if (item.id == data){
-          return item.name;
+        if (education[k].id == data){
+          return education[k].name;
         }
       } else if(type == 1){
-        if (item.id == data.education){
-          data.education = item.name;
+        if (education[k].id == data.education){
+          data.education = education[k].name;
         }
       }else if (type == 2){
         if (off == 'office'){
           for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].office.education == item.id){
-              data[i].office.education = item.name;
+            if (data[i].office.education == education[k].id){
+              data[i].office.education = education[k].name;
             }
           }
         }else {
           for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].education == item.id){
-              data[i].education = item.name;
+            if (data[i].education == education[k].id){
+              data[i].education = education[k].name;
             }
           }
         }
       }
-    });
+    }
   }
 
   // 薪资待遇
@@ -141,31 +157,31 @@
     if (type == 3){
       return salary;
     }else {
-      salary.forEach((item)=>{
-        if(type == 0){
-          if (item.id == data){
-            return item.name;
-          }
-        } else if(type == 1){
-          if (item.id == data.salary){
-            data.salary = item.name;
-          }
-        }else if (type == 2){
-          if (off == 'office'){
-            for (let i = 0,len = data.length;i < len;i++){
-              if (data[i].office.salary == item.id){
-                data[i].office.salary = item.name;
-              }
+        for(let k = 0,len = salary.length;k < len;k++){
+          if(type == 0){
+            if (salary[k].id == data){
+              return salary[k].name;
             }
-          } else {
-            for (let i = 0,len = data.length;i < len;i++){
-              if (data[i].salary == item.id){
-                data[i].salary = item.name;
+          } else if(type == 1){
+            if (salary[k].id == data.salary){
+              data.salary = salary[k].name;
+            }
+          }else if (type == 2){
+            if (off == 'office'){
+              for (let i = 0,len = data.length;i < len;i++){
+                if (data[i].office.salary == salary[k].id){
+                  data[i].office.salary = salary[k].name;
+                }
+              }
+            } else {
+              for (let i = 0,len = data.length;i < len;i++){
+                if (data[i].salary == salary[k].id){
+                  data[i].salary = salary[k].name;
+                }
               }
             }
           }
         }
-      });
     }
   }
 
@@ -196,10 +212,27 @@
   }
 
   // 发布时间
-  function tranOffice_time() {
+  function tranOffice_time(data,type) {
     const office_time = JSON.parse(localStorage.getItem('RELEASETIME'));
     if (type == 3){
       return office_time;
+    }
+    for(let k = 0,len = office_time.length;k < len;k++){
+      if(type == 0){
+        if (office_time[k].id == data){
+          return office_time[k].name;
+        }
+      } else if(type == 1){
+        if (office_time[k].id == data.jobs){
+          data.office_time = office_time[k].name;
+        }
+      }else if (type == 2){
+        for (let i = 0,len = data.length;i < len;i++){
+          if (data[i].office_time == office_time[k].id){
+            data[i].office_time = office_time[k].name;
+          }
+        }
+      }
     }
   }
   // 职位类别
@@ -208,23 +241,23 @@
     if (type == 3){
       return jobs;
     }
-    jobs.forEach((item)=>{
+    for(let k = 0,len = jobs.length;k < len;k++){
       if(type == 0){
-        if (item.id == data){
-          return item.name;
+        if (jobs[k].id == data){
+          return jobs[k].name;
         }
       } else if(type == 1){
-        if (item.id == data.jobs){
-          data.jobs = item.name;
+        if (jobs[k].id == data.jobs){
+          data.jobs = jobs[k].name;
         }
       }else if (type == 2){
         for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].jobs == item.id){
-            data[i].jobs = item.name;
+          if (data[i].jobs == jobs[k].id){
+            data[i].jobs = jobs[k].name;
           }
         }
       }
-    });
+    }
   }
 
   // 工作性质
@@ -269,31 +302,31 @@
     if(type == 3){
       return workexp
     }
-    workexp.forEach((item)=>{
+    for(let k = 0,len = workexp.length;k < len;k++){
       if(type == 0){
-        if (item.id == data){
-          return item.name;
+        if (workexp[k].id == data){
+          return workexp[k].name;
         }
       } else if(type == 1){
-        if (item.id == data.work_exp){
-          data.work_exp = item.name;
+        if (workexp[k].id == data.work_exp){
+          data.work_exp = workexp[k].name;
         }
       }else if (type == 2){
         if (off == 'office'){
           for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].office.work_exp == item.id){
-              data[i].office.work_exp = item.name;
+            if (data[i].office.work_exp == workexp[k].id){
+              data[i].office.work_exp = workexp[k].name;
             }
           }
         }else {
           for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].work_exp == item.id){
-              data[i].work_exp = item.name;
+            if (data[i].work_exp == workexp[k].id){
+              data[i].work_exp = workexp[k].name;
             }
           }
         }
       }
-    });
+    }
   }
 
 /*字典部分*/

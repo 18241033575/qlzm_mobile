@@ -85,7 +85,7 @@
                 工作经验
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == workExpAct}" :workexp-id="index" @click="workexp_opera" v-for="(item,index) in this.workexpData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:item.id == workExpAct}" :workexp-id="item.id" @click="workexp_opera" v-for="(item,index) in this.workexpData" :key="index">{{item.name}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -93,7 +93,7 @@
                 学历要求
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == educationAct}" :education-id="item.id" @click="education_opera" v-for="(item,index) in educationData" :key="index">{{item.name}}</span>
+                <span class="filter_cell" :class="{com_active:item.id == educationAct}" :education-id="item.id" @click="education_opera" v-for="(item,index) in educationData" :key="index">{{item.name}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -101,7 +101,7 @@
                 工作性质
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == natureAct}" :nature-id="index" @click="nature_opera" v-for="(item,index) in natureData" :key="index">{{item}}</span>
+                <span class="filter_cell" :class="{com_active:item.id == natureAct}" :nature-id="item.id" @click="nature_opera" v-for="(item,index) in natureData" :key="index">{{item.name}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -109,7 +109,7 @@
                 薪资要求
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == salaryAct}" :salary-id="item.id" @click="salary_opera" v-for="(item,index) in salaryData" :key="index">{{item.name}}</span>
+                <span class="filter_cell" :class="{com_active:item.id == salaryAct}" :salary-id="item.id" @click="salary_opera" v-for="(item,index) in salaryData" :key="index">{{item.name}}</span>
               </div>
             </div>
             <div class="filter_part2_cell">
@@ -117,7 +117,7 @@
                 发布时间
               </div>
               <div class="part2_cell_body">
-                <span class="filter_cell" :class="{com_active:index == offDayAct}" :offDay-id="item.id" @click="offDay_opera" v-for="(item,index) in offDayData" :key="index">{{item.name}}</span>
+                <span class="filter_cell" :class="{com_active:item.id == offDayAct}" :offDay-id="item.id" @click="offDay_opera" v-for="(item,index) in offDayData" :key="index">{{item.name}}</span>
               </div>
             </div>
           </div>
@@ -167,7 +167,7 @@
   import main_menu from '../../components/common/main_menu'
   import menu_list_pic from '../../components/common/menu_list_pic'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {transSalary,getDistanceTime,transNature1,transEducation,transWorkexp1,transArrive,transJobs} from '../../../static/js/common.js'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,transArrive,transJobs,tranOffice_time} from '../../../static/js/common.js'
   export default {
     name: "find_job",
     data() {
@@ -206,11 +206,11 @@
           province: '520000'
         },
         // 筛选条件状态
-        workExpAct: 0,
-        educationAct: 0,
+        workExpAct: 1,
+        educationAct: 9,
         natureAct: 0,
-        salaryAct: 0,
-        offDayAct: 0,
+        salaryAct: 1,
+        offDayAct: 1,
         workexpData: {},
         educationData: {},
         natureData: {},
@@ -253,9 +253,9 @@
           .then((res)=>{
             if (res.data.code == 200) {
               tranCity(res.data.data,true,2);
-              transWorkexp1(res.data.data,0);
+              transWorkexp(res.data.data,2);
               transEducation(res.data.data,2);
-              transNature1(res.data.data,2);
+              transNature(res.data.data,2);
               transSalary(res.data.data,2);
               for (let i = 0,len = res.data.data.length;i < len;i++) {
                 res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
@@ -304,11 +304,11 @@
       job_filter() {
         this.outBox = true;
         this.firstBox = true;
-        this.workexpData = transWorkexp1(this.workexpData,5);
+        this.workexpData = transWorkexp(this.workexpData,3);
         this.educationData = transEducation(this.educationData,3);
-        this.natureData = transNature1(this.natureData,3);
+        this.natureData = transNature(this.natureData,3);
         this.salaryData = transSalary(this.salaryData,3);
-        this.offDayData = transArrive(this.offDayData,3);
+        this.offDayData = tranOffice_time(this.offDayData,3);
       },
       firstBoxBg() {
         this.outBox = false;
@@ -325,7 +325,8 @@
           this.showMsg = 'city';
           this.top_title = '选择城市'
         } else if (partSign == 'pos_type') {
-          this.jobClassify = transJobs(this.jobClassify,5);
+         /* this.jobClassify = JSON.parse(localStorage.getItem('JOBTYPE'));
+          console.log(this.jobClassify);*/
           this.showMsg = 'posType';
           this.top_title = '选择职位类别'
         }
@@ -359,7 +360,10 @@
       },
       // 重置
       reset() {
-        this.workExpAct = this.educationAct = this.natureAct = this.salaryAct = this.offDayAct = 0;
+        this.tranCode = '';
+        this.workExpAct = this.salaryAct = this.offDayAct = 1;
+        this.educationAct = 9;
+        this.natureAct = 0;
         this.tranPosType = '全部';
         this.posTypeNum = 0;
         this.$route.query.job_id = '';
@@ -372,21 +376,13 @@
         this.outBox = false;
         this.find_jobParam.page = 1;
         this.allLoaded = true;
-        if (this.workExpAct != 0) {
-          this.find_jobParam.work_exp = this.workExpAct;
-        }
-        if (this.educationAct != 0) {
-          this.find_jobParam.education = this.educationAct;
-        }
+        this.find_jobParam.work_exp = this.workExpAct;
+        this.find_jobParam.education = this.educationAct;
         if (this.natureAct != 0) {
           this.find_jobParam.nature = this.natureAct;
         }
-        if (this.salaryAct != 0) {
-          this.find_jobParam.salary = this.salaryAct;
-        }
-        if (this.offDayAct != 0) {
-          this.find_jobParam.time = this.offDayAct;
-        }
+        this.find_jobParam.salary = this.salaryAct;
+        this.find_jobParam.time = this.offDayAct;
         if (this.posTypeNum != 0) {
           this.find_jobParam.job_id = this.posTypeNum;
         }
@@ -406,9 +402,9 @@
               }else {
                 this.req_state = false;
                 tranCity(res.data.data,true,2);
-                transWorkexp1(res.data.data,0);
+                transWorkexp(res.data.data,2);
                 transEducation(res.data.data,2);
-                transNature1(res.data.data,2);
+                transNature(res.data.data,2);
                 transSalary(res.data.data,2);
                 for (let i = 0,len = res.data.data.length;i < len;i++) {
                   res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
@@ -471,9 +467,9 @@
         .then((res)=>{
           if (res.data.code == 200) {
             tranCity(res.data.data,true,2);
-            transWorkexp1(res.data.data,0);
+            transWorkexp(res.data.data,2);
             transEducation(res.data.data,2);
-            transNature1(res.data.data,2);
+            transNature(res.data.data,2);
             transSalary(res.data.data,2);
             for (let i = 0,len = res.data.data.length;i < len;i++) {
               res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
@@ -487,8 +483,6 @@
           }
         });
       this.tranCode = tranCity(this.cityCode,true,1);
-     /* this.jobClassify = JSON.parse(localStorage.getItem('JOBTYPE'));
-      console.log(this.jobClassify);*/
     },
     updated() {
       this.tranCode = tranCity(this.cityCode,true,1);

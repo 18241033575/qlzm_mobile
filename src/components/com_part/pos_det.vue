@@ -290,12 +290,6 @@
       this.$ajax.get('/office/detail', {params:{id: this.id}})
         .then((res) => {
           if (res.data.state != 400) {
-            if (res.data.tags == '') {
-              this.tags_sign = false;
-            } else {
-              this.tags_sign = true;
-              res.data.tags = company_adv(res.data.tags,true);
-            }
             tranArea(res.data,true,1);
             tranCity(res.data,true,4);
             tranProvince(res.data,true,'');
@@ -309,7 +303,18 @@
             this.pos_major = this.posDetData.cert_major.major;
             transWorkexp(res.data,1,'company');
             this.has_mSign = this.posDetData.company_info.has_m == 1?true:false;
-            this.companyName = this.posDetData.company_info.name
+            this.companyName = this.posDetData.company_info.name;
+            if (res.data.tags == '' || res.data.tags == undefined) {
+              this.tags_sign = false;
+            } else {
+              this.tags_sign = true;
+              let tags = res.data.tags.split(','),
+                tranTags = [];
+              for (let i = 0,len = tags.length;i < len;i++){
+                tranTags.push(company_adv(tags[i],0));
+              }
+              this.posDetData.tags = tranTags;
+            }
           }
         });
 
@@ -324,8 +329,8 @@
             }
             this.otherPosNum = res.data.data.length - 1;
             tranCity(res.data.data,true,2);
-            transWorkexp(res.data.data,0);
-            transEducation(res.data.data,0);
+            transWorkexp(res.data.data,2);
+            transEducation(res.data.data,2);
             transNature(res.data.data,2);
             transSalary(res.data.data,2);
             this.otherPosData = res.data.data;

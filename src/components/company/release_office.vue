@@ -19,15 +19,15 @@
                 <span class="edit_lab">职位类别</span><span class="int_job_det fr" @click="pos_type" >{{tranPosType || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.JobNature == 1}" @click="all_nature">全职</span><span class="choose_cell" :class="{choose_active:this.JobNature==2}" @click="pro_nature">项目</span></span>
+                <span class="edit_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" nature-id="1" :class="{choose_active:this.JobNature == 1}" @click="nature_id">全职</span><span class="choose_cell" nature-id="2" :class="{choose_active:this.JobNature==2}" @click="nature_id">项目</span></span>
               </div>
               <div class="edit_cell db_special_cell">
                 <span class="edit_lab">持证要求</span>
                 <div class="block">
-                  <div class="edit_cell border-none" @click="certType">
+                  <div class="edit_cell border-none" @click="certType_choose">
                     <span class="edit_lab">{{tranCertType || '请选择证书类型'}}</span><span class="int_job_det fr" ><img src="/static/images/ic_right@2x.png" alt=""></span>
                   </div>
-                  <div class="edit_cell" @click="certMajor">
+                  <div class="edit_cell" @click="certMajor_choose">
                     <span class="edit_lab">{{tranCertMajor || '请选择证书专业'}}</span><span class="int_job_det fr" ><img src="/static/images/ic_right@2x.png" alt=""></span>
                   </div>
                 </div>
@@ -37,16 +37,16 @@
                 <input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址，如：街道、门牌号等">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">薪资待遇</span><span class="int_job_det fr" @click="choose_salary">{{tranSalary || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+                <span class="edit_lab">薪资待遇</span><span opera-sign="salary" class="int_job_det fr" @click="operate">{{tranSalary || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">学历要求</span><span class="int_job_det fr" @click="choose_edu">{{tranEdu || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+                <span class="edit_lab">学历要求</span><span opera-sign="education" class="int_job_det fr" @click="operate">{{tranEdu || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">工作年限</span><span class="int_job_det fr" @click="choose_workexp">{{tranWorkexp || '一年以下'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+                <span class="edit_lab">工作年限</span><span opera-sign="workexp" class="int_job_det fr" @click="operate">{{tranWorkexp || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">性别限制</span><span class="fr choose_group la_choose_group"><span class="choose_cell" :class="{choose_active:this.genderNum == 0}" @click="all_sex">不限</span><span class="choose_cell" :class="{choose_active:this.genderNum == 1}" @click="man_sex">男</span><span class="choose_cell" :class="{choose_active:this.genderNum == 2}" @click="woman_sex">女</span></span>
+                <span class="edit_lab">性别限制</span><span class="fr choose_group la_choose_group"><span class="choose_cell" sex-id="0" :class="{choose_active:this.genderNum == 0}" @click="sex_id">不限</span><span class="choose_cell" sex-id="1" :class="{choose_active:this.genderNum == 1}" @click="sex_id">男</span><span class="choose_cell" :class="{choose_active:this.genderNum == 2}" sex-id="2" @click="sex_id">女</span></span>
               </div>
               <div class="edit_cell" @click="pos_adv">
                 <span class="edit_lab">职位亮点</span><span class="int_job_det fr"><img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -111,25 +111,25 @@
           </div>
           <div class="content">
             <div class="filter_part1">
-              <div v-if="showMsg == 'posType'" v-for="(item,index) in CommonData" :posType-id="item.value" :key="index" class="filter_part1_cell second" @click="posTypeCode">
-                {{item.name}}<img v-show="posTypeNum == item.value" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <!-- 职位类别选择 -->
+              <div v-if="showMsg == 'posType'" v-for="(item,index) in CommonData" :posType-id="item.id" :key="index" class="filter_part1_cell second" @click="posTypeCode">
+                {{item.name}}<img v-show="posTypeNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
+
+              <!-- 薪资、教育、工作经验 -->
+              <div v-if="basSign" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="operate_det">
+                {{item.name}}<img v-show="comNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              </div>
+
+              <!-- 证书类型、专业 -->
               <div v-if="showMsg =='cert_type'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="CertCode">
                 {{item.category}}<img v-show="certTypeNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
               <div v-if="showMsg == 'cert_major'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="MajorCode">
                 {{item.major}}<img v-show="certMajorNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
-              <div v-if="showMsg == 'salary'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="SalaryCode">
-                {{item}}<img v-show="salaryNum.salary == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-              </div>
-              <div v-if="showMsg == 'education'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="EduCode">
-                {{item}}<img v-show="educationNum == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-              </div>
-              <div v-if="showMsg == 'workexp'" v-for="(item,index) in CommonData" :city-id="index" :key="index" class="filter_part1_cell second" @click="WorkexpCode">
-                {{item}}<img v-show="workexpNum == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-              </div>
 
+              <!-- 地点选择 -->
               <div v-if="showMsg =='pro'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="ProCode">
                 {{item}}<img v-show="infoData.province == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
@@ -174,6 +174,7 @@
           tranCertType: '',
           certMajorNum: 0,
           tranCertMajor: '',
+          comNum: 0,
           salaryNum: {
             salary: 0
           },
@@ -205,14 +206,116 @@
           subTags: [],
           // 名企标识
           has_m: 0,
+          // 富文本
           editorOption: {
             modules:{
               toolbar: false
             },
-          }
+          },
+          sign: '',
+          // 弹层显示标识
+          certSign: false,
+          basSign: false,
         }
       },
       methods: {
+        // 基础弹层操作
+        operate(e){
+          this.showMsg = '';
+          this.basSign = true;
+          this.sign = e.currentTarget.getAttribute('opera-sign');
+          switch (this.sign) {
+            case 'salary':
+              this.CommonData = transSalary(this.CommonData,3);
+              this.top_title = '薪资待遇';
+              this.comNum = this.salaryNum.salary;
+              break;
+            case 'education':
+              this.top_title = '学历要求';
+              this.CommonData = transEducation(this.CommonData,3);
+              this.comNum = this.educationNum;
+              break;
+            case 'workexp':
+              this.top_title = '工作年限';
+              this.CommonData = transWorkexp(this.CommonData,3);
+              this.comNum = this.workexpNum;
+              break;
+          }
+          this.scrollSign = true;
+          this.secondBox = true;
+        },
+        operate_det(e){
+          switch (this.sign) {
+            case 'salary':
+              let salaryId = e.currentTarget.getAttribute('city-id');
+              this.salaryNum.salary = salaryId;
+              this.tranSalary = transSalary(salaryId,0);
+              break;
+            case 'education':
+              let eduId = e.currentTarget.getAttribute('city-id');
+              this.educationNum = eduId;
+              this.tranEdu = transEducation(eduId,0);
+              break;
+            case 'workexp':
+              let expId = e.currentTarget.getAttribute('city-id');
+              this.workexpNum = expId;
+              this.tranWorkexp = transWorkexp(expId,0);
+              break;
+          }
+          this.scrollSign = false;
+          this.secondBox = false;
+          this.basSign = false;
+        },
+        // 证书弹层操作
+        certType_choose(){
+          let certData = JSON.parse(localStorage.getItem('CERT'));
+          this.showMsg = 'cert_type';
+          this.CommonData = certData;
+          this.top_title = '选择证书类型';
+          this.scrollSign = true;
+          this.secondBox = true;
+        },
+        CertCode(e) {
+          let certData = JSON.parse(localStorage.getItem('CERT'));
+          let certId = e.currentTarget.getAttribute('city-id');
+          this.certTypeNum = certId;
+          this.tranCertMajor = '';
+          this.secondBox = false;
+          this.scrollSign = false;
+          for (let i = 0,len = certData.length; i < len; i++) {
+            if (certData[i].id == certId) {
+              this.tranCertType = certData[i].category;
+            }
+          }
+        },
+        certMajor_choose(){
+          let certData = JSON.parse(localStorage.getItem('CERT'));
+          this.showMsg = 'cert_major';
+          this.top_title = '选择证书专业';
+          for (let i = 0,len = certData.length; i < len; i++) {
+            if (certData[i].id == this.certTypeNum) {
+              this.CommonData = certData[i].majors;
+            }
+          }
+          this.scrollSign = true;
+          this.secondBox = true;
+        },
+        MajorCode(e) {
+          let certData = JSON.parse(localStorage.getItem('CERT'));
+          let majorId = e.currentTarget.getAttribute('city-id');
+          this.certMajorNum = majorId;
+          this.secondBox = false;
+          this.scrollSign = false;
+          for (let i = 0,len = certData.length; i < len; i++) {
+            if (certData[i].id == this.certTypeNum) {
+              for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
+                if (certData[i].majors[j].id == majorId) {
+                  this.tranCertMajor = certData[i].majors[j].major
+                }
+              }
+            }
+          }
+        },
         release() {
           // 输入限制判断
           this.form.office_name = this.form.office_name.replace(/^\s*|\s*$/g,"");
@@ -336,9 +439,9 @@
           });
           this.form.ugent = this.isUgent == true?1:0;
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
-          if (this.id == 0) {
+          if (this.id == 0 || this.id == undefined) {
             this.$ajax.post('/office/first-release',{office_name: this.form.office_name,has_m: this.has_m, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
-              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags,is_urgent: this.form.ugent})
+              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags.join(','),is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
                   this.$notify.success({
@@ -355,7 +458,7 @@
               })
           } else {
             this.$ajax.post('/office/edit',{id: this.id,has_m: this.has_m,office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,is_release: 1,
-              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags,is_urgent: this.form.ugent})
+              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags.join(','),is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
                   this.$notify.success({
@@ -377,151 +480,27 @@
           this.scrollSign = false;
         },
         //工作性质选择
-        all_nature() {
-          this.JobNature = 1
-        },
-        pro_nature() {
-          this.JobNature = 2
+        nature_id(e) {
+          this.JobNature = e.target.getAttribute('nature-id');
         },
         //性别限制选择
-        all_sex() {
-          this.genderNum = 0
-        },
-        man_sex() {
-          this.genderNum = 1
-        },
-        woman_sex() {
-          this.genderNum = 2
+        sex_id(e) {
+          this.genderNum = e.target.getAttribute('sex-id');
         },
         //职位类别选择
         pos_type() {
           this.secondBox = true;
-          this.top_title = '职位类别';
           this.showMsg = 'posType';
           this.scrollSign = true;
-          this.CommonData = transJobs(this.CommonData,5);
+          this.top_title = '职位类别';
+          this.CommonData = transJobs(this.CommonData,3);
         },
         posTypeCode(e) {
           let pos_code = e.currentTarget.getAttribute('posType-id');
           this.posTypeNum = pos_code;
-          this.tranPosType = transJobs(pos_code,1);
+          this.tranPosType = transJobs(pos_code,0);
           this.secondBox = false;
           this.scrollSign = false;
-        },
-        //证书类型
-        certType() {
-          this.secondBox = true;
-          this.scrollSign = true;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          this.showMsg = 'cert_type';
-          this.CommonData = certData;
-          this.top_title = '选择证书类型'
-        },
-        CertCode(e) {
-          let certId = e.currentTarget.getAttribute('city-id');
-          this.certTypeNum = certId;//certTypeNum
-          this.tranCertMajor = '';
-          this.secondBox = false;
-          this.scrollSign = false;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == certId) {
-              this.tranCertType = certData[i].category;
-            }
-          }
-        },
-        //证书专业
-        certMajor() {
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          if(this.certTypeNum == 0) {
-            this.$message({
-              showClose: false,
-              message: '请先选择证书类型',
-              type:　'warning'
-            });
-            return
-          }
-          this.secondBox = true;
-          this.scrollSign = true;
-          this.showMsg = 'cert_major';
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == this.certTypeNum) {
-              this.CommonData = certData[i].majors;
-            }
-          }
-          this.top_title = '选择证书专业'
-        },
-        MajorCode(e) {
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          let majorId = e.currentTarget.getAttribute('city-id');
-          this.certMajorNum = majorId;
-          this.secondBox = false;
-          this.scrollSign = false;
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == this.certTypeNum) {
-              for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
-                if (certData[i].majors[j].id == majorId) {
-                  this.tranCertMajor = certData[i].majors[j].major
-                }
-              }
-            }
-          }
-        },
-        //薪资待遇
-        choose_salary() {
-          this.scrollSign = true;
-          this.secondBox = true;
-          this.showMsg = 'salary';
-          this.top_title = '薪资待遇';
-          this.CommonData = transSalary(this.CommonData,3);
-        },
-        SalaryCode(e) {
-          let salaryId = e.currentTarget.getAttribute('city-id');
-          this.salaryNum.salary = salaryId;
-          this.scrollSign = false;
-          this.secondBox = false;
-          transSalary(this.salaryNum,1);
-          this.tranSalary = this.salaryNum.transalary;
-        },
-        //学历要求
-        choose_edu() {
-          this.scrollSign = true;
-          this.secondBox = true;
-          this.showMsg = 'education';
-          this.top_title = '学历要求';
-          this.CommonData = transEducation(this.CommonData,3);
-        },
-        EduCode(e) {
-          let eduId = e.currentTarget.getAttribute('city-id');
-          this.educationNum = eduId;
-          this.scrollSign = false;
-          this.secondBox = false;
-          this.tranEdu = transEducation(eduId,4);
-        },
-        //工作年限要求
-        choose_workexp() {
-          this.scrollSign = true;
-          this.secondBox = true;
-          this.showMsg = 'workexp';
-          this.top_title = '工作年限';
-          this.CommonData = transWorkexp(this.CommonData,5);
-        },
-        WorkexpCode(e) {
-          let expId = e.currentTarget.getAttribute('city-id');
-          this.workexpNum = expId;
-          this.scrollSign = false;
-          this.secondBox = false;
-          this.tranWorkexp = transWorkexp(expId,4);
         },
         // 地址选择
         choose_pro() {
@@ -569,6 +548,7 @@
           this.secondBox = false;
           this.scrollSign = false;
         },
+        // 描述、亮点返回
         intro_back() {
           if (this.introSign) {
             this.introSign = false;
@@ -577,6 +557,7 @@
           }
           this.scrollSign = false;
         },
+        // 职位描述、职位亮点确定
         intro_sub() {
           if (this.introSign) {
             this.duty = this.infoData.duty;
@@ -587,14 +568,17 @@
           }
           this.scrollSign = false;
         },
+        // 职位描述
         pos_desc() {
           this.scrollSign = true;
           this.introSign = true;
         },
+        // 职位亮点
         pos_adv(){
           this.scrollSign = true;
           this.tagsSign = true;
         },
+        // 选择职位亮点
         choose_adv(e) {
           let adv_sign = e.currentTarget.getAttribute('adv-id');
           for (let i = 0,len = this.advData.length;i < len;i++){
@@ -646,6 +630,7 @@
               this.has_m = res.data.has_m;
           });
         this.id = this.$route.query.id;
+        // id不为0 职位编辑
         if (this.id != 0 || this.id != undefined) {
             // 获取职位列表
             this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
@@ -659,17 +644,18 @@
                       this.tranCity = tranCity(this.infoData,true,3);
                       this.infoData.area = res.data[i].area;
                       this.tranArea = tranArea(this.infoData,true,3);
-                      this.infoData.duty = res.data[i].duty;
+                      this.duty = this.infoData.duty = res.data[i].duty;
                       this.form.office_name = res.data[i].office_name;
                       this.form.tal_addr = res.data[i].address;
                       this.form.hire_num = res.data[i].hire_num == 0?'若干':res.data[i].hire_num;
-                      this.posTypeNum = res.data[i].job_id;
-                      this.tranPosType = transJobs(this.posTypeNum,1);
+                      this.posTypeNum = res.data[i].category;
+                      this.tranPosType = transJobs(this.posTypeNum,0);
                       this.certTypeNum = res.data[i].cert_categories_id;
+                      let tags = res.data[i].tags.split(',');
                       this.advData.forEach((item)=>{
-                        for (let k = 0,len = res.data[i].tags.length;k < len;k++) {
-                          if (res.data[i].tags[k] == item.id) {
-                              item.choose = 1;
+                        for (let k = 0,len = tags.length;k < len;k++) {
+                          if (tags[k] == item.id) {
+                            item.choose = 1;
                           }
                         }
                       });
@@ -688,16 +674,13 @@
                           }
                         }
                       }
-                      this.posTypeNum = res.data[i].category;
-                      this.tranPosType = transJobs(this.posTypeNum,1);
                       this.JobNature = res.data[i].nature;
                       this.salaryNum.salary = res.data[i].salary;
-                      transSalary(this.salaryNum,1);
-                      this.tranSalary = this.salaryNum.transalary;
+                      this.tranSalary = transSalary(res.data[i].salary,0);
                       this.educationNum = res.data[i].education;
-                      this.tranEdu = transEducation(this.educationNum,4);
+                      this.tranEdu = transEducation(this.educationNum,0);
                       this.workexpNum = res.data[i].work_exp;
-                      this.tranWorkexp = transWorkexp(this.workexpNum,4);
+                      this.tranWorkexp = transWorkexp(this.workexpNum,0);
                       this.isUgent = res.data[i].is_urgent == 1?true:false;
                       this.genderNum = res.data[i].sex;
                     }

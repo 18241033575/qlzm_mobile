@@ -299,7 +299,6 @@
               tranArea(res.data,true,1);
               tranCity(res.data,true,4);
               tranProvince(res.data,true);
-              // console.log(res.data);
               transComScale(res.data,1);
               transComNature(res.data,1);
               this.companyMsg = res.data;
