@@ -329,6 +329,50 @@
     }
   }
 
+// 更新时间
+function updateTime(data,type) {
+  const Time = [
+    {name: "不限",id: 0},
+    {name: "1天内",id: 1},
+    {name: "3天内",id: 2},
+    {name: "1周内",id: 3},
+    {name: "15天内",id: 4},
+    {name: "1个月内",id: 5},
+  ];
+  if (type == 3) {
+    return Time
+  }
+}
+// 年龄要求
+function reqAge(data,type) {
+  const Age = [
+    {name: "不限",id: 0},
+    {name: "18-25岁",id: 1},
+    {name: "25-30岁",id: 2},
+    {name: "30-35岁",id: 3},
+    {name: "35岁以上",id: 4},
+  ];
+  if (type == 3) {
+    return Age
+  }
+}
+
+// 性别
+function transGender(data,type) {
+  const gender = [
+    {name: "不限",id: 0},
+    {name: "男",id: 1},
+    {name: "女",id: 2},
+  ];
+  if (type == 3) {
+    return gender
+  } else {
+    data.gender = gender[data.gender]
+  }
+}
+
+
+
 /*字典部分*/
 
 function transNature1(data,type,off) {
@@ -384,19 +428,7 @@ function transWorkexp1(data,type,classify) {
     }
   }
 }
-function transGender(data,type) {
-  // gender：
-  const gender = [
-    "不限",
-    "男",
-    "女"
-  ];
-    if (type == 5) {
-      return gender
-    } else {
-      data.gender = gender[data.gender]
-    }
-}
+
 
 
 
@@ -501,33 +533,7 @@ function splicLogo(data,type) {
     }
   }
 }
-// 更新时间
-function updateTime(data,type) {
-    const Time = [
-      "不限",
-      "1天内",
-      "3天内",
-      "1周内",
-      "15天内",
-      "1个月内",
-    ];
-  if (type == 3) {
-      return Time
-  }
-}
-// 年龄要求
-function reqAge(data,type) {
-  const Age = [
-    "不限",
-    "18-25岁",
-    "25-30岁",
-    "30-35岁",
-    "35岁以上",
-  ];
-  if (type == 3) {
-    return Age
-  }
-}
+
 
 
 function splicFrontcover(data,num) {

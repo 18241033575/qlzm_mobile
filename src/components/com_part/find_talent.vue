@@ -72,7 +72,7 @@
                   工作经验
                 </div>
                 <div class="part2_cell_body">
-                  <span class="filter_cell" :class="{com_active:index == workExpAct}" :workexp-id="index" @click="workexp_opera" v-for="(item,index) in this.workexpData" :key="index">{{item}}</span>
+                  <span class="filter_cell" :class="{com_active:item.id == workExpAct}" :workexp-id="item.id" @click="workexp_opera" v-for="(item,index) in this.workexpData" :key="index">{{item.name}}</span>
                 </div>
               </div>
               <div class="filter_part2_cell">
@@ -80,7 +80,7 @@
                   学历要求
                 </div>
                 <div class="part2_cell_body">
-                  <span class="filter_cell" :class="{com_active:index == educationAct}" :education-id="index" @click="education_opera" v-for="(item,index) in educationData" :key="index">{{item}}</span>
+                  <span class="filter_cell" :class="{com_active:item.id == educationAct}" :education-id="item.id" @click="education_opera" v-for="(item,index) in educationData" :key="index">{{item.name}}</span>
                 </div>
               </div>
               <div class="filter_part2_cell">
@@ -88,7 +88,7 @@
                   工作性质
                 </div>
                 <div class="part2_cell_body">
-                  <span class="filter_cell" :class="{com_active:index == natureAct}" :nature-id="index" @click="nature_opera" v-for="(item,index) in natureData" :key="index">{{item}}</span>
+                  <span class="filter_cell" :class="{com_active:item.id == natureAct}" :nature-id="item.id" @click="nature_opera" v-for="(item,index) in natureData" :key="index">{{item.name}}</span>
                 </div>
               </div>
               <div class="filter_part2_cell">
@@ -96,7 +96,7 @@
                   薪资要求
                 </div>
                 <div class="part2_cell_body">
-                  <span class="filter_cell" :class="{com_active:index == salaryAct}" :salary-id="index" @click="salary_opera" v-for="(item,index) in salaryData" :key="index">{{item}}</span>
+                  <span class="filter_cell" :class="{com_active:item.id == salaryAct}" :salary-id="item.id" @click="salary_opera" v-for="(item,index) in salaryData" :key="index">{{item.name}}</span>
                 </div>
               </div>
               <div class="filter_part2_cell">
@@ -104,7 +104,7 @@
                   性别要求
                 </div>
                 <div class="part2_cell_body">
-                  <span class="filter_cell" :class="{com_active:index == genderAct}" :gender-id="index" @click="gender_opera" v-for="(item,index) in genderData" :key="index">{{item}}</span>
+                  <span class="filter_cell" :class="{com_active:item.id == genderAct}" :gender-id="item.id" @click="gender_opera" v-for="(item,index) in genderData" :key="index">{{item.name}}</span>
                 </div>
               </div>
               <div class="filter_part2_cell">
@@ -112,7 +112,7 @@
                   年龄要求
                 </div>
                 <div class="part2_cell_body">
-                  <span class="filter_cell" :class="{com_active:index == ageAct}" :age-id="index" @click="age_opera" v-for="(item,index) in ageData" :key="index">{{item}}</span>
+                  <span class="filter_cell" :class="{com_active:item.id == ageAct}" :age-id="item.id" @click="age_opera" v-for="(item,index) in ageData" :key="index">{{item.name}}</span>
                 </div>
               </div>
               <div class="filter_part2_cell">
@@ -120,7 +120,7 @@
                   更新时间
                 </div>
                 <div class="part2_cell_body">
-                  <span class="filter_cell" :class="{com_active:index == offDayAct}" :offDay-id="index" @click="offDay_opera" v-for="(item,index) in offDayData" :key="index">{{item}}</span>
+                  <span class="filter_cell" :class="{com_active:item.id == offDayAct}" :offDay-id="item.id" @click="offDay_opera" v-for="(item,index) in offDayData" :key="index">{{item.name}}</span>
                 </div>
               </div>
             </div>
@@ -180,7 +180,7 @@
 
 <script>
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {transSalary,getDistanceTime,transNature1,transEducation,transWorkexp,transJobs,transGender,updateTime,reqAge,getTrueAge} from '../../../static/js/common.js'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,transJobs,transGender,updateTime,reqAge,getTrueAge} from '../../../static/js/common.js'
     export default {
         name: "find_talent",
       data() {
@@ -212,13 +212,13 @@
             row: 8,
             work_province: '520000'
           },
-          workExpAct: 0,
-          educationAct: 0,
-          natureAct: 0,
-          genderAct: 0,
-          salaryAct: 0,
-          ageAct: 0,
-          offDayAct: 0,
+          workExpAct: 1,
+          educationAct: 1,
+          natureAct: 1,
+          genderAct: 1,
+          salaryAct: 1,
+          ageAct: 1,
+          offDayAct: 1,
           workexpData: {},
           educationData: {},
           natureData: {},
@@ -290,10 +290,10 @@
         job_filter() {
           this.outBox = true;
           this.firstBox = true;
-          this.workexpData = transWorkexp1(this.workexpData,5);
+          this.workexpData = transWorkexp(this.workexpData,3);
           this.educationData = transEducation(this.educationData,3);
-          this.natureData = transNature1(this.natureData,3);
-          this.genderData = transGender(this.genderData,5);
+          this.natureData = transNature(this.natureData,3);
+          this.genderData = transGender(this.genderData,3);
           this.salaryData = transSalary(this.salaryData,3);
           this.ageData = reqAge(this.offDayData,3);
           this.offDayData = updateTime(this.offDayData,3);
@@ -431,6 +431,8 @@
         CityCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
           this.cityCode[1] = cCode;
+          this.find_talParam.city = cCode;
+          this.tranCode = tranCity(this.cityCode,true,1);
           this.firstBox = true;
           this.secondBox = false
         },
@@ -502,7 +504,7 @@
               tranCity(res.data.data,true,2);
               transWorkexp(res.data.data,2);
               transEducation(res.data.data,2);
-              transNature1(res.data.data,2);
+              transNature(res.data.data,2);
               transSalary(res.data.data,2);
               getTrueAge(res.data.data,2);
               for (let i = 0,len = res.data.data.length;i < len;i++) {

@@ -419,6 +419,8 @@
       CityCode(e) {
         let cCode = e.currentTarget.getAttribute('city-id');
         this.cityCode[1] = cCode;
+        this.find_jobParam.city = cCode;
+        this.tranCode = tranCity(this.cityCode,true,1);
         this.firstBox = true;
         this.secondBox = false
       },
@@ -485,8 +487,8 @@
       this.tranCode = tranCity(this.cityCode,true,1);
     },
     updated() {
-      this.tranCode = tranCity(this.cityCode,true,1);
-      this.find_jobParam.city = this.cityCode[1];
+
+
       for (let i = 0,len = this.jobClassify.length; i < len; i++) {
         if (this.jobClassify[i].value == this.classifyValue) {
           this.tranPosType = this.jobClassify[i].name;
