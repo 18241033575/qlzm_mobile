@@ -8,9 +8,9 @@
       </div>
       <div class="set_list">
         <div class="content">
-          <div class="edit_cell">
+         <!-- <div class="edit_cell">
             <span class="edit_lab">自动招聘</span><span @click="auto_set" class="int_job_det fr">未开启<img src="/static/images/ic_right@2x.png" alt=""></span>
-          </div>
+          </div>-->
           <div class="edit_cell">
             <span class="edit_lab">招聘优势</span><span class="int_job_det fr"><img src="/static/images/ic_right@2x.png" alt=""></span>
             <p>提升职位吸引力，有效增加招聘效率！</p>

@@ -248,7 +248,7 @@
               localStorage.setItem('BASSET',param);
               res.data.forEach((item,ids)=> {
                 // 网站title
-                if (item.id == 13) {
+                if (item.key == 'cfg_websitename') {
                   this.webTitle = item.value;
                 }
               })

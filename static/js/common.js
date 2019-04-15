@@ -10,12 +10,12 @@
     // 文件上传接口地址
     'file_upload'           => '//file.wiiwork.com/v1/upload',
   */
-  const file_server = '//file.wiiwork.com/';  // 测试服
-  // const file_server = '//https://file.qlzm.com.cn/'; // 正式服
+  const file_server = 'http://file.wiiwork.com/';  // 测试服
+  // const file_server = 'https://file.qlzm.com.cn/'; // 正式服
 
   function file_upload() {
-    return '//file.wiiwork.com/v1/upload';  // 测试服
-    // return 'https://file.qlzm.com.cn/v1/upload'; // 正式服
+    return 'file.wiiwork.com/v1/upload';  // 测试服
+    // return 'https:file.qlzm.com.cn/v1/upload'; // 正式服
   }
 
 

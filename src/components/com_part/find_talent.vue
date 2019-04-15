@@ -151,8 +151,8 @@
               <div v-if="showMsg=='city'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
                 {{item}}<img v-show="cityCode[1] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
-              <div v-if="showMsg == 'posType'" v-for="(item,index) in jobClassify" :posType-id="item.value" :key="index" class="filter_part1_cell second" @click="posTypeCode">
-                {{item.name}}<img v-show="posTypeNum == item.value" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg == 'posType'" v-for="(item,index) in jobClassify" :posType-id="item.id" :key="index" class="filter_part1_cell second" @click="posTypeCode">
+                {{item.name}}<img v-show="posTypeNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
             </div>
           </div>
@@ -163,7 +163,7 @@
 
         <div class="opera_list">
           <div class="content">
-            <div class="opera_cell" @click.stop="collect_resume">
+            <div class="opera_cell" @click="collect_resume">
               加入收藏
             </div>
           </div>
@@ -257,7 +257,7 @@
                   tranCity(res.data.data,true,2);
                   transWorkexp(res.data.data,2);
                   transEducation(res.data.data,2);
-                  transNature1(res.data.data,2);
+                  transNature(res.data.data,2);
                   transSalary(res.data.data,2);
                   getTrueAge(res.data.data,2);
                   for (let i = 0,len = res.data.data.length;i < len;i++) {
@@ -312,7 +312,7 @@
             this.showMsg = 'city';
             this.top_title = '选择城市'
           } else if (partSign == 'pos_type') {
-            this.jobClassify = transJobs(this.jobClassify,5);
+            this.jobClassify = transJobs(this.jobClassify,3);
             this.showMsg = 'posType';
             this.top_title = '选择职位类别'
           }
@@ -403,7 +403,7 @@
                   tranCity(res.data.data,true,2);
                   transWorkexp(res.data.data,2);
                   transEducation(res.data.data,2);
-                  transNature1(res.data.data,2);
+                  transNature(res.data.data,2);
                   transSalary(res.data.data,2);
                   getTrueAge(res.data.data,2);
                   for (let i = 0,len = res.data.data.length;i < len;i++) {
@@ -439,7 +439,7 @@
         posTypeCode(e) {
           let pos_code = e.currentTarget.getAttribute('posType-id');
           this.posTypeNum = pos_code;
-          this.tranPosType = transJobs(pos_code,1);
+          this.tranPosType = transJobs(pos_code,0);
           this.firstBox = true;
           this.secondBox = false;
           // this.scrollSign = false;
