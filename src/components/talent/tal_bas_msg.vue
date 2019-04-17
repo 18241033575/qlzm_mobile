@@ -318,7 +318,7 @@
                 this.cityCode.province = res.data.base_info.province;
                 this.cityCode.city = res.data.base_info.city;
                 this.cityCode.area = res.data.base_info.area;
-                transGender(res.data.base_info,true);
+                transGender(res.data.base_info,1);
                 transEducation(res.data.base_info,1);
                 this.userMsg = res.data.base_info;
                 this.tranPro = tranProvince(this.userMsg.province,true,'',2);

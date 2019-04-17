@@ -152,7 +152,6 @@
 
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
           .then((res)=>{
-            console.log(res.data);
             if(res.data.state != 400) {
               if (res.data.base_info.id_card != '') {
                 this.integrity += 15

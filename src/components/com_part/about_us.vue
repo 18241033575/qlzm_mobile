@@ -8,7 +8,11 @@
       </div>
       <!--分类列表-->
       <div class="classify bacf">
-        <span v-for="(item,index) in List" :key="index" :class="{active: act == item.id}" @click="operat" :id-sign="item.id">{{item.column_name}}</span><span @click="operat" :class="{active: act == 1000}" id-sign="1000">用户指南</span><span @click="operat" :class="{active: act == 1001}" id-sign="1001">意见反馈</span>
+        <div class="classify_det" :style="com_style">
+          <v-touch v-on:swipeleft="leftChangeImg" height="44px" v-on:swiperight="rightChangeImg">
+            <span v-for="(item,index) in List" :key="index" :class="{active: act == item.id}" @click="operat" :id-sign="item.id">{{item.column_name}}</span><span @click="operat" :class="{active: act == 1000}" id-sign="1000">用户指南</span><span @click="operat" :class="{active: act == 1001}" id-sign="1001">意见反馈</span>
+          </v-touch>
+        </div>
       </div>
       <!--分类单元-->
       <div class="contact bacf" v-for="(item,index) in List" :key="index" v-show="act == item.id">
@@ -54,6 +58,8 @@
             },
             List: [],
             guideData: {},
+            com_style:{marginLeft: 0}
+
           }
       },
       methods: {
@@ -63,6 +69,15 @@
         operat(e){
           let sign = e.currentTarget.getAttribute('id-sign');
           this.act = sign;
+        },
+        leftChangeImg(e) {
+          // console.log(e);
+          e.preventDefault();
+          this.com_style.marginLeft = -e.distance + 'px';
+        },
+        rightChangeImg(e){
+          e.preventDefault();
+          this.com_style.marginLeft = e.distance + 'px';
         }
       },
       created() {
@@ -73,8 +88,7 @@
           this.$ajax.get('/news/user-guides')
             .then((res)=>{
               this.guideData = res.data;
-              console.log(this.guideData);
-            })
+            });
       }
     }
 </script>

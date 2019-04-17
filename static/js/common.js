@@ -14,7 +14,7 @@
   // const file_server = 'https://file.qlzm.com.cn/'; // 正式服
 
   function file_upload() {
-    return 'file.wiiwork.com/v1/upload';  // 测试服
+    return 'http://file.wiiwork.com/v1/upload';  // 测试服
     // return 'https:file.qlzm.com.cn/v1/upload'; // 正式服
   }
 
@@ -364,10 +364,16 @@ function transGender(data,type) {
     {name: "男",id: 1},
     {name: "女",id: 2},
   ];
-  if (type == 3) {
-    return gender
-  } else {
-    data.gender = gender[data.gender]
+  for (let k = 0,len = gender.length;k < len;k++){
+    if (type == 3) {
+      return gender
+    } else if(type == 1){
+      if (data.gender == gender[k].id){
+        data.gender = gender[k].name;
+      }
+    }else {
+      data.gender = gender[data.gender]
+    }
   }
 }
 

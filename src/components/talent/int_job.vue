@@ -1,6 +1,6 @@
 <template>
   <!--求职意向-->
-  <div class="int_job_all" :class="{stop_scroll: this.secondBox}">
+  <div class="int_job_all" :class="{stop_scroll: secondBox || doubleBox}">
     <!--信息列表-->
     <div class="int_job" v-show="this.int_job_edit">
       <div class="com_det_title">
@@ -14,7 +14,7 @@
             <p><span class="left_lab">求职类型</span> <span class="right_msg">{{intJobData.nature}}</span></p>
             <p><span class="left_lab">意向岗位</span> <span v-for="(item,index) in this.tranIntJob" :key="index" class="right_msg">{{item}}</span></p>
             <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary}}</span></p>
-            <p><span class="left_lab">工作地区</span> <span class="right_msg">{{(intJobData.province || '未知') + (intJobData.city || '')}}</span></p>
+            <p><span class="left_lab">工作地区</span> <span class="right_msg">{{(intJobData.province) + (intJobData.city=='未知'?'':intJobData.city)}}</span></p>
             <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time}}</span></p>
             <p><span class="left_lab">备注</span> <span class="right_msg">{{intJobData.remark}}</span></p>
           </div>
@@ -46,7 +46,7 @@
               <span class="edit_lab">期望薪资</span><span class="int_job_det fr" @click="salary">{{intJobData.salary || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">工作地区</span><span class="int_job_det fr" @click="pro_city">{{(intJobData.province + intJobData.city || '') || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">工作地区</span><span class="int_job_det fr" @click="pro_city">{{(intJobData.province + (intJobData.city=='未知'?'':intJobData.city)) || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">预计到岗时间</span><span class="int_job_det fr" @click="arrive_time">{{intJobData.duty_time || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -106,7 +106,7 @@
           </div>
         </div>
         <div class="content">
-          <div class="filter_part1">
+          <div class="filter_part1 toTop" >
             <div class="pro_cell">
               <div v-for="(item,index) in ProData" :city-id="index" :key="index" :class="{pro_active:cityCode.province == index}" class=" filter_part1_cell  second" @click="WorkAreaCode">
                 {{item}}
@@ -149,7 +149,8 @@
             ArriveId: '',
             cityCode: {},
             jobClassify: {},
-            upSalary: 0
+            upSalary: 0,
+            midPro: 0
           }
       },
       methods: {
@@ -286,8 +287,10 @@
           this.cityCode.province = areaCode;
           this.cityData = tranCity(this.cityCode,true,2,'city');
           this.intJobData.province = tranProvince(this.cityCode.province,true,'',2);
-
+          this.cityCode.city = 0;
+          this.intJobData.city = '';
           // 滑动到上面
+          // window.scroll(0,0);
 
         },
         WorkCityCode(e) {

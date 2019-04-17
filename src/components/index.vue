@@ -156,7 +156,7 @@
       data() {
           return{
             bannerList: {
-              0: "/static/images/banner03@2x.png",
+              0: "/static/images/banner01@2x.png",
               1: "/static/images/banner02@2x.png",
               2: "/static/images/banner03@2x.png",
             },
