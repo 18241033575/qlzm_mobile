@@ -519,7 +519,6 @@
     width: 90px;
     height: 60px;
     min-width: 90px;
-    background-color: aqua;
   }
   .news_head img{
     width: 100%;

@@ -17,7 +17,7 @@
                   <img v-show="companyMsg.has_m==1" src="/static/images/ic_fam_comp@2x.png" alt="">{{companyMsg.name}}<span @click="report" class="fr report"><img
                   src="/static/images/report.png" alt="">举报</span>
                 </div>
-                <p><span class="tags">{{companyMsg.nature}}</span> | <span class="tags">{{companyMsg.scale}}</span> | <span class="tags">{{(companyMsg.province || '未知') + (companyMsg.city || '')}}</span></p>
+                <p><span class="tags">{{companyMsg.nature}}</span> | <span class="tags">{{companyMsg.scale}}</span> | <span class="tags">{{(companyMsg.province=='未知'?'未知地点':companyMsg.province) + (companyMsg.city=='未知'?'':companyMsg.city)}}</span></p>
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@
                   企业地址
                 </div>
                 <div class="company_address">
-                  {{(companyMsg.province || '') +　(companyMsg.city || '') + (companyMsg.area || '') + companyMsg.address}}
+                  {{(companyMsg.province=='未知'?'未知地点':companyMsg.province) +　(companyMsg.city=='未知'?'':companyMsg.city) + (companyMsg.area=='未知'?'':companyMsg.city) + (companyMsg.address=='未知'?'':companyMsg.address)}}
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@
 
 <script>
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {transSalary,transNature,transEducation,transWorkexp,transComNature,transComScale,splicPic,company_adv} from '../../../static/js/common.js'
+  import {transSalary,transNature,transEducation,transWorkexp,transComNature,transComScale,splicPic,company_adv,fileUrl} from '../../../static/js/common.js'
     export default {
       name: "company_det",
       data() {
@@ -275,7 +275,6 @@
         this.$ajax.get('/api/company/detail'+ '/' + cid)
           .then((res) => {
             if (res.data.state != 400) {
-              console.log(res.data);
               if (res.data.tags == '') {
                 this.tags_sign = false;
               } else {
@@ -294,7 +293,8 @@
               for (let i = 0,len = this.companyMien.length;i < len;i++) {
                 this.companyMien[i] = splicPic(this.companyMien[i],true);
               }
-              res.data.logo = splicPic(res.data.logo,true);
+              let file_url = fileUrl();
+              res.data.logo = splicPic(res.data.logo,true)==file_url?'/static/images/company_def_logo.png':splicPic(res.data.logo,true);
               this.contactData = res.data.contact;
               tranArea(res.data,true,1);
               tranCity(res.data,true,4);
