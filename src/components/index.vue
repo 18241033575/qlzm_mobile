@@ -209,6 +209,67 @@
         }
       },
       created() {
+        // 加载字典
+        // 更新标识
+        if (true){
+          //  字典
+          // 获取招聘优势字典
+          this.$ajax.get('/company/zhaopin-advantages')
+            .then((res)=>{
+              localStorage.setItem('COMPANYTAGS',JSON.stringify(res.data));
+            });
+          // 获取个人优势字典
+          this.$ajax.get('/personal/get-advantages')
+            .then((res)=>{
+              localStorage.setItem('USERTAGS',JSON.stringify(res.data));
+            });
+          // 获取到岗时间
+          this.$ajax.get('/tags/duty-time')
+            .then((res)=>{
+              localStorage.setItem('ARRIVETIME',JSON.stringify(res.data));
+            });
+          // 获取发布时间
+          this.$ajax.get('/base/get-time-limit')
+            .then((res)=>{
+              localStorage.setItem('RELEASETIME',JSON.stringify(res.data));
+            });
+          // 获取职位类别
+          this.$ajax.get('/base/get-jobs')
+            .then((res)=>{
+              localStorage.setItem('JOBTYPE',JSON.stringify(res.data));
+            });
+          // 获取月薪
+          this.$ajax.get('/tags/salary')
+            .then((res)=>{
+              localStorage.setItem('SALARY',JSON.stringify(res.data));
+            });
+          // 获取学历
+          this.$ajax.get('/tags/education')
+            .then((res)=>{
+              localStorage.setItem('EDUCATION',JSON.stringify(res.data));
+            });
+
+          // 获取企业性质
+          this.$ajax.get('/company/get-natures')
+            .then((res)=>{
+              localStorage.setItem('COMNATURE',JSON.stringify(res.data));
+            });
+          // 获取企业规模
+          this.$ajax.get('/company/get-scales')
+            .then((res)=>{
+              localStorage.setItem('COMSCALE',JSON.stringify(res.data));
+            });
+          // 获取工作经验
+          this.$ajax.get('/base/get-workexp-range')
+            .then((res)=>{
+              localStorage.setItem('WORKEXP',JSON.stringify(res.data));
+            });
+          // 证书数据
+          this.$ajax.get('/allcerts')
+            .then((res)=>{
+              localStorage.setItem('CERT',JSON.stringify(res.data));
+            });
+        }
           // 急聘数据
           this.$ajax.get('/office/urgent')
             .then((res)=>{
@@ -253,59 +314,6 @@
                 }
               })
             }
-          });
-
-        //  字典
-        // 获取招聘优势字典
-        this.$ajax.get('/company/zhaopin-advantages')
-          .then((res)=>{
-            localStorage.setItem('COMPANYTAGS',JSON.stringify(res.data));
-          });
-        // 获取个人优势字典
-        this.$ajax.get('/personal/get-advantages')
-          .then((res)=>{
-            localStorage.setItem('USERTAGS',JSON.stringify(res.data));
-          });
-        // 获取到岗时间
-        this.$ajax.get('/tags/duty-time')
-          .then((res)=>{
-            localStorage.setItem('ARRIVETIME',JSON.stringify(res.data));
-          });
-        // 获取发布时间
-        this.$ajax.get('/base/get-time-limit')
-          .then((res)=>{
-            localStorage.setItem('RELEASETIME',JSON.stringify(res.data));
-          });
-        // 获取职位类别
-        this.$ajax.get('/base/get-jobs')
-          .then((res)=>{
-            localStorage.setItem('JOBTYPE',JSON.stringify(res.data));
-          });
-        // 获取月薪
-        this.$ajax.get('/tags/salary')
-          .then((res)=>{
-            localStorage.setItem('SALARY',JSON.stringify(res.data));
-          });
-        // 获取学历
-        this.$ajax.get('/tags/education')
-          .then((res)=>{
-            localStorage.setItem('EDUCATION',JSON.stringify(res.data));
-          });
-
-        // 获取企业性质
-        this.$ajax.get('/company/get-natures')
-          .then((res)=>{
-            localStorage.setItem('COMNATURE',JSON.stringify(res.data));
-          });
-        // 获取企业规模
-        this.$ajax.get('/company/get-scales')
-          .then((res)=>{
-            localStorage.setItem('COMSCALE',JSON.stringify(res.data));
-          });
-        // 获取工作经验
-        this.$ajax.get('/base/get-workexp-range')
-          .then((res)=>{
-            localStorage.setItem('WORKEXP',JSON.stringify(res.data));
           });
       }
     }

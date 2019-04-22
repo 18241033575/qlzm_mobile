@@ -16,9 +16,6 @@
                 <span class="edit_lab">招聘人数</span><input type="number" v-model="form.hire_num" placeholder="招聘人数，默认为“若干”">
               </div>
               <div class="edit_cell">
-                <span class="edit_lab">职位类别</span><span class="int_job_det fr" @click="pos_type" >{{tranPosType || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
-              </div>
-              <div class="edit_cell">
                 <span class="edit_lab">工作性质</span><span class="fr choose_group"><span class="choose_cell" nature-id="1" :class="{choose_active:this.JobNature == 1}" @click="nature_id">全职</span><span class="choose_cell" nature-id="2" :class="{choose_active:this.JobNature==2}" @click="nature_id">项目</span></span>
               </div>
               <div class="edit_cell db_special_cell">
@@ -111,10 +108,6 @@
           </div>
           <div class="content">
             <div class="filter_part1">
-              <!-- 职位类别选择 -->
-              <div v-if="showMsg == 'posType'" v-for="(item,index) in CommonData" :posType-id="item.id" :key="index" class="filter_part1_cell second" @click="posTypeCode">
-                {{item.name}}<img v-show="posTypeNum == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-              </div>
 
               <!-- 薪资、教育、工作经验 -->
               <div v-if="basSign" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="operate_det">
@@ -167,8 +160,6 @@
           introSign: false,
           duty: '',
           //弹层数据标识、转换数据
-          posTypeNum: '0',
-          tranPosType: '',
           tranGender: '',
           certTypeNum: 0,
           tranCertType: '',
@@ -328,15 +319,6 @@
             });
             return
           }
-          if (this.posTypeNum == '0') {
-            this.$notify.warning({
-              title: '提示',
-              message: '请选择职位类别',
-              showClose: false,
-              duration: 1500
-            });
-            return
-          }
           if (this.certTypeNum == '0') {
             this.$notify.warning({
               title: '提示',
@@ -440,7 +422,7 @@
           this.form.ugent = this.isUgent == true?1:0;
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (this.id == 0 || this.id == undefined) {
-            this.$ajax.post('/office/first-release',{office_name: this.form.office_name,has_m: this.has_m, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,
+            this.$ajax.post('/office/first-release',{office_name: this.form.office_name,has_m: this.has_m, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,
               province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags.join(','),is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
@@ -457,7 +439,7 @@
                 }
               })
           } else {
-            this.$ajax.post('/office/edit',{id: this.id,has_m: this.has_m,office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,category: this.posTypeNum,is_release: 1,
+            this.$ajax.post('/office/edit',{id: this.id,has_m: this.has_m,office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,is_release: 1,
               province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags.join(','),is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
@@ -486,21 +468,6 @@
         //性别限制选择
         sex_id(e) {
           this.genderNum = e.target.getAttribute('sex-id');
-        },
-        //职位类别选择
-        pos_type() {
-          this.secondBox = true;
-          this.showMsg = 'posType';
-          this.scrollSign = true;
-          this.top_title = '职位类别';
-          this.CommonData = transJobs(this.CommonData,3);
-        },
-        posTypeCode(e) {
-          let pos_code = e.currentTarget.getAttribute('posType-id');
-          this.posTypeNum = pos_code;
-          this.tranPosType = transJobs(pos_code,0);
-          this.secondBox = false;
-          this.scrollSign = false;
         },
         // 地址选择
         choose_pro() {
@@ -648,8 +615,6 @@
                       this.form.office_name = res.data[i].office_name;
                       this.form.tal_addr = res.data[i].address;
                       this.form.hire_num = res.data[i].hire_num == 0?'若干':res.data[i].hire_num;
-                      this.posTypeNum = res.data[i].category;
-                      this.tranPosType = transJobs(this.posTypeNum,0);
                       this.certTypeNum = res.data[i].cert_categories_id;
                       let tags = res.data[i].tags.split(',');
                       this.advData.forEach((item)=>{

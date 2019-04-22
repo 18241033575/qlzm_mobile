@@ -380,67 +380,7 @@ function transGender(data,type) {
   }
 }
 
-
-
-/*字典部分*/
-
-function transNature1(data,type,off) {
-  const nature = [
-    "不限",
-    "全职",
-    "项目"
-  ];
-  let transData = data;
-  if (type == 2) {
-    if (off == 'office') {
-      for (let i = 0; i < transData.length; i++) {
-        transData[i].office.nature = nature[transData[i].office.nature]
-      }
-    }else {
-      for (let i = 0; i < transData.length; i++) {
-        transData[i].nature = nature[transData[i].nature]
-      }
-    }
-  } else if (type == 3) {
-      return nature
-  } else {
-    transData.nature = nature[transData.nature]
-  }
-}
-
-
-
-function transWorkexp1(data,type,classify) {
-  //工作经验
-  let workexp = [
-    "不限",
-    "1年以下",
-    "1-3年",
-    "3-5年",
-    "5-10年",
-    "10年以上"
-  ];
-  let transData = data;
-  if (type == 5) {
-    return workexp
-  } else if(type == 4) {
-    return workexp[data]
-  }else if (type == 2) {
-    for (let i = 0; i < transData.length; i++) {
-      transData[i].office.work_exp = workexp[transData[i].office.work_exp]
-    }
-  }else if(type == 1) {
-    return transData.work_exp = workexp[transData.work_exp]
-  }else {
-    for (let i = 0; i < transData.length; i++) {
-      transData[i].work_exp = workexp[transData[i].work_exp]
-    }
-  }
-}
-
-
-
-
+// 获取距离当前时间
 function getDistanceTime(time,type,off) {
   if (type == 2) {
     if (off == 'office') {
@@ -519,6 +459,7 @@ function splicPic(data, add) {
   }
 }
 
+// 拼接logo地址
 function splicLogo(data,type) {
   if (type == 1){
     if (data.logo == '') {
@@ -544,7 +485,7 @@ function splicLogo(data,type) {
 }
 
 
-
+// 拼接文章图片
 function splicFrontcover(data,num) {
   for (let i = 0; i < data.length; i++) {
     if (data[i].frontcover == '') {
@@ -611,10 +552,8 @@ export {
   transGender,
   transEducation,
   transWorkexp,
-  transWorkexp1,
   getDistanceTime,
   transNature,
-  transNature1,
   splicPic,
   tal_adv,
   splicLogo,

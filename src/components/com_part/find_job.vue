@@ -75,9 +75,6 @@
             <div class="filter_part1_cell" data-sign="city" @click="all_choose">
               城市<span class="fr">{{tranCode || '请选择'}}<img src="/static/images/icon_goright.png" alt=""></span>
             </div>
-            <div class="filter_part1_cell" data-sign="pos_type" @click="all_choose">
-              职位类别<span class="fr">{{tranPosType || '请选择'}}<img src="/static/images/icon_goright.png" alt=""></span>
-            </div>
           </div>
           <div class="filter_part2">
             <div class="filter_part2_cell">
@@ -153,9 +150,6 @@
             <div v-if="showMsg=='city'" v-for="(item,index) in guiyangData" :city-id="index" :key="index" class="filter_part1_cell second" @click="CityCode">
               {{item}}<img v-show="cityCode[1] == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
-            <div v-if="showMsg == 'posType'" v-for="(item,index) in jobClassify" :posType-id="item.value" :key="index" class="filter_part1_cell second" @click="posTypeCode">
-              {{item.name}}<img v-show="posTypeNum == item.value" class="fr" src="/static/images/ic_checked@2x.png" alt="">
-            </div>
           </div>
         </div>
       </div>
@@ -188,13 +182,11 @@
         keyword: '',
         find_jobData: {},
         top_title: '',
-        posTypeNum: 0,
         loading: false,
         cityCode: {
           0:'520000',
         },
         tranCode: '',
-        tranPosType: '全部',
         sortList: {
           0: "默认排序",
           1: "薪资水平",
@@ -364,8 +356,6 @@
         this.workExpAct = this.salaryAct = this.offDayAct = 1;
         this.educationAct = 9;
         this.natureAct = 0;
-        this.tranPosType = '全部';
-        this.posTypeNum = 0;
         this.$route.query.job_id = '';
         this.find_jobParam = {};
         this.find_jobParam.page = 1;
@@ -383,9 +373,6 @@
         }
         this.find_jobParam.salary = this.salaryAct;
         this.find_jobParam.time = this.offDayAct;
-        if (this.posTypeNum != 0) {
-          this.find_jobParam.job_id = this.posTypeNum;
-        }
         if (this.cityCode[1] != 0 && this.cityCode[1] != undefined) {
           this.find_jobParam.city = this.cityCode[1];
         }
@@ -424,14 +411,6 @@
         this.firstBox = true;
         this.secondBox = false
       },
-      posTypeCode(e) {
-        let pos_code = e.currentTarget.getAttribute('posType-id');
-        this.posTypeNum = pos_code;
-        this.tranPosType = transJobs(pos_code,1);
-        this.firstBox = true;
-        this.secondBox = false;
-        // this.scrollSign = false;
-      },
       to_pos_det(e) {
         let id = e.currentTarget.getAttribute('id');
         let cid = e.currentTarget.getAttribute('cid');
@@ -451,15 +430,18 @@
       },
     },
     created() {
+      if (this.$route.query.category) {
+        this.find_jobParam.category = this.$route.query.category;
+        if (this.$route.query.major) {
+          this.find_jobParam.major = this.$route.query.major;
+        }
+      }
 
       if (this.$route.query.province) {
         this.keyword = this.find_jobParam.office_name = this.$route.query.office_name;
         this.find_jobParam.province = this.$route.query.province;
       }
-      if (this.$route.query.job_id) {
-        this.posTypeNum = this.find_jobParam.category = this.$route.query.job_id;
-        this.tranPosType = transJobs(this.posTypeNum,1);
-      }
+
       if (this.$route.query.ugent) {
         this.ugentFlag = true;
         this.find_jobParam.urgent = 1;
@@ -485,18 +467,6 @@
           }
         });
       this.tranCode = tranCity(this.cityCode,true,1);
-    },
-    updated() {
-
-
-      for (let i = 0,len = this.jobClassify.length; i < len; i++) {
-        if (this.jobClassify[i].value == this.classifyValue) {
-          this.tranPosType = this.jobClassify[i].name;
-        }
-      }
-      if (this.posTypeNum == '0') {
-        this.tranPosType = '全部';
-      }
     },
     //获取屏幕高度
     beforeMount() {
