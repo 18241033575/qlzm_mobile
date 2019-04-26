@@ -65,7 +65,21 @@
           /*this.subTags.join(',')*/
           this.$ajax.post('/company/set-recruitment',{cid: companyInfo.id,has_m: sign,advantage:this.subTags.join(',')})
             .then((res)=>{
-              console.log(res);
+              if (res.data.state== 200){
+                this.$notify.success({
+                  title: '提示',
+                  message: '保存成功',
+                  showClose: false,
+                  duration: 1500
+                });
+              } else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
+              }
             })
         },
         pos_adv(){
