@@ -274,7 +274,7 @@
         let eduVal = e.currentTarget.getAttribute('edu-id');
         this.selectedVal = eduVal;
         this.operaData.education = this.selectedVal;
-        this.transVal = transEducation(eduVal,1);
+        this.transVal = transEducation(eduVal,0);
         this.secondBox = false
       },
       secondBoxBg() {
@@ -315,7 +315,7 @@
         this.$ajax.get('/resume/eduexp',{params: {uid: userInfo.id}})
           .then((res)=>{
             if (res.data.state != 400) {
-              transEducation(res.data);
+              transEducation(res.data,2);
               this.eduData = res.data;
               // this.certData = res.data;
             }

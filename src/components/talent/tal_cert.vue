@@ -19,7 +19,7 @@
                 </div>
                 <div class="bottom_msg">
                   <p><span class="left_lab">注册情况</span> <span class="right_msg">{{item.tranreg_status}}</span></p>
-                  <p><span class="left_lab">增项</span> <span class="right_msg">{{item.tranaddition}}</span></p>
+                  <p v-show="item.trantype == '一级建造师' || item.trantype == '二级建造师'"><span class="left_lab">增项</span> <span class="right_msg"><span v-show="additionData.length ==0">暂无</span><span style="margin-right: 5px;" v-for="(item) in additionData" v-show="additionData.length !=0">{{item}}</span></span></p>
                   <p><span class="left_lab">备注</span> <span class="right_msg">{{item.remark}}</span></p>
                 </div>
               </div>
@@ -43,7 +43,7 @@
               <span class="edit_lab">证书专业</span><span class="int_job_det fr" @click="certMajor">{{this.certData.major || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell" v-show="certTypeId == 1 || certTypeId == 2">
-              <span class="edit_lab">建造师增项</span><span class="int_job_det fr" @click="certAddition">{{this.certData.addition || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">建造师增项</span><span class="int_job_det cert_det fr" @click="certAddition"><span v-show="tranIntCert.length == 0">请选择</span><span v-show="tranIntCert.length != 0" style="margin-right: 5px" v-for="(item,index) in this.tranIntCert" :key="index">{{item}}</span><img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
               <span class="edit_lab specail_lab">注册情况</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.regState==0}" @click="man_workNature">不限</span><span class="choose_cell" :class="{choose_active:this.regState==1}" @click="ski_workNature">初始</span><span class="choose_cell" :class="{choose_active:this.regState==2}" @click="oth_workNature">转注</span></span>
@@ -99,8 +99,8 @@
               <div v-if="showMsg == 'cert_major'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="MajorCode">
                 {{item.major}}<img v-show="certMajorId == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
-              <div v-if="showMsg == 'cert_add'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="AddCode">
-                {{item.major}}<img v-show="certAddId == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg =='cert_add'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="AddCode">
+                {{item.major}}<img v-show="item.choose == 1" class="fr" src="/static/images/checkbox.png" alt="">
               </div>
             </div>
           </div>
@@ -136,7 +136,11 @@
           value2: '',
           checked: true,
           CommonData: {},
-          certAllData: {}
+          certAllData: {},
+          additionData: {},
+          IntCert: [],
+          tranIntCert: [],
+          certTotalData: {}
         }
       },
       methods: {
@@ -160,18 +164,16 @@
         },
         certType() {
           this.secondBox = true;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
           this.showMsg = 'cert_type';
-          this.CommonData = certData;
+          this.CommonData = this.certTotalData;
           this.top_title = '选择证书类型'
         },
         certMajor() {
           this.secondBox = true;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
           this.showMsg = 'cert_major';
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == this.certTypeId) {
-              this.CommonData = certData[i].majors;
+          for (let i = 0,len = this.certTotalData.length; i < len; i++) {
+            if (this.certTotalData[i].id == this.certTypeId) {
+              this.CommonData = this.certTotalData[i].majors;
             }
           }
           this.top_title = '选择证书专业'
@@ -180,13 +182,12 @@
           this.secondBox = true;
           this.showMsg = 'cert_add';
           this.top_title = '选择增项';
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == this.certTypeId) {
-              certData[i].majors.forEach((item,index)=>{
+          for (let i = 0,len = this.certTotalData.length; i < len; i++) {
+            if (this.certTotalData[i].id == this.certTypeId) {
+              this.certTotalData[i].majors.forEach((item,index)=>{
                 if (item.id == this.certMajorId) {
-                  certData[i].majors.splice(index,1);
-                  this.CommonData =  certData[i].majors;
+                  this.certTotalData[i].majors.splice(index,1);
+                  this.CommonData =  this.certTotalData[i].majors;
                 }
               });
             }
@@ -196,10 +197,9 @@
           let certId = e.currentTarget.getAttribute('city-id');
           this.certTypeId = certId;
           this.secondBox = false;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == certId) {
-              this.certData.category = certData[i].category;
+          for (let i = 0,len = this.certTotalData.length; i < len; i++) {
+            if (this.certTotalData[i].id == certId) {
+              this.certData.category = this.certTotalData[i].category;
             }
           }
         },
@@ -207,27 +207,75 @@
           let majorId = e.currentTarget.getAttribute('city-id');
           this.certMajorId = majorId;
           this.secondBox = false;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == this.certTypeId) {
-              for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
-                if (certData[i].majors[j].id == majorId) {
-                  this.certData.major = certData[i].majors[j].major
+          for (let i = 0,len = this.certTotalData.length; i < len; i++) {
+            if (this.certTotalData[i].id == this.certTypeId) {
+              for (let j = 0,leng = this.certTotalData[i].majors.length;j < leng; j++) {
+                if (this.certTotalData[i].majors[j].id == majorId) {
+                  this.certData.major = this.certTotalData[i].majors[j].major
                 }
               }
             }
           }
         },
         AddCode(e) {
-          let addId = e.currentTarget.getAttribute('city-id');
+          let addId = e.currentTarget.getAttribute('city-id'),
+              addDet;
           this.certAddId = addId;
-          this.secondBox = false;
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == this.certTypeId) {
-              for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
-                if (certData[i].majors[j].id == addId) {
-                  this.certData.addition = certData[i].majors[j].major
+          // this.secondBox = false;
+
+
+          // 如果存在则删除，如果不存在则添加
+          let h = true;
+          for (let k = 0,len = this.IntCert.length;k < len;k++) {
+            if (addId == this.IntCert[k]) {
+              this.IntCert.splice(k, 1);
+              h = false;
+            }
+          }
+          if (h){
+            this.IntCert.push(addId);
+            // 对应choose = 1
+            for (let i = 0,len = this.certTotalData.length; i < len; i++) {
+              if (this.certTotalData[i].id == this.certTypeId) {
+                this.certTotalData[i].majors.forEach((item,index)=>{
+                    if (addId == item.id){
+                      addDet = item.major;
+                      item.choose = 1;
+                      this.tranIntCert.push(item.major);
+                    }
+                  if (item.id == this.certMajorId) {
+                    this.certTotalData[i].majors.splice(index,1);
+                    this.CommonData =  this.certTotalData[i].majors;
+                  }
+                });
+              }
+            }
+          }else{
+            // 对应choose = 0
+            for (let i = 0,len = this.certTotalData.length; i < len; i++) {
+              if (this.certTotalData[i].id == this.certTypeId) {
+                for(let j = 0,len = this.certTotalData[i].majors.length;j < len;j++){
+                  if (this.certTotalData[i].id == this.certTypeId) {
+                    this.CommonData =  this.certTotalData[i].majors;
+                    for(let k = 0,len = this.CommonData.length;k < len;k++){
+                      if (this.CommonData[k].id == addId){
+                        addDet = this.CommonData[k].major;
+                        // vue 对对象里的数组不会响应式的变化
+                        this.$set(this.CommonData,k,{choose: 0,id: this.CommonData[k].id,cert_category_id: this.CommonData[k].cert_category_id,major: this.CommonData[k].major});
+                      }
+                    }
+                    for (let l = 0,len = this.IntCert.length;l < len;l++){
+                      if (this.IntCert[l] == addId){
+                        this.IntCert.splice(l,1);
+                        this.tranIntCert.splice(l,1);
+                      }
+                    }
+                    for (let l = 0,len = this.tranIntCert.length;l < len;l++){
+                      if (this.tranIntCert[l] == addDet){
+                        this.tranIntCert.splice(l,1);
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -246,15 +294,30 @@
               this.certMajorId = this.certAllData[i].major;
               this.remark = this.certAllData[i].remark;
               this.regState = this.certAllData[i].reg_status;
+              // 证书增项处理
+              this.IntCert = this.certAllData[i].addition.split(',');
+              // 对应choose = 1
+              for (let i = 0,len = this.certTotalData.length; i < len; i++) {
+                if (this.certTotalData[i].id == this.certTypeId) {
+                  this.certTotalData[i].majors.forEach((item,index)=>{
+                    for(let k = 0,len = this.IntCert.length;k < len;k++){
+                      if (this.IntCert[k] == item.id){
+                        item.choose = 1;
+                        this.tranIntCert.push(item.major);
+                      }
+                    }
+                  });
+                }
+              }
             }
           }
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          for (let i = 0,len = certData.length; i < len; i++) {
-            if (certData[i].id == this.certTypeId) {
-              this.certData.category = certData[i].category;
-              for (let j = 0,leng = certData[i].majors.length;j < leng; j++) {
-                if (certData[i].majors[j].id == this.certMajorId) {
-                  this.certData.major = certData[i].majors[j].major
+          // 渲染类型和专业
+          for (let i = 0,len = this.certTotalData.length; i < len; i++) {
+            if (this.certTotalData[i].id == this.certTypeId) {
+              this.certData.category = this.certTotalData[i].category;
+              for (let j = 0,leng = this.certTotalData[i].majors.length;j < leng; j++) {
+                if (this.certTotalData[i].majors[j].id == this.certMajorId) {
+                  this.certData.major = this.certTotalData[i].majors[j].major
                 }
               }
             }
@@ -281,7 +344,7 @@
           }
 
           let userInfo = JSON.parse(localStorage.getItem('USER'));
-          this.$ajax.post('/resume/certificate',{type: this.certTypeId,major: this.certMajorId,reg_status: this.regState,remark: this.remark,id:this.certEdit_id,uid: userInfo.id,addition: this.certAddId})
+          this.$ajax.post('/resume/certificate',{type: this.certTypeId,major: this.certMajorId,reg_status: this.regState,remark: this.remark,id:this.certEdit_id,uid: userInfo.id,addition: this.IntCert.join(',')})
             .then((res)=>{
               if (res.data.state == 200) {
                 this.workExpSign = true;
@@ -327,45 +390,42 @@
         },
         getCert() {
           // 证书数据添加到缓存中
-          let certData = JSON.parse(localStorage.getItem('CERT'));
-          if (!certData) {
-            this.$ajax.get('/allcerts')
-              .then((res)=>{
-                //  放入本地数据
-                let params = {};
-                params = JSON.stringify(res.data);
-                localStorage.setItem('CERT',params);
-                sessionStorage.setItem('CERT',params);
-              })
-          }
+          this.certTotalData = JSON.parse(localStorage.getItem('CERT'));
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/resume/certificate',{params: {uid: userInfo.id}})
             .then((res)=>{
               if (res.data.state != 400) {
+                // 证书
+                let certs = res.data,
+                  addData = [];
                 this.certAllData = res.data;
-                res.data.forEach(function (item,ids) {
-                  if (item.reg_status == 0) {
-                    item.tranreg_status = '不限'
-                  } else if (item.reg_status == 1) {
-                    item.tranreg_status = '初始'
+                for (let k = 0,len = certs.length;k < len;k++){
+                  if (certs[k].reg_status == 0) {
+                    certs[k].tranreg_status = '不限'
+                  } else if (certs[k].reg_status == 1) {
+                    certs[k].tranreg_status = '初始'
                   } else {
-                    item.tranreg_status = '转注'
+                    certs[k].tranreg_status = '转注'
                   }
-                  for(let i = 0,len = certData.length;i < len;i++) {
-                    if (item.type == certData[i].id ) {
-                      item.trantype = certData[i].category;
-                      for(let j = 0,mlen = certData[i].majors.length; j < mlen; j++) {
-                        if (item.major == certData[i].majors[j].id) {
-                          item.tranmajor = certData[i].majors[j].major
+                  for(let i = 0,len = this.certTotalData.length;i < len;i++) {
+                    if (certs[k].type == this.certTotalData[i].id ) {
+                      certs[k].trantype = this.certTotalData[i].category;
+                      for(let j = 0,mlen = this.certTotalData[i].majors.length; j < mlen; j++) {
+                        if (certs[k].major == this.certTotalData[i].majors[j].id) {
+                          certs[k].tranmajor = this.certTotalData[i].majors[j].major
                         }
-                        if (item.addition == certData[i].majors[j].id) {
-                          item.tranaddition = certData[i].majors[j].major
+                        let addi = certs[k].addition.split(',');
+                        for (let k = 0,len = addi.length;k < len;k++){
+                          if (addi[k] == this.certTotalData[i].majors[j].id) {
+                            addData.push(this.certTotalData[i].majors[j].major)
+                          }
                         }
                       }
                     }
                   }
-                });
-                this.certData = res.data;
+                }
+                this.additionData = addData;
+                this.certData = certs;
               }
             });
         }
@@ -380,5 +440,12 @@
   @import "../../../static/css/tal_resume.css";
   .tal_cert .edit_cell .specail_lab{
     width: 65px;
+  }
+  .cert_det{
+    width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
   }
 </style>

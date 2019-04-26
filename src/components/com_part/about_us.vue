@@ -93,14 +93,14 @@
           if(this.screenW < (this.guideLength - this.indexMien)*60 ) {
             // 向左滑
            this.indexMien++;
-           this.com_style.marginLeft = -60 * this.indexMien + 'px';
+           this.com_style.marginLeft = -(60 * this.indexMien + 10) + 'px';
           }
         },
         rightChangeImg(e){
           e.preventDefault();
           if (this.indexMien > 0) {
             this.indexMien--;
-            this.com_style.marginLeft = -60 * this.indexMien + 'px';
+            this.com_style.marginLeft = -(60 * this.indexMien - 10) + 'px';
           }
         },
         choose_type(e){
@@ -187,6 +187,9 @@
 </script>
 
 <style scoped>
+  html ol{
+    list-style-type: none;
+  }
   /* 分类列表 */
   .classify{
     display: flex;
@@ -195,11 +198,11 @@
     margin-bottom: 10px;
   }
   .classify_det{
-    -webkit-transition: ease 1s;
-    -moz-transition: ease 1s;
-    -ms-transition: ease 1s;
-    -o-transition: ease 1s;
-    transition: ease 1s;
+    -webkit-transition: ease .5s;
+    -moz-transition: ease .5s;
+    -ms-transition: ease .5s;
+    -o-transition: ease .5s;
+    transition: ease .5s;
   }
   .classify span{
     padding: 0 7px;
@@ -220,7 +223,7 @@
     background-color: #ffffff;
   }
   .advice{
-    padding-bottom: 20px;
+    padding: 20px 0;
   }
   .advice p{
     margin-bottom: 5px;

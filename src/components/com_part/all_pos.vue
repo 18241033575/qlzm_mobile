@@ -45,7 +45,6 @@
         chooseType(e){
           this.category = e.currentTarget.getAttribute('data-id');
           this.allPosData.forEach((item)=>{
-            console.log(item);
             if (item.id == this.category) {
               this.MajorPosData = item.majors;
             }

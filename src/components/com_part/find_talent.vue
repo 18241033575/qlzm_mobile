@@ -36,9 +36,10 @@
             <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" bottomDropText="加载中" ref="loadmore" >
               <div class="resume_list_cell" v-for="(item,index) in this.find_talData" :uid="item.uid" :key="index" @click="tal_det">
                 <div class="content">
-                  <p class="tal_name">{{item.name}}<img :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
-                  <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
+                  <p class="tal_name">{{item.name}}<span style="color: #919199;font-size: 12px; font-weight: normal; margin-left: 10px;">价值指数:<span style="margin-left: 0;" class="hope_salary">{{item.ability_index}}</span></span><img :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""></p>
+                  <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp == 0?'一年以下':item.work_exp + '年'}}</span><span>|</span><span>{{item.education==0?'未知学历':item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
                   <p class="tal_det">期望薪资:<span class="hope_salary">{{item.salary}}</span></p>
+                  <p class="tal_det">更新时间:<span style="margin-left: 10px;">{{item.updated_at}}</span></p>
                 </div>
               </div>
               <div class="bottom_line" v-show="req_state">
@@ -60,10 +61,10 @@
                 省份<span class="fr">贵州省<img src="/static/images/icon_goright.png" alt=""></span>
               </div>
               <div class="filter_part1_cell" data-sign="city" @click="all_choose">
-                城市<span class="fr">{{tranCode}}<img src="/static/images/icon_goright.png" alt=""></span>
+                城市<span class="fr">{{tranCode || '请选择'}}<img src="/static/images/icon_goright.png" alt=""></span>
               </div>
-              <div class="filter_part1_cell" data-sign="pos_type" @click="all_choose">
-                职位类别<span class="fr">{{tranPosType || '请选择'}}<img src="/static/images/icon_goright.png" alt=""></span>
+              <div class="filter_part1_cell" data-sign="cert" @click="all_choose">
+                证书<span class="fr">{{(tranCategory + (tranMajor == undefined?'':tranMajor)) || '请选择'}}<img src="/static/images/icon_goright.png" alt=""></span>
               </div>
             </div>
             <div class="filter_part2">
@@ -175,12 +176,42 @@
         <img src="/static/images/ic_empty_data@2x.png" alt="">
         <p>暂无数据</p>
       </div>
+      <!--双层筛选-->
+      <div class="filter_all_box" v-show="this.doubleBox">
+        <div class="filter_bg" @click="doubleBoxBg">
+
+        </div>
+        <div class="filter_det">
+          <div class="filter_s_title">
+            <div class="content">
+              <img @click="doubleBoxBg" src="/static/images/left.png" alt="left">证书类型专业
+            </div>
+          </div>
+          <div class="content">
+            <div class="filter_part1 toTop" >
+              <div class="pro_cell">
+                <div v-for="(item,index) in allPosData" :data-id="item.id" :key="index" :class="{pro_active:categoryId == item.id}" class=" filter_part1_cell  second" @click="chooseType">
+                  {{item.category}}
+                </div>
+              </div>
+              <div class="pro_cell city_cell">
+                <div data-id="0"  class=" filter_part1_cell  second" @click="chooseMajor">
+                  全部<img v-show="majorId == 0" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+                </div>
+                <div v-for="(item,index) in MajorPosData" :data-id="item.id" :key="index" class=" filter_part1_cell  second" @click="chooseMajor">
+                  {{item.major}}<img v-show="majorId == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,transJobs,transGender,updateTime,reqAge,getTrueAge} from '../../../static/js/common.js'
+  import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,transJobs,transGender,updateTime,reqAge,getTrueAge,transCert } from '../../../static/js/common.js'
     export default {
         name: "find_talent",
       data() {
@@ -192,18 +223,25 @@
           outBox: false,
           firstBox: false,
           secondBox: false,
+          doubleBox: false,
           showMsg: '',
           sortNum: 0,
           search_job: '',
           order: 0,
           keyword: '',
+          categoryId: '',
+          tranCategory: '',
+          majorId: '',
+          tranMajor: '',
           find_talData: {},
+          allPosData: {},
+          MajorPosData: {},
           top_title: '',
           posTypeNum: 0,
           loading: false,
           cityCode: {
             0:'520000',
-            1:'520100'
+            1:'520000'
           },
           tranCode: '',
           tranPosType: '全部',
@@ -213,12 +251,12 @@
             work_province: '520000'
           },
           workExpAct: 1,
-          educationAct: 1,
-          natureAct: 1,
-          genderAct: 1,
+          educationAct: 9,
+          natureAct: 0,
+          genderAct: 0,
           salaryAct: 1,
-          ageAct: 1,
-          offDayAct: 1,
+          ageAct: 0,
+          offDayAct: 0,
           workexpData: {},
           educationData: {},
           natureData: {},
@@ -254,14 +292,13 @@
               if (res.data.data == '') {
                 this.emptySign = true;
               } else {
-                  tranCity(res.data.data,true,2);
-                  transWorkexp(res.data.data,2);
+                tranCity(res.data.data,true,2);
                   transEducation(res.data.data,2);
                   transNature(res.data.data,2);
                   transSalary(res.data.data,2);
                   getTrueAge(res.data.data,2);
                   for (let i = 0,len = res.data.data.length;i < len;i++) {
-                    res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
+                    res.data.data[i].updated_at = getDistanceTime(res.data.data[i],3);
                   }
                   this.find_talData = res.data.data;
                   this.emptySign = false;
@@ -306,18 +343,38 @@
           this.firstBox = false;
           this.secondBox = false
         },
+        doubleBoxBg() {
+          this.doubleBox = false;
+          this.firstBox = true;
+          this.outBox = false;
+        },
         all_choose(e) {
           let partSign = e.currentTarget.getAttribute('data-sign');
           if (partSign == 'city') {
             this.showMsg = 'city';
-            this.top_title = '选择城市'
-          } else if (partSign == 'pos_type') {
-            this.jobClassify = transJobs(this.jobClassify,3);
-            this.showMsg = 'posType';
-            this.top_title = '选择职位类别'
+            this.top_title = '选择城市';
+            this.secondBox = true;
+          } else if (partSign == 'cert') {
+            this.doubleBox = true;
+            this.firstBox = false;
           }
-
-          this.secondBox = true
+        },
+        chooseType(e){
+          this.categoryId = e.currentTarget.getAttribute('data-id');
+          this.allPosData.forEach((item)=>{
+            if (item.id == this.categoryId) {
+              this.MajorPosData = item.majors;
+            }
+          });
+        },
+        chooseMajor(e){
+          this.majorId = e.currentTarget.getAttribute('data-id');
+          let back_data = transCert(this.categoryId,this.majorId);
+          this.tranCategory = back_data.category;
+          this.tranMajor = back_data.major;
+          this.doubleBox = false;
+          this.firstBox = true;
+          this.outBox = false;
         },
         //返回第一层
         first_back() {
@@ -361,31 +418,70 @@
           this.find_talParam.page = 1;
           this.find_talParam.row = 8;
           this.find_talParam.work_province = '520000';
+          this.categoryId = '';
+          this.majorId = '';
+          this.tranCategory = '';
+          this.tranMajor = '';
+          this.educationAct = 9;
+          this.workExpAct = 1;
+          this.salaryAct = 1;
+          this.cityCode = {
+            0: "520000",
+            1: "520000",
+          };
+          this.tranCode = '';
         },
         filter_submit() {
           this.outBox = false;
           this.find_talParam.page = 1;
           this.allLoaded = true;
-          if (this.workExpAct != 0) {
+          // 经验
+          if (this.workExpAct == 1) {
+            delete this.find_talParam.work_exp;
+          }else {
             this.find_talParam.work_exp = this.workExpAct;
           }
-          if (this.educationAct != 0) {
+          // 教育
+          if (this.educationAct == 9) {
+            delete this.find_talParam.education;
+          }else {
             this.find_talParam.education = this.educationAct;
           }
-          if (this.natureAct != 0) {
+          // 性质
+          if (this.natureAct == 0) {
+            delete this.find_talParam.nature;
+          }else {
             this.find_talParam.nature = this.natureAct;
           }
-          if (this.genderAct != 0) {
+          // 性别
+          if (this.genderAct == 0) {
+            delete this.find_talParam.gender;
+          }else {
             this.find_talParam.gender = this.genderAct;
           }
-          if (this.ageAct != 0) {
+          // 年龄
+          if (this.ageAct == 0) {
+            delete this.find_talParam.age;
+          }else {
             this.find_talParam.age = this.ageAct;
           }
-          if (this.salaryAct != 0) {
+          // 薪资
+          if (this.salaryAct == 1) {
+            delete this.find_talParam.salary;
+          }else {
             this.find_talParam.salary = this.salaryAct;
           }
-          if (this.offDayAct != 0) {
+          // 发布时间
+          if (this.offDayAct == 0) {
+           delete this.find_talParam.time;
+          }else {
             this.find_talParam.time = this.offDayAct;
+          }
+          if(this.categoryId){
+            this.find_talParam.cert_type = this.categoryId;
+          }
+          if(this.majorId){
+            this.find_talParam.cert_major = this.majorId;
           }
           this.find_talParam.keyword = this.keyword;
           this.getTalData(this.find_talParam);
@@ -401,7 +497,7 @@
                 }else {
                   this.req_state = false;
                   tranCity(res.data.data,true,2);
-                  transWorkexp(res.data.data,2);
+                  // transWorkexp(res.data.data,2);
                   transEducation(res.data.data,2);
                   transNature(res.data.data,2);
                   transSalary(res.data.data,2);
@@ -431,7 +527,7 @@
         CityCode(e) {
           let cCode = e.currentTarget.getAttribute('city-id');
           this.cityCode[1] = cCode;
-          this.find_talParam.city = cCode;
+          this.find_talParam.work_city = cCode;
           this.tranCode = tranCity(this.cityCode,true,1);
           this.firstBox = true;
           this.secondBox = false
@@ -462,10 +558,6 @@
           if (companyInfo) {
             this.$ajax.post('/resume/collect',{uid: this.uid,info_id: this.info_id,cid: companyInfo.id})
               .then((res)=>{
-
-
-                // 层级处理
-
                 if (res.data.state ==200) {
                   this.$notify.success({
                     title: '提示',
@@ -493,6 +585,7 @@
         }
       },
       created() {
+        this.allPosData = JSON.parse(localStorage.getItem('CERT'));
         if (this.$route.query.province) {
           this.keyword = this.find_talParam.office_name = this.$route.query.office_name;
           this.find_talParam.province = this.$route.query.province;
@@ -501,14 +594,15 @@
         this.$ajax.get('/talents',{params: data})
           .then((res)=>{
             if (res.data.state != 400) {
+              console.log(res.data);
               tranCity(res.data.data,true,2);
-              transWorkexp(res.data.data,2);
+              // transWorkexp(res.data.data,2);
               transEducation(res.data.data,2);
               transNature(res.data.data,2);
               transSalary(res.data.data,2);
               getTrueAge(res.data.data,2);
               for (let i = 0,len = res.data.data.length;i < len;i++) {
-                res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
+                res.data.data[i].updated_at = getDistanceTime(res.data.data[i],3);
               }
               this.find_talData = res.data.data;
             }
@@ -618,8 +712,9 @@
   }
   .resume_list_cell{
     margin-top: 10px;
+    padding-bottom: 10px;
     width: 100%;
-    height: 100px;
+    /*height: 100px;*/
     background-color: #ffffff;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -751,5 +846,16 @@
     margin-left: 5px;
     font-size: 12px;
     color: #919199;
+  }
+  /* 证书选择 */
+  .pro_cell{
+    float: left;
+    width: 50%;
+  }
+  .pro_active{
+    background-color: #f0f1f5;
+  }
+  .city_cell{
+    background-color: #f0f1f5;
   }
 </style>

@@ -83,7 +83,7 @@
                 职位描述
               </div>
               <div class="company_info" :class="{shade_info: this.shadeSign}">
-                <quill-editor id="pos" v-model="posDetData.duty"
+                <quill-editor id="pos" style="border: none!important;" v-model="posDetData.duty || '暂无'"
                               @ready="onEditorReady($event)"
                               :options ="editorOption">
                 </quill-editor>
@@ -101,7 +101,7 @@
                 职位亮点
               </div>
               <div v-show="!tags_sign" class="company_welfare">
-                <p v-show="!tags_sign">暂无</p>
+                <p style="font-size: 12px;color: #666666;" v-show="!tags_sign">暂无</p>
               </div>
               <div v-show="tags_sign" class="company_welfare">
                 <span v-for="(item,index) in posDetData.tags" :key="index">{{item}}</span>

@@ -115,11 +115,11 @@
         </router-link>
       </div>
     </div>
-    <!--新闻资讯-->
+    <!--政策资讯-->
     <div class="news">
       <div class="content">
         <div class="common_title">
-          <img src="/static/images/ic_title_news@2x.png" alt="">新闻资讯
+          <img src="/static/images/ic_title_news@2x.png" alt="">政策资讯
         </div>
         <div class="news_body">
           <div class="news_cell" :news-id="item.id" v-for="(item,index) in newsData" :key="index" @click="news_det">
@@ -134,7 +134,7 @@
           </div>
         </div>
         <router-link :to="{name: 'news'}" class="show_more">
-          更多新闻资讯
+          更多政策资讯
         </router-link>
       </div>
     </div>

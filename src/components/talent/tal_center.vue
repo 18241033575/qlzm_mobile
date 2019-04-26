@@ -165,7 +165,6 @@
               //  个人价值指数
               this.ability_index = res.data.base_info.ability_index || 0;
               //  预估薪资水平
-
               this.jobs = transJobs('',3);
               this.jobs.forEach((item)=>{
                 let job_id = res.data.career_objective.job_id.split(',');

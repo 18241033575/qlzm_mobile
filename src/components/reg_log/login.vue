@@ -71,10 +71,14 @@
         login_type1() {
           this.active = false;
           this.account = '';
+          this.getSmsCode = '获取短信验证码';
+          this.getSmsState = true;
         },
         login_type2() {
           this.active = true;
           this.account = '';
+          this.getSmsCode = '获取短信验证码';
+          this.getSmsState = true;
         },
         comLogin() {
           if (this.account.length < 11) {
@@ -86,7 +90,9 @@
             });
             return
           }
+          // active == true 用户登录
           if (!this.active) {
+            // value 1验证码登录 2密码登录
             if (this.value == 2) {
               if (this.sms_code.length < 4) {
                 this.$notify.warning({
@@ -139,6 +145,7 @@
                 })
             }
           }else {
+            // 企业登录
             if (this.value == 2) {
               if (this.sms_code.length < 4) {
                 this.$notify.warning({
@@ -149,7 +156,7 @@
                 });
                 return
               }
-              this.$ajax.post('/sms/login',{"phone": this.account,"type": 1,"member":1,"sms_code": this.sms_code})
+              this.$ajax.post('/sms/login',{"phone": this.account,"type": 1,"member":2,"sms_code": this.sms_code})
                 .then((res)=>{
                   if (res.data.state == 400) {
                     this.reqSuc = false;
@@ -174,7 +181,7 @@
                 });
                 return
               }
-              this.$ajax.post('/member/login',{"phone": this.account,"account": this.account,"password": this.password,"type": 2})
+              this.$ajax.post('/member/login',{"phone": this.account,"account": this.account,"password": this.password,"type": 2,member: 2})
                 .then((res)=>{
                   if (res.data.state == 400) {
                     this.reqSuc = false;
@@ -202,24 +209,84 @@
         getCode() {
           if (this.getSmsState) {
             this.getSmsState = false;
-            if(active) {
+            if(!this.active) {
               this.$ajax.get('/sms',{params: {type:1,member:1,phone:this.account}})
                 .then((res)=>{
                   if (res.data.state == 200) {
-                    this.$message({
-                      message: '获取验证码成功',
-                      type: 'success',
-                    })
+                    t = 60;
+                    localStorage.setItem('SMSTIME',t);
+                    this.$notify.success({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500,
+                    });
+                    // 验证倒计时
+                    this.getSmsState = false;
+                    let t = 60;
+                    let smsTime = localStorage.getItem('SMSTIME');
+                    if (smsTime != '' && smsTime != 0 && smsTime != undefined) {
+                      t = smsTime;
+                    }
+                    this.getSmsCode = t + 's后再次获取';
+                    let timer = setInterval(()=>{
+                      t--;
+                      this.getSmsCode = t + 's后再次获取';
+                      if (t < 1) {
+                        clearInterval(timer);
+                        this.getSmsCode = '再次获取';
+                        this.getSmsState = true;
+                        t = 60;
+                      }
+                      localStorage.setItem('SMSTIME',t);
+                    },1000);
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500,
+                    });
                   }
                 })
             }else {
               this.$ajax.get('/sms',{params: {type:1,member:2,phone:this.account}})
                 .then((res)=>{
                   if (res.data.state == 200) {
-                    this.$message({
-                      message: '获取验证码成功',
-                      type: 'success',
-                    })
+                    t = 60;
+                    localStorage.setItem('SMSTIME',t);
+                    this.$notify.success({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500,
+                    });
+                    // 验证倒计时
+                    this.getSmsState = false;
+                    let t = 60;
+                    let smsTime = localStorage.getItem('SMSTIME');
+                    if (smsTime != '' && smsTime != 0 && smsTime != undefined) {
+                      t = smsTime;
+                    }
+                    this.getSmsCode = t + 's后再次获取';
+                    let timer = setInterval(()=>{
+                      t--;
+                      this.getSmsCode = t + 's后再次获取';
+                      if (t < 1) {
+                        clearInterval(timer);
+                        this.getSmsCode = '再次获取';
+                        this.getSmsState = true;
+                        t = 60;
+                      }
+                      localStorage.setItem('SMSTIME',t);
+                    },1000);
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500,
+                    });
                   }
                 })
             }

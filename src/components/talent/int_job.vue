@@ -13,9 +13,9 @@
           <div class="bottom_msg">
             <p><span class="left_lab">求职类型</span> <span class="right_msg">{{intJobData.nature}}</span></p>
             <p><span class="left_lab">意向岗位</span> <span v-for="(item,index) in this.tranIntJob" :key="index" class="right_msg">{{item}}</span></p>
-            <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary}}</span></p>
+            <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary==0?'暂无':intJobData.salary}}</span></p>
             <p><span class="left_lab">工作地区</span> <span class="right_msg">{{(intJobData.province) + (intJobData.city=='未知'?'':intJobData.city)}}</span></p>
-            <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time}}</span></p>
+            <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time==0?'暂无':intJobData.duty_time}}</span></p>
             <p><span class="left_lab">备注</span> <span class="right_msg">{{intJobData.remark}}</span></p>
           </div>
         </div>
@@ -40,7 +40,7 @@
               <span class="edit_lab">求职类型</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.work_nature==1}" @click="have_job">全职</span><span class="choose_cell" :class="{choose_active:this.form.work_nature==2}" @click="wait_job">项目</span></span>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">意向岗位</span><span class="int_job_det job_det fr" @click="init_job"><span v-for="(item,index) in this.tranIntJob" :key="index">{{item || '请选择'}}</span><img src="/static/images/ic_right@2x.png" alt=""></span>
+              <span class="edit_lab">意向岗位</span><span class="int_job_det job_det fr" @click="init_job"><span style="margin-right: 5px" v-for="(item,index) in this.tranIntJob" :key="index">{{item || '请选择'}}</span><img src="/static/images/ic_right@2x.png" alt=""></span>
             </div>
             <div class="edit_cell">
               <span class="edit_lab">期望薪资</span><span class="int_job_det fr" @click="salary">{{intJobData.salary || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -88,7 +88,7 @@
               {{item.name}}<img v-show="intJobData.salary == item.name" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
             <div v-if="showMsg == 'arr_time'" v-for="(item,index) in CommonData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="TimeCode">
-              {{item.name}}<img v-show="ArriveId == item.name" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              {{item.name}}<img v-show="ArriveId == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
           </div>
         </div>
@@ -146,7 +146,7 @@
             CommonData: {},
             ProData: {},
             cityData: {},
-            ArriveId: '',
+            ArriveId: 0,
             cityCode: {},
             jobClassify: {},
             upSalary: 0,
@@ -185,7 +185,7 @@
             });
             return
           }
-          if (this.ArriveId == '') {
+          if (this.ArriveId == 0) {
             this.$notify.warning({
               title: '提示',
               message: '请选择到岗时间',
@@ -303,7 +303,7 @@
           let arrId = e.currentTarget.getAttribute('city-id');
           this.ArriveId = arrId;
           this.secondBox = false;
-          this.intJobData.duty_time = transArrive(arrId,1);
+          this.intJobData.duty_time = transArrive(arrId,0);
         },
         init_job() {
           this.secondBox = true;

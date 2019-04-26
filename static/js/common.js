@@ -34,132 +34,134 @@ function fileUrl() {
   }
   off: 数组内有office对象
  */
+
   // 企业规模
   function transComScale(data,type) {
     const company_scale = JSON.parse(localStorage.getItem('COMSCALE'));
-    for(let k = 0,len = company_scale.length;k < len;k++){
-      if(type == 0){
-        if (company_scale[k].id == data){
-          return company_scale[k].name;
-        }
-      } else if(type == 1){
-        if (company_scale[k].id == data.scale){
-          data.scale = company_scale[k].name;
-        }
-      }else if (type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].scale == company_scale[k].id){
-            data[i].scale = company_scale[k].name;
+      for(let k = 0,len = company_scale.length;k < len;k++){
+        if(type == 0){
+          if (company_scale[k].id == data){
+            return company_scale[k].name;
           }
+        } else if(type == 1){
+          if (company_scale[k].id == data.scale){
+            data.scale = company_scale[k].name;
+          }
+        }else if (type == 2){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].scale == company_scale[k].id){
+              data[i].scale = company_scale[k].name;
+            }
+          }
+        } else if (type == 3){
+          return company_scale;
         }
-      } else if (type == 3){
-        return company_scale;
       }
-    }
   }
 
   // 企业性质
   function transComNature(data,type) {
     const company_nature = JSON.parse(localStorage.getItem('COMNATURE'));
-    for(let k = 0,len = company_nature.length;k < len;k++){
-      if(type == 1){
-        if (company_nature[k].id == data.nature){
-          data.nature = company_nature[k].name;
-        }
-      }else if (type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].nature == company_nature[k].id){
-            data[i].nature = company_nature[k].name;
+      for(let k = 0,len = company_nature.length;k < len;k++){
+        if(type == 1){
+          if (company_nature[k].id == data.nature){
+            data.nature = company_nature[k].name;
           }
+        }else if (type == 2){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].nature == company_nature[k].id){
+              data[i].nature = company_nature[k].name;
+            }
+          }
+        } else if (type == 3){
+          return company_nature;
         }
-      } else if (type == 3){
-        return company_nature;
       }
-    }
   }
 
   // 人才优势
   function tal_adv(data,type) {
     const userTags = JSON.parse(localStorage.getItem('USERTAGS'));
-    userTags.forEach((item)=>{
-      if (type == 1){
+      userTags.forEach((item)=>{
+        if (type == 1){
 
-      } else if(type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i] == item.id) {
-            data[i] = item.value;
+        } else if(type == 2){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i] == item.id) {
+              data[i] = item.value;
+            }
           }
-        }
-      }else {
+        }else {
 
-      }
-    });
-    return data;
+        }
+      });
+      return data;
   }
 
   // 招聘优势
   function company_adv(data,type) {
     const welfare = JSON.parse(localStorage.getItem('COMPANYTAGS'));
-    for(let k = 0,len = welfare.length;k < len;k++){
-      if(type == 0){
-        if (welfare[k].id == data){
-          return welfare[k].value;
-        }
-      } else if(type == 1){
-        if (welfare[k].id == data.scale){
-          data.scale = welfare[k].value;
-        }
-      }else if (type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].scale == welfare[k].id){
-            data[i].scale = welfare[k].value;
+      for(let k = 0,len = welfare.length;k < len;k++){
+        if(type == 0){
+          if (welfare[k].id == data){
+            return welfare[k].value;
           }
+        } else if(type == 1){
+          if (welfare[k].id == data.scale){
+            data.scale = welfare[k].value;
+          }
+        }else if (type == 2){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].scale == welfare[k].id){
+              data[i].scale = welfare[k].value;
+            }
+          }
+        } else if (type == 3){
+          return welfare;
         }
-      } else if (type == 3){
-        return welfare;
       }
-    }
   }
 
   // 教育经历
   function transEducation(data,type,off) {
     const education = JSON.parse(localStorage.getItem('EDUCATION'));
-    if (type == 3){
-      return education;
-    }
-    for(let k = 0,len = education.length;k < len;k++){
-      if(type == 0){
-        if (education[k].id == data){
-          return education[k].name;
-        }
-      } else if(type == 1){
-        if (education[k].id == data.education){
-          data.education = education[k].name;
-        }
-      }else if (type == 2){
-        if (off == 'office'){
-          for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].office.education == education[k].id){
-              data[i].office.education = education[k].name;
+      if (type == 3){
+        return education;
+      }else {
+        for(let k = 0,len = education.length;k < len;k++){
+          if(type == 0){
+            if (education[k].id == data){
+              return education[k].name;
             }
-          }
-        }else {
-          for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].education == education[k].id){
-              data[i].education = education[k].name;
+          } else if(type == 1){
+            if (education[k].id == data.education){
+              data.education = education[k].name;
+            }
+          }else if (type == 2){
+            if (off == 'office'){
+              for (let i = 0,len = data.length;i < len;i++){
+                if (data[i].office.education == education[k].id){
+                  data[i].office.education = education[k].name;
+                }
+              }
+            }else {
+              for (let i = 0,len = data.length;i < len;i++){
+                if (data[i].education == education[k].id){
+                  data[i].education = education[k].name;
+                }
+              }
             }
           }
         }
       }
-    }
   }
 
   // 薪资待遇
   function transSalary(data,type,off) {
     const salary = JSON.parse(localStorage.getItem('SALARY'));
-    if (type == 3){
-      return salary;
-    }else {
+      if (type == 3){
+        return salary;
+      }else {
         for(let k = 0,len = salary.length;k < len;k++){
           if(type == 0){
             if (salary[k].id == data){
@@ -185,78 +187,108 @@ function fileUrl() {
             }
           }
         }
-    }
+      }
   }
 
   // 到岗时间
   function transArrive(data,type) {
     const arrive_time = JSON.parse(localStorage.getItem('ARRIVETIME'));
-    if (type == 3){
-      return arrive_time;
-    }else {
-      arrive_time.forEach((item)=>{
-        if(type == 0){
-          if (item.id == data){
-            return item.name;
-          }
-        } else if(type == 1){
-          if (item.id == data.duty_time){
-            data.duty_time = item.name;
-          }
-        }else if (type == 2){
-          for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].duty_time == item.id){
-              data[i].duty_time = item.name;
+      if (type == 3){
+        return arrive_time;
+      }else {
+        for(let k = 0,len = arrive_time.length;k < len;k++){
+          if(type == 0){
+            if (arrive_time[k].id == data){
+              return arrive_time[k].name;
+            }
+          } else if(type == 1){
+            if (arrive_time[k].id == data.duty_time){
+              data.duty_time = arrive_time[k].name;
+            }
+          }else if (type == 2){
+            for (let i = 0,len = data.length;i < len;i++){
+              if (data[i].duty_time == arrive_time[k].id){
+                data[i].duty_time = arrive_time[k].name;
+              }
             }
           }
         }
-      });
-    }
+      }
   }
 
   // 发布时间
   function tranOffice_time(data,type) {
     const office_time = JSON.parse(localStorage.getItem('RELEASETIME'));
-    if (type == 3){
-      return office_time;
-    }
-    for(let k = 0,len = office_time.length;k < len;k++){
-      if(type == 0){
-        if (office_time[k].id == data){
-          return office_time[k].name;
-        }
-      } else if(type == 1){
-        if (office_time[k].id == data.jobs){
-          data.office_time = office_time[k].name;
-        }
-      }else if (type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].office_time == office_time[k].id){
-            data[i].office_time = office_time[k].name;
+      if (type == 3){
+        return office_time;
+      }else {
+        for(let k = 0,len = office_time.length;k < len;k++){
+          if(type == 0){
+            if (office_time[k].id == data){
+              return office_time[k].name;
+            }
+          } else if(type == 1){
+            if (office_time[k].id == data.jobs){
+              data.office_time = office_time[k].name;
+            }
+          }else if (type == 2){
+            for (let i = 0,len = data.length;i < len;i++){
+              if (data[i].office_time == office_time[k].id){
+                data[i].office_time = office_time[k].name;
+              }
+            }
           }
         }
       }
-    }
   }
+
+
+  // 证书类型
+  function transCert(c,m,type) {
+    const certs = JSON.parse(localStorage.getItem('CERT'));
+      let backData = {};
+      if (type == 3){
+        return certs;
+      }else {
+        for(let k = 0,len = certs.length;k < len;k++){
+          if (m != 0 && m != ''){
+            if (c == certs[k].id){
+              backData.category = certs[k].category;
+              for(let j = 0,len = certs[k].majors.length;j < len;j++){
+                if (certs[k].majors[j].id == m){
+                  backData.major = certs[k].majors[j].major;
+                  return backData;
+                }
+              }
+            }
+          } else{
+            backData.category = certs[k].category;
+            return backData;
+          }
+        }
+      }
+  }
+
   // 职位类别
   function transJobs(data,type) {
     const jobs = JSON.parse(localStorage.getItem('JOBTYPE'));
     if (type == 3){
       return jobs;
-    }
-    for(let k = 0,len = jobs.length;k < len;k++){
-      if(type == 0){
-        if (jobs[k].id == data){
-          return jobs[k].name;
-        }
-      } else if(type == 1){
-        if (jobs[k].id == data.jobs){
-          data.jobs = jobs[k].name;
-        }
-      }else if (type == 2){
-        for (let i = 0,len = data.length;i < len;i++){
-          if (data[i].jobs == jobs[k].id){
-            data[i].jobs = jobs[k].name;
+    }else {
+      for(let k = 0,len = jobs.length;k < len;k++){
+        if(type == 0){
+          if (jobs[k].id == data){
+            return jobs[k].name;
+          }
+        } else if(type == 1){
+          if (jobs[k].id == data.jobs){
+            data.jobs = jobs[k].name;
+          }
+        }else if (type == 2){
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i].jobs == jobs[k].id){
+              data[i].jobs = jobs[k].name;
+            }
           }
         }
       }
@@ -302,34 +334,37 @@ function fileUrl() {
   //工作经验
   function transWorkexp(data,type,off) {
     const workexp = JSON.parse(localStorage.getItem('WORKEXP'));
-    if(type == 3){
-      return workexp
-    }
-    for(let k = 0,len = workexp.length;k < len;k++){
-      if(type == 0){
-        if (workexp[k].id == data){
-          return workexp[k].name;
-        }
-      } else if(type == 1){
-        if (workexp[k].id == data.work_exp){
-          data.work_exp = workexp[k].name;
-        }
-      }else if (type == 2){
-        if (off == 'office'){
-          for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].office.work_exp == workexp[k].id){
-              data[i].office.work_exp = workexp[k].name;
+
+      if(type == 3){
+        return workexp
+      }else {
+        for(let k = 0,len = workexp.length;k < len;k++){
+          if(type == 0){
+            if (workexp[k].id == data){
+              return workexp[k].name;
             }
-          }
-        }else {
-          for (let i = 0,len = data.length;i < len;i++){
-            if (data[i].work_exp == workexp[k].id){
-              data[i].work_exp = workexp[k].name;
+          } else if(type == 1){
+            if (workexp[k].id == data.work_exp){
+              data.work_exp = workexp[k].name;
+            }
+          }else if (type == 2){
+            if (off == 'office'){
+              for (let i = 0,len = data.length;i < len;i++){
+                if (data[i].office.work_exp == workexp[k].id){
+                  data[i].office.work_exp = workexp[k].name;
+                }
+              }
+            }else {
+              for (let i = 0,len = data.length;i < len;i++){
+                if (data[i].work_exp == workexp[k].id){
+                  data[i].work_exp = workexp[k].name;
+                }
+              }
             }
           }
         }
       }
-    }
+
   }
 
 // 更新时间
@@ -571,5 +606,6 @@ export {
   file_upload,
   updateTime,
   reqAge,
-  fileUrl
+  fileUrl,
+  transCert
 }
