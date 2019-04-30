@@ -80,11 +80,11 @@
               <div v-if="showMsg == 'area'" v-for="(item,index) in addrData" :city-id="index" :key="index" class="filter_part1_cell second" @click="AreaCode">
                 {{item}}<img v-show="infoData.area == index" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
-              <div v-if="showMsg == 'entNature'" v-for="(item,index) in addrData" :posType-id="index+1" :key="index" class="filter_part1_cell second" @click="ent_nature">
-                {{item}}<img v-show="infoData.nature == index+1" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg == 'entNature'" v-for="(item,index) in addrData" :posType-id="item.id" :key="index" class="filter_part1_cell second" @click="ent_nature">
+                {{item.name}}<img v-show="infoData.nature == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
-              <div v-if="showMsg == 'entScale'" v-for="(item,index) in addrData" :city-id="index+1" :key="index" class="filter_part1_cell second" @click="ent_scale">
-                {{item}}<img v-show="infoData.scale == index+1" class="fr" src="/static/images/ic_checked@2x.png" alt="">
+              <div v-if="showMsg == 'entScale'" v-for="(item,index) in addrData" :city-id="item.id" :key="index" class="filter_part1_cell second" @click="ent_scale">
+                {{item.name}}<img v-show="infoData.scale == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
               </div>
 
             </div>
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-  import {file_upload,splicPic} from '../../../static/js/common.js'/*companyNature,companyScale*/
+  import {file_upload,splicPic,transComNature,transComScale} from '../../../static/js/common.js'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
     export default {
       name: "enterp_info",
@@ -126,7 +126,7 @@
           showMsg: '',
           introSign: false,
           editIntro: '',
-          logoPic: '/static/images/user-01@2x.png',
+          logoPic: '/static/images/company_def_logo.png',
           // 转换文字
           tranNature: '',
           tranScale: '',
@@ -153,11 +153,11 @@
           this.secondBox = true;
           this.top_title = '企业性质';
           this.showMsg = 'entNature';
-          // this.addrData = companyNature(this.addrData,3);
+          this.addrData = transComNature(this.addrData,3);
         },
         ent_nature(e) {
           this.infoData.nature = e.currentTarget.getAttribute('posType-id');
-          // this.tranNature = companyNature(this.infoData.nature,2);
+          this.tranNature = transComNature(this.infoData.nature,0);
           this.secondBox = false;
         },
         // 企业规模
@@ -165,11 +165,11 @@
           this.secondBox = true;
           this.top_title = '企业规模';
           this.showMsg = 'entScale';
-          // this.addrData = companyScale(this.addrData,3);
+          this.addrData = transComScale(this.addrData,3);
         },
         ent_scale(e) {
           this.infoData.scale = e.currentTarget.getAttribute('city-id');
-          // this.tranScale = companyScale(this.infoData.scale,2);
+          this.tranScale = transComScale(this.infoData.scale,0);
           this.secondBox = false;
         },
         // 地址选择
@@ -325,12 +325,20 @@
           .then((res)=>{
             if(res.data.state != 400) {
               this.infoData = res.data;
-              this.logoPic = splicPic(this.infoData.logo, true);
-            /*  this.tranNature = companyNature(this.infoData.nature,2);
-              this.tranScale = companyScale(this.infoData.scale,2);*/
-              this.tranPro = tranProvince(this.infoData.province,true,'',2);
-              this.tranCity = tranCity(this.infoData,true,3);
-              this.tranArea = tranArea(this.infoData,true,3);
+              if (this.infoData.logo != ''){
+                this.logoPic = splicPic(this.infoData.logo, true);
+              }
+              this.tranScale = transComScale(this.infoData.scale,0);
+              this.tranNature = transComNature(this.infoData.nature,0);
+              if (this.infoData.area != 0){
+                this.tranArea = tranArea(this.infoData,true,3);
+              }
+             if (this.infoData.city != 0){
+               this.tranCity = tranCity(this.infoData,true,3);
+             }
+             if (this.infoData.province != 0) {
+               this.tranPro = tranProvince(this.infoData.province,true,'',2);
+             }
               this.editIntro = this.infoData.introduction;
             }
           })

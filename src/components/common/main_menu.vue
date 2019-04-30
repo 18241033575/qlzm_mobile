@@ -131,8 +131,8 @@
         exit() {
           this.isLogin =false;
           this.$router.push({name: 'login'});
-          localStorage.clear('COMPANY');
-          localStorage.clear('USER');
+          localStorage.removeItem('COMPANY');
+          localStorage.removeItem('USER');
           this.nav_close();
         },
         close_menu() {

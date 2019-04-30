@@ -63,7 +63,11 @@ function fileUrl() {
   function transComNature(data,type) {
     const company_nature = JSON.parse(localStorage.getItem('COMNATURE'));
       for(let k = 0,len = company_nature.length;k < len;k++){
-        if(type == 1){
+        if (type == 0){
+          if (company_nature[k].id == data){
+            return company_nature[k].name;
+          }
+        } else if(type == 1){
           if (company_nature[k].id == data.nature){
             data.nature = company_nature[k].name;
           }

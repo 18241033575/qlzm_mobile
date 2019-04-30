@@ -13,93 +13,147 @@
       </div>
       <div class="content">
         <div class="labor_title">
-          服务流程
-          <p>专业运作&nbsp;&nbsp;效率当先</p>
+          专业运作&nbsp;&nbsp;效率当先
         </div>
-
-        <!--服务流程-->
         <div class="labor_area">
-
-        </div>
-
-        <div class="labor_title">
-          劳务派遣有何<span>好处</span>
-        </div>
-        <!--好处-->
-        <div class="labor_good">
-          <div class="good_cell">
-            <div class="cell_top">
-              <img src="/static/images/lwnum_01.png" alt=""><span class="good_title">减低管理成本，人力成本下降30％，管理成本下降50％</span>
+          <div class="area_cell">
+            <div class="sort_num">
+              01
             </div>
-            <div class="cell_bottom">
-              省去员工招聘、劳动合同的签订、社会保险缴纳、员工福利和工资的支付等，这些繁琐的HR事务由我们（骑驴找马）代理，人力成本下降30％，人力部管理成本下降50％
+            <div class="sort_msg">
+              <p class="msg1">企业下单</p>
+              <p class="msg2">1分钟急速下单</p>
             </div>
           </div>
-          <div class="good_cell">
-            <div class="cell_top">
-              <img src="/static/images/lwnum_02.png" alt=""><span class="good_title">招聘成本下降，人员到位效率提高，招聘渠道广，储备人才多</span>
+          <div class="area_cell">
+            <div class="sort_num">
+              02
             </div>
-            <div class="cell_bottom">
-              省去员工招聘、劳动合同的签订、社会保险缴纳、员工福利和工资的支付等，这些繁琐的HR事务由我们（骑驴找马）代理，人力成本下降30％，人力部管理成本下降50％
-            </div>
-          </div>
-          <div class="good_cell">
-            <div class="cell_top">
-              <img src="/static/images/lwnum_03.png" alt=""><span class="good_title">转移劳动关系，将企业的历史遗留以及可见的经济风险化解</span>
-            </div>
-            <div class="cell_bottom">
-              随着员工劳动关系的转移，企业历史遗留的如没有缴纳社保和加班费等问题，都将得到化解。因为如果过了法律的追溯期限，则劳动仲裁或法院都不会再支持相关的追讨。
+            <div class="sort_msg">
+              <p class="msg1">顾问对接</p>
+              <p class="msg2">1小时快速对接需求</p>
             </div>
           </div>
-          <div class="good_cell">
-            <div class="cell_top">
-              <img src="/static/images/lwnum_04.png" alt=""><span class="good_title">使用劳务费发票可以大大减少应付企业所得税</span>
+          <div class="area_cell">
+            <div class="sort_num">
+              03
             </div>
-            <div class="cell_bottom">
-              国家税法规定，员工工资超过规定的部分，企业在年底汇算清缴的时候，将要补缴企业所得税。如果企业用劳务费发票入生产（服务）成本直接税前列支而不用工资单入账不纳入企业的工资额范围，将可以避免这个补缴企业所得税所带来的麻烦。
-            </div>
-          </div>
-          <div class="good_cell">
-            <div class="cell_top">
-              <img src="/static/images/lwnum_05.png" alt=""><span class="good_title">降低社保费成本</span>
-            </div>
-            <div class="cell_bottom">
-              骑驴找马可根据企业的实际需要参保，可有效的降低社保的费用成本。
+            <div class="sort_msg">
+              <p class="msg1">评估方案</p>
+              <p class="msg2">1-3天推荐报告</p>
             </div>
           </div>
-        </div>
-
-        <div class="labor_title">
-          劳务派遣有何<span>优势</span>
-        </div>
-        <!--好处-->
-        <!--优势-->
-        <div class="labor_adv">
-          <div class="adv_cell">
-            <img src="/static/images/ic_shape_01@2x.png" alt=""><span class="adv_title">节约招聘成本和时间</span>
-            <p class="adv_det">公司遵循客户至上的原则和持续创新的精神，专注于劳务资源和劳务派遣管理，以推动劳务资源派遣建设的进程和劳务资源管理的产业化发展</p>
+          <div class="area_cell">
+            <div class="sort_num">
+              04
+            </div>
+            <div class="sort_msg">
+              <p class="msg1">急速寻猎</p>
+              <p class="msg2">3-5天安排面试</p>
+            </div>
           </div>
-          <div class="adv_cell">
-            <img src="/static/images/ic_shape_02@2x.png" alt=""><span class="adv_title">节约招聘成本和时间</span>
-            <p class="adv_det">公司遵循客户至上的原则和持续创新的精神，专注于劳务资源和劳务派遣管理，以推动劳务资源派遣建设的进程和劳务资源管理的产业化发展</p>
-          </div>
-          <div class="adv_cell">
-            <img src="/static/images/ic_shape_03@2x.png" alt=""><span class="adv_title">节约招聘成本和时间</span>
-            <p class="adv_det">公司遵循客户至上的原则和持续创新的精神，专注于劳务资源和劳务派遣管理，以推动劳务资源派遣建设的进程和劳务资源管理的产业化发展</p>
-          </div>
-          <div class="adv_cell">
-            <img src="/static/images/ic_shape_04@2x.png" alt=""><span class="adv_title">节约招聘成本和时间</span>
-            <p class="adv_det">公司遵循客户至上的原则和持续创新的精神，专注于劳务资源和劳务派遣管理，以推动劳务资源派遣建设的进程和劳务资源管理的产业化发展</p>
+          <div class="area_cell">
+            <div class="sort_num">
+              05
+            </div>
+            <div class="sort_msg">
+              <p class="msg1">持续服务</p>
+              <p class="msg2">平均15天推荐成功</p>
+            </div>
           </div>
         </div>
       </div>
+      <!-- banner -->
+      <div class="horse_banner">
+        <div class="horse_banner_title">
+          专项专猎&nbsp;&nbsp;<span>精准狙击</span>
+        </div>
+        <div class="new_banner">
+          <v-touch v-on:swipeleft="leftChangeImg" height="104px" v-on:swiperight="leftChangeImg">
+            <ul>
+              <li class="banner_det">
+                  <span class="server">
+                    <span class="server_tips">专业顾问</span>
+                    <span class="server_det">两千名专业猎头顾问负责专业领域，客户体验好</span>
+                  </span>
+                <span class="server">
+                    <span class="server_tips">专业顾问</span>
+                    <span class="server_det">两千名专业猎头顾问负责专业领域，客户体验好</span>
+                  </span>
+                <span class="server">
+                    <span class="server_tips">专业顾问</span>
+                    <span class="server_det">两千名专业猎头顾问负责专业领域，客户体验好</span>
+                  </span>
+              </li>
+              <li class="banner_det">
+
+              </li>
+              <li class="banner_det">
+
+              </li>
+            </ul>
+        <!--    <div :style="com_style" class="banner_det fl">
+              <p></p>
+            </div>-->
+          </v-touch>
+        </div>
+      </div>
+      <div class="content">
+        <div class="labor_title">
+          科学的人才甄选解决方案
+        </div>
+        <div class="plan">
+          <div class="plan_cell" style="margin-bottom: 30px;">
+            <div class="cell_tit">管理能力</div>
+            <div class="plan_msg">
+              有效的协作能够为你的项目团队或组织带来更好的成绩,你将会学习如何成长为一名自觉的、透明的、有责任感的团队成员,以及如何够为成功的团队绩效做出积极贡献。
+            </div>
+          </div>
+          <div class="plan_cell" style="margin-bottom: 30px;">
+            <div class="cell_tit">项目经验</div>
+            <div class="plan_msg">
+              沟通风格有很多种,你将学会如何根据不同的人和情况采取不同的沟通风格,并且同时仍然能坚守真我, 并为自己和组织寻求积极的成果。
+            </div>
+          </div>
+          <div class="plan_cell">
+            <div class="cell_tit">技术能力</div>
+            <div class="plan_msg">
+              获得良好沟通技能的方法并不是为了争个输赢,而是更多关注与如何在 “游戏” 进行的过程中,让你更加如鱼得水地在你的领域中灵活发挥。
+            </div>
+          </div>
+        </div>
+
+        <div class="labor_title">
+          业务覆盖全国
+        </div>
+        <div class="range">
+          骑驴找马在上海、北京、广州、深圳、南京、苏州、杭州、成都、长沙、厦门、青岛、武汉、宁波、无锡、西安、合肥 、大连、天津、南昌、重庆、常州、济南、沈阳等30多座中心城市设有独立办公室，为企业客户提供专业服务，拥有超50000平米的办公面积。
+        </div>
+      </div>
     </div>
+    <copyright></copyright>
   </div>
 </template>
 
 <script>
+  import copyright from "../../components/common/copyright"
     export default {
-        name: "donkey_horse"
+        name: "donkey_horse",
+      components: {
+        copyright
+      },
+      data(){
+        return {
+          com_style: {
+            marginLeft: 0
+          },
+        }
+      },
+      methods: {
+        leftChangeImg(){
+
+        }
+      }
     }
 </script>
 
@@ -119,79 +173,132 @@
     font-size: 18px;
     line-height: 18px;
   }
-  .labor_title p{
-    font-size: 14px;
-    color: #919199;
-  }
-  .labor_title span{
-    color: #ff8236;
-  }
   .labor_area{
     padding: 15px;
     color: #666666;
     font-size: 12px;
     line-height: 18px;
-    -webkit-box-sizing: border-box;
+/*    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    border: 2px dashed #5082E6;
+    border: 2px dashed #5082E6;*/
   }
-  /* 好处 */
-  .labor_good .good_cell{
-    margin-bottom: 30px;
-  }
-  .cell_top{
+  .area_cell{
     display: flex;
-    align-items: center;
-    padding: 15px;
-    line-height: 60px;
-    background-color: #5082e6;
+    width: 330px;
+    height: 70px;
   }
-  .cell_bottom{
-    padding: 18px 12px;
-    background-color: #f9f9f9;
+ .sort_num{
+   margin-top: 15px;
+   margin-right: 20px;
+   width: 40px;
+   line-height: 40px;
+   height: 40px;
+   font-size: 18px;
+   color: #fe6037;
+   font-weight: bold;
+   text-align: center;
+   background: url("/static/images/ic_quan@2x.png") center center;
+   background-size: 40px;
+ }
+  .sort_msg{
+    margin-top: 15px;
+  }
+  .sort_msg .msg1{
+    margin-bottom: 2px;
+    line-height: 18px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #353535;
+  }
+  .sort_msg .msg2{
+    line-height: 18px;
     font-size: 12px;
     color: #999999;
-    line-height: 18px;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
   }
-  .labor_good img{
-    margin-right: 16px;
-    width: 30px;
-    height: 23px;
-    vertical-align: middle;
+  .plan_cell{
+    position: relative;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: 1px dashed #252B46;
   }
-  .labor_good .good_title{
+  .cell_tit{
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    margin-left: -40px;
+    width:85px;
+    height:24px;
+    line-height: 24px;
+    text-align: center;
+    background:linear-gradient(-30deg,rgba(223,55,52,1) 0%,rgba(254,96,55,1) 100%);
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
     font-size: 14px;
     color: #ffffff;
-    line-height: 18px;
   }
-  /* 优势 */
-  .labor_adv .adv_cell{
-    padding: 9px 10px;
-    height: 120px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    box-shadow:0 5px 20px 0 rgba(231,233,236,1);
-  }
-  .labor_adv img{
-    margin-right: 12px;
-    width: 29px;
-    height: 29px;
-    vertical-align: middle;
-  }
-  .labor_adv .adv_title{
-    font-size: 14px;
-    color: #353535;
-    font-weight: bold;
-  }
-  .labor_adv .adv_det{
-    margin-top: 15px;
+  .plan_msg{
+    padding: 24px 15px 10px;
     font-size: 12px;
     color: #666666;
     line-height: 18px;
+  }
+  .range{
+    font-size: 12px;
+    color: #999999;
+    text-align: center;
+    line-height: 16px;
+  }
+  .horse_banner{
+    width: 100%;
+    height: 400px;
+    background-color: #f0f1f5;
+  }
+  .horse_banner_title{
+    padding: 30px 0;
+    text-align: center;
+  }
+  .horse_banner_title span{
+    color: #ff4b4b;
+  }
+  .new_banner ul{
+ /*   display: flex;*/
+    width: 300%;
+  }
+  .new_banner ul li{
+    float: left;
+  }
+  .banner_det{
+    margin-left: 10px;
+    width: 86%;
+    height: 275px;
+    background:linear-gradient(-45deg,rgba(19,24,48,1),rgba(55,62,92,1));
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+  }
+  .server_tips{
+    display: inline-block;
+    margin-top: 20px;
+    padding-right: 12px;
+    width: 73px;
+    line-height: 24px;
+    font-size: 14px;
+    text-align: right;
+    color: #ffffff;
+    background:linear-gradient(-30deg,rgba(223,55,52,1) 0%,rgba(254,96,55,1) 100%);
+    -webkit-border-radius: 0 12px 12px 0;
+    -moz-border-radius: 0 12px 12px 0;
+    border-radius: 0 12px 12px 0;
+  }
+  .server_det{
+    display: inline-block;
+    margin-left: 15px;
+    padding: 15px;
+    font-size: 12px;
+    color: #ffffff;
+    border-bottom: 1px dashed #fff;
   }
 </style>

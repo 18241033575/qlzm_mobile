@@ -277,7 +277,7 @@
       },
       tal_login() {
         this.dialogVisible = false;
-        localStorage.clear('COMPANY');
+        localStorage.removeItem('COMPANY');
         this.$router.push({name: 'login'})
       },
       onEditorReady(val) {

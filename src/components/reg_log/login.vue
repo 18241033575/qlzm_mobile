@@ -114,8 +114,9 @@
                     this.reqSuc = true;
                     this.dialogVisible = true;
                     this.showMsg = '登录成功';
-                    localStorage.clear('COMPANY');
+                    localStorage.removeItem('COMPANY');
                     localStorage.setItem('USER',JSON.stringify(res.data));
+                    this.getSmsState = true;
                   }
                 })
             }else {
@@ -138,7 +139,7 @@
                     this.reqSuc = true;
                     this.dialogVisible = true;
                     this.showMsg = '登录成功';
-                    localStorage.clear('COMPANY');
+                    localStorage.removeItem('COMPANY');
                     //  放入本地数据
                     localStorage.setItem('USER',JSON.stringify(res.data));
                   }
@@ -167,8 +168,9 @@
                     this.reqSuc = true;
                     this.dialogVisible = true;
                     this.showMsg = '登录成功';
-                    localStorage.clear('USER');
+                    localStorage.removeItem('USER');
                     localStorage.setItem('COMPANY',JSON.stringify(res.data));
+                    this.getSmsState = true;
                   }
                 })
             }else {
@@ -191,7 +193,7 @@
                     this.reqSuc = true;
                     this.dialogVisible = true;
                     this.showMsg = '登录成功';
-                    localStorage.clear('USER');
+                    localStorage.removeItem('USER');
                     //  放入本地数据
                     localStorage.setItem('COMPANY',JSON.stringify(res.data));
                   }
@@ -241,12 +243,21 @@
                       localStorage.setItem('SMSTIME',t);
                     },1000);
                   }else {
-                    this.$notify.error({
-                      title: '提示',
-                      message: res.data.msg,
-                      showClose: false,
-                      duration: 1500,
-                    });
+                    if (false){
+                   /*   this.$notify.error({
+                        title: '提示',
+                        message: '还剩' + res.data.msg + '秒可以再次发送',
+                        showClose: false,
+                        duration: 1500,
+                      });*/
+                    }else {
+                      this.$notify.error({
+                        title: '提示',
+                        message: res.data.msg,
+                        showClose: false,
+                        duration: 1500,
+                      });
+                    }
                   }
                 })
             }else {

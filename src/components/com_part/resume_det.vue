@@ -394,7 +394,6 @@
                   // 自我评价
                   res.data.evaluation.tags = tal_adv(res.data.evaluation.tags,2);
                   this.selfEvalData = res.data.evaluation;
-                  console.log(this.selfEvalData);
                   this.evaluation = this.selfEvalData.evaluation;
                 }else {
                   this.isBuy = false;
