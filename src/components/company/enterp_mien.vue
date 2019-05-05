@@ -58,6 +58,10 @@
           }
         },
         mien_save() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.upLoadData.cid = companyInfo.id;
           this.upLoadData.style = this.mienData;
@@ -70,6 +74,7 @@
                   showClose: false,
                   duration: 1500
                 });
+                this.$indicator.close();
               } else {
                 this.$notify.error({
                   title: '提示',
@@ -77,10 +82,15 @@
                   showClose: false,
                   duration: 1500
                 });
+                this.$indicator.close();
               }
             })
         },
         upMienPic(res) {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           if (res.code == 200) {
             let url = res.data.success[0].url;
             this.infoData.push(splicPic(url,true));
@@ -88,6 +98,7 @@
             if (this.mienData.length > 7) {
               this.limits = true;
             }
+            this.$indicator.close();
           }
         },
 

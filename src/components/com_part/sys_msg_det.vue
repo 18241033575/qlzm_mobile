@@ -47,6 +47,10 @@
         },
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let id = this.$route.query.id;
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         if (userInfo) {
@@ -58,6 +62,7 @@
                     this.msgDetData = res.data[i];
                   }
                 }
+                this.$indicator.close();
               }
             });
         }
@@ -72,6 +77,7 @@
                     this.msgDetData.created_at = getDistanceTime(this.msgDetData.created_at,0);
                   }
                 }
+                this.$indicator.close();
               }
             })
         }

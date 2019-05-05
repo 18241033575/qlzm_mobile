@@ -81,6 +81,10 @@
       },
       methods: {
         resume_flash() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
             this.$ajax.get('/resume/refresh',{params:{}})
               .then((res)=>{
                 if (res.data.state == 200) {
@@ -89,6 +93,7 @@
                     type: 'success'
                   })
                 }
+                this.$indicator.close();
               })
           }
       },

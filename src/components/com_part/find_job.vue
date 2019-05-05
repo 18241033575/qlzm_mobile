@@ -279,8 +279,11 @@
         this.sort_sign = false
       },
       getjobData(param) {
-        let data = param;
-        this.$ajax.get('/company_work',{params: data})
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
+        this.$ajax.get('/company_work',{params: param})
           .then((res)=>{
             if (res.data.code == 200) {
               tranCity(res.data.data,true,2);
@@ -298,8 +301,10 @@
               }else {
                 this.emptySign = false;
               }
+              this.$indicator.close();
             }
-          })
+          });
+        this.tranCode = tranCity(this.cityCode,true,1);
       },
       chooseType(e){
         this.categoryId = e.currentTarget.getAttribute('data-id');
@@ -474,6 +479,10 @@
         this.firstBox = false;
       },
       loadBottom() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         this.find_jobParam.page++;
         this.$ajax.get('/company_work',{params: this.find_jobParam})
           .then((res)=>{
@@ -494,6 +503,7 @@
                 this.$refs.loadmore.onBottomLoaded();
               }
               this.allLoaded = true;
+              this.$indicator.close();
             }
           })
       },
@@ -549,33 +559,13 @@
         this.ugentFlag = true;
         this.find_jobParam.urgent = 1;
       }
-      let data = this.find_jobParam;
-      this.$ajax.get('/company_work',{params: data})
-        .then((res)=>{
-          if (res.data.code == 200) {
-            tranCity(res.data.data,true,2);
-            transWorkexp(res.data.data,2);
-            transEducation(res.data.data,2);
-            transNature(res.data.data,2);
-            transSalary(res.data.data,2);
-            for (let i = 0,len = res.data.data.length;i < len;i++) {
-              res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
-            }
-            this.find_jobData = res.data.data;
-            if (this.find_jobData.length == 0 || this.find_jobData.length == '' || this.find_jobData == undefined) {
-              this.emptySign = true;
-            }else {
-              this.emptySign = false;
-            }
-          }
-        });
-      this.tranCode = tranCity(this.cityCode,true,1);
+      this.getjobData(this.find_jobParam);
     },
     //获取屏幕高度
     beforeMount() {
       let h = document.documentElement.clientHeight || document.body.clientHeight;
       // 90搜索栏高度
-      this.screenH = h - 90;
+      this.screenH = h - 100;
     },
     mounted() {
       document.addEventListener('scroll', this.handleScroll)

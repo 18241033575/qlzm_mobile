@@ -81,12 +81,17 @@
           }
         },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/company/data-count',{params: {cid: companyInfo.id}})
             .then((res)=>{
               if (res.data.state != 400) {
                 this.countData = res.data;
               }
+              this.$indicator.close();
             })
       }
     }

@@ -389,6 +389,10 @@
             })
         },
         getCert() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           // 证书数据添加到缓存中
           this.certTotalData = JSON.parse(localStorage.getItem('CERT'));
           let userInfo = JSON.parse(localStorage.getItem('USER'));
@@ -427,6 +431,7 @@
                 this.additionData = addData;
                 this.certData = certs;
               }
+              this.$indicator.close();
             });
         }
       },

@@ -268,7 +268,11 @@
         }
       },
       created() {
-        //获取屏幕高度
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
+        //获取屏幕宽度
         this.screenW = document.documentElement.clientWidth || document.body.clientWidth;
         let cid = this.$route.query.cid;
         this.cid = cid;
@@ -304,6 +308,7 @@
               this.companyMsg = res.data;
               this.shadeSign = this.companyMsg.introduction.length > 300?true:false;
             }
+            this.$indicator.close();
           });
         this.$ajax.get('/office/company', {params: {cid: cid}})
           .then((res) => {

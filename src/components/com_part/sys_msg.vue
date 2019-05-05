@@ -54,28 +54,34 @@
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         if (userInfo) {
           this.$ajax.get('/personal/sysmsg',{params: {uid: userInfo.id}})
             .then((res)=>{
-              if (res.data) {
+              if (res.data != '') {
                 this.msgData = res.data;
                 this.emptySign = false;
               }else {
                 this.emptySign = true;
               }
+              this.$indicator.close();
             });
         }
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
         if (companyInfo) {
           this.$ajax.get('/company/get-messages',{params: {cid: companyInfo.id}})
             .then((res)=>{
-              if (res.data) {
+              if (res.data != '') {
                 this.msgData = res.data;
                 this.emptySign = false;
               }else {
                 this.emptySign = true;
               }
+              this.$indicator.close();
             })
         }
       },

@@ -47,13 +47,18 @@
         },
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let id = this.$route.query.id;
         this.$ajax.get('/news/detail/' + id)
           .then((res)=>{
             console.log(res);
             if (res.data.state != 400) {
               res.data.publish_at = timestampToTime(res.data.publish_at);
-              this.news_infoData = res.data
+              this.news_infoData = res.data;
+              this.$indicator.close();
             }
           })
       }

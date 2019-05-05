@@ -278,6 +278,10 @@
             });
             return
           }
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.$ajax.post('/company/info-set',{cid: companyInfo.id,logo: this.infoData.logo,name: this.infoData.name,nature: this.infoData.nature,scale: this.infoData.scale,province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.infoData.address,introduction: this.editIntro})
             .then((res)=>{
               if (res.data.state == 200) {
@@ -289,7 +293,8 @@
                 });
                 setTimeout(()=>{
                     this.$router.push({name: 'enterp_info_set'})
-                },1000)
+                },1000);
+                this.$indicator.close();
               }else {
                 this.$notify.error({
                   title: '提示',
@@ -297,6 +302,7 @@
                   showClose: false,
                   duration: 1500
                 });
+                this.$indicator.close();
               }
             })
         },

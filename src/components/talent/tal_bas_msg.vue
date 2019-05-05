@@ -226,6 +226,10 @@
             return
           }
           let userInfo = JSON.parse(localStorage.getItem('USER'));
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.$ajax.post('/resume/userinfo',{"flag": 1,photo: this.userMsg.photo,"name": this.form.tal_name, "province": this.userMsg.province, "city": this.userMsg.city, "area": this.userMsg.area, "address": this.form.tal_addr, "email": this.form.tal_email, "qq": this.form.tal_qq, "id_card":  this.form.tal_idcard, "work_status": this.form.tal_state, uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
@@ -246,6 +250,7 @@
                   duration: 1500
                 });
               }
+              this.$indicator.close();
             })
         },
         // 地址选择
@@ -305,6 +310,10 @@
           }
         },
         getInfo() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.userInfoMsg = userInfo;
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
@@ -332,6 +341,7 @@
                 this.form.tal_addr = this.userMsg.address;
                 this.form.tal_state = this.userMsg.work_status;
               }
+              this.$indicator.close();
             });
         }
       },

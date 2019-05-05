@@ -251,6 +251,10 @@
               });
               return
             }
+            this.$indicator.open({
+              text: '加载中...',
+              spinnerType: 'fading-circle'
+            });
             if (!this.backData) {
               this.$ajax.post('/company/add-vat-invoice',{cid: companyInfo.id,title: this.invTax.title,taxpayer_identification_number: this.invTax.number,reg_address:  this.invTax.reg_address,
                 reg_tel: this.invTax.reg_tel,bank: this.invTax.bank,bank_account: this.invTax.bank_account})
@@ -273,6 +277,7 @@
                       duration: 1500
                     });
                   }
+                  this.$indicator.close();
                 })
             } else {
               this.$ajax.post('/company/vat-invoice-set',{cid: companyInfo.id,title: this.invTax.title,taxpayer_identification_number: this.invTax.number,reg_address:  this.invTax.reg_address,
@@ -296,6 +301,7 @@
                       duration: 1500
                     });
                   }
+                  this.$indicator.close();
                 })
             }
           }
@@ -318,6 +324,10 @@
               });
               return
             }
+            this.$indicator.open({
+              text: '加载中...',
+              spinnerType: 'fading-circle'
+            });
             if (!this.backData) {
               this.$ajax.post('/company/add-general-invoice',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: this.invTotal.number})
                 .then((res)=>{
@@ -339,6 +349,7 @@
                       duration: 1500
                     });
                   }
+                  this.$indicator.close();
                 })
             } else {
               this.$ajax.post('/company/general-invoice-set',{cid: companyInfo.id,title: this.invTotal.title,taxpayer_identification_number: this.invTotal.number})
@@ -361,6 +372,7 @@
                       duration: 1500
                     });
                   }
+                  this.$indicator.close();
                 })
             }
 
@@ -429,6 +441,10 @@
               });
               return
             }
+            this.$indicator.open({
+              text: '加载中...',
+              spinnerType: 'fading-circle'
+            });
             if (!this.backData) {
               this.$ajax.post('/company/add-addressee',{cid: companyInfo.id,name: this.invMsg.name,phone : this.invMsg.phone,email : this.invMsg.email,province : this.invMsg.province,city : this.invMsg.city,area : this.invMsg.area,address : this.invMsg.address})
                 .then((res)=>{
@@ -450,6 +466,7 @@
                       duration: 1500
                     });
                   }
+                  this.$indicator.close();
                 })
             } else {
               this.$ajax.post('/company/set-addressee',{cid: companyInfo.id,name: this.invMsg.name,phone : this.invMsg.phone,email : this.invMsg.email,province : this.invMsg.province,city : this.invMsg.city,area : this.invMsg.area,address : this.invMsg.address})
@@ -472,9 +489,9 @@
                       duration: 1500
                     });
                   }
+                  this.$indicator.close();
                 })
             }
-
           }
         },
         // 数字限制
@@ -500,6 +517,10 @@
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.org = this.$route.query.org;
         if (this.org == 'tax') {
@@ -516,6 +537,7 @@
               } else {
                 this.backData = false;
               }
+              this.$indicator.close();
             })
         }
         if (this.org == 'total') {
@@ -528,9 +550,9 @@
                 } else {
                   this.backData = false;
                 }
+                this.$indicator.close();
               })
           }
-
         if (this.org == 'msg') {
           this.$ajax.get('/company/get-addressee',{params: {cid: companyInfo.id}})
             .then((res)=>{
@@ -549,9 +571,9 @@
               } else {
                 this.backData = false;
               }
+              this.$indicator.close();
             })
         }
-
       }
     }
 </script>

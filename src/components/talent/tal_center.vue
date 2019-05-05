@@ -149,7 +149,10 @@
               this.newNews = res.data ==0?false:true;
             }
           });
-
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
           .then((res)=>{
             if(res.data.state != 400) {
@@ -176,6 +179,7 @@
               });
               this.estimate_salary = this.baseSalary/1000 +　'K';
             }
+            this.$indicator.close();
           });
          this.$ajax.get('/resume/certificate',{params:{uid: userInfo.id}})
           .then((res)=> {

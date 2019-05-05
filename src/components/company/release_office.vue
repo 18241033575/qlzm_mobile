@@ -599,6 +599,10 @@
         this.id = this.$route.query.id;
         // id不为0 职位编辑
         if (this.id != 0 || this.id != undefined) {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
             // 获取职位列表
             this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
               .then((res)=>{
@@ -651,6 +655,7 @@
                     }
                    }
                 }
+                this.$indicator.close();
               })
           }
       }

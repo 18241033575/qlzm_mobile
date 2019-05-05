@@ -9,14 +9,14 @@
       <div class="resume_list">
         <div class="resume_list_cell" v-if="!orignState" v-for="(item,index) in this.commonData" :uid="item.uid" :key="index" @click="tal_det">
           <div class="content">
-            <p class="tal_name">{{item.name}}<img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
+            <p class="tal_name">{{item.name}}<img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="" alt=""></p><!--/static/images/ic_cm_down@2x.png-->
             <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
             <p class="tal_det">期望薪资:<span class="hope_salary">{{item.salary}}</span></p>
           </div>
         </div>
         <div class="resume_list_cell" v-if="orignState" v-for="(item,index) in this.commonData" :uid="item.user_info.uid" :key="index" @click="tal_det">
           <div class="content">
-            <p class="tal_name">{{item.user_info.name}}<span class="app_pos" >(应聘职位: {{item.office.office_name}})</span><img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="/static/images/ic_cm_down@2x.png" alt=""></p>
+            <p class="tal_name">{{item.user_info.name}}<span class="app_pos" >(应聘职位: {{item.office.office_name}})</span><img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="" alt=""></p><!--/static/images/ic_cm_down@2x.png-->
             <p class="tal_det"><span>{{item.user_info.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.user_info.work_exp}}</span><span>|</span><span>{{item.user_info.education}}</span><span>|</span><span>{{item.user_info.major==''?'无专业':item.user_info.major}}</span></p>
             <p class="tal_det">期望薪资:<span class="hope_salary">{{item.user_info.salary}}</span></p>
           </div>
@@ -104,6 +104,10 @@
         },
         // 收藏简历
         collect_resume() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/resume/collect',{uid: this.uid,info_id: this.info_id,cid: companyInfo.id})
             .then((res)=>{
@@ -118,10 +122,15 @@
                   type: 'warning'
                 });
               }
+              this.$indicator.close();
             })
         },
         // 录用
         hire(){
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/company/set-interviews',{uid: this.uid,cid: companyInfo.id,state: 1})
             .then((res)=>{
@@ -140,10 +149,15 @@
                   duration: 1500,
                 });
               }
+              this.$indicator.close();
             })
         },
         // 未录用
         unhire(){
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/company/set-interviews',{uid: this.uid,cid: companyInfo.id,state: 2})
             .then((res)=>{
@@ -162,6 +176,7 @@
                   duration: 1500,
                 });
               }
+              this.$indicator.close();
             })
         },
         // 简历详情
@@ -171,6 +186,10 @@
         },
         // 取消收藏
         cancel_col() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/resume/cancel-collect',{uid: this.uid,cid: companyInfo.id})
             .then((res)=>{
@@ -187,10 +206,15 @@
                   }
                 });
               }
+              this.$indicator.close();
             })
         },
         // 删除简历
         del_resume() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/resume/delete-already-buy',{cid: companyInfo.id,uid: this.uid})
             .then((res)=>{
@@ -207,10 +231,15 @@
                   }
                 }
               }
+              this.$indicator.close();
             })
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
           let  org = this.$route.query.orign;
           this.orignState = org == 'app'?true:false;
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
@@ -221,7 +250,6 @@
             this.$ajax.get('/resume/get-apply',{params:{cid: companyInfo.id}})
               .then((res)=>{
                 if (res.data.state != 400) {
-                  console.log(res.data);
                   for (let i = 0,len = res.data.length;i < len;i++) {
                     res.data[i].age = getTrueAge(res.data[i].user_info.birthday,1);
                     transSalary(res.data[i].user_info,1);
@@ -235,6 +263,7 @@
                     this.emptySign = false;
                   }
                 }
+                this.$indicator.close();
               })
           }else if (org == 'buy') {
             this.orign = 'buy';
@@ -253,6 +282,7 @@
                     this.emptySign = false;
                   }
                 }
+                this.$indicator.close();
               })
           }else if (org == 'collect') {
             this.orign = 'collect';
@@ -271,6 +301,7 @@
                     this.emptySign = false;
                   }
                 }
+                this.$indicator.close();
               })
           }else if (org == 'invite') {
             this.orign = 'invite';
@@ -290,6 +321,7 @@
                     this.emptySign = false;
                   }
                 }
+                this.$indicator.close();
               })
           }else if (org == 'collected') {
             this.orign = 'collected';
@@ -308,6 +340,7 @@
                     this.emptySign = false;
                   }
                 }
+                this.$indicator.close();
               })
           }
       }

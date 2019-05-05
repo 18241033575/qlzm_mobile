@@ -48,6 +48,10 @@
             });
             return
           }
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.post('/personal/shield',{uid: userInfo.id,company: this.company_name})
             .then((res)=>{
@@ -64,9 +68,14 @@
                 this.shieldData.unshift({company: this.company_name,id: res.data,uid: userInfo.id});
                 this.company_name = '';
               }
+              this.$indicator.close();
             })
         },
         shield_cancel(e) {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let id = e.target.getAttribute('id');
           let uid = e.target.getAttribute('uid');
           this.$ajax.post('personal/shield',{id: id,uid: uid})
@@ -85,6 +94,7 @@
                   }
                 }
               }
+              this.$indicator.close();
             })
         }
       },

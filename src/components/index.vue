@@ -38,34 +38,10 @@
     <!--主导航-->
     <div class="main_nav_cell">
       <div class="content">
-        <router-link :to="{name: 'all_pos'}">
+        <router-link v-for="(item,index) in mainNav" :key="index" :to="{name: item.url}">
           <div class="nav_cell">
-            <img src="/static/images/ic_jobs@2x.png" alt="">
-            <p>全部职位</p>
-          </div>
-        </router-link>
-        <router-link :to="{name: 'find_job'}">
-          <div class="nav_cell">
-            <img src="/static/images/ic_findjob@2x.png" alt="">
-            <p>找工作</p>
-         </div>
-        </router-link>
-        <router-link :to="{name: 'find_talent'}">
-          <div class="nav_cell">
-            <img src="/static/images/ic_rencai@2x.png" alt="">
-            <p>找人才</p>
-          </div>
-        </router-link>
-        <router-link :to="{name: 'famous_pos'}">
-          <div class="nav_cell">
-            <img src="/static/images/ic_mingqi@2x.png" alt="">
-            <p>名企招聘</p>
-          </div>
-        </router-link>
-        <router-link :to="{name: 'news'}">
-          <div class="nav_cell">
-            <img src="/static/images/ic_news@2x.png" alt="">
-            <p>新闻资讯</p>
+            <img :src="item.img" alt="">
+            <p>{{item.name}}</p>
           </div>
         </router-link>
       </div>
@@ -175,6 +151,33 @@
             famousData: {},
             newsData: {},
             webTitle: '',
+            mainNav: [
+              {
+                name: '全部职位',
+                img: '/static/images/ic_jobs@2x.png',
+                url: 'all_pos',
+              },
+              {
+                name: '找工作',
+                img: '/static/images/ic_findjob@2x.png',
+                url: 'find_job',
+              },
+              {
+                name: '找人才',
+                img: '/static/images/ic_rencai@2x.png',
+                url: 'find_talent',
+              },
+              {
+                name: '名企招聘',
+                img: '/static/images/ic_mingqi@2x.png',
+                url: 'famous_pos',
+              },
+              {
+                name: '新闻资讯',
+                img: '/static/images/ic_news@2x.png',
+                url: 'news',
+              },
+            ]
           }
       },
       methods: {
@@ -209,9 +212,10 @@
         }
       },
       created() {
-        // 加载字典
-        // 更新标识
-        if (true){
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
           //  字典
           // 获取招聘优势字典
           this.$ajax.get('/company/zhaopin-advantages')
@@ -269,7 +273,6 @@
             .then((res)=>{
               localStorage.setItem('CERT',JSON.stringify(res.data));
             });
-        }
           // 急聘数据
           this.$ajax.get('/office/urgent')
             .then((res)=>{
@@ -283,6 +286,7 @@
                 for (let i = 0;i < this.ugentData.length; i++) {
                   this.ugentData[i].created_at = getDistanceTime(this.ugentData[i].created_at)
                 }
+                this.$indicator.close();
               }
             });
           // 名企数据
@@ -290,7 +294,7 @@
           .then((res)=>{
             if(res.data.state != 400){
               splicLogo(res.data);
-              this.famousData = res.data
+              this.famousData = res.data;
             }
           });
         // 新闻资讯
@@ -315,7 +319,7 @@
               })
             }
           });
-      }
+      },
     }
 </script>
 

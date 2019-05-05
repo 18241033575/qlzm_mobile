@@ -194,6 +194,10 @@
             });
             return
           }
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.post('/resume/userinfo',{nature:this.form.work_nature,salary: this.upSalary,duty_time: this.ArriveId,remark: this.remark,flag: 2,job_id: this.intJobCode.join(','),work_province: this.cityCode.province,work_city: this.cityCode.city,uid: userInfo.id})
             .then((res)=>{
@@ -214,6 +218,7 @@
                   duration: 1500
                 });
               }
+              this.$indicator.close();
             })
           // this.int_job_edit = true
         },
@@ -328,6 +333,10 @@
           this.CommonData = transArrive(this.CommonData,3);
         },
         getIntJob() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
             .then((res)=>{
@@ -362,6 +371,7 @@
                 }
                 this.remark = this.intJobData.remark;
               }
+              this.$indicator.close();
             });
         }
       },

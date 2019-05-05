@@ -90,7 +90,7 @@
             });
             return
           }
-          // active == true 用户登录
+          // active == false 用户登录
           if (!this.active) {
             // value 1验证码登录 2密码登录
             if (this.value == 2) {
@@ -157,7 +157,7 @@
                 });
                 return
               }
-              this.$ajax.post('/sms/login',{"phone": this.account,"type": 1,"member":2,"sms_code": this.sms_code})
+              this.$ajax.post('/sms/login',{"phone": this.account,"type": 2,"member":2,"sms_code": this.sms_code})
                 .then((res)=>{
                   if (res.data.state == 400) {
                     this.reqSuc = false;

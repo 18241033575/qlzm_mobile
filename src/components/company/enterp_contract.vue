@@ -111,12 +111,17 @@
         },
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/company/get-contact',{params:{cid: companyInfo.id}})
             .then((res)=>{
               if (res.data) {
                 this.contractData = res.data;
               }
+              this.$indicator.close();
             })
       }
     }

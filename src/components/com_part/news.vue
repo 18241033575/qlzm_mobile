@@ -77,6 +77,10 @@
         },
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
           this.$ajax.post('/news',{page: 1,operate: 'news',limit: 10})
             .then((res)=>{
               if (res.data.code == 200) {
@@ -85,6 +89,7 @@
                   res.data.data[i].publish_at = getDistanceTime(res.data.data[i].publish_at);
                 }
                 this.newsData = res.data.data;
+                this.$indicator.close();
               }
             })
       },

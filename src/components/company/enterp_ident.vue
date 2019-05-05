@@ -73,6 +73,10 @@
           }
         },
         submitLicense() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/company/auth-set',{cid: companyInfo.id,license: this.licenseUrl})
             .then((res)=>{
@@ -84,6 +88,7 @@
                   duration: 1500
                 });
                 this.identData.state = -2;
+                this.$indicator.close();
               }else {
                 this.$notify.error({
                   title: '提示',
@@ -91,11 +96,16 @@
                   showClose: false,
                   duration: 1500
                 });
+                this.$indicator.close();
               }
             })
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         this.loadAddr = file_upload();
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
         this.companyInfo = companyInfo;
@@ -104,7 +114,7 @@
             this.licenseUrl = res.data.license;
             res.data.license = splicPic(res.data.license,true)=='//file.wiiwork.com/'?'':splicPic(res.data.license,true);
             this.identData = res.data;
-            console.log(this.identData);
+            this.$indicator.close();
           });
         this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
           .then((res)=>{

@@ -56,6 +56,10 @@
           this.$router.push({name: 'company_det',query:{cid: cid,id: id}});
         },
         loadBottom() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.pages += 1;
           this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
             .then((res)=>{
@@ -68,6 +72,7 @@
                 this.req_state = true;
               }
               this.allLoaded = true;
+              this.$indicator.close();
             })
         },
         handleScroll () {
@@ -84,11 +89,16 @@
         },
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
           .then((res)=>{
             if(res.data.state != 400) {
               splicLogo(res.data);
               this.famData = res.data;
+              this.$indicator.close();
             }
           })
       },

@@ -233,6 +233,10 @@
           this.workexpAllData.id = this.workexp_Id;
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.workexpAllData.uid = userInfo.id;
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.$ajax.post('/resume/workexp',this.workexpAllData)
             .then((res)=>{
               if (res.data.state == 200) {
@@ -245,6 +249,7 @@
                 });
                 this.workExp();
               }
+              this.$indicator.close();
             })
         },
         workexp_del() {
@@ -260,6 +265,10 @@
           this.workexpAllData.id = this.workexp_Id;
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.workexpAllData.uid = userInfo.id;
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.$ajax.post('/resume/workexp',this.workexpAllData)
             .then((res)=>{
               if (res.data.state == 200) {
@@ -279,6 +288,7 @@
                   duration: 1500
                 });
               }
+              this.$indicator.close();
             })
         },
         workexp_edit(e) {
@@ -306,6 +316,10 @@
           }
         },
         workExp() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/resume/workexp',{params: {uid: userInfo.id}})
             .then((res)=>{
@@ -326,6 +340,7 @@
                   }
                 }
               }
+              this.$indicator.close();
             })
         },
       },

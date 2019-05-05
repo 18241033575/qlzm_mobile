@@ -42,6 +42,10 @@
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
           .then((res)=>{
@@ -58,7 +62,8 @@
             }else {
               this.emptySign = true;
             }
-          })
+            this.$indicator.close();
+          });
       },
     }
 </script>

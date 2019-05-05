@@ -96,6 +96,10 @@
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
             .then((res)=>{
@@ -110,6 +114,7 @@
                   this.centerDetData.city = '';
                 }
                 this.centerDetData = res.data.info;
+                this.$indicator.close();
               }
             })
       }

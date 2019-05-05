@@ -31,6 +31,10 @@
         changeState() {
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           let sta = this.privacy_state == true?1:-1;
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.$ajax.post('/resume/hiddenopen',{state: sta,uid: userInfo.id})
             .then((res)=>{
               if (res.data.state == 200) {
@@ -45,12 +49,23 @@
                   type: 'error'
                 });
               }
+              this.$indicator.close();
             })
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let userInfo = JSON.parse(localStorage.getItem('USER'));
-        this.privacy_state = userInfo.state == 1?true:false;
+        this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
+          .then((res)=>{
+            if (res.data.state!= 400) {
+              this.privacy_state = res.data.base_info.state == 1?true:false;
+            }
+            this.$indicator.close();
+          });
       },
     }
 </script>

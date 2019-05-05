@@ -174,6 +174,10 @@
           }
       },
       created(){
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.uid = userInfo.id;
         let certs = JSON.parse(localStorage.getItem('CERT'));
@@ -298,6 +302,7 @@
               });
               this.additionData = addData;
               this.certsData = certs;
+              this.$indicator.close();
             }
           });
 

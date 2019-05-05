@@ -95,6 +95,10 @@
         },
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         //获取屏幕高度
         this.screenW = document.documentElement.clientWidth || document.body.clientWidth;
         this.$ajax.get('/news/employment-guidance')
@@ -108,6 +112,7 @@
             }
             this.List = res.data;
             this.guideLength = res.data.length; // 两个静态
+            this.$indicator.close();
           })
       }
     }

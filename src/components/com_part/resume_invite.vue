@@ -33,6 +33,7 @@
             <span class="edit_lab">面试时间</span>
             <el-date-picker
               v-model="time"
+              id="time"
               align="right"
               type="datetime"
               placeholder="选择日期"
@@ -145,13 +146,15 @@
             });
             return
           }
-
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           let uid = this.$route.query.uid;
           this.$ajax.post('/company/send-interview',{ cid: companyInfo.id, uid: uid, job: this.job,username: this.contractData.username, tel: this.contractData.tel, phone: this.contractData.phone,qq: this.contractData.qq,
             wx: this.contractData.wx,email: this.contractData.email,address: this.address,invite_type: this.invite_type,time: this.time,remind: this.remind})
             .then((res)=>{
-              console.log(res);
               if(res.data.state == 200) {
                 this.$notify.success({
                   title: '提示',
@@ -170,16 +173,22 @@
                   duration: 1500
                 });
               }
+              this.$indicator.close();
             })
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/company/get-contact',{params: {cid: companyInfo.id}})
             .then((res)=>{
-              if (res.data.state != 400) {
+              if (res.data) {
                 this.contractData = res.data;
               }
+              this.$indicator.close();
             })
       }
     }
@@ -282,6 +291,9 @@
     font-weight: bold;
     color: #666666;
     line-height: 32px;
+  }
+  .el_date_editor.el_input{
+    width: 200px;
   }
   .edit_cell .int_way_active{
     background: rgba(80,130,230,.1);

@@ -38,6 +38,10 @@
           }
         },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let id = this.$route.query.id;
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.$ajax.get('/personal/interview',{params: {uid: userInfo.id}})
@@ -54,6 +58,7 @@
                 }
               }
             }
+            this.$indicator.close();
           })
       }
     }

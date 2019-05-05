@@ -72,6 +72,10 @@
           this.selfEvalSign = false;
         },
         selfSave() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.selfEvalData.flag = 3;
           this.selfEvalData.uid = userInfo.id;
@@ -96,6 +100,7 @@
                   duration: 1500
                 });
               }
+              this.$indicator.close();
             })
         },
         choose_adv(e) {
@@ -117,6 +122,10 @@
           }
         },
         getEval() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.userTags = JSON.parse(localStorage.getItem('USERTAGS'));
           let userInfo = JSON.parse(localStorage.getItem('USER'));
           this.$ajax.get('/resume/userinfo',{params:{uid: userInfo.id}})
@@ -136,6 +145,7 @@
                 this.selfEvalData.tags = tal_adv(this.selfEvalData.tags,2);
                 this.evaluation = this.selfEvalData.evaluation;
               }
+              this.$indicator.close();
             });
         }
       },

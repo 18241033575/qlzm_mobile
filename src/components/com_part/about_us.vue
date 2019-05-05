@@ -165,6 +165,10 @@
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         //获取屏幕高度
         this.screenW = document.documentElement.clientWidth || document.body.clientWidth;
         let basset = JSON.parse(localStorage.getItem('BASSET'));
@@ -181,6 +185,7 @@
           this.$ajax.get('/news/user-guides')
             .then((res)=>{
               this.guideData = res.data;
+              this.$indicator.close();
             });
       }
     }
@@ -246,6 +251,7 @@
   .adv_type span{
     display: inline-block;
     margin-left: 20px;
+    margin-top: 10px;
     width: 60px;
     height: 30px;
     line-height: 30px;

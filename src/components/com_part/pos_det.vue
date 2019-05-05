@@ -285,6 +285,10 @@
       },
     },
     created() {
+      this.$indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      });
       this.id = this.$route.query.id;
       this.cid = this.$route.query.cid;
       this.$ajax.get('/office/detail', {params:{id: this.id}})
@@ -315,6 +319,7 @@
               }
               this.posDetData.tags = tranTags;
             }
+            this.$indicator.close();
           }
         });
 

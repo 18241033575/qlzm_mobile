@@ -488,27 +488,32 @@
           this.firstBox = false;
         },
         loadBottom() {
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.find_talParam.page++;
           this.$ajax.get('/talents',{params: this.find_talParam})
             .then((res)=>{
+              console.log(res);
               if (res.data.state != 400) {
                 if (res.data.data.length == 0) {
                   this.req_state = true;
                 }else {
                   this.req_state = false;
                   tranCity(res.data.data,true,2);
-                  // transWorkexp(res.data.data,2);
                   transEducation(res.data.data,2);
                   transNature(res.data.data,2);
                   transSalary(res.data.data,2);
                   getTrueAge(res.data.data,2);
                   for (let i = 0,len = res.data.data.length;i < len;i++) {
-                    res.data.data[i].created_time = getDistanceTime(res.data.data[i].created_at,1);
+                    res.data.data[i].updated_at = getDistanceTime(res.data.data[i].updated_at,1);
                   }
                   this.find_talData.push.apply(this.find_talData,res.data.data);
                   this.$refs.loadmore.onBottomLoaded();
                 }
                 this.allLoaded = true;
+                this.$indicator.close();
               }
             })
         },
@@ -585,6 +590,10 @@
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         this.allPosData = JSON.parse(localStorage.getItem('CERT'));
         if (this.$route.query.province) {
           this.keyword = this.find_talParam.office_name = this.$route.query.office_name;
@@ -594,7 +603,6 @@
         this.$ajax.get('/talents',{params: data})
           .then((res)=>{
             if (res.data.state != 400) {
-              console.log(res.data);
               tranCity(res.data.data,true,2);
               // transWorkexp(res.data.data,2);
               transEducation(res.data.data,2);
@@ -605,6 +613,7 @@
                 res.data.data[i].updated_at = getDistanceTime(res.data.data[i],3);
               }
               this.find_talData = res.data.data;
+              this.$indicator.close();
             }
           });
         this.tranCode = tranCity(this.cityCode,true,1)
@@ -613,7 +622,7 @@
       beforeMount() {
         let h = document.documentElement.clientHeight || document.body.clientHeight;
         // 90搜索栏高度
-        this.screenH = h - 90;
+        this.screenH = h - 100;
       },
       mounted() {
         document.addEventListener('scroll', this.handleScroll)

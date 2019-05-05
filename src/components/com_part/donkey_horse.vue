@@ -70,26 +70,62 @@
         </div>
         <div class="new_banner">
           <v-touch v-on:swipeleft="leftChangeImg" height="104px" v-on:swiperight="leftChangeImg">
-            <ul>
+            <ul :style="com_style">
               <li class="banner_det">
                   <span class="server">
                     <span class="server_tips">专业顾问</span>
                     <span class="server_det">两千名专业猎头顾问负责专业领域，客户体验好</span>
                   </span>
                 <span class="server">
-                    <span class="server_tips">专业顾问</span>
-                    <span class="server_det">两千名专业猎头顾问负责专业领域，客户体验好</span>
+                    <span class="server_tips">专业协作</span>
+                    <span class="server_det">分工协作，同时也可在全国范围内展开联合寻猎</span>
                   </span>
                 <span class="server">
-                    <span class="server_tips">专业顾问</span>
-                    <span class="server_det">两千名专业猎头顾问负责专业领域，客户体验好</span>
+                    <span class="server_tips">专业客服</span>
+                    <span class="server_det">上百名专业客服，为您提供一对一的专业服务</span>
                   </span>
               </li>
               <li class="banner_det">
-
+                  <span class="server">
+                    <span class="server_tips">需求对接</span>
+                    <span class="server_det">急速下单，专业猎头顾问点对点为您界定需求、规划方案</span>
+                  </span>
+                <span class="server">
+                    <span class="server_tips">急速寻猎</span>
+                    <span class="server_det">360度全方位、多渠道寻猎，筛选准、推荐快</span>
+                  </span>
+                <span class="server">
+                    <span class="server_tips">后续服务</span>
+                    <span class="server_det">为结果负责，确保所选人才持续稳定地为您服务</span>
+                  </span>
               </li>
               <li class="banner_det">
-
+                  <span class="server">
+                    <span class="server_tips">快速推荐</span>
+                    <span class="server_det">1~3天即可为您推荐首批候选人才，效率高</span>
+                  </span>
+                <span class="server">
+                    <span class="server_tips">面试安排</span>
+                    <span class="server_det">3~5天即可为您安排候选人才面试，速度快</span>
+                  </span>
+                <span class="server">
+                    <span class="server_tips">成功入职</span>
+                    <span class="server_det">平均15天推荐成功</span>
+                  </span>
+              </li>
+              <li class="banner_det">
+                  <span class="server">
+                    <span class="server_tips">增值服务</span>
+                    <span class="server_det">90天保证期，为您提供12个月所选人才追踪服务</span>
+                  </span>
+                <span class="server">
+                    <span class="server_tips">人事管理</span>
+                    <span class="server_det">为您提供人事管理方案及办公软件（吱鸟办公）</span>
+                  </span>
+                <span class="server">
+                    <span class="server_tips">职业操守</span>
+                    <span class="server_det">保护您的商业隐私，恪守猎头行业规范</span>
+                  </span>
               </li>
             </ul>
         <!--    <div :style="com_style" class="banner_det fl">
@@ -147,12 +183,27 @@
           com_style: {
             marginLeft: 0
           },
+          screenW: 0,
+          indexMien: 0
         }
       },
       methods: {
-        leftChangeImg(){
-
+        leftChangeImg(e){
+          e.preventDefault();
+          if (e.deltaX > 0 && this.indexMien > 0) {
+            // 向右滑
+            this.indexMien--;
+          }else if (e.deltaX < 0 && this.indexMien < 3) {
+            // 向左滑
+            console.log(1);
+            this.indexMien++;
+          }
+          this.com_style.marginLeft = -this.screenW * 0.9 * this.indexMien + 'px';
         }
+      },
+      created(){
+        //获取屏幕宽度
+        this.screenW = document.documentElement.clientWidth || document.body.clientWidth;
       }
     }
 </script>
@@ -178,10 +229,6 @@
     color: #666666;
     font-size: 12px;
     line-height: 18px;
-/*    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 2px dashed #5082E6;*/
   }
   .area_cell{
     display: flex;
@@ -264,15 +311,17 @@
     color: #ff4b4b;
   }
   .new_banner ul{
- /*   display: flex;*/
-    width: 300%;
+    transition: ease-in-out 1s;
+    width: 400%;
+    list-style: none;
+    overflow: hidden;
   }
   .new_banner ul li{
     float: left;
+    width: 22%;
   }
   .banner_det{
-    margin-left: 10px;
-    width: 86%;
+    margin: 0 10px 0;
     height: 275px;
     background:linear-gradient(-45deg,rgba(19,24,48,1),rgba(55,62,92,1));
     -webkit-border-radius: 6px;
@@ -281,7 +330,7 @@
   }
   .server_tips{
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 10px;
     padding-right: 12px;
     width: 73px;
     line-height: 24px;
@@ -294,9 +343,9 @@
     border-radius: 0 12px 12px 0;
   }
   .server_det{
-    display: inline-block;
+    display: block;
     margin-left: 15px;
-    padding: 15px;
+    padding: 12px 15px;
     font-size: 12px;
     color: #ffffff;
     border-bottom: 1px dashed #fff;

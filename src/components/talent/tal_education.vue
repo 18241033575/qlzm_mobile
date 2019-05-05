@@ -220,7 +220,10 @@
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.operaData.uid = userInfo.id;
         this.operaData.id = this.edit_Id;
-
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         this.$ajax.post('/resume/eduexp',this.operaData)
           .then((res)=>{
             if (res.data.state == 200) {
@@ -240,9 +243,14 @@
                 duration: 1500
               });
             }
+            this.$indicator.close();
           })
       },
       edu_del() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         this.operaData.state = -1;
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.operaData.uid = userInfo.id;
@@ -268,7 +276,8 @@
                 duration: 1500
               });
             }
-          })
+          });
+        this.$indicator.close();
       },
       EduCode(e) {
         let eduVal = e.currentTarget.getAttribute('edu-id');

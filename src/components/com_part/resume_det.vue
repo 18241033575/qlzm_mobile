@@ -256,6 +256,10 @@
         resume_confirm() {
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (companyInfo) {
+            this.$indicator.open({
+              text: '加载中...',
+              spinnerType: 'fading-circle'
+            });
             if (!this.isFree.is_free) {
               if (this.integral >= this.spend) {
                 this.$ajax.get('/company_by_resume',{params: {cid: companyInfo.id,uid: this.uid,type: 'index'}})
@@ -270,6 +274,7 @@
                       this.resume_buy = false;
                       this.getUserInfo();
                     }
+                    this.$indicator.close();
                   })
               } else {
                 // 关闭弹层 ---去充值
@@ -296,16 +301,20 @@
                     this.resume_buy = false;
                     this.getUserInfo();
                   }
+                  this.$indicator.close();
                 })
             }
           }
         },
         getUserInfo(){
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.uid = this.$route.query.uid;
           let certData = JSON.parse(localStorage.getItem('CERT'));
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           if (companyInfo) {
-
             this.$ajax.get('/company/current-integral',{params:{cid: companyInfo.id}})
               .then((res)=>{
                 if (res.data.state != 400) {
@@ -426,6 +435,7 @@
                     }
                   }
                 });
+                this.$indicator.close();
               });
           } else {
             this.$ajax.get('/resume/view/' + this.uid,{params: {cid: 0}})
@@ -458,12 +468,12 @@
                     }
                   }
                 });
+                this.$indicator.close();
               });
           }
         }
       },
       created() {
-
         this.getUserInfo();
       }
     }

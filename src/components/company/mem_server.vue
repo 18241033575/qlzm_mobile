@@ -64,6 +64,10 @@
         }
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
         splicLogo(companyInfo,1);
         this.$ajax.get('/company/base',{params:{cid: companyInfo.id}})
@@ -85,6 +89,7 @@
           .then((res)=>{
             if (res.data.state != 400) {
               this.sonsumptRecord = res.data;
+              this.$indicator.close();
             }
           })
       }

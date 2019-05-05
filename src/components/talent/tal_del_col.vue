@@ -47,6 +47,10 @@
         },
       },
       created() {
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         //判断路由显示不同内容    /personal/apply
         let type = this.$route.query.orig;
         let userInfo = JSON.parse(localStorage.getItem('USER'));
@@ -69,6 +73,7 @@
               }else {
                 this.emptySign = true;
               }
+              this.$indicator.close();
             })
         }else {
           this.titleMsg = '收藏的职位';
@@ -89,6 +94,7 @@
               }else {
                 this.emptySign = true;
               }
+              this.$indicator.close();
             })
         }
       },

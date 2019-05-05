@@ -236,6 +236,10 @@
           });
           return
         }
+        this.$indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
         this.proAllData.id = this.pro_Id;
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.proAllData.uid = userInfo.id;
@@ -258,6 +262,7 @@
                 duration: 1500
               });
             }
+            this.$indicator.close();
           })
       },
       pro_del() {
