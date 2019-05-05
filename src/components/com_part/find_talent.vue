@@ -279,7 +279,6 @@
           boxState: false,
           // 简历ID
           info_id: 0,
-          pullSign: 0,
           screenH: 0,
         }
       },
@@ -495,7 +494,6 @@
           this.find_talParam.page++;
           this.$ajax.get('/talents',{params: this.find_talParam})
             .then((res)=>{
-              console.log(res);
               if (res.data.state != 400) {
                 if (res.data.data.length == 0) {
                   this.req_state = true;
@@ -521,9 +519,8 @@
           let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
           let ch = document.querySelector('#findTal').clientHeight;
           if (this.allLoaded && !this.req_state) {
-            if (scrollTop > ((ch/(this.pullSign + 1)) - this.screenH + ch * this.pullSign/(this.pullSign + 1))) {
+            if ( scrollTop > (ch - this.screenH ) ) {
               this.allLoaded = false;
-              this.pullSign++;
             }else{
               this.allLoaded = true;
             }
@@ -590,6 +587,10 @@
         }
       },
       created() {
+        //获取屏幕高度
+        let h = document.documentElement.clientHeight || document.body.clientHeight;
+        // 90搜索栏高度
+        this.screenH = h + 65;
         this.$indicator.open({
           text: '加载中...',
           spinnerType: 'fading-circle'
@@ -604,7 +605,6 @@
           .then((res)=>{
             if (res.data.state != 400) {
               tranCity(res.data.data,true,2);
-              // transWorkexp(res.data.data,2);
               transEducation(res.data.data,2);
               transNature(res.data.data,2);
               transSalary(res.data.data,2);
@@ -617,12 +617,6 @@
             }
           });
         this.tranCode = tranCity(this.cityCode,true,1)
-      },
-      //获取屏幕高度
-      beforeMount() {
-        let h = document.documentElement.clientHeight || document.body.clientHeight;
-        // 90搜索栏高度
-        this.screenH = h - 100;
       },
       mounted() {
         document.addEventListener('scroll', this.handleScroll)

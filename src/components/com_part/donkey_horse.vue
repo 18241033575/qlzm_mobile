@@ -212,6 +212,7 @@
   .labor_dispatch_box{
     background-color: #ffffff;
     padding-bottom: 30px;
+    overflow: hidden;
   }
   .banner img{
     width: 100%;
@@ -302,6 +303,7 @@
     width: 100%;
     height: 400px;
     background-color: #f0f1f5;
+    overflow: hidden;
   }
   .horse_banner_title{
     padding: 30px 0;

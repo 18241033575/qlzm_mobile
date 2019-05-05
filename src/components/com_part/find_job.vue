@@ -248,7 +248,6 @@
         salaryData: {},
         offDayData: {},
         // 上拉次数标识
-        pullSign: 0,
         screenH: 0,
         guiyangData: {
           520100: '贵阳市',
@@ -524,9 +523,8 @@
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         let ch = document.querySelector('#findJob').clientHeight;
         if (this.allLoaded && !this.req_state) {
-          if (scrollTop > ((ch/(this.pullSign + 1)) - this.screenH + ch * this.pullSign/(this.pullSign + 1))) {
+          if (scrollTop > (ch - this.screenH)) {
             this.allLoaded = false;
-            this.pullSign++;
           }else{
             this.allLoaded = true;
           }
@@ -565,7 +563,7 @@
     beforeMount() {
       let h = document.documentElement.clientHeight || document.body.clientHeight;
       // 90搜索栏高度
-      this.screenH = h - 100;
+      this.screenH = h + 65;
     },
     mounted() {
       document.addEventListener('scroll', this.handleScroll)

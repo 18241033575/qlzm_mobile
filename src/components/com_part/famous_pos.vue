@@ -45,7 +45,6 @@
             rows: 6,
             allLoaded: true,
             req_state: false,
-            pullSign: 0,
             screenH: 0,
           }
       },
@@ -79,9 +78,8 @@
           let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
           let ch = document.querySelector('#famouse').clientHeight;
           if (this.allLoaded && !this.req_state) {
-            if (scrollTop > ((ch/(this.pullSign + 1)) - this.screenH + ch * this.pullSign/(this.pullSign + 1))) {
+            if (scrollTop > (ch - this.screenH)) {
               this.allLoaded = false;
-              this.pullSign++;
             }else{
               this.allLoaded = true;
             }
@@ -89,6 +87,9 @@
         },
       },
       created() {
+        let h = document.documentElement.clientHeight || document.body.clientHeight;
+        // 90搜索栏高度
+        this.screenH = h + 65;
         this.$indicator.open({
           text: '加载中...',
           spinnerType: 'fading-circle'
@@ -101,12 +102,6 @@
               this.$indicator.close();
             }
           })
-      },
-      //获取屏幕高度
-      beforeMount() {
-        let h = document.documentElement.clientHeight || document.body.clientHeight;
-        // 90搜索栏高度
-        this.screenH = h - 55;
       },
       mounted() {
         document.addEventListener('scroll', this.handleScroll)

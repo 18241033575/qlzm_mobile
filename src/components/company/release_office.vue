@@ -663,6 +663,9 @@
 </script>
 
 <style scoped>
+  .tal_msg_edit{
+    padding-bottom: 20px;
+  }
   .top_pic img{
     width: 75px;
     height: 90px;
