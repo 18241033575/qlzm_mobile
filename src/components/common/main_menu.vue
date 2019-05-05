@@ -14,7 +14,7 @@
             </div>
             <div class="msg_det">
               <p class="msg_name">HI，<span class="user_name">{{userName}}</span></p>
-              <p class="greeting">欢迎回来，<span>下午好!</span></p>
+              <p class="greeting">欢迎回来，<span>{{greeting}}!</span></p>
             </div>
           </div>
           <div class="btn_group" v-if="isLogin">
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-  import {splicPic} from '../../../static/js/common.js'
+  import {splicPic,getGreetings} from '../../../static/js/common.js'
     export default {
       props: {
         give_shade:{
@@ -111,7 +111,8 @@
           default_headPic: '/static/images/ic_user_def@2x.png',
           userName: '',
           center: '个人中心',
-          centerUrl: 'tal_center'
+          centerUrl: 'tal_center',
+          greeting: '上午好'
         }
       },
       methods: {
@@ -162,6 +163,7 @@
           }
           this.userName = companyInfo.name || companyInfo.logo;
         }
+        this.greeting = getGreetings();
       },
     }
 </script>

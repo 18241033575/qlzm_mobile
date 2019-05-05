@@ -583,6 +583,24 @@ function getTrueAge(data,type) {
   }
 }
 
+// 问候语
+function getGreetings() {
+  let myDate = new Date();
+  let currHour = myDate.getHours(),
+    greetings = '';
+
+  if (currHour > 6 && currHour <= 10) {
+    return greetings = '早上好';
+  } else if (currHour > 10 && currHour <= 14) {
+    return greetings = '中午好';
+  } else if (currHour > 14 && currHour <= 18) {
+    return greetings = '下午好';
+  } else if (currHour >18 && currHour <= 23) {
+    return greetings = '晚上好';
+  } else if (currHour > 0 && currHour <= 6) {
+    return greetings = '晚安';
+  }
+}
 
 
 export {
@@ -611,5 +629,6 @@ export {
   updateTime,
   reqAge,
   fileUrl,
-  transCert
+  transCert,
+  getGreetings
 }
