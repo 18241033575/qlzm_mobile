@@ -50,7 +50,7 @@
         name: "guidance",
       data() {
         return{
-          act: 55,
+          act: 3,
           editorOption: {
             modules:{
               toolbar: false

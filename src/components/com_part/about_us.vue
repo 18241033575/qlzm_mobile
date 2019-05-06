@@ -61,7 +61,7 @@
         name: "about_us",
       data() {
           return{
-            act: 70,
+            act: 18,
             editorOption: {
               modules:{
                 toolbar: false

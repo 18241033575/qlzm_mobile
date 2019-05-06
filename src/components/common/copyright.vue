@@ -22,11 +22,11 @@
           if (basset) {
             basset.forEach((item,ids)=> {
               // 版权
-              if (item.id == 20) {
+              if (item.key == 'cfg_copyright') {
                 this.webCopy.copy = item.value;
               }
               // 备案
-              if (item.id == 21) {
+              if (item.key == 'cfg_beian_icp') {
                 this.webCopy.case = item.value;
               }
             })
@@ -39,11 +39,11 @@
                   localStorage.setItem('BASSET',param);
                   res.data.forEach((item,ids)=> {
                     // 版权
-                    if (item.id == 20) {
+                    if (item.key == 'cfg_copyright') {
                       this.webCopy.copy = item.value;
                     }
                     // 备案
-                    if (item.id == 21) {
+                    if (item.key == 'cfg_beian_icp') {
                       this.webCopy.case = item.value;
                     }
                   })

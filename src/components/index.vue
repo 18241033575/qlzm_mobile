@@ -173,7 +173,7 @@
                 url: 'famous_pos',
               },
               {
-                name: '新闻资讯',
+                name: '政策资讯',
                 img: '/static/images/ic_news@2x.png',
                 url: 'news',
               },

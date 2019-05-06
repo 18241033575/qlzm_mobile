@@ -7,7 +7,6 @@
             名企招聘
           </div>
         </div>
-        <!--可以提取出来公共部分-->
         <div class="famous_body" >
           <div class="content">
             <div class="load" id="famouse">
@@ -31,6 +30,11 @@
           </div>
         </div>
       </div>
+      <!-- 空 -->
+      <div class="empty" v-show="emptySign">
+        <img src="/static/images/ic_empty_data@2x.png" alt="">
+        <p>暂无数据</p>
+      </div>
     </div>
 </template>
 
@@ -46,6 +50,7 @@
             allLoaded: true,
             req_state: false,
             screenH: 0,
+            emptySign: false,
           }
       },
       methods: {
@@ -97,10 +102,15 @@
         this.$ajax.get('/company/famous',{params:{page: this.pages, rows: this.rows}})
           .then((res)=>{
             if(res.data.state != 400) {
-              splicLogo(res.data);
-              this.famData = res.data;
-              this.$indicator.close();
+              if (res.data != ''){
+                splicLogo(res.data);
+                this.famData = res.data;
+                this.emptySign = false;
+              }else {
+                this.emptySign = true;
+              }
             }
+            this.$indicator.close();
           })
       },
       mounted() {

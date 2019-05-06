@@ -316,7 +316,9 @@
       chooseMajor(e){
         this.majorId = e.currentTarget.getAttribute('data-id');
         let back_data = transCert(this.categoryId,this.majorId);
+        console.log(back_data);
         this.tranCategory = back_data.category;
+        console.log(this.tranCategory);
         this.tranMajor = back_data.major;
         this.doubleBox = false;
         this.firstBox = true;
