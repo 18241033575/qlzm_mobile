@@ -168,21 +168,12 @@
         this.workNature = 3
       },
       saveEdu() {
+        delete this.operaData.state;
         this.operaData.school = this.operaData.school.replace(/^\s*|\s*$/g,"");
         if (this.operaData.school == '') {
           this.$notify.warning({
             title: '提示',
             message: '毕业院校不能为空',
-            showClose: false,
-            duration: 1500
-          });
-          return
-        }
-        this.operaData.major = this.operaData.major.replace(/^\s*|\s*$/g,"");
-        if (this.operaData.major == '') {
-          this.$notify.warning({
-            title: '提示',
-            message: '专业不能为空',
             showClose: false,
             duration: 1500
           });
@@ -197,29 +188,30 @@
           });
           return
         }
+        if (transtime(this.value1) == 'null') {
+          this.$notify.warning({
+            title: '提示',
+            message: '请输入开始时间',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
+        if (transtime(this.value2) == 'null') {
+          this.$notify.warning({
+            title: '提示',
+            message: '请输入结束时间',
+            showClose: false,
+            duration: 1500
+          });
+          return
+        }
         this.operaData.start_time = transtime(this.value1);
         this.operaData.end_time = transtime(this.value2);
-        if (this.value1 == '') {
-          this.$notify.warning({
-            title: '提示',
-            message: '请选择开始时间',
-            showClose: false,
-            duration: 1500
-          });
-          return
-        }
-        if (this.value2 == '' && this.value2 != 0) {
-          this.$notify.warning({
-            title: '提示',
-            message: '请选择结束时间',
-            showClose: false,
-            duration: 1500
-          });
-          return
-        }
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.operaData.uid = userInfo.id;
         this.operaData.id = this.edit_Id;
+        this.operaData.education = this.selectedVal;
         this.$indicator.open({
           text: '加载中...',
           spinnerType: 'fading-circle'
@@ -255,6 +247,7 @@
         let userInfo = JSON.parse(localStorage.getItem('USER'));
         this.operaData.uid = userInfo.id;
         this.operaData.id = this.edit_Id;
+        this.operaData.education = this.selectedVal;
         this.operaData.start_time = JSON.stringify(this.value1).substring(1,11);
         this.operaData.end_time = JSON.stringify(this.value2).substring(1,11);
         this.$ajax.post('/resume/eduexp',this.operaData)
@@ -276,8 +269,8 @@
                 duration: 1500
               });
             }
+            this.$indicator.close();
           });
-        this.$indicator.close();
       },
       EduCode(e) {
         let eduVal = e.currentTarget.getAttribute('edu-id');
@@ -310,7 +303,6 @@
                 this.selectedVal = j;
               }
             }
-
             this.operaData.major = this.eduData[i].major;
             this.value1 = this.eduData[i].start_time;
             this.value2 = this.eduData[i].end_time;

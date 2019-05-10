@@ -18,7 +18,7 @@ function fileUrl() {
 }
   function file_upload() {
     // return 'http://file.wiiwork.com/v1/upload';  // 测试服
-    return 'https:file.qlzm.com.cn/v1/upload'; // 正式服
+    return 'https://file.qlzm.com.cn/v1/upload'; // 正式服
   }
 
 

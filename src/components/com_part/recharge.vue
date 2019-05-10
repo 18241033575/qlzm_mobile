@@ -42,8 +42,6 @@
 </template>
 
 <script>
-  import main_menu from '../../components/common/main_menu'
-  import menu_list_pic from '../../components/common/menu_list_pic'
     export default {
       name: "recharge",
       data() {
@@ -59,6 +57,9 @@
           this.$router.push({name: 'charge_online'})
         }
       },
+      created(){
+        this.$indicator.close();
+      }
     }
 </script>
 

@@ -400,7 +400,9 @@
             });
             return
           }
-
+          if (this.id == 0 || this.id == undefined) {
+            this.subTags = this.tagsNum;
+          }
           this.duty = this.duty.replace(/^\s*|\s*$/g,"");
           if (this.subTags == '') {
             this.$notify.warning({
@@ -436,6 +438,13 @@
                   setTimeout(()=>{
                     this.$router.push({name: 'pos_manage'})
                   },1000)
+                }else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 800
+                  });
                 }
               })
           } else {
@@ -453,6 +462,13 @@
                   setTimeout(()=>{
                     this.$router.push({name: 'pos_manage'})
                   },1000)
+                }else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 800
+                  });
                 }
               })
           }
@@ -621,6 +637,7 @@
                       this.form.hire_num = res.data[i].hire_num == 0?'若干':res.data[i].hire_num;
                       this.certTypeNum = res.data[i].cert_categories_id;
                       let tags = res.data[i].tags.split(',');
+                      this.tagsNum = tags;
                       this.advData.forEach((item)=>{
                         for (let k = 0,len = tags.length;k < len;k++) {
                           if (tags[k] == item.id) {

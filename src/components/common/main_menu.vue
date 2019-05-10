@@ -164,6 +164,9 @@
           this.userName = companyInfo.name || companyInfo.logo;
         }
         this.greeting = getGreetings();
+        if (!userInfo && !companyInfo) {
+          this.isLogin =false;
+        }
       },
     }
 </script>

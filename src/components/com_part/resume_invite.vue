@@ -61,6 +61,7 @@
 </template>
 
 <script>
+  import {transtime} from '../../../static/js/common.js'
     export default {
       name: "resume_invite",
       data() {
@@ -152,8 +153,36 @@
           });
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           let uid = this.$route.query.uid;
+          let name = this.$route.query.name;
+          let sex = this.$route.query.sex == '男'?1:2;
           this.$ajax.post('/company/send-interview',{ cid: companyInfo.id, uid: uid, job: this.job,username: this.contractData.username, tel: this.contractData.tel, phone: this.contractData.phone,qq: this.contractData.qq,
-            wx: this.contractData.wx,email: this.contractData.email,address: this.address,invite_type: this.invite_type,time: this.time,remind: this.remind})
+            wx: this.contractData.wx,email: this.contractData.email,address: this.address,invite_type: this.invite_type,time: transtime(this.time),remind: this.remind})
+            .then((res)=>{
+              if (this.invite_type != 1){
+                if(res.data.state == 200) {
+                  this.$notify.success({
+                    title: '提示',
+                    message: '发送面试成功',
+                    showClose: false,
+                    duration: 800
+                  });
+                  setTimeout(()=>{
+                    this.$router.push({name: 'resume_det',query:{uid: uid}})
+                  },1000)
+                }else {
+                  this.$notify.error({
+                    title: '提示',
+                    message: res.data.msg,
+                    showClose: false,
+                    duration: 1500
+                  });
+                }
+              }
+            });
+          // 邮箱邀请
+          if (this.invite_type == 1){
+          this.$ajax.post('/email/send/interview',{cid: companyInfo.id, uid: uid, job: this.job,contact: this.contractData.username, contact_phone: this.contractData.phone,
+           email: this.contractData.email,address: this.address,time: transtime(this.time),sex: sex,name: name,company: companyInfo.name})
             .then((res)=>{
               if(res.data.state == 200) {
                 this.$notify.success({
@@ -175,6 +204,7 @@
               }
               this.$indicator.close();
             })
+          }
         }
       },
       created() {

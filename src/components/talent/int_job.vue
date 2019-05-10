@@ -158,7 +158,7 @@
           this.int_job_edit = false
         },
         save_job() {
-          if (this.intJobData.job_id == '0') {
+          if (this.intJobCode == '') {
             this.$notify.warning({
               title: '提示',
               message: '请选择意向岗位',
@@ -294,9 +294,6 @@
           this.intJobData.province = tranProvince(this.cityCode.province,true,'',2);
           this.cityCode.city = 0;
           this.intJobData.city = '';
-          // 滑动到上面
-          // window.scroll(0,0);
-
         },
         WorkCityCode(e) {
           let areaCityCode = e.currentTarget.getAttribute('city-id');
@@ -354,7 +351,9 @@
                 transSalary(res.data.career_objective,1);
                 this.intJobData = res.data.career_objective;
                 // 意向职位处理
-                this.intJobCode = res.data.career_objective.job_id.split(',');
+                if (res.data.career_objective.job_id != '') {
+                  this.intJobCode = res.data.career_objective.job_id.split(',');
+                }
                 this.jobClassify.forEach((item)=>{
                     for(let i = 0,len = this.intJobCode.length;i <len;i++){
                       if (item.id == this.intJobCode[i]){

@@ -173,6 +173,7 @@
           this.workNature = 3
         },
         workexp_save() {
+          delete this.workexpAllData.state;
           this.workexpAllData.company = this.workexpAllData.company.replace(/^\s*|\s*$/g,"");
           if (this.workexpAllData.company == '') {
             this.$notify.warning({
@@ -203,31 +204,30 @@
             });
             return
           }
-
+          if (transtime(this.value1) == 'null') {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入开始时间',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (!this.checked && (transtime(this.value2) == 'null')) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入结束时间',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           if (this.checked) {
             this.workexpAllData.end_time = 0;
           }else {
             this.workexpAllData.end_time = transtime(this.value2);
           }
           this.workexpAllData.start_time = transtime(this.value1);
-          if (this.value1 == '') {
-            this.$notify.warning({
-              title: '提示',
-              message: '请选择开始时间',
-              showClose: false,
-              duration: 1500
-            });
-            return
-          }
-          if (this.value2 == '' && this.value2 != 0) {
-            this.$notify.warning({
-              title: '提示',
-              message: '请选择结束时间',
-              showClose: false,
-              duration: 1500
-            });
-            return
-          }
           this.workexpAllData.nature = this.workNature;
           this.workexpAllData.industry = this.jobNature;
           this.workexpAllData.id = this.workexp_Id;
@@ -248,12 +248,38 @@
                   duration: 1500
                 });
                 this.workExp();
+              }else {
+                this.$notify.error({
+                  title: '提示',
+                  message: res.data.msg,
+                  showClose: false,
+                  duration: 1500
+                });
               }
               this.$indicator.close();
             })
         },
         workexp_del() {
           this.workexpAllData.state = -1;
+          if (transtime(this.value1) == 0) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入开始时间',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+          if (!this.checked && transtime(this.value2) == 0) {
+            this.$notify.warning({
+              title: '提示',
+              message: '请输入结束时间',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
+
           if (this.checked) {
             this.workexpAllData.end_time = 0;
           }else {
@@ -300,7 +326,7 @@
           for (let i = 0,len = this.workData.length; i < len; i++) {
             if (this.workData[i].id == workexpId) {
               this.value1 = this.workData[i].start_time;
-              if (this.workData[i].end_time == 0) {
+              if (this.workData[i].end_time == 0 || this.workData[i].end_time == '至今') {
                 this.checked = true;
               } else {
                 this.value2 = this.workData[i].end_time;

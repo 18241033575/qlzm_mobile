@@ -87,10 +87,6 @@
             })
         },
         upMienPic(res) {
-          this.$indicator.open({
-            text: '加载中...',
-            spinnerType: 'fading-circle'
-          });
           if (res.code == 200) {
             let url = res.data.success[0].url;
             this.infoData.push(splicPic(url,true));
@@ -98,7 +94,6 @@
             if (this.mienData.length > 7) {
               this.limits = true;
             }
-            this.$indicator.close();
           }
         },
 

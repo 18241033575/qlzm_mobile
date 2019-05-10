@@ -138,7 +138,7 @@
         let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.get('/office/management',{params: {cid: companyInfo.id}})
             .then((res)=>{
-              if (res.data) {
+              if (res.data != '') {
                 transWorkexp(res.data,2);
                 transEducation(res.data,2);
                 transSalary(res.data,2);

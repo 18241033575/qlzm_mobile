@@ -44,7 +44,7 @@
                 <span  @click="choose_type" id="advice" :class="{active: adv_type=='advice'}">建议</span><span  @click="choose_type" id="option" :class="{active: adv_type=='option'}">意见</span><span  @click="choose_type" id="help" :class="{active: adv_type=='help'}">求助</span><span  @click="choose_type" id="complaint" :class="{active: adv_type=='complaint'}">投诉</span>
               </div>
               <div class="communicat_way">
-                联系方式:<input type="text" v-model="com_way" placeholder="电话/QQ/邮箱">
+                <span style="line-height: 30px">联系方式:</span><input type="text" v-model="com_way" placeholder="电话/QQ/邮箱">
               </div>
               <div class="sub_btn" @click="sub_adv">
                 提交反馈
@@ -277,6 +277,7 @@
     flex-grow: 1;
     margin-left: 10px;
     padding-left: 15px;
+    height: 30px;
   }
   .sub_btn{
     margin: 0 auto;

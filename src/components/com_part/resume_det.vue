@@ -195,6 +195,8 @@
       data() {
         return {
           uid: '',
+          uName: '',
+          uSex: '',
           isBuy: false,
           isFree: false,
           resume_buy: false,
@@ -214,7 +216,7 @@
       },
       methods: {
         interview() {
-          this.$router.push({name: 'resume_invite',query: {uid: this.uid}})
+          this.$router.push({name: 'resume_invite',query: {uid: this.uid,name: this.uName,sex: this.uSex}})
         },
         // 人才举报
         report() {
@@ -284,6 +286,7 @@
                   showClose: false,
                   duration: 800
                 });
+                this.$indicator.close();
                 setTimeout(()=>{
                   this.$router.push({name: 'recharge'});
                 },1000);
@@ -324,6 +327,8 @@
 
             this.$ajax.get('/resume/view/' + this.uid,{params: {cid: companyInfo.id}})
               .then((res)=>{
+                this.uName = res.data.base_info.name;
+                this.uSex = res.data.base_info.gender;
                 // 已购买
                 if (res.data.is_buy == 1) {
                   this.isBuy = true;
@@ -481,6 +486,9 @@
 
 <style scoped>
   @import "../../../static/css/tal_resume.css";
+  .bottom_msg .right_msg{
+    white-space: normal;
+  }
   .exp_list .exp_cell{
     margin-bottom: 0;
   }

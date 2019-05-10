@@ -187,6 +187,9 @@
             if (res.data.state!= 400) {
               res.data.base_info.photo = splicPic(res.data.base_info.photo,true) || '/static/images/user_avator.png';
               this.userMsg = res.data.base_info;
+              this.userMsg.area = tranArea(this.userMsg, true, 3);
+              this.userMsg.city = tranCity(this.userMsg,true,3);
+              this.userMsg.province = tranProvince(this.userMsg.province,true,'',2);
               this.userMsg.phone = JSON.parse(localStorage.getItem('USER')).phone;
               transGender(this.userMsg,1);
               transEducation(this.userMsg,1);
@@ -196,6 +199,7 @@
         // 求职意向
         this.$ajax.get('/resume/userinfo',{params:{uid: this.uid}})
           .then((res)=>{
+            console.log(res);
             if (res.data.state!= 400) {
               // 求职意向
               res.data.career_objective.province = res.data.career_objective.work_province;

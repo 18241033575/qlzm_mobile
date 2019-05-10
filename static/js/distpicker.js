@@ -50,15 +50,19 @@ function tranProvince(data,flag,adata,type) {
     if (adata == 'pro') {
       return PROVICE
     } else {
-      if (type == 2) {
-        data = PROVICE[data];
-        return data
-      }else {
-        if (PROVICE[data.province]) {
-          data.province = PROVICE[data.province]
-        } else {
-          data.province = '未知'
+      if (data != 0 || data.province != 0){
+        if (type == 2) {
+          data = PROVICE[data];
+          return data
+        }else {
+          if (PROVICE[data.province]) {
+            data.province = PROVICE[data.province]
+          } else {
+            data.province = '未知'
+          }
         }
+      } else {
+        return ''
       }
     }
   }
@@ -506,36 +510,41 @@ function tranCity(data,flag,type,off) {
     },
   };
   if (flag) {
-    if (type == 2) {
-      if (off == 'office')
-      {
-        for (let i = 0; i < data.length; i++) {
-          // midData[i] = CITY[data[i].province][data[i].city];
-          data[i].office.city = CITY[data[i].office.province][data[i].office.city];
-        }
-      }else if (off == 'city') {
-        return CITY[data.province]
-      } else {
-        for (let i = 0; i < data.length; i++) {
-          // midData[i] = CITY[data[i].province][data[i].city];
-          if (CITY[data[i].province] && [data[i].city]) {
-            data[i].city = CITY[data[i].province][data[i].city];
-          } else {
-            data[i].city = '未知'
+    if (data.province != 0 && data.city != 0){
+
+      if (type == 2) {
+        if (off == 'office')
+        {
+          for (let i = 0; i < data.length; i++) {
+            // midData[i] = CITY[data[i].province][data[i].city];
+            data[i].office.city = CITY[data[i].office.province][data[i].office.city];
+          }
+        }else if (off == 'city') {
+          return CITY[data.province]
+        } else {
+          for (let i = 0; i < data.length; i++) {
+            // midData[i] = CITY[data[i].province][data[i].city];
+            if (CITY[data[i].province] && [data[i].city]) {
+              data[i].city = CITY[data[i].province][data[i].city];
+            } else {
+              data[i].city = '未知'
+            }
           }
         }
-      }
-    }else if (type == 1) {
-      data = CITY[data[0]][data[1]];
-      return data
-    } else if (type == 3) {
-      return CITY[data.province][data.city]
-    } else {
-      if (CITY[data.province] && CITY[data.province][data.city]) {
-        data.city = CITY[data.province][data.city];
+      }else if (type == 1) {
+        data = CITY[data[0]][data[1]];
+        return data
+      } else if (type == 3) {
+        return CITY[data.province][data.city]
       } else {
-        data.city = '未知'
+        if (CITY[data.province] && CITY[data.province][data.city]) {
+          data.city = CITY[data.province][data.city];
+        } else {
+          data.city = '未知'
+        }
       }
+    }else {
+      return data.city = ''
     }
   }
 }
@@ -4177,22 +4186,26 @@ function tranArea(data,flag,type) {
     }
   };
   if (flag) {
-    if (type == 2) {
-      for (let i = 0; i < data.length; i++) {
-        data[i].area = CITY[data[i].city][data[i].area];
+    if (data.area != 0 && data.city != 0) {
+      if (type == 2) {
+        for (let i = 0; i < data.length; i++) {
+          data[i].area = CITY[data[i].city][data[i].area];
+        }
+      } else if (type == 3) {
+        return AREA[data.city][data.area];
       }
-    } else if (type == 3) {
-      return AREA[data.city][data.area];
-    }
-    else if (type == 5) {
-      return AREA[data.city]
-    }
-    else {
-      if (AREA[data.city] && AREA[data.city][data.area]) {
-        data.area = AREA[data.city][data.area];
-      } else {
-        data.area = '未知'
+      else if (type == 5) {
+        return AREA[data.city]
       }
+      else {
+        if (AREA[data.city] && AREA[data.city][data.area]) {
+          data.area = AREA[data.city][data.area];
+        } else {
+          data.area = '未知'
+        }
+      }
+    }else {
+      return data.area = ''
     }
   }
 }

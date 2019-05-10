@@ -10,14 +10,14 @@
         <div class="resume_list_cell" v-if="!orignState" v-for="(item,index) in this.commonData" :uid="item.uid" :key="index" @click="tal_det">
           <div class="content">
             <p class="tal_name">{{item.name}}<img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="" alt=""></p><!--/static/images/ic_cm_down@2x.png-->
-            <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
+            <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp == 0?'一年以下':item.work_exp + '年'}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
             <p class="tal_det">期望薪资:<span class="hope_salary">{{item.salary}}</span></p>
           </div>
         </div>
         <div class="resume_list_cell" v-if="orignState" v-for="(item,index) in this.commonData" :uid="item.user_info.uid" :key="index" @click="tal_det">
           <div class="content">
             <p class="tal_name">{{item.user_info.name}}<span class="app_pos" >(应聘职位: {{item.office.office_name}})</span><img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="" alt=""></p><!--/static/images/ic_cm_down@2x.png-->
-            <p class="tal_det"><span>{{item.user_info.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.user_info.work_exp}}</span><span>|</span><span>{{item.user_info.education}}</span><span>|</span><span>{{item.user_info.major==''?'无专业':item.user_info.major}}</span></p>
+            <p class="tal_det"><span>{{item.user_info.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.user_info.work_exp == 0?'一年以下':item.user_info.work_exp + '年'}}</span><span>|</span><span>{{item.user_info.education}}</span><span>|</span><span>{{item.user_info.major==''?'无专业':item.user_info.major}}</span></p>
             <p class="tal_det">期望薪资:<span class="hope_salary">{{item.user_info.salary}}</span></p>
           </div>
         </div>
@@ -219,17 +219,17 @@
           this.$ajax.post('/resume/delete-already-buy',{cid: companyInfo.id,uid: this.uid})
             .then((res)=>{
               if (res.data.state == 200) {
-                for (let i = 0,len = this.commonData.length; i < len;i++) {
-                  if (this.commonData[i].id == this.info_id) {
+                this.commonData.forEach((item,index)=>{
+                  if (item.id == this.info_id) {
                     // 删除相应数组
-                    this.commonData.splice(i,1);
+                    this.commonData.splice(index,1);
                     if (this.commonData.length == 0 || this.commonData.length == '') {
                       this.emptySign = true;
                     }else {
                       this.emptySign = false;
                     }
                   }
-                }
+                });
               }
               this.$indicator.close();
             })
@@ -274,7 +274,7 @@
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
                   transEducation(res.data,2);
-                  transWorkexp(res.data,2);
+                  // transWorkexp(res.data,2);
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
@@ -293,7 +293,7 @@
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
                   transEducation(res.data,2);
-                  transWorkexp(res.data,2);
+                  // transWorkexp(res.data,2);
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
@@ -312,7 +312,7 @@
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
                   transEducation(res.data,2);
-                  transWorkexp(res.data,2);
+                  // transWorkexp(res.data,2);
                   this.commonData = res.data;
                   console.log(this.commonData);
                   if (this.commonData.length == 0 || this.commonData.length == '') {
@@ -332,7 +332,7 @@
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
                   transEducation(res.data,2);
-                  transWorkexp(res.data,2);
+                  // transWorkexp(res.data,2);
                   this.commonData = res.data;
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;

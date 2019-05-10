@@ -341,7 +341,7 @@
   }
   .user_login p{
     margin-top: 50px;
-    font-size: 14%;
+    font-size: 14px;
     color: #919199;
   }
   .user_login p a{

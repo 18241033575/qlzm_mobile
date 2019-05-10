@@ -12,7 +12,7 @@
             <span class="edit_lab">企业名称</span><input type="text" :readonly="true"  v-model="entName" placeholder="企业名称">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state == -1 && !uploadSign">
+            <span class="edit_lab">营业执照</span><span class="fr uppic_ident" @click="uploadLicense" v-show="identData.state == -1 || identData.state == 0 && !uploadSign">
             <el-upload
             class="avatar-uploader upload_btn"
             :action="this.loadAddr"
@@ -77,6 +77,15 @@
             text: '加载中...',
             spinnerType: 'fading-circle'
           });
+          if(this.licenseUrl == ''){
+            this.$notify.warning({
+              title: '提示',
+              message: '请先上传图片',
+              showClose: false,
+              duration: 1500
+            });
+            return
+          }
           let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
           this.$ajax.post('/company/auth-set',{cid: companyInfo.id,license: this.licenseUrl})
             .then((res)=>{
