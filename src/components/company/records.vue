@@ -10,7 +10,7 @@
         <div class="content">
           <div class="record_cell" v-for="(item,index) in this.recordsData" :key="index">
             <div class="record_msg">
-              <p class="record_money">金额:<span class="money">￥{{item.amount}}</span></p>
+              <p class="record_money">金额:<span class="money">￥{{item.amount /100}}</span></p>
               <p>时间:<span>{{item.rtime}}</span></p>
             </div>
             <div class="record_btn">

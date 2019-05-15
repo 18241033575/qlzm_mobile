@@ -510,7 +510,10 @@ function tranCity(data,flag,type,off) {
     },
   };
   if (flag) {
-    if (data.province != 0 && data.city != 0){
+    if (off == 'city') {
+      return CITY[data.province]
+    }else {
+      if (data.province != 0 && data.city != 0){
 
       if (type == 2) {
         if (off == 'office')
@@ -519,9 +522,7 @@ function tranCity(data,flag,type,off) {
             // midData[i] = CITY[data[i].province][data[i].city];
             data[i].office.city = CITY[data[i].office.province][data[i].office.city];
           }
-        }else if (off == 'city') {
-          return CITY[data.province]
-        } else {
+        }else {
           for (let i = 0; i < data.length; i++) {
             // midData[i] = CITY[data[i].province][data[i].city];
             if (CITY[data[i].province] && [data[i].city]) {
@@ -545,6 +546,7 @@ function tranCity(data,flag,type,off) {
       }
     }else {
       return data.city = ''
+    }
     }
   }
 }
@@ -4186,16 +4188,17 @@ function tranArea(data,flag,type) {
     }
   };
   if (flag) {
-    if (data.area != 0 && data.city != 0) {
+
+   if (type == 5) {
+      return AREA[data.city]
+    }else {
+      if (data.area != 0 && data.city != 0) {
       if (type == 2) {
         for (let i = 0; i < data.length; i++) {
           data[i].area = CITY[data[i].city][data[i].area];
         }
       } else if (type == 3) {
         return AREA[data.city][data.area];
-      }
-      else if (type == 5) {
-        return AREA[data.city]
       }
       else {
         if (AREA[data.city] && AREA[data.city][data.area]) {
@@ -4206,6 +4209,7 @@ function tranArea(data,flag,type) {
       }
     }else {
       return data.area = ''
+    }
     }
   }
 }

@@ -170,7 +170,7 @@
   }
   .enterp_reg p{
     margin-top: 50px;
-    font-size: 14%;
+    font-size: 14px;
     color: #919199;
   }
   .enterp_reg p a{

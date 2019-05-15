@@ -103,7 +103,7 @@
         </div>
         <div class="content">
           <div class="filter_part1">
-            <div v-for="(item,index) in EduData" :edu-id="item.id" :key="index" class="filter_part1_cell second" @click="EduCode">
+            <div v-for="(item,index) in EduData" v-show="item.name != '不限'" :edu-id="item.id" :key="index" class="filter_part1_cell second" @click="EduCode">
               {{item.name}}<img v-show="selectedVal == item.id" class="fr" src="/static/images/ic_checked@2x.png" alt="">
             </div>
           </div>

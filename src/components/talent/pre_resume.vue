@@ -325,6 +325,9 @@
 
 <style scoped>
   @import "../../../static/css/tal_resume.css";
+  .bottom_msg .right_msg{
+    white-space: normal;
+  }
   .exp_list .exp_cell{
     margin-bottom: 0;
   }

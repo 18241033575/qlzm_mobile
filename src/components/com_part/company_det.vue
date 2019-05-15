@@ -279,11 +279,11 @@
         this.$ajax.get('/api/company/detail'+ '/' + cid)
           .then((res) => {
             if (res.data.state != 400) {
-              if (res.data.tags == '') {
+              if (res.data.advantage == '') {
                 this.tags_sign = false;
               } else {
                 this.tags_sign = true;
-                res.data.tags = company_adv(res.data.tags,true);
+                res.data.advantage = company_adv(res.data.advantage,true);
               }
               if (res.data.style.length == 0 || res.data.style == '') {
                 this.styleSign = false;

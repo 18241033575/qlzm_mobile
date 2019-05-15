@@ -39,13 +39,13 @@
       created() {
          let basMsg = JSON.parse(localStorage.getItem('BASSET'));
           basMsg.forEach((item)=>{
-            if (item.id == 30) {
+            if (item.key == 'cfg_company') {
               this.com_name = item.value;
             }
-            if (item.id == 33) {
+            if (item.key == 'cfg_kaihuhang') {
               this.bank = item.value;
             }
-            if (item.id == 36) {
+            if (item.key == 'cfg_payaccount') {
               this.account = item.value;
             }
           })

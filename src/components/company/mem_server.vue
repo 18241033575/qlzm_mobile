@@ -88,6 +88,7 @@
         this.$ajax.get('/company/recharge/lump-sum',{params: {cid: companyInfo.id}})
           .then((res)=>{
             if (res.data.state != 400) {
+              console.log(res);
               this.sonsumptRecord = res.data;
               this.$indicator.close();
             }

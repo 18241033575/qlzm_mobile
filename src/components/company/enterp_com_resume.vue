@@ -10,7 +10,7 @@
         <div class="resume_list_cell" v-if="!orignState" v-for="(item,index) in this.commonData" :uid="item.uid" :key="index" @click="tal_det">
           <div class="content">
             <p class="tal_name">{{item.name}}<img v-if="!opera_state" :id="item.id" :uid="item.uid"  @click.stop="moreOpera" class="fr" src="/static/images/ic_cm_more@2x.png" alt=""><img :id="item.id" :uid="item.uid"  v-if="opera_state" class="fr" src="" alt=""></p><!--/static/images/ic_cm_down@2x.png-->
-            <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp == 0?'一年以下':item.work_exp + '年'}}</span><span>|</span><span>{{item.education}}</span><span>|</span><span>{{item.major==''?'无专业':item.major}}</span></p>
+            <p class="tal_det"><span>{{item.gender==1?'男':'女'}}</span><span>|</span><span>{{item.age}}</span><span>|</span><span>{{item.work_exp == 0?'一年以下':item.work_exp + '年'}}</span><span>|</span><span>{{item.education==''?'未知学历':item.education}}</span><span>|</span><span>{{item.major==''?'未知专业':item.major}}</span></p>
             <p class="tal_det">期望薪资:<span class="hope_salary">{{item.salary}}</span></p>
           </div>
         </div>

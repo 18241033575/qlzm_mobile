@@ -32,7 +32,7 @@
           </div>
           <div class="bottom_msg">
             <p><span class="left_lab">求职类型</span> <span class="right_msg">{{intJobData.nature}}</span></p>
-            <p><span class="left_lab">意向岗位</span> <span style="width: auto;flex-grow: inherit;margin-right: 5px" v-for="(item,index) in tranJob" class="right_msg">{{item}}</span></p>
+            <p><span class="left_lab">意向岗位</span> <span style="display: inline-block; width: auto;flex-grow: inherit;margin-right: 5px" v-for="(item,index) in tranJob" class="right_msg">{{item}}</span></p>
             <p><span class="left_lab">期望薪资</span> <span class="right_msg">{{intJobData.salary}}</span></p>
             <p><span class="left_lab">工作地区</span> <span class="right_msg">{{(intJobData.province || '未知') + (intJobData.city || '')}}</span></p>
             <p><span class="left_lab">预计到岗时间</span> <span class="right_msg">{{intJobData.duty_time}}</span></p>
@@ -189,7 +189,7 @@
 
 <script>
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {splicPic,transJobs,transEducation,transSalary,tal_adv} from '../../../static/js/common.js'
+  import {splicPic,transJobs,transEducation,transSalary,tal_adv,fileUrl} from '../../../static/js/common.js'
     export default {
       name: "resume_det",
       data() {
@@ -212,6 +212,7 @@
           integral: 0,
           spend: 30,
           additionData: '暂无',
+          fileUrl: ''
         }
       },
       methods: {
@@ -264,7 +265,7 @@
             });
             if (!this.isFree.is_free) {
               if (this.integral >= this.spend) {
-                this.$ajax.get('/company_by_resume',{params: {cid: companyInfo.id,uid: this.uid,type: 'index'}})
+                this.$ajax.post('/resume/buy', { cid: companyInfo.id,uid: this.uid})
                   .then((res)=>{
                     if (res.data.state == 200){
                       this.$notify.success({
@@ -292,7 +293,7 @@
                 },1000);
               }
             }else {
-              this.$ajax.post('/resume/buy',{uid: this.uid, cid: companyInfo.id})
+              this.$ajax.post('/company_by_resume',{uid: this.uid, cid: companyInfo.id})
                 .then((res)=>{
                   if (res.data.state == 200){
                     this.$notify.success({
@@ -303,6 +304,13 @@
                     });
                     this.resume_buy = false;
                     this.getUserInfo();
+                  }else {
+                    this.$notify.error({
+                      title: '提示',
+                      message: res.data.msg,
+                      showClose: false,
+                      duration: 1500
+                    });
                   }
                   this.$indicator.close();
                 })
@@ -413,7 +421,7 @@
                   this.isBuy = false;
                 }
                 // 公共部分
-                res.data.base_info.photo = splicPic(res.data.base_info.photo,true) == 'http://file.wiiwork.com/'? '/static/images/user_avator.png' : splicPic(res.data.base_info.photo,true);
+                res.data.base_info.photo = splicPic(res.data.base_info.photo,true) == this.fileUrl? '/static/images/user_avator.png' : splicPic(res.data.base_info.photo,true);
                 this.userMsg = res.data.base_info;
                 // 求职意向
                 res.data.career.province = res.data.career.work_province;
@@ -479,6 +487,7 @@
         }
       },
       created() {
+        this.fileUrl = fileUrl();
         this.getUserInfo();
       }
     }
