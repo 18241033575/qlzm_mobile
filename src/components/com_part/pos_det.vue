@@ -49,6 +49,10 @@
               class="tags">{{item.nature}}</span><span class="update_time fr">{{item.update_at}}</span>
             </div>
           </div>
+          <div class="loadmore">
+            <p v-show="!moreDataSign && firstSign" class="more" @click="loadData">加载更多</p>
+            <p v-show="moreDataSign && firstSign">我也是有底线的</p>
+          </div>
         </div>
       </div>
       <div class="company_msg_list" v-show="this.tabSign">
@@ -124,10 +128,10 @@
         </div>
       </div>
     </div>
-    <div class="empty" v-show="emptySign && !this.tabSign">
+    <!--<div class="empty" v-show="emptySign && !this.tabSign">
       <img src="/static/images/ic_empty_data@2x.png" alt="">
       <p>暂无数据</p>
-    </div>
+    </div>-->
     <el-dialog
       title="提示"
       :visible.sync="dialogVisible"
@@ -138,17 +142,25 @@
         <el-button type="primary" @click="tal_login">确 定</el-button>
       </span>
     </el-dialog>
+    <null_page :sign="emptySign"></null_page>
   </div>
 </template>
 
 <script>
+  import null_page from '../../components/common/null_page'
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
   import {transSalary,getDistanceTime,transNature,transEducation,transWorkexp,company_adv} from '../../../static/js/common.js'
   export default {
     name: "pos_det",
+    components: {
+      null_page,
+    },
     data() {
       return {
         emptySign: false,
+        moreDataSign: false,
+        firstSign: false,
+        page: 1,
         posDetData: {},
         posOthData: {},
         has_mSign: false,
@@ -283,6 +295,25 @@
       onEditorReady(val) {
         val.enable(false);
       },
+      // 加载更多职位
+      loadData(){
+        this.page++;
+        this.$ajax.get('/office/company', {params: {cid: this.cid,page: this.page}})
+          .then((res) => {
+            if (res.data.state != 400) {
+              tranCity(res.data.data,true,2);
+              transWorkexp(res.data.data,2);
+              transEducation(res.data.data,2);
+              transNature(res.data.data,2);
+              transSalary(res.data.data,2);
+              this.otherPosData.push.apply(this.otherPosData,res.data.data);
+              if (this.otherPosData.length == this.hotPosNum - 1) {
+                this.moreDataSign = true;
+              }
+
+            }
+          })
+      }
     },
     created() {
       this.$indicator.open({
@@ -323,16 +354,18 @@
           }
         });
 
-
+      let offLen = 0;
       this.$ajax.get('/office/company', {params:{cid: this.cid}})
         .then((res) => {
           if (res.data.state != 400) {
+            this.hotPosNum = offLen = res.data.count;
+            this.firstSign = res.data.count > 5?true:false;
             for (let i = 0,len = res.data.data.length;i < len;i++) {
               if (res.data.data[i].id == this.id) {
                 this.indexPos = i;
               }
             }
-            this.otherPosNum = res.data.data.length - 1;
+            this.otherPosNum = res.data.count - 1;
             tranCity(res.data.data,true,2);
             transWorkexp(res.data.data,2);
             transEducation(res.data.data,2);
@@ -340,6 +373,8 @@
             transSalary(res.data.data,2);
             this.otherPosData = res.data.data;
             this.otherPosData.splice(this.indexPos,1);
+           // 请求其他
+
             if (this.otherPosData.length == 0 || this.otherPosData.length == '') {
               this.emptySign = true;
             }else {
@@ -347,6 +382,7 @@
             }
           }
         });
+
       let userInfo = JSON.parse(localStorage.getItem('USER'));
       //  是否收藏、申请
       if (userInfo) {
@@ -706,7 +742,17 @@
   #pos .ql-toolbar{
     display: none!important;
   }
-  .empty{
+  .pos_det .empty{
     padding-top: 285px;
+  }
+  /* 加载更多 */
+  .loadmore{
+    text-align: center;
+    line-height: 44px;
+    font-size: 12px;
+    color: #919191;
+  }
+  .more{
+    color: #ff8236;
   }
 </style>

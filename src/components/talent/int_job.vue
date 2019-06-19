@@ -59,7 +59,7 @@
           <div class="edit_cell specail_area">
             <span class="edit_lab">备注</span>
           </div>
-          <textarea placeholder="这里填写备注内容" v-model="remark" id="" cols="30" rows="10"></textarea>
+          <textarea placeholder="这里填写备注内容" maxlength="200" v-model="remark" id="" cols="30" rows="10"></textarea>
         </div>
       </div>
       <div class="content">
@@ -249,12 +249,10 @@
             if (this.intJobCode.length < 3){
               this.intJobCode.push(jobId);
               for (let i = 0,len = this.jobClassify.length;i < len;i++) {
-                for(let j = 0,len = this.intJobCode.length;j < len;j++) {
-                  if (this.jobClassify[i].id == this.intJobCode[j]) {
+                  if (this.jobClassify[i].id == jobId) {
                     this.jobClassify[i].choose = 1;
                     this.tranIntJob.push(this.jobClassify[i].name);
                   }
-                }
               }
             } else{
               this.$notify.warning({
@@ -270,16 +268,15 @@
                 if (this.jobClassify[i].id == jobId) {
                   // vue 对对象里的数组不会响应式的变化
                   this.$set(this.jobClassify,i,{choose: 0,id: jobId,type: this.jobClassify[i].type,salary: this.jobClassify[i].salary,name: this.jobClassify[i].name});
-                }
-                for(let j = 0,len = this.tranIntJob.length;j < len;j++){
-                  if (this.jobClassify[i].name == this.tranIntJob[j]) {
-                    this.tranIntJob.splice(j,1);
+                  for(let j = 0,len = this.tranIntJob.length;j < len;j++){
+                    if (this.jobClassify[i].name == this.tranIntJob[j]) {
+                      this.tranIntJob.splice(j,1);
+                    }
                   }
                 }
+
             }
           }
-
-
         },
         SalaryCode(e) {
           let salaryId = e.currentTarget.getAttribute('city-id');
@@ -382,6 +379,9 @@
 </script>
 
 <style scoped>
+  .int_bottom .bottom_msg p{
+    white-space: normal;
+  }
   .int_bottom{
     margin-top: 10px;
     background-color: #ffffff;

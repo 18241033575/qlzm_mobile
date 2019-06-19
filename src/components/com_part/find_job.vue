@@ -277,11 +277,13 @@
         this.sort_msg = this.sortList[sort_index];
         this.sort_sign = false
       },
+      // 请求数据
       getjobData(param) {
         this.$indicator.open({
           text: '加载中...',
           spinnerType: 'fading-circle'
         });
+        this.req_state = false;
         this.$ajax.get('/company_work',{params: param})
           .then((res)=>{
             if (res.data.code == 200) {
@@ -316,9 +318,7 @@
       chooseMajor(e){
         this.majorId = e.currentTarget.getAttribute('data-id');
         let back_data = transCert(this.categoryId,this.majorId);
-        console.log(back_data);
         this.tranCategory = back_data.category;
-        console.log(this.tranCategory);
         this.tranMajor = back_data.major;
         this.doubleBox = false;
         this.firstBox = true;

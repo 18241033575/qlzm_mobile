@@ -80,6 +80,7 @@ import demand_inv from '@/components/company/demand_inv'
 //组件
 import main_menu from '@/components/common/main_menu'
 import copyright from '@/components/common/copyright'
+import null_page from '@/components/common/null_page'
 
 Vue.use(Router);
 

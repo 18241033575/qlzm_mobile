@@ -69,16 +69,16 @@
               <span class="edit_lab">身份证号码</span><input type="text" v-model="form.tal_idcard" maxlength="18" placeholder="身份证号码">
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">QQ号码</span><input type="text" v-model="form.tal_qq" placeholder="QQ号码">
+              <span class="edit_lab">QQ号码</span><input type="text" maxlength="20" v-model="form.tal_qq" placeholder="QQ号码">
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">电子邮箱</span><input type="text" v-model="form.tal_email" placeholder="电子邮箱">
+              <span class="edit_lab">电子邮箱</span><input type="text" maxlength="30" v-model="form.tal_email" placeholder="电子邮箱">
             </div>
             <div class="edit_cell special_cell">
               <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place">{{tranPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place">{{tranCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span class="place">{{tranArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
             </div>
             <div class="edit_cell">
-              <span class="edit_lab">详细地址</span><input type="text" maxlength="20" v-model="form.tal_addr" placeholder="详细地址">
+              <span class="edit_lab">详细地址</span><input type="text" maxlength="50" v-model="form.tal_addr" placeholder="详细地址">
             </div>
             <div class="edit_cell">
               <span class="edit_lab">就业状态</span><span class="fr choose_group"><span class="choose_cell" :class="{choose_active:this.form.tal_state==1}" @click="have_job">已就业</span><span class="choose_cell" :class="{choose_active:this.form.tal_state==0}" @click="wait_job">待就业</span></span>

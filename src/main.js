@@ -31,9 +31,10 @@ Vue.use(VueTouch, {name: 'v-touch'});
 // 正式服
 // Axios.defaults.baseURL = 'https://www.qlzm.com.cn';
 // 测试服
-// Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
-Axios.defaults.baseURL = 'http://qlzm.com';
+Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
+// Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
+Vue.prototype.$notify = Notification;
 
 
 Axios.interceptors.request.use(config => {
@@ -62,19 +63,35 @@ Vue.component(Message.name, Message);//用以解决刷新自动弹出message
 Vue.component(Popup.name, Popup);
 Vue.component(Loadmore.name, Loadmore);
 
+
+Axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if(error.message.includes('status code 500')){   // 判断请求异常信息中是否含有超时timeout字符串
+      Notification.error({
+        title: '提示',
+        message: '服务器错误',
+        showClose: false,
+        duration: 1500
+      });
+      return Promise.reject(error);          // reject这个错误信息
+    }
+    if(error.message.includes('timeout')){   // 判断请求异常信息中是否含有超时timeout字符串
+      Notification.error({
+        title: '提示',
+        message: '网络超时',
+        showClose: false,
+        duration: 1500
+      });
+      return Promise.reject(error);          // reject这个错误信息
+    }
+    return Promise.reject(error);
+  });
+
 Vue.config.productionTip = false;
 
-
-
-Axios.interceptors.request.use(config => {
-  /* let token = userInfo.token;
-   if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-     config.headers.token = token;
-   }*/
-  return config
-}, error => {
-  /*return Promise.reject(error)*/
-})
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   if (to.meta.title) {
@@ -89,4 +106,4 @@ new Vue({
   router,
   components: { App },
   template: '<App/>'
-})
+});

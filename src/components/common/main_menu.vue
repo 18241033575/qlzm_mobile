@@ -97,7 +97,7 @@
               urlRoute: "guidance"
             },
             7:{
-              urlName: "新闻资讯",
+              urlName: "政策资讯",
               urlRoute: "news"
             },
             8:{

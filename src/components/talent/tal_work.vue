@@ -85,7 +85,7 @@
             <div class="edit_cell specail_area">
               <span class="edit_lab">工作职责</span>
             </div>
-            <textarea placeholder="在这里填写职责内容" v-model="workexpAllData.duties" id="" cols="30" rows="10"></textarea>
+            <textarea placeholder="在这里填写职责内容" maxlength="500" v-model="workexpAllData.duties" id="" cols="30" rows="10"></textarea>
           </div>
         </div>
         <div class="edit_btn_group" v-if="!this.save_editSign">
@@ -128,7 +128,7 @@
             workNature: 1,
             pickerOptions1: {
               disabledDate(time) {
-                return time.getTime() > Date.now();
+                return time.getTime() > Date.now(),time.getTime() < 0;
               }
             },
             value1: '',

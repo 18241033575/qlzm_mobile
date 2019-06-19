@@ -597,7 +597,7 @@
         });
         this.allPosData = JSON.parse(localStorage.getItem('CERT'));
         if (this.$route.query.province) {
-          this.keyword = this.find_talParam.office_name = this.$route.query.office_name;
+          this.keyword = this.find_talParam.keyword = this.$route.query.office_name;
           this.find_talParam.province = this.$route.query.province;
         }
         let data = this.find_talParam;

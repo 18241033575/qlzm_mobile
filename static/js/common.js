@@ -10,15 +10,15 @@
     // 文件上传接口地址
     'file_upload'           => '//file.wiiwork.com/v1/upload',
   */
-  // const file_server = 'http://file.wiiwork.com/';  // 测试服
-  const file_server = 'https://file.qlzm.com.cn/'; // 正式服
+  const file_server = 'http://file.wiiwork.com/';  // 测试服
+  // const file_server = 'https://file.qlzm.com.cn/'; // 正式服
 function fileUrl() {
-  // return 'http://file.wiiwork.com/';  // 测试服
-  return 'https://file.qlzm.com.cn/'; // 正式服
+  return 'http://file.wiiwork.com/';  // 测试服
+  // return 'https://file.qlzm.com.cn/'; // 正式服
 }
   function file_upload() {
-    // return 'http://file.wiiwork.com/v1/upload';  // 测试服
-    return 'https://file.qlzm.com.cn/v1/upload'; // 正式服
+    return 'http://file.wiiwork.com/v1/upload';  // 测试服
+    // return 'https://file.qlzm.com.cn/v1/upload'; // 正式服
   }
 
 
@@ -122,6 +122,12 @@ function fileUrl() {
           }
         } else if (type == 3){
           return welfare;
+        }else {
+          for (let i = 0,len = data.length;i < len;i++){
+            if (data[i] == welfare[k].id){
+              data[i] = welfare[k].value;
+            }
+          }
         }
       }
   }
@@ -471,6 +477,14 @@ function getDistanceTime(time,type,off) {
 
 }
 
+
+// 是否为数字
+function isNum(data) {
+  let regPos = /^\d+(\.\d+)?$/;
+  return regPos.test(data);
+}
+
+
 //时间戳转标准时间
 function getLocalTime(nS) {
   return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
@@ -489,8 +503,7 @@ function timestampToTime(timestamp) {
 //时间转时间戳
 function transtime(t) {
   let T = new Date(t);  // 将指定日期转换为标准日期格式。Fri Dec 08 2017 20:05:30 GMT+0800 (中国标准时间)
-  // console.log(T,T.getTime(),typeof T.getTime());
-  return JSON.stringify(T.getTime()).substring(0,10)
+  return JSON.stringify(T.getTime()/1000)
 }
 
 
@@ -622,7 +635,7 @@ export {
   transComScale,
   transComNature,
   transArrive,
-  reverseOrder,
+  isNum,
   getLocalTime,
   timestampToTime,
   transtime,

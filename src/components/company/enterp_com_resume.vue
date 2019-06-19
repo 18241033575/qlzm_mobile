@@ -22,10 +22,6 @@
           </div>
         </div>
       </div>
-      <div class="empty" v-show="emptySign">
-        <img src="/static/images/ic_empty_data@2x.png" alt="">
-        <p>暂无数据</p>
-      </div>
       <div class="pos_opera_box" @click="closeState" v-show="this.boxState">
         <div class="opera_list" v-if="this.orign == 'app'">
           <div class="content">
@@ -72,13 +68,18 @@
           </div>
         </div>
       </div>
+      <null_page :sign="emptySign"></null_page>
     </div>
 </template>
 
 <script>
+  import null_page from '../../components/common/null_page'
   import {getTrueAge,transSalary,transEducation,transWorkexp} from '../../../static/js/common.js'
     export default {
       name: "enterp_com_resume",
+      components: {
+        null_page,
+      },
       data() {
         return {
           opera_state: true,
@@ -312,9 +313,7 @@
                   transSalary(res.data,2);
                   getTrueAge(res.data,2);
                   transEducation(res.data,2);
-                  // transWorkexp(res.data,2);
                   this.commonData = res.data;
-                  console.log(this.commonData);
                   if (this.commonData.length == 0 || this.commonData.length == '') {
                     this.emptySign = true;
                   }else {

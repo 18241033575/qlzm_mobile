@@ -122,7 +122,9 @@
             this.$ajax.post('/personal/changephone',{phone: this.param.phone,sms_code: this.sms_code,uid: uid})
               .then((res)=>{
                 if (res.data.state == 200) {
-                  this.$router.push({name: 'success_page',query:{orig: 'phone'}})
+                  this.$router.push({name: 'success_page',query:{orig: 'phone'}});
+                  localStorage.removeItem('USER');
+                  localStorage.removeItem('COMPANY');
                 } else {
                   this.$notify.error({
                     title: '提示',

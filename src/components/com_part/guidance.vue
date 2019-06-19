@@ -110,6 +110,7 @@
                 splicFrontcover(res.data[i].articles);
               }
             }
+            console.log(res.data);
             this.List = res.data;
             this.guideLength = res.data.length; // 两个静态
             this.$indicator.close();

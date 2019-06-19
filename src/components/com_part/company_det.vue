@@ -97,7 +97,7 @@
                   <p v-show="!tags_sign">暂无</p>
                 </div>
                 <div v-show="tags_sign" class="company_welfare">
-                  <span v-for="(item,index) in companyMsg.tags" :key="index">{{item}}</span>
+                  <span v-for="(item,index) in companyMsg.advantage" :key="index">{{item}}</span>
                 </div>
               </div>
             </div>
@@ -283,7 +283,9 @@
                 this.tags_sign = false;
               } else {
                 this.tags_sign = true;
-                res.data.advantage = company_adv(res.data.advantage,true);
+                res.data.advantage = res.data.advantage.split(',');
+
+                company_adv(res.data.advantage,4);
               }
               if (res.data.style.length == 0 || res.data.style == '') {
                 this.styleSign = false;

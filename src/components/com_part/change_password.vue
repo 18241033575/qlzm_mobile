@@ -44,6 +44,8 @@
                     showClose: false,
                     duration: 800
                   });
+                  localStorage.removeItem('USER');
+                  localStorage.removeItem('COMPANY');
                   setTimeout(()=>{
                     this.$router.push({name: 'success_page',query: {orig: 'password'}})
                   },1000)

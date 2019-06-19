@@ -293,7 +293,7 @@
                 },1000);
               }
             }else {
-              this.$ajax.post('/company_by_resume',{uid: this.uid, cid: companyInfo.id})
+              this.$ajax.post('/resume/buy',{uid: this.uid, cid: companyInfo.id})
                 .then((res)=>{
                   if (res.data.state == 200){
                     this.$notify.success({

@@ -36,7 +36,7 @@
           <div class="edit_bottom">
             <div class="content">
               <div class="edit_cell">
-                <span class="edit_lab">企业名称</span><input type="text" v-model="infoData.name" maxlength="15" placeholder="请输入职位名称">
+                <span class="edit_lab">企业名称</span><input type="text" v-model="infoData.name" maxlength="20" placeholder="请输入职位名称">
               </div>
               <div class="edit_cell">
                 <span class="edit_lab">企业性质</span><span class="int_job_det fr" @click="entNature">{{tranNature || '请选择'}}<img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -46,7 +46,7 @@
               </div>
               <div class="edit_cell special_cell">
                 <span class="edit_lab">通讯地址</span><div class="comm_addr"><div class="comm_addr_cell" @click="choose_pro"><span class="place">{{tranPro || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_city"><span class="place">{{tranCity || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div><div class="comm_addr_cell" @click="choose_area"><span>{{tranArea || '请选择'}}</span><img src="/static/images/font_down.png" alt=""></div></div>
-                <input type="text" v-model="infoData.address" maxlength="20" placeholder="详细地址，如：街道、门牌号等">
+                <input type="text" v-model="infoData.address" maxlength="50" placeholder="详细地址，如：街道、门牌号等">
               </div>
               <div class="edit_cell" @click="edit_intro">
                 <span class="edit_lab">企业简介</span><span class="int_job_det fr"><img src="/static/images/ic_right@2x.png" alt=""></span>
@@ -496,8 +496,9 @@
     position: absolute;
     left: 0;
     top: 0;
+    padding-bottom: 40px;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #ffffff;
     z-index: 999999999;
   }

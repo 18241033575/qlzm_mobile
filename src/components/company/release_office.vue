@@ -404,7 +404,7 @@
             this.subTags = this.tagsNum;
           }
           this.duty = this.duty.replace(/^\s*|\s*$/g,"");
-          if (this.subTags == '') {
+          if (this.subTags == '' && this.id == undefined) {
             this.$notify.warning({
               title: '提示',
               message: '请选择职位亮点',
@@ -449,7 +449,7 @@
               })
           } else {
             this.$ajax.post('/office/edit',{id: this.id,has_m: this.has_m,office_name: this.form.office_name, cid: companyInfo.id,nature: this.JobNature,cert_categories_id: this.certTypeNum,cert_majors_id: this.certMajorNum,is_release: 1,
-              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.subTags.join(','),is_urgent: this.form.ugent})
+              province: this.infoData.province,city: this.infoData.city,area: this.infoData.area,address: this.form.tal_addr,salary: this.salaryNum.salary,education: this.educationNum,work_exp: this.workexpNum,sex: this.genderNum,duty: this.duty,hire_num: this.form.hire_num,tags: this.tagsNum.join(','),is_urgent: this.form.ugent})
               .then((res)=>{
                 if (res.data.state == 200) {
                   this.$notify.success({
@@ -924,9 +924,9 @@
     position: absolute;
     left: 0;
     top: 0;
+    padding-bottom: 10px;
     width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
     background-color: #ffffff;
   }
   .ent_intro .filter_s_title{

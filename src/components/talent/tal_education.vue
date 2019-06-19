@@ -132,7 +132,7 @@
         workNature: 1,
         pickerOptions1: {
           disabledDate(time) {
-            return time.getTime() > Date.now();
+            return time.getTime() > Date.now(),time.getTime() < 0;
           }
         },
         value1: '',
@@ -297,6 +297,11 @@
           if (this.eduData[i].id == eduId) {
             this.operaData.school = this.eduData[i].school;
             this.operaData.education = this.eduData[i].education;
+            transEducation('',3).forEach((item,index)=> {
+              if (item.name === this.eduData[i].education) {
+                this.selectedVal = item.id;
+              }
+            });
             this.transVal = this.eduData[i].education;
             for (let j = 0,len = this.EduData.length;j < len; j++) {
               if (this.EduData[j] == this.transVal) {

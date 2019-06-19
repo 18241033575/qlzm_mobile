@@ -10,7 +10,7 @@
     <div class="tal_msg_det">
       <div class="content">
         <div class="top_pic">
-          <img :src="userMsg.photo" alt="">
+          <img :src="userMsg.photo == basUrl?'/static/images/user_pho_def.png':userMsg.photo" alt="">
           <p class="tal_name">{{userMsg.name}}</p>
           <p><span>{{userMsg.gender}}</span>|<span>{{userMsg.age}}岁</span>|<span>{{userMsg.education==0?'未知学历':userMsg.education}}</span>|<span>{{userMsg.work_exp == 0?'一年以下':userMsg.work_exp + '年'}}</span></p>
         </div>
@@ -155,7 +155,7 @@
 
 <script>
   import {tranProvince, tranCity, tranArea} from  '../../../static/js/distpicker'
-  import {splicPic,transJobs,transEducation,transWorkexp,transSalary,transCert,transGender,transNature,transArrive,tal_adv} from '../../../static/js/common.js'
+  import {splicPic,transJobs,transEducation,fileUrl,transSalary,transCert,transGender,transNature,transArrive,tal_adv} from '../../../static/js/common.js'
     export default {
         name: "pre_resume",
       data() {
@@ -171,9 +171,11 @@
             tranJob: [],
             evaluation: '',
             additionData: '暂无',
+            basUrl: ''
           }
       },
       created(){
+        this.basUrl = fileUrl();
         this.$indicator.open({
           text: '加载中...',
           spinnerType: 'fading-circle'

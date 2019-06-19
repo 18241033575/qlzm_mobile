@@ -55,7 +55,7 @@
             <div class="edit_cell specail_area">
               <span class="edit_lab">备注</span>
             </div>
-            <textarea placeholder="在这里填写备注内容" v-model="remark" name="remark"></textarea>
+            <textarea placeholder="在这里填写备注内容" maxlength="500" v-model="remark" name="remark"></textarea>
           </div>
         </div>
         <div class="edit_btn_group" v-if="!this.save_editSign">

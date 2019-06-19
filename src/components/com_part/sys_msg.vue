@@ -13,16 +13,17 @@
         </div>
       </div>
     </div>
-    <div class="empty" v-show="emptySign">
-      <img src="/static/images/ic_empty_data@2x.png" alt="">
-      <p>暂无数据</p>
-    </div>
+    <null_page :sign="emptySign"></null_page>
   </div>
 </template>
 
 <script>
+  import null_page from '../../components/common/null_page'
     export default {
       name: "sys_msg",
+      components: {
+        null_page,
+      },
       data() {
         return {
           emptySign: false,

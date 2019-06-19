@@ -41,7 +41,7 @@
             </div>
           </div>
           <div class="eval_body_bottom">
-            <textarea v-model="evaluation" name="evaluation"></textarea>
+            <textarea v-model="evaluation" maxlength="500" name="evaluation"></textarea>
           </div>
         </div>
       </div>

@@ -43,10 +43,10 @@
             <span class="edit_lab">项目名称</span><input type="text" v-model="proAllData.project" placeholder="项目名称">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">项目地点</span><input type="text" v-model="proAllData.address" placeholder="项目地点">
+            <span class="edit_lab">项目地点</span><input type="text" maxlength="35" v-model="proAllData.address" placeholder="项目地点">
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">项目规模(万)</span><input type="text" v-model="proAllData.scale" placeholder="项目规模">
+            <span class="edit_lab">项目规模(万)</span><input maxlength="10" type="text" v-model="proAllData.scale" placeholder="项目规模">
           </div>
           <div class="edit_cell special_cell">
             <span class="edit_lab">在职时间</span>
@@ -73,7 +73,7 @@
             </div>
           </div>
           <div class="edit_cell">
-            <span class="edit_lab">个人职位</span><input v-model="proAllData.job" type="text" placeholder="个人职位">
+            <span class="edit_lab">个人职位</span><input maxlength="20" v-model="proAllData.job" type="text" placeholder="个人职位">
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@
           <div class="edit_cell specail_area">
             <span class="edit_lab">项目介绍</span>
           </div>
-          <textarea placeholder="简单的描述一下这个项目吧" v-model="proAllData.introduction"></textarea>
+          <textarea placeholder="简单的描述一下这个项目吧" maxlength="500" v-model="proAllData.introduction"></textarea>
         </div>
       </div>
       <div class="remark">
@@ -90,7 +90,7 @@
           <div class="edit_cell specail_area">
             <span class="edit_lab">个人业绩</span>
           </div>
-          <textarea placeholder="在这里填写你在项目中的业绩" v-model="proAllData.duties"></textarea>
+          <textarea placeholder="在这里填写你在项目中的业绩" maxlength="500" v-model="proAllData.duties"></textarea>
         </div>
       </div>
       <div class="edit_btn_group" v-if="!this.save_editSign">
@@ -132,7 +132,7 @@
         workNature: 1,
         pickerOptions1: {
           disabledDate(time) {
-            return time.getTime() > Date.now();
+            return time.getTime() > Date.now(),time.getTime() < 0;
           }
         },
         value1: '',
