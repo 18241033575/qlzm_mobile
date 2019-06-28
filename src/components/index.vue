@@ -31,7 +31,10 @@
     <div class="banner">
       <el-carousel height="120px">
         <el-carousel-item v-for="(item,index) in bannerList" :key="index">
-          <img :src=item alt="">
+          <router-link  v-if="item.link != ''" :to="{name: item.link}">
+            <img :src=item.url alt="">
+          </router-link>
+          <img v-if="item.link == ''" :src=item.url alt="">
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -131,11 +134,24 @@
       },
       data() {
           return{
-            bannerList: {
-              0: "/static/images/banner01@2x.png",
-              1: "/static/images/banner02@2x.png",
-              2: "/static/images/banner03@2x.png",
-            },
+            bannerList: [
+              {
+                url: "/static/images/banner01@2x.png",
+                link: "famous_pos"
+              },
+              {
+                url: "/static/images/banner02@2x.png",
+                link: "labor_dispatch"
+              },
+              {
+                url: "/static/images/banner03@2x.png",
+                link: "donkey_horse"
+              },
+              {
+                url: "/static/images/banner04@2x.png",
+                link: "skills_loan"
+              }
+            ],
             options: [{
               value: '1',
               label: '找工作'

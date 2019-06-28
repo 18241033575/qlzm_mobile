@@ -29,9 +29,9 @@ Vue.use(VueTouch, {name: 'v-touch'});
 
 // 数据请求
 // 正式服
-// Axios.defaults.baseURL = 'https://www.qlzm.com.cn';
+Axios.defaults.baseURL = 'https://www.qlzm.com.cn';
 // 测试服
-Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
+// Axios.defaults.baseURL = 'http://qlzm.wiiwork.com';
 // Axios.defaults.baseURL = 'http://qlzm.com';
 Vue.prototype.$ajax = Axios;
 Vue.prototype.$notify = Notification;

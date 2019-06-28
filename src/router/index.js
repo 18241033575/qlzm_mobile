@@ -38,6 +38,8 @@ import about_us from '@/components/com_part/about_us'
 import guidance from '@/components/com_part/guidance'
 import labor_dispatch from '@/components/com_part/labor_dispatch'
 import donkey_horse from '@/components/com_part/donkey_horse'
+import skills_loan from '@/components/com_part/skills_loan'
+import loan_det from '@/components/com_part/loan_det'
 
 //个人中心页面
 import tal_center from '@/components/talent/tal_center'
@@ -234,6 +236,16 @@ export default new Router({
       path: '/donkey_horse',
       name: 'donkey_horse',
       component: donkey_horse,
+    },
+    {
+      path: '/skill_sloan',
+      name: 'skills_loan',
+      component: skills_loan,
+    },
+    {
+      path: '/loan_det',
+      name: 'loan_det',
+      component: loan_det,
     },
     //个人中心
     {
