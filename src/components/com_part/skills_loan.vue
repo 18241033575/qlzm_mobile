@@ -72,7 +72,7 @@
         </div>
         <div class="classify">
           <div class="cla_title">
-            哪些技能证书可贷款？
+            简单几步，快速拿钱！
           </div>
           <div class="cla_part">
             <div class="cla_part_cell">
@@ -206,7 +206,7 @@
     font-size: 14px;
     color: #ffffff;
     text-align: center;
-    background: linear-gradient(180deg,rgba(131,101,255,1) 0%,rgba(44,79,255,1) 100%);
+    background: linear-gradient(180deg,rgba(131,101,255,1) 0%,rgba(44,79,255,1) 100%) no-repeat;
     border-radius: 21px;
   }
   .skill_adv{
@@ -225,16 +225,16 @@
     box-sizing: border-box;
   }
   .skill_adv_cell:nth-child(1){
-    background: url("/static/images/img_bg_01@2x.png");
+    background: url("/static/images/img_bg_01.png") no-repeat;
   }
   .skill_adv_cell:nth-child(2){
-    background: url("/static/images/img_bg_02@2x.png");
+    background: url("/static/images/img_bg_02.png") no-repeat;
   }
   .skill_adv_cell:nth-child(3){
-    background: url("/static/images/img_bg_03@2x.png");
+    background: url("/static/images/img_bg_03.png") no-repeat;
   }
   .skill_adv_cell:nth-child(4){
-    background: url("/static/images/img_bg_04@2x.png");
+    background: url("/static/images/img_bg_04.png") no-repeat;
   }
   .skill_adv_cell p{
     padding-top: 25px;
@@ -303,7 +303,8 @@
     border-radius: 21px;
     font-size: 14px;
     color: #ffffff;
-    background:linear-gradient(90deg,rgba(169,122,255,1) 0%,rgba(74,134,254,1) 100%);
+    background:linear-gradient(90deg,rgba(169,122,255,1) 0%,rgba(74,134,254,1) 100%) no-repeat;
+    box-shadow:0 5px 18px 0 rgba(79,75,254,0.3);
   }
   .to_next{
     width: 15%;

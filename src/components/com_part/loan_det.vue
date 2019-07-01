@@ -83,22 +83,27 @@
             });
             return
           }
-
+          this.$indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+          });
           this.$ajax.post('/skills_loan/store',this.skills_form)
             .then((res)=>{
-                if (res.state == 200){
+                if (res.data.state == 200){
                   this.successSign = true;
-                  this.successMsg = res.msg;
+                  this.successMsg = res.data.msg;
                   setTimeout(()=>{
                     this.$router.push({name: 'skills_loan'})
-                  },3000)
+                  },3000);
+                  this.$indicator.close();
                 } else {
                   this.$notify.error({
                     title: '提示',
-                    message: res.msg,
+                    message: res.data.msg,
                     showClose: false,
                     duration: 1500
-                  })
+                  });
+                  this.$indicator.close();
                 }
             })
         }
