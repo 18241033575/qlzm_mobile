@@ -1,7 +1,7 @@
 {
-  "name": "qlzm_mobile",
+  "name": "donkey_horse",
   "version": "1.0.0",
-  "description": "qlzm",
+  "description": "donkey_horse",
   "author": "Jayshi",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
     "axios": "^0.18.0",
     "element-ui": "^2.4.11",
     "mint-ui": "^2.2.13",
+    "nativeshare": "^2.1.3",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.4",
     "vue-quill-editor": "^3.0.6",

@@ -12,7 +12,7 @@
             <div class="lab">姓名<i class="necessary">*</i></div><input v-model="skills_form.name" placeholder="您的真实姓名" maxlength="10" type="text">
           </div>
           <div class="cell">
-            <div class="lab">手机号码<i class="necessary">*</i></div><input v-model="skills_form.phone" maxlength="11" placeholder="您的手机号码" type="text">
+            <div class="lab">手机号码<i class="necessary">*</i></div><input readonly v-model="skills_form.phone" maxlength="11" placeholder="您的手机号码" type="text">
           </div>
           <div class="cell">
             <div class="lab">身份证号码</div><input v-model="skills_form.id_card" maxlength="18" placeholder="身份证号码" type="text">
@@ -107,6 +107,13 @@
                 }
             })
         }
+      },
+      created() {
+          this.skills_form.name = this.$route.query.name;
+          this.skills_form.phone = this.$route.query.phone;
+          if (!this.skills_form.phone) {
+            this.$router.push({name: 'login'})
+          }
       }
     }
 </script>

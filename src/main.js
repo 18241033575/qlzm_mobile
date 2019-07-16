@@ -6,6 +6,7 @@ import mintUI from 'mint-ui'
 import { Button, Select, Icon, Input, Carousel, Dialog, Message, DatePicker, Notification, MessageBox} from 'element-ui';
 import { Popup,Loadmore,Indicator } from 'mint-ui';
 import VueTouch from 'vue-touch'
+import NativeShare from 'nativeshare'
 import App from './App'
 import router from './router'
 import VueQuillEditor from 'vue-quill-editor'

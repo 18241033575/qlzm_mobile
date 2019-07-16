@@ -204,8 +204,15 @@
         },
         handleClose() {
           this.dialogVisible = false;
+          let lastName = JSON.parse(localStorage.getItem('last_url'));
+          let userInfo = localStorage.getItem('USER');
+          localStorage.removeItem('last_url');
           if (this.reqSuc == true){
-            this.$router.push({name: 'index'});
+            if (lastName && userInfo) {
+              this.$router.push({name: lastName.name});
+            }else {
+              this.$router.push({name: 'index'});
+            }
           }
         },
         getCode() {
@@ -314,6 +321,9 @@
       },
       updated() {
         this.loginTypeSign = this.value == 2?false:true;
+      },
+      destroyed(){
+          localStorage.removeItem('last_url')
       }
     }
 </script>

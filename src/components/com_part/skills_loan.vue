@@ -15,7 +15,7 @@
           <div class="skill_msg">
             <p>急用钱  不求人</p>
             <p class="skill_need">有证书  能贷款  最高可贷50万</p>
-            <span class="apply_skill_btn" @click="skills_det">立即申请技能贷</span>
+            <!--<span class="apply_skill_btn" @click="skills_det">立即申请技能贷</span>-->
           </div>
         </div>
         <div class="skill_adv">
@@ -118,7 +118,54 @@
             </div>
           </div>
           <div class="apply_btn">
-            <span @click="skills_det">立即申请技能贷</span>
+            <!--<span @click="skills_det">立即申请技能贷</span>-->
+          </div>
+          <div class="bottom_btn">
+            <div class="content">
+              <div class="bottom_btn_box">
+                <span @click="skills_det" class="apply_skill_btn">立即申请技能贷</span><!--<span class="share" @click="share"><img src="/static/images/ic_share@2x.png" alt="">分享</span>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <el-dialog
+        title="提示"
+        :visible.sync="dialogVisible"
+        width="80%">
+        <span>{{ msg }}</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handleClose">确 定</el-button>
+        </span>
+      </el-dialog>
+      <!-- 分享弹层 -->
+      <div class="share_box" v-show="share_sign" @click="close_share">
+        <div class="content">
+          <div class="share_box_det" @click.stop="donothing">
+            <div class="share_cell" @click.stop="share_cell" data-type="wx_friend">
+              <img src="/static/images/icon_share_wechat@2x.png" alt="">
+              <p>微信好友</p>
+            </div>
+            <div class="share_cell" @click.stop="share_cell" data-type="wx_zone">
+              <img src="/static/images/icon_share_circle@2x.png" alt="">
+              <p>微信朋友圈</p>
+            </div>
+            <div class="share_cell" @click.stop="share_cell" data-type="qq_friend">
+              <img src="/static/images/icon_share_qq@2x.png" alt="">
+              <p>QQ好友</p>
+            </div>
+            <div class="share_cell" @click.stop="share_cell" data-type="qq_zone">
+              <img src="/static/images/icon_share_qzone@2x.png" alt="">
+              <p>QQ空间</p>
+            </div>
+            <div class="share_cell" @click.stop="share_cell" data-type="xina">
+              <img src="/static/images/icon_share_sina@2x.png" alt="">
+              <p>新浪微博</p>
+            </div>
+            <div class="share_cell" @click.stop="share_cell" data-type="other">
+              <img src="/static/images/icon_share_copy@2x.png" alt="">
+              <p>其他途径</p>
+            </div>
           </div>
         </div>
       </div>
@@ -126,14 +173,191 @@
 </template>
 
 <script>
-    export default {
+  export default {
         name: "skills_loan",
+      data() {
+          return {
+            dialogVisible: false,
+            msg: '您还没有登录，是否前往登录页面？',
+            share_sign: false
+          }
+      },
       methods: {
         go_index(){
           this.$router.push({name: 'index'})
         },
         skills_det(){
-          this.$router.push({name: 'loan_det'})
+          let userInfo = JSON.parse(localStorage.getItem('USER'));
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if (userInfo) {
+            this.$router.push({name: 'loan_det',query: {name: userInfo.name,phone: userInfo.phone}})
+          }else if (companyInfo) {
+            this.msg = '企业用户无法申请技能贷';
+            this.dialogVisible = true;
+          }else {
+            this.dialogVisible = true;
+          }
+        },
+        handleClose(){
+          let companyInfo = JSON.parse(localStorage.getItem('COMPANY'));
+          if (!companyInfo) {
+            this.$router.push({name: 'login'});
+            let param = {name: 'skills_loan'};
+            localStorage.setItem('last_url',JSON.stringify(param));
+          }
+          this.dialogVisible = false;
+        },
+        share(){
+          // this.share_sign = true;
+          let nativeShare = new NativeShare({
+            wechatConfig: {
+              appId: '',
+              timestamp: '',
+              nonceStr: '',
+              signature: '',
+            },
+            // 让你修改的分享的文案同步到标签里，比如title文案会同步到<title>标签中
+            // 这样可以让一些不支持分享的浏览器也能修改部分文案，默认都不会同步
+            syncDescToTag: false,
+            syncIconToTag: false,
+            syncTitleToTag: false,
+          });
+          try {
+            nativeShare.call(command = 'default');
+          } catch(err) {
+            this.$notify.warning({
+              title: '提示',
+              message: '您的浏览器可能不支持此功能,请使用浏览器的分享功能',
+              showClose: false,
+              duration: 1500
+            });
+          }
+        },
+        close_share(){
+          this.share_sign = false;
+        },
+        donothing(){
+
+        },
+        share_cell(e){
+          let type = e.currentTarget.getAttribute('data-type');
+
+          let nativeShare = new NativeShare({
+            wechatConfig: {
+              appId: '',
+              timestamp: '',
+              nonceStr: '',
+              signature: '',
+            },
+            // 让你修改的分享的文案同步到标签里，比如title文案会同步到<title>标签中
+            // 这样可以让一些不支持分享的浏览器也能修改部分文案，默认都不会同步
+            syncDescToTag: false,
+            syncIconToTag: false,
+            syncTitleToTag: false,
+          });
+          // 你也可以在setConfig方法中设置配置参数
+          nativeShare.setConfig({
+            wechatConfig: {
+              appId: '',
+              timestamp: '',
+              nonceStr: '',
+              signature: '',
+            }
+          });
+          // 设置分享文案
+          nativeShare.setShareData({
+            icon: 'https://pic3.zhimg.com/v2-080267af84aa0e97c66d5f12e311c3d6_xl.jpg',
+            link: 'https://github.com/fa-ge/NativeShare',
+            title: 'NativeShare',
+            desc: 'NativeShare是一个整合了各大移动端浏览器调用原生分享的插件',
+            from: '@fa-ge',
+          });
+
+          switch (type){
+            case 'wx_friend':
+              // 唤起浏览器原生分享组件(如果在微信中不会唤起，此时call方法只会设置文案。类似setShareData)
+              try {
+                nativeShare.call('wechatFriend');
+                // 如果是分享到微信则需要 nativeShare.call('wechatFriend')
+                // 类似的命令下面有介绍
+              } catch(err) {
+                try {
+
+                }catch (err) {
+                  // 如果不支持，你可以在这里做降级处理
+                  this.$notify.warning({
+                    title: '提示',
+                    message: '您的浏览器可能不支持此功能,请使用浏览器自带的分享功能',
+                    showClose: false,
+                    duration: 1500
+                  });
+                }
+              }
+              break;
+            case 'wx_zone':
+              try {
+                nativeShare.call('wechatTimeline');
+              } catch(err) {
+                this.$notify.warning({
+                  title: '提示',
+                  message: '您的浏览器可能不支持此功能,请使用浏览器自带的分享功能',
+                  showClose: false,
+                  duration: 1500
+                });
+              }
+              break;
+            case 'qq_friend':
+              try {
+                nativeShare.call('qqFriend');
+              } catch(err) {
+                this.$notify.warning({
+                  title: '提示',
+                  message: '您的浏览器可能不支持此功能,请使用浏览器自带的分享功能',
+                  showClose: false,
+                  duration: 1500
+                });
+              }
+              break;
+            case 'qq_zone':
+              try {
+                nativeShare.call('qZone');
+              } catch(err) {
+                this.$notify.warning({
+                  title: '提示',
+                  message: '您的浏览器可能不支持此功能,请使用浏览器自带的分享功能',
+                  showClose: false,
+                  duration: 1500
+                });
+              }
+              break;
+            default:
+              try {
+                nativeShare.call('default');
+              } catch(err) {
+                this.$notify.warning({
+                  title: '提示',
+                  message: '您的浏览器可能不支持此功能,请使用浏览器自带的分享功能',
+                  showClose: false,
+                  duration: 1500
+                });
+              }
+              break;
+          }
+
+          /*
+            调用call方法时第一个参数是指定用什么命令调用分享组件
+            default 默认，调用起底部的分享组件，当其他命令不支持的时候也会调用该命令
+            wechatTimeline 分享到朋友圈
+            wechatFriend 分享给微信好友
+            qqFriend 分享给QQ好友
+            qZone 分享到QQ空间
+            weibo 分享到微博
+          */
+
+
+
+
+
         }
       }
     }
@@ -141,7 +365,7 @@
 
 <style scoped>
   .skills{
-    padding-bottom: 10px;
+    padding-bottom: 30px;
     background-color: #ffffff;
   }
   .skill_bg{
@@ -335,5 +559,75 @@
   }
   .bac_none{
     background: none;
+  }
+  .bottom_btn{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #ffffff;
+    text-align: center;
+    background: #fff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #DCDCDC;
+  }
+  .bottom_btn_box{
+    display: flex;
+  }
+  .bottom_btn_box span{
+    display: inline-block;
+    margin: 0 auto;
+    /*width: 50%;*/
+  }
+  .bottom_btn_box .apply_skill_btn{
+    margin-top: 3px;
+  }
+  .bottom_btn_box img{
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+  }
+  .bottom_btn_box .share{
+    color: #666666;
+  }
+  .share_box{
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,.4);
+  }
+  .share_box_det{
+    position: fixed;
+    bottom: 10px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    width: 92%;
+    background-color: #fff;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+  }
+  .share_box_det .share_cell{
+    padding: 30px 0;
+    width: 30%;
+    text-align: center;
+  }
+  .share_cell img{
+    width: 30px;
+    height: 30px;
+  }
+  .share_cell p{
+    margin-top: 12px;
+    font-size: 12px;
+    color: #333333;
   }
 </style>
